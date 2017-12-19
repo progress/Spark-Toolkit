@@ -1,0 +1,1414 @@
+<!DOCTYPE html >
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>OEUserRealm.cls</title>
+
+<link rel="StyleSheet" href="../../../css/stylesheet.css"
+	type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- package name  and class name-->
+	<div class="pkg_class_name">
+		 <a href="package.html">Spark.Core.Security</a>: OEUserRealm CLASS 
+	</div>
+	<br>
+	<!--Class Name -->
+	<div  class="title_name">
+	OEUserRealm 
+	
+			ABSTRACT
+		CLASS</div>
+
+	<!-- class comment should go here -->
+	<div class="paragraph">
+	<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Implement methods for OERealm service.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										Applies back-end logic to OEReam authorization requests.
+						<br>
+	  <span class="detail_field_title" width="50px">Author(s)</span>:
+	  										Dustin Grau (dugrau@progress.com)
+						<br>
+	  <span class="detail_field_title" width="50px">Notes</span>:
+	  										<pre>
+In the appSecurity-xxxx-oerealm.xml security model, this class
+is the target of the realmClass in the OERealmUserDetails bean.
+The security model is selected by filename in web.xml under the
+context-param section for "contextConfigLocation".
+The default operation/response of all methods contained in this class
+will return a passing value for all operations of the OERealm process!
+To avoid opening up your application to attack, you must provide an
+override to the getPassword() and checkPasswordHash() methods!
+</pre>
+						<br>
+	  <span class="detail_field_title" width="50px">Created</span>:
+	  										Wed Dec 10 09:13:43 EST 2014
+						<br>
+	</div>
+	
+					<!-- Abstract modifier  -->
+	<div class="paragraph">
+	<span class="detail_field_title" style="font-size: 15px" width="50px">Modifiers</span>:&nbsp 
+		ABSTRACT
+	</div>
+		
+		
+		
+	<!-- extends section-->
+				<div  class="section">Super Class</div>
+		<div  class="paragraph">
+		<span class="code">
+						Progress.Lang.Object			
+			</span>
+	</div>
+	
+	<!-- inherits section-->
+		<div  class="section">Interfaces</div>
+	<div  class="paragraph">
+		<span class="code">
+					<span class="code">
+								Progress.Security.Realm.IHybridRealm			
+				</span>&nbsp 
+					<span class="code">
+							<a href="../../../Spark/Core/Security/IAuthHandler.cls.html"
+			title="Spark.Core.Security.IAuthHandler">			IAuthHandler
+</a>
+				</span>&nbsp 
+				</span>
+	</div>
+		
+
+	<!-- CONSTRUCTOR SUMMARY SECTION -->
+		
+	<div class="title_name">
+		Constructors<br>
+	</div>
+		
+		<table class="table_summary" cellspacing="0" summary="">
+			
+				 
+																	<tr>
+										<td class="table_data">
+						<div class="cell_data">
+							 <a
+								href="OEUserRealm.cls.html#OEUserRealm_Constructor"
+								title="OEUserRealm">OEUserRealm()</a>
+						</div>
+					</td> 
+																						</tr>
+						</table>
+
+		<!-- CONSTRUCTOR SUMMARY SECTION END -->
+
+	<!-- methods summary section -->
+		<div class="title_name">
+		Methods<br>
+	</div>
+	
+	
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#checkPasswordHash_Method"
+						title="checkPasswordHash">checkPasswordHash(INPUT:character,INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#checkPasswordHash_Method"
+						title="checkPasswordHash">checkPasswordHash(INPUT:integer,INPUT:character,INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#GetAttribute_Method"
+						title="GetAttribute">GetAttribute(INPUT:integer,INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#GetAttributeNames_Method"
+						title="GetAttributeNames">GetAttributeNames(INPUT:integer):CHARACTER[]</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#getPassword_Method"
+						title="getPassword">getPassword(INPUT:integer):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#getUserID_Method"
+						title="getUserID">getUserID(INPUT:character,INPUT:character):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#GetUsernames_Method"
+						title="GetUsernames">GetUsernames():CHARACTER[]</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#GetUsernamesByQuery_Method"
+						title="GetUsernamesByQuery">GetUsernamesByQuery(INPUT:character):CHARACTER[]</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#GetUsernamesByQuery_Method"
+						title="GetUsernamesByQuery">GetUsernamesByQuery(INPUT:character,INPUT:character):CHARACTER[]</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#getUserRoles_Method"
+						title="getUserRoles">getUserRoles(INPUT:integer):CHARACTER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#isActive_Method"
+						title="isActive">isActive(INPUT:integer):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#isExpired_Method"
+						title="isExpired">isExpired(INPUT:integer):LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#isLocked_Method"
+						title="isLocked">isLocked(INPUT:integer):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#loadConfig_Method"
+						title="loadConfig">loadConfig()</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#postAuthenticate_Method"
+						title="postAuthenticate">postAuthenticate(INPUT:integer,INPUT:logical)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#RemoveAttribute_Method"
+						title="RemoveAttribute">RemoveAttribute(INPUT:integer,INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#SetAttribute_Method"
+						title="SetAttribute">SetAttribute(INPUT:integer,INPUT:character,INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#ValidatePassword_Method"
+						title="ValidatePassword">ValidatePassword(INPUT:integer,INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#ValidatePassword_Method"
+						title="ValidatePassword">ValidatePassword(INPUT:integer,INPUT:character,INPUT:character,INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#validateRequest_Method"
+						title="validateRequest">validateRequest():LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#validateRequest_Method"
+						title="validateRequest">validateRequest(INPUT:character):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OEUserRealm.cls.html#ValidateUser_Method"
+						title="ValidateUser">ValidateUser(INPUT:character):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+								</table>
+	
+		<!-- method summary section end -->
+
+
+	<!-- EVENT SUMMARY SECTION -->
+		<!-- EVENT SUMMARY SECTION END -->
+
+	<!-- PROPERTY SUMMARY SECTION -->
+		<!-- PROPERTY SUMMARY SECTION END -->
+
+	
+<!-- VARIABLE SUMMARY SECTION -->
+<div class="section">
+	Variables<br>
+</div>
+
+
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data"><div class="cell_data">
+					<a	href="OEUserRealm.cls.html#clientRole_Variable"
+						title="clientRole">clientRole</a>
+				</div></td> 
+														<td class="table_data"><div class="cell_data">
+					<a	href="OEUserRealm.cls.html#domains_Variable"
+						title="domains">domains</a>
+				</div></td> 
+														<td class="table_data"><div class="cell_data">
+					<a	href="OEUserRealm.cls.html#oConfig_Variable"
+						title="oConfig">oConfig</a>
+				</div></td> 
+								</tr>
+										<tr>
+						<td class="table_data"><div class="cell_data">
+					<a	href="OEUserRealm.cls.html#useDebugs_Variable"
+						title="useDebugs">useDebugs</a>
+				</div></td> 
+												</tr>
+			</table>
+
+<!-- VARIABLE SUMMARY SECTION END -->
+
+
+<!-- BUFFER SUMMARY SECTION -->
+<!-- BUFFER SUMMARY SECTION END -->
+
+<!-- DATASET SUMMARY SECTION -->
+<!-- DATASET SUMMARY SECTION END -->
+
+
+<!-- DATA-SOURCE SUMMARY SECTION -->
+<!-- DATA-SOURCE SUMMARY SECTION END -->
+
+<!-- QUERY SUMMARY SECTION -->
+<!-- QUERY SUMMARY SECTION END -->
+
+<!-- TEMP-TABLE SUMMARY SECTION -->
+<!-- TEMP-TABLE SUMMARY SECTION END -->
+	
+	<!-- ============ CONSTRUCTOR DETAIL ========== --> 
+		<div class="title_name">Constructor Detail<br></div>
+	
+		<hr/> 
+	<a name="OEUserRealm_Constructor"></a>
+	<div class="section">OEUserRealm constructor</div>
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+									PUBLIC &nbsp
+											</div>
+	
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">OEUserRealm() </span>
+			</td>
+		</tr>
+	</table>
+	
+			
+	
+	
+			
+	<!-- ============ END CONSTRUCTOR DETAIL ========== --> 
+	<!-- ============ METHOD DETAIL ========== -->
+	
+		
+	<div class="title_name">
+		Method Detail<br>
+	</div>
+	 
+		<hr/>
+	<a name="checkPasswordHash_Method"></a>
+	<div class="section">checkPasswordHash method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Compare the user-supplied password to a hashed password.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										Implement as a protected method in your own class.
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;										Logical pass/fail for operation
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">checkPasswordHash(INPUT:character,INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">pcPassword</span>&nbsp;
+										CHARACTER			
+							&nbsp; Externally supplied password by user
+					</div>
+																																		<div class="parameter">
+						<span class="parameter_code">pcHashPass</span>&nbsp;
+										CHARACTER			
+							&nbsp; Internally stored password for user
+					</div>
+																		
+		<hr/>
+	<a name="checkPasswordHash_Method"></a>
+	<div class="section">checkPasswordHash method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Compare the user-supplied password to a hashed password, with UserID.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										Implement as a protected method in your own class.
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;										Logical pass/fail for operation
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">checkPasswordHash(INPUT:integer,INPUT:character,INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																																		<div class="parameter">
+						<span class="parameter_code">pcPassword</span>&nbsp;
+										CHARACTER			
+							&nbsp; Externally supplied password by user
+					</div>
+																																									<div class="parameter">
+						<span class="parameter_code">pcHashPass</span>&nbsp;
+										CHARACTER			
+							&nbsp; Internally stored password for user
+					</div>
+																		
+		<hr/>
+	<a name="GetAttribute_Method"></a>
+	<div class="section">GetAttribute method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">GetAttribute(INPUT:integer,INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcAttrName</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="GetAttributeNames_Method"></a>
+	<div class="section">GetAttributeNames method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">GetAttributeNames(INPUT:integer):CHARACTER[]</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+					</div>
+								
+		<hr/>
+	<a name="getPassword_Method"></a>
+	<div class="section">getPassword method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Obtain the password for a given UserID.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										Implement as a protected method in your own class.
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;										Internally stored password value
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getPassword(INPUT:integer):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																		
+		<hr/>
+	<a name="getUserID_Method"></a>
+	<div class="section">getUserID method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Obtain the UserID for a given username (and domain, optional).
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;										Unique identifier for user, as integer
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getUserID(INPUT:character,INPUT:character):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">pcUsername</span>&nbsp;
+										CHARACTER			
+							&nbsp; Username portion of credentials
+					</div>
+																																		<div class="parameter">
+						<span class="parameter_code">pcDomainName</span>&nbsp;
+										CHARACTER			
+							&nbsp; Domain portion of credentials
+					</div>
+																		
+		<hr/>
+	<a name="GetUsernames_Method"></a>
+	<div class="section">GetUsernames method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">GetUsernames():CHARACTER[]</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="GetUsernamesByQuery_Method"></a>
+	<div class="section">GetUsernamesByQuery method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">GetUsernamesByQuery(INPUT:character):CHARACTER[]</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcQueryString</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="GetUsernamesByQuery_Method"></a>
+	<div class="section">GetUsernamesByQuery method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">GetUsernamesByQuery(INPUT:character,INPUT:character):CHARACTER[]</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcAttrName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcAttrValue</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="getUserRoles_Method"></a>
+	<div class="section">getUserRoles method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Return available roles for a given UserID.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;										Comma-separated list of roles (without ROLE_ prefix)
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getUserRoles(INPUT:integer):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																		
+		<hr/>
+	<a name="isActive_Method"></a>
+	<div class="section">isActive method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Return active status for a given UserID.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;										Logical pass/fail for operation
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">isActive(INPUT:integer):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																		
+		<hr/>
+	<a name="isExpired_Method"></a>
+	<div class="section">isExpired method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Return expiration status for a given UserID.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;										Logical pass/fail for operation
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">isExpired(INPUT:integer):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																		
+		<hr/>
+	<a name="isLocked_Method"></a>
+	<div class="section">isLocked method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Return locked status for a given UserID.
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;										Logical pass/fail for operation
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">isLocked(INPUT:integer):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																		
+		<hr/>
+	<a name="loadConfig_Method"></a>
+	<div class="section">loadConfig method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">loadConfig()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="postAuthenticate_Method"></a>
+	<div class="section">postAuthenticate method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Perform an action after authentication (validatePassword).
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										Implement as a protected method in your own class, if needed.
+						<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;										Void
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">postAuthenticate(INPUT:integer,INPUT:logical)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+																<div class="parameter">
+						<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+							&nbsp; UserID value, as integer
+					</div>
+																																		<div class="parameter">
+						<span class="parameter_code">lRetVal</span>&nbsp;
+										LOGICAL			
+							&nbsp; Result of authentication action, as logical
+					</div>
+																		
+		<hr/>
+	<a name="RemoveAttribute_Method"></a>
+	<div class="section">RemoveAttribute method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">RemoveAttribute(INPUT:integer,INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcAttrName</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="SetAttribute_Method"></a>
+	<div class="section">SetAttribute method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">SetAttribute(INPUT:integer,INPUT:character,INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcAttrName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcAttrValue</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="ValidatePassword_Method"></a>
+	<div class="section">ValidatePassword method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">ValidatePassword(INPUT:integer,INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcPassword</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="ValidatePassword_Method"></a>
+	<div class="section">ValidatePassword method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">ValidatePassword(INPUT:integer,INPUT:character,INPUT:character,INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piUserID</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcDigest</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcNonce</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcTimestamp</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="validateRequest_Method"></a>
+	<div class="section">validateRequest method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">validateRequest():LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="validateRequest_Method"></a>
+	<div class="section">validateRequest method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">validateRequest(INPUT:character):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcSourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="ValidateUser_Method"></a>
+	<div class="section">ValidateUser method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">ValidateUser(INPUT:character):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcUsername</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+			
+	<!-- ============ END METHOD DETAIL ========== --> 
+	<!-- ============ EVENT DETAIL ========== -->
+		<!-- ============ END EVENT DETAIL ========== -->
+	<!-- ============ PROPERTY DETAIL ========== -->
+		<!-- ============ END PROPERTY DETAIL ========== -->
+
+	<!-- ============ VARIABLE DETAIL ========== -->
+<br>
+	<div class="title_name">
+		Variable Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="clientRole_Variable"></a>
+	
+	<div class="section">clientRole variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+						CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PRIVATE &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="domains_Variable"></a>
+	
+	<div class="section">domains variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+						Progress.Json.ObjectModel.JsonArray			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PRIVATE &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="oConfig_Variable"></a>
+	
+	<div class="section">oConfig variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+					<a href="../../../Spark/Core/Message/ConfigMessage.cls.html"
+			title="Spark.Core.Message.ConfigMessage">			ConfigMessage
+</a>
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PROTECTED &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="useDebugs_Variable"></a>
+	
+	<div class="section">useDebugs variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+						LOGICAL			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PROTECTED &nbsp
+			</div>
+	
+							 
+				
+<br>
+<!-- ============ END VARIABLE DETAIL ========== -->
+
+<!-- ============ BUFFER DETAIL ========== -->
+<!-- ============ END BUFFER DETAIL ========== -->
+
+<!-- ============ DATASET DETAIL ========== -->
+<!-- ============ END DATASET DETAIL ========== -->
+<!-- ============ DATA-SOURCE DETAIL ========== -->
+<!-- ============ END DATA-SOURCE DETAIL ========== -->
+<!-- ============ QUERY DETAIL ========== -->
+<!-- ============ END QUERY DETAIL ========== -->
+<!-- ============ TEMP-TABLE DETAIL ========== -->
+<!-- ============ END TEMP-TABLE DETAIL ========== -->
+	<!-- copyright content placed here will be shown in all the output pages -->
+<footer>
+		<br>
+		<div class="copyright_style">
+			<p><!-- put your copyright here --></p>
+		</div>
+</footer></body>
+</html>

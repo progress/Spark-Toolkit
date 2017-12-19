@@ -1,0 +1,687 @@
+<!DOCTYPE html >
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>FileUpload.cls</title>
+
+<link rel="StyleSheet" href="../../../css/stylesheet.css"
+	type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- package name  and class name-->
+	<div class="pkg_class_name">
+		 <a href="package.html">Spark.Core.Handler</a>: FileUpload CLASS 
+	</div>
+	<br>
+	<!--Class Name -->
+	<div  class="title_name">
+	FileUpload 
+	
+		CLASS</div>
+
+	<!-- class comment should go here -->
+	<div class="paragraph">
+	<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Author(s)</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Notes</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Created</span>:
+	  				<br>
+	</div>
+	
+				
+		
+		<div class="paragraph">
+	<span class="detail_field_title" style="font-size: 13px;" width="50px">USE-WIDGET-POOL</span>:
+	  true<br>
+	</div>
+		
+	<!-- extends section-->
+				<div  class="section">Super Class</div>
+		<div  class="paragraph">
+		<span class="code">
+						OpenEdge.Web.WebHandler			
+			</span>
+	</div>
+	
+	<!-- inherits section-->
+		
+
+	<!-- CONSTRUCTOR SUMMARY SECTION -->
+		<!-- CONSTRUCTOR SUMMARY SECTION END -->
+
+	<!-- methods summary section -->
+		<div class="title_name">
+		Methods<br>
+	</div>
+	
+	
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#getMultipartEntity_Method"
+						title="getMultipartEntity">getMultipartEntity(INPUT:OpenEdge.Web.IWebRequest):OpenEdge.Net.MultipartEntity</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandleDelete_Method"
+						title="HandleDelete">HandleDelete(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandleGet_Method"
+						title="HandleGet">HandleGet(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandleHead_Method"
+						title="HandleHead">HandleHead(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandleNotAllowedMethod_Method"
+						title="HandleNotAllowedMethod">HandleNotAllowedMethod(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandleNotImplemented_Method"
+						title="HandleNotImplemented">HandleNotImplemented(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandleOptions_Method"
+						title="HandleOptions">HandleOptions(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandlePatch_Method"
+						title="HandlePatch">HandlePatch(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandlePost_Method"
+						title="HandlePost">HandlePost(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#HandlePut_Method"
+						title="HandlePut">HandlePut(INPUT:OpenEdge.Web.IWebRequest):INTEGER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="FileUpload.cls.html#writeResponse_Method"
+						title="writeResponse">writeResponse(INPUT:OpenEdge.Web.WebResponse)</a>
+				</div>
+			</td> 
+												</tr>
+			</table>
+	
+		<!-- method summary section end -->
+
+
+	<!-- EVENT SUMMARY SECTION -->
+		<!-- EVENT SUMMARY SECTION END -->
+
+	<!-- PROPERTY SUMMARY SECTION -->
+		<div class="title_name">
+		Properties<br>
+	</div>
+
+	<table class="table_summary" cellspacing="0" summary="">
+			
+		 
+										<tr>
+							<td class="table_data">
+					<div class="cell_data">
+						<a href="FileUpload.cls.html#oLoggingManager_Property"
+								title="oLoggingManager">oLoggingManager</a>
+					</div>
+				</td> 
+													</tr>
+			</table>
+	
+		<!-- PROPERTY SUMMARY SECTION END -->
+
+	
+<!-- VARIABLE SUMMARY SECTION -->
+<!-- VARIABLE SUMMARY SECTION END -->
+
+
+<!-- BUFFER SUMMARY SECTION -->
+<!-- BUFFER SUMMARY SECTION END -->
+
+<!-- DATASET SUMMARY SECTION -->
+<!-- DATASET SUMMARY SECTION END -->
+
+
+<!-- DATA-SOURCE SUMMARY SECTION -->
+<!-- DATA-SOURCE SUMMARY SECTION END -->
+
+<!-- QUERY SUMMARY SECTION -->
+<!-- QUERY SUMMARY SECTION END -->
+
+<!-- TEMP-TABLE SUMMARY SECTION -->
+<!-- TEMP-TABLE SUMMARY SECTION END -->
+	
+	<!-- ============ CONSTRUCTOR DETAIL ========== --> 
+		
+	<!-- ============ END CONSTRUCTOR DETAIL ========== --> 
+	<!-- ============ METHOD DETAIL ========== -->
+	
+		
+	<div class="title_name">
+		Method Detail<br>
+	</div>
+	 
+		<hr/>
+	<a name="getMultipartEntity_Method"></a>
+	<div class="section">getMultipartEntity method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				OpenEdge.Net.MultipartEntity			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getMultipartEntity(INPUT:OpenEdge.Web.IWebRequest):OpenEdge.Net.MultipartEntity</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandleDelete_Method"></a>
+	<div class="section">HandleDelete method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandleDelete(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandleGet_Method"></a>
+	<div class="section">HandleGet method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandleGet(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandleHead_Method"></a>
+	<div class="section">HandleHead method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandleHead(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandleNotAllowedMethod_Method"></a>
+	<div class="section">HandleNotAllowedMethod method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandleNotAllowedMethod(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandleNotImplemented_Method"></a>
+	<div class="section">HandleNotImplemented method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandleNotImplemented(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandleOptions_Method"></a>
+	<div class="section">HandleOptions method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandleOptions(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandlePatch_Method"></a>
+	<div class="section">HandlePatch method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandlePatch(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandlePost_Method"></a>
+	<div class="section">HandlePost method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandlePost(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="HandlePut_Method"></a>
+	<div class="section">HandlePut method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				INTEGER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">HandlePut(INPUT:OpenEdge.Web.IWebRequest):INTEGER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poRequest</span>&nbsp;
+										OpenEdge.Web.IWebRequest			
+					</div>
+								
+		<hr/>
+	<a name="writeResponse_Method"></a>
+	<div class="section">writeResponse method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">writeResponse(INPUT:OpenEdge.Web.WebResponse)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poResponse</span>&nbsp;
+										OpenEdge.Web.WebResponse			
+					</div>
+								
+			
+	<!-- ============ END METHOD DETAIL ========== --> 
+	<!-- ============ EVENT DETAIL ========== -->
+		<!-- ============ END EVENT DETAIL ========== -->
+	<!-- ============ PROPERTY DETAIL ========== -->
+		<div class="title_name">
+		Property Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="oLoggingManager_Property"></a>
+	
+	<div class="section">oLoggingManager property</div>
+	<div class="paragraph">
+		 										
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;			<a href="../../../Spark/Core/Manager/ILoggingManager.cls.html"
+			title="Spark.Core.Manager.ILoggingManager">			ILoggingManager
+</a>
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+							 
+				
+		<!-- ============ END PROPERTY DETAIL ========== -->
+
+	<!-- ============ VARIABLE DETAIL ========== -->
+<!-- ============ END VARIABLE DETAIL ========== -->
+
+<!-- ============ BUFFER DETAIL ========== -->
+<!-- ============ END BUFFER DETAIL ========== -->
+
+<!-- ============ DATASET DETAIL ========== -->
+<!-- ============ END DATASET DETAIL ========== -->
+<!-- ============ DATA-SOURCE DETAIL ========== -->
+<!-- ============ END DATA-SOURCE DETAIL ========== -->
+<!-- ============ QUERY DETAIL ========== -->
+<!-- ============ END QUERY DETAIL ========== -->
+<!-- ============ TEMP-TABLE DETAIL ========== -->
+<!-- ============ END TEMP-TABLE DETAIL ========== -->
+	<!-- copyright content placed here will be shown in all the output pages -->
+<footer>
+		<br>
+		<div class="copyright_style">
+			<p><!-- put your copyright here --></p>
+		</div>
+</footer></body>
+</html>

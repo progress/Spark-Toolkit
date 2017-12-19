@@ -1,0 +1,734 @@
+<!DOCTYPE html >
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>OSTools.cls</title>
+
+<link rel="StyleSheet" href="../../../css/stylesheet.css"
+	type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- package name  and class name-->
+	<div class="pkg_class_name">
+		 <a href="package.html">Spark.Core.Util</a>: OSTools CLASS 
+	</div>
+	<br>
+	<!--Class Name -->
+	<div  class="title_name">
+	OSTools 
+	
+		CLASS</div>
+
+	<!-- class comment should go here -->
+	<div class="paragraph">
+	<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Author(s)</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Notes</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Created</span>:
+	  				<br>
+	</div>
+	
+				
+		
+		
+	<!-- extends section-->
+				<div  class="section">Super Class</div>
+		<div  class="paragraph">
+		<span class="code">
+						Progress.Lang.Object			
+			</span>
+	</div>
+	
+	<!-- inherits section-->
+		
+
+	<!-- CONSTRUCTOR SUMMARY SECTION -->
+		<!-- CONSTRUCTOR SUMMARY SECTION END -->
+
+	<!-- methods summary section -->
+		<div class="title_name">
+		Methods<br>
+	</div>
+	
+	
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#drillDir_Method"
+						title="drillDir">drillDir(INPUT:character)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#getFullPathname_Method"
+						title="getFullPathname">getFullPathname(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#osCopyDir_Method"
+						title="osCopyDir">osCopyDir(INPUT:character,INPUT:character)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#osCopyFile_Method"
+						title="osCopyFile">osCopyFile(INPUT:character,INPUT:character)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#osCreateDirTree_Method"
+						title="osCreateDirTree">osCreateDirTree(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#osErrorMsg_Method"
+						title="osErrorMsg">osErrorMsg(INPUT:integer):CHARACTER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#processDir_Method"
+						title="processDir">processDir(INPUT:character,INPUT:character)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="OSTools.cls.html#recurseDir_Method"
+						title="recurseDir">recurseDir(INPUT:character,INPUT:logical):JsonArray</a>
+				</div>
+			</td> 
+								</tr>
+								</table>
+	
+		<!-- method summary section end -->
+
+
+	<!-- EVENT SUMMARY SECTION -->
+		<!-- EVENT SUMMARY SECTION END -->
+
+	<!-- PROPERTY SUMMARY SECTION -->
+		<div class="title_name">
+		Properties<br>
+	</div>
+
+	<table class="table_summary" cellspacing="0" summary="">
+			
+		 
+										<tr>
+							<td class="table_data">
+					<div class="cell_data">
+						<a href="OSTools.cls.html#catalinaBase_Property"
+								title="catalinaBase">catalinaBase</a>
+					</div>
+				</td> 
+															<td class="table_data">
+					<div class="cell_data">
+						<a href="OSTools.cls.html#configProjectDir_Property"
+								title="configProjectDir">configProjectDir</a>
+					</div>
+				</td> 
+									</tr>
+											<tr>
+							<td class="table_data">
+					<div class="cell_data">
+						<a href="OSTools.cls.html#dlcdir_Property"
+								title="dlcdir">dlcdir</a>
+					</div>
+				</td> 
+															<td class="table_data">
+					<div class="cell_data">
+						<a href="OSTools.cls.html#sparkConf_Property"
+								title="sparkConf">sparkConf</a>
+					</div>
+				</td> 
+									</tr>
+											<tr>
+							<td class="table_data">
+					<div class="cell_data">
+						<a href="OSTools.cls.html#tmpdir_Property"
+								title="tmpdir">tmpdir</a>
+					</div>
+				</td> 
+															<td class="table_data">
+					<div class="cell_data">
+						<a href="OSTools.cls.html#wrkdir_Property"
+								title="wrkdir">wrkdir</a>
+					</div>
+				</td> 
+									</tr>
+								</table>
+	
+		<!-- PROPERTY SUMMARY SECTION END -->
+
+	
+<!-- VARIABLE SUMMARY SECTION -->
+<!-- VARIABLE SUMMARY SECTION END -->
+
+
+<!-- BUFFER SUMMARY SECTION -->
+<!-- BUFFER SUMMARY SECTION END -->
+
+<!-- DATASET SUMMARY SECTION -->
+<!-- DATASET SUMMARY SECTION END -->
+
+
+<!-- DATA-SOURCE SUMMARY SECTION -->
+<!-- DATA-SOURCE SUMMARY SECTION END -->
+
+<!-- QUERY SUMMARY SECTION -->
+<!-- QUERY SUMMARY SECTION END -->
+
+<!-- TEMP-TABLE SUMMARY SECTION -->
+<div class="section">
+	Temp Tables<br>
+</div>
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+			 
+													<tr>
+								<td class="table_data"><div class="cell_data">
+						<a	href="OSTools.cls.html#ttDirStruct_Temp_Table"
+							title="ttDirStruct">ttDirStruct</a>
+					</div></td> 
+																	</tr>
+				</table>
+
+<!-- TEMP-TABLE SUMMARY SECTION END -->
+	
+	<!-- ============ CONSTRUCTOR DETAIL ========== --> 
+		
+	<!-- ============ END CONSTRUCTOR DETAIL ========== --> 
+	<!-- ============ METHOD DETAIL ========== -->
+	
+		
+	<div class="title_name">
+		Method Detail<br>
+	</div>
+	 
+		<hr/>
+	<a name="drillDir_Method"></a>
+	<div class="section">drillDir method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">drillDir(INPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcFrom</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="getFullPathname_Method"></a>
+	<div class="section">getFullPathname method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getFullPathname(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcFile</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="osCopyDir_Method"></a>
+	<div class="section">osCopyDir method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">osCopyDir(INPUT:character,INPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcFrom</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcTo</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="osCopyFile_Method"></a>
+	<div class="section">osCopyFile method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">osCopyFile(INPUT:character,INPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcFrom</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcTo</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="osCreateDirTree_Method"></a>
+	<div class="section">osCreateDirTree method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">osCreateDirTree(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcDir</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="osErrorMsg_Method"></a>
+	<div class="section">osErrorMsg method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">osErrorMsg(INPUT:integer):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">piOsError</span>&nbsp;
+										INTEGER			
+					</div>
+								
+		<hr/>
+	<a name="processDir_Method"></a>
+	<div class="section">processDir method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">processDir(INPUT:character,INPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcFrom</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcTo</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="recurseDir_Method"></a>
+	<div class="section">recurseDir method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				Progress.Json.ObjectModel.JsonArray			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">recurseDir(INPUT:character,INPUT:logical):JsonArray</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcFrom</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plOmitDirs</span>&nbsp;
+										LOGICAL			
+					</div>
+								
+			
+	<!-- ============ END METHOD DETAIL ========== --> 
+	<!-- ============ EVENT DETAIL ========== -->
+		<!-- ============ END EVENT DETAIL ========== -->
+	<!-- ============ PROPERTY DETAIL ========== -->
+		<div class="title_name">
+		Property Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="catalinaBase_Property"></a>
+	
+	<div class="section">catalinaBase property</div>
+	<div class="paragraph">
+		 										*
+     * Return the $CATALINA_BASE OS environment variable if set
+     
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;				CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="configProjectDir_Property"></a>
+	
+	<div class="section">configProjectDir property</div>
+	<div class="paragraph">
+		 										*
+     * Sets a custom subdirectory for config files, applicable under PASOE.
+     * Note that this could be a possible security risk, so the set method
+     * attempts to avoid setting the value if the string is deemed invalid.
+     
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;				CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="dlcdir_Property"></a>
+	
+	<div class="section">dlcdir property</div>
+	<div class="paragraph">
+		 										*
+     * Return the DLC directory
+     
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;				CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="sparkConf_Property"></a>
+	
+	<div class="section">sparkConf property</div>
+	<div class="paragraph">
+		 										*
+     * Return the Spark configuration directory
+     
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;				CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="tmpdir_Property"></a>
+	
+	<div class="section">tmpdir property</div>
+	<div class="paragraph">
+		 										*
+     * Return the current temp directory of the app server agent
+     * Under PASOE, this will be $CATALINA_BASE/temp
+     
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;				CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="wrkdir_Property"></a>
+	
+	<div class="section">wrkdir property</div>
+	<div class="paragraph">
+		 										*
+     * Return the current working directory of the app server agent
+     * Under PASOE, this will be $CATALINA_BASE/work
+     
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;				CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+							 
+				
+		<!-- ============ END PROPERTY DETAIL ========== -->
+
+	<!-- ============ VARIABLE DETAIL ========== -->
+<!-- ============ END VARIABLE DETAIL ========== -->
+
+<!-- ============ BUFFER DETAIL ========== -->
+<!-- ============ END BUFFER DETAIL ========== -->
+
+<!-- ============ DATASET DETAIL ========== -->
+<!-- ============ END DATASET DETAIL ========== -->
+<!-- ============ DATA-SOURCE DETAIL ========== -->
+<!-- ============ END DATA-SOURCE DETAIL ========== -->
+<!-- ============ QUERY DETAIL ========== -->
+<!-- ============ END QUERY DETAIL ========== -->
+<!-- ============ TEMP-TABLE DETAIL ========== -->
+	<div class="title_name">
+		Temp-Table Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="ttDirStruct_Temp_Table"></a>
+	
+	<div class="section">ttDirStruct temp-table</div>
+	<div class="paragraph">
+												
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Access</span>:&nbsp;PRIVATE
+	</div>
+	
+							 
+<br>				
+<!-- ============ END TEMP-TABLE DETAIL ========== -->
+	<!-- copyright content placed here will be shown in all the output pages -->
+<footer>
+		<br>
+		<div class="copyright_style">
+			<p><!-- put your copyright here --></p>
+		</div>
+</footer></body>
+</html>

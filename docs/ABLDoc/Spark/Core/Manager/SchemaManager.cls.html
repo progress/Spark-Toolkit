@@ -1,0 +1,1294 @@
+<!DOCTYPE html >
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>SchemaManager.cls</title>
+
+<link rel="StyleSheet" href="../../../css/stylesheet.css"
+	type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- package name  and class name-->
+	<div class="pkg_class_name">
+		 <a href="package.html">Spark.Core.Manager</a>: SchemaManager CLASS 
+	</div>
+	<br>
+	<!--Class Name -->
+	<div  class="title_name">
+	SchemaManager 
+	
+		CLASS</div>
+
+	<!-- class comment should go here -->
+	<div class="paragraph">
+	<span class="detail_field_title" width="50px">Purpose</span>:
+	  										
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										
+						<br>
+	  <span class="detail_field_title" width="50px">Author(s)</span>:
+	  										Dustin Grau (dugrau@progress.com)
+						<br>
+	  <span class="detail_field_title" width="50px">Notes</span>:
+	  										
+						<br>
+	  <span class="detail_field_title" width="50px">Created</span>:
+	  										Fri Dec 19 14:31:04 EST 2014
+						<br>
+	</div>
+	
+				
+		
+		
+	<!-- extends section-->
+				<div  class="section">Super Class</div>
+		<div  class="paragraph">
+		<span class="code">
+					<a href="../../../Spark/Core/Manager/Manager.cls.html"
+			title="Spark.Core.Manager.Manager">			Manager
+</a>
+			</span>
+	</div>
+	
+	<!-- inherits section-->
+		<div  class="section">Interfaces</div>
+	<div  class="paragraph">
+		<span class="code">
+					<span class="code">
+							<a href="../../../Spark/Core/Manager/ISchemaManager.cls.html"
+			title="Spark.Core.Manager.ISchemaManager">			ISchemaManager
+</a>
+				</span>&nbsp 
+					<span class="code">
+							<a href="../../../Ccs/Common/IManager.cls.html"
+			title="Ccs.Common.IManager">			IManager
+</a>
+				</span>&nbsp 
+					<span class="code">
+							<a href="../../../Ccs/Common/IService.cls.html"
+			title="Ccs.Common.IService">			IService
+</a>
+				</span>&nbsp 
+				</span>
+	</div>
+		
+
+	<!-- CONSTRUCTOR SUMMARY SECTION -->
+		<!-- CONSTRUCTOR SUMMARY SECTION END -->
+
+	<!-- methods summary section -->
+		<div class="title_name">
+		Methods<br>
+	</div>
+	
+	
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#addSchemaToSignature_Method"
+						title="addSchemaToSignature">addSchemaToSignature(INPUT:character,INPUT:MethodSignature):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#deleteObjects_Method"
+						title="deleteObjects">deleteObjects()</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#dispose_Method"
+						title="dispose">dispose()</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#dumpObjects_Method"
+						title="dumpObjects">dumpObjects()</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#examineDatabases_Method"
+						title="examineDatabases">examineDatabases()</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#examineTables_Method"
+						title="examineTables">examineTables(INPUT:character)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#examineTables_Method"
+						title="examineTables">examineTables(INPUT:character,INPUT:character,INPUT:character,INPUT:logical)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#fixSerializedNames_Method"
+						title="fixSerializedNames">fixSerializedNames(INPUT:table-handle)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#getDataset_Method"
+						title="getDataset">getDataset(INPUT:character,OUTPUT:dataset-handle):LOGICAL</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#getDataset_Method"
+						title="getDataset">getDataset(INPUT:longchar,OUTPUT:dataset-handle):LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#getObject_Method"
+						title="getObject">getObject(INPUT:character,INPUT:character,OUTPUT:character,OUTPUT:character,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#getObjectChildren_Method"
+						title="getObjectChildren">getObjectChildren(INPUT:character,OUTPUT:character)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#getObjectList_Method"
+						title="getObjectList">getObjectList(INPUT:character,OUTPUT:character)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#getTempTable_Method"
+						title="getTempTable">getTempTable(INPUT:character,OUTPUT:table-handle):LOGICAL</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#initialize_Method"
+						title="initialize">initialize()</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#initMethodSignature_Method"
+						title="initMethodSignature">initMethodSignature(INPUT:MethodSignature)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#initSchema_Method"
+						title="initSchema">initSchema()</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#registerDatabases_Method"
+						title="registerDatabases">registerDatabases()</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#registerDataset_Method"
+						title="registerDataset">registerDataset(INPUT:handle)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#registerTempTable_Method"
+						title="registerTempTable">registerTempTable(INPUT:character,INPUT:handle)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="SchemaManager.cls.html#registerTempTable_Method"
+						title="registerTempTable">registerTempTable(INPUT:handle)</a>
+				</div>
+			</td> 
+												</tr>
+			</table>
+	
+		<!-- method summary section end -->
+
+
+	<!-- EVENT SUMMARY SECTION -->
+		<!-- EVENT SUMMARY SECTION END -->
+
+	<!-- PROPERTY SUMMARY SECTION -->
+		<div class="title_name">
+		Properties<br>
+	</div>
+
+	<table class="table_summary" cellspacing="0" summary="">
+			
+		 
+										<tr>
+							<td class="table_data">
+					<div class="cell_data">
+						<a href="SchemaManager.cls.html#oLoggingManager_Property"
+								title="oLoggingManager">oLoggingManager</a>
+					</div>
+				</td> 
+													</tr>
+			</table>
+	
+		<!-- PROPERTY SUMMARY SECTION END -->
+
+	
+<!-- VARIABLE SUMMARY SECTION -->
+<!-- VARIABLE SUMMARY SECTION END -->
+
+
+<!-- BUFFER SUMMARY SECTION -->
+<!-- BUFFER SUMMARY SECTION END -->
+
+<!-- DATASET SUMMARY SECTION -->
+<div class="section">
+	Datasets<br>
+</div>
+
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data"><div class="cell_data">
+					<a	href="SchemaManager.cls.html#dsConfig_Dataset"
+						title="dsConfig">dsConfig</a>
+				</div></td> 
+												</tr>
+		</table>
+
+<!-- DATASET SUMMARY SECTION END -->
+
+
+<!-- DATA-SOURCE SUMMARY SECTION -->
+<!-- DATA-SOURCE SUMMARY SECTION END -->
+
+<!-- QUERY SUMMARY SECTION -->
+<!-- QUERY SUMMARY SECTION END -->
+
+<!-- TEMP-TABLE SUMMARY SECTION -->
+<div class="section">
+	Temp Tables<br>
+</div>
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+			 
+													<tr>
+								<td class="table_data"><div class="cell_data">
+						<a	href="SchemaManager.cls.html#ConfigDB_Temp_Table"
+							title="ConfigDB">ConfigDB</a>
+					</div></td> 
+																			<td class="table_data"><div class="cell_data">
+						<a	href="SchemaManager.cls.html#ConfigField_Temp_Table"
+							title="ConfigField">ConfigField</a>
+					</div></td> 
+																			<td class="table_data"><div class="cell_data">
+						<a	href="SchemaManager.cls.html#ConfigTable_Temp_Table"
+							title="ConfigTable">ConfigTable</a>
+					</div></td> 
+											</tr>
+														<tr>
+								<td class="table_data"><div class="cell_data">
+						<a	href="SchemaManager.cls.html#SchemaObject_Temp_Table"
+							title="SchemaObject">SchemaObject</a>
+					</div></td> 
+																	</tr>
+				</table>
+
+<!-- TEMP-TABLE SUMMARY SECTION END -->
+	
+	<!-- ============ CONSTRUCTOR DETAIL ========== --> 
+		
+	<!-- ============ END CONSTRUCTOR DETAIL ========== --> 
+	<!-- ============ METHOD DETAIL ========== -->
+	
+		
+	<div class="title_name">
+		Method Detail<br>
+	</div>
+	 
+		<hr/>
+	<a name="addSchemaToSignature_Method"></a>
+	<div class="section">addSchemaToSignature method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">addSchemaToSignature(INPUT:character,INPUT:MethodSignature):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcObjectList</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">poMethodSignature</span>&nbsp;
+									<a href="../../../Spark/Core/Util/MethodSignature.cls.html"
+			title="Spark.Core.Util.MethodSignature">			MethodSignature
+</a>
+					</div>
+								
+		<hr/>
+	<a name="deleteObjects_Method"></a>
+	<div class="section">deleteObjects method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">deleteObjects()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="dispose_Method"></a>
+	<div class="section">dispose method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">dispose()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="dumpObjects_Method"></a>
+	<div class="section">dumpObjects method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">dumpObjects()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="examineDatabases_Method"></a>
+	<div class="section">examineDatabases method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">examineDatabases()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="examineTables_Method"></a>
+	<div class="section">examineTables method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">examineTables(INPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcDatabaseName</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="examineTables_Method"></a>
+	<div class="section">examineTables method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">examineTables(INPUT:character,INPUT:character,INPUT:character,INPUT:logical)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcDatabaseName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcIncludeTables</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcExcludeTables</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plUseDebugs</span>&nbsp;
+										LOGICAL			
+					</div>
+								
+		<hr/>
+	<a name="fixSerializedNames_Method"></a>
+	<div class="section">fixSerializedNames method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">fixSerializedNames(INPUT:table-handle)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">phTableHandle</span>&nbsp;
+										TABLE-HANDLE			
+					</div>
+								
+		<hr/>
+	<a name="getDataset_Method"></a>
+	<div class="section">getDataset method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getDataset(INPUT:character,OUTPUT:dataset-handle):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcDatasetName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">phDatasetHandle</span>&nbsp;
+										DATASET-HANDLE			
+					</div>
+								
+		<hr/>
+	<a name="getDataset_Method"></a>
+	<div class="section">getDataset method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getDataset(INPUT:longchar,OUTPUT:dataset-handle):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">plcDatasetSchema</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">phDatasetHandle</span>&nbsp;
+										DATASET-HANDLE			
+					</div>
+								
+		<hr/>
+	<a name="getObject_Method"></a>
+	<div class="section">getObject method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getObject(INPUT:character,INPUT:character,OUTPUT:character,OUTPUT:character,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcParentname</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcObjectName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcObjectAltName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcObjectType</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcObjectSchema</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="getObjectChildren_Method"></a>
+	<div class="section">getObjectChildren method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getObjectChildren(INPUT:character,OUTPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcParentName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcObjectList</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="getObjectList_Method"></a>
+	<div class="section">getObjectList method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getObjectList(INPUT:character,OUTPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcSchemaType</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcObjectList</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="getTempTable_Method"></a>
+	<div class="section">getTempTable method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				LOGICAL			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getTempTable(INPUT:character,OUTPUT:table-handle):LOGICAL</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcTableName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">phTableHandle</span>&nbsp;
+										TABLE-HANDLE			
+					</div>
+								
+		<hr/>
+	<a name="initialize_Method"></a>
+	<div class="section">initialize method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">initialize()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="initMethodSignature_Method"></a>
+	<div class="section">initMethodSignature method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">initMethodSignature(INPUT:MethodSignature)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poMethodSignature</span>&nbsp;
+									<a href="../../../Spark/Core/Util/MethodSignature.cls.html"
+			title="Spark.Core.Util.MethodSignature">			MethodSignature
+</a>
+					</div>
+								
+		<hr/>
+	<a name="initSchema_Method"></a>
+	<div class="section">initSchema method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">initSchema()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="registerDatabases_Method"></a>
+	<div class="section">registerDatabases method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">registerDatabases()</span>
+			</td>
+		</tr>
+	</table>
+	
+			
+		<hr/>
+	<a name="registerDataset_Method"></a>
+	<div class="section">registerDataset method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">registerDataset(INPUT:handle)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">phDatasetHandle</span>&nbsp;
+										HANDLE			
+					</div>
+								
+		<hr/>
+	<a name="registerTempTable_Method"></a>
+	<div class="section">registerTempTable method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">registerTempTable(INPUT:character,INPUT:handle)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcParentObject</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">phTableHandle</span>&nbsp;
+										HANDLE			
+					</div>
+								
+		<hr/>
+	<a name="registerTempTable_Method"></a>
+	<div class="section">registerTempTable method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">registerTempTable(INPUT:handle)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">phTableHandle</span>&nbsp;
+										HANDLE			
+					</div>
+								
+			
+	<!-- ============ END METHOD DETAIL ========== --> 
+	<!-- ============ EVENT DETAIL ========== -->
+		<!-- ============ END EVENT DETAIL ========== -->
+	<!-- ============ PROPERTY DETAIL ========== -->
+		<div class="title_name">
+		Property Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="oLoggingManager_Property"></a>
+	
+	<div class="section">oLoggingManager property</div>
+	<div class="paragraph">
+		 										
+								<!-- tags should go here -->
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;			<a href="../../../Spark/Core/Manager/ILoggingManager.cls.html"
+			title="Spark.Core.Manager.ILoggingManager">			ILoggingManager
+</a>
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PROTECTED &nbsp
+			</div>
+	
+							 
+				
+		<!-- ============ END PROPERTY DETAIL ========== -->
+
+	<!-- ============ VARIABLE DETAIL ========== -->
+<!-- ============ END VARIABLE DETAIL ========== -->
+
+<!-- ============ BUFFER DETAIL ========== -->
+<!-- ============ END BUFFER DETAIL ========== -->
+
+<!-- ============ DATASET DETAIL ========== -->
+	<div class="title_name">
+		Dataset Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="dsConfig_Dataset"></a>
+	
+	<div class="section">dsConfig dataset</div>
+	<div class="paragraph">
+												
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Access</span>:&nbsp;PRIVATE
+	</div>
+	
+							 
+<br>				
+<!-- ============ END DATASET DETAIL ========== -->
+<!-- ============ DATA-SOURCE DETAIL ========== -->
+<!-- ============ END DATA-SOURCE DETAIL ========== -->
+<!-- ============ QUERY DETAIL ========== -->
+<!-- ============ END QUERY DETAIL ========== -->
+<!-- ============ TEMP-TABLE DETAIL ========== -->
+	<div class="title_name">
+		Temp-Table Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="ConfigDB_Temp_Table"></a>
+	
+	<div class="section">ConfigDB temp-table</div>
+	<div class="paragraph">
+												
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Access</span>:&nbsp;PRIVATE
+	</div>
+	
+		<hr/> 
+	<a name="ConfigField_Temp_Table"></a>
+	
+	<div class="section">ConfigField temp-table</div>
+	<div class="paragraph">
+												
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Access</span>:&nbsp;PRIVATE
+	</div>
+	
+		<hr/> 
+	<a name="ConfigTable_Temp_Table"></a>
+	
+	<div class="section">ConfigTable temp-table</div>
+	<div class="paragraph">
+												
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Access</span>:&nbsp;PRIVATE
+	</div>
+	
+		<hr/> 
+	<a name="SchemaObject_Temp_Table"></a>
+	
+	<div class="section">SchemaObject temp-table</div>
+	<div class="paragraph">
+												
+							</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Access</span>:&nbsp;PRIVATE
+	</div>
+	
+							 
+<br>				
+<!-- ============ END TEMP-TABLE DETAIL ========== -->
+	<!-- copyright content placed here will be shown in all the output pages -->
+<footer>
+		<br>
+		<div class="copyright_style">
+			<p><!-- put your copyright here --></p>
+		</div>
+</footer></body>
+</html>

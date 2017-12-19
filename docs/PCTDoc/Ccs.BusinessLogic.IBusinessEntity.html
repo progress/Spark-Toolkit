@@ -1,0 +1,572 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>PMFO (v4.1.1)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="Ccs.BusinessLogic.package.html">Ccs.BusinessLogic<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Interface&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">IBusinessEntity</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits"><a href='Ccs.Common.IService.html'>Ccs.Common.IService</a></span>
+                                </td>
+                            </tr>
+                            
+                            <!--
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"></span> 
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>This Software is licensed by Progress Software Corporation (licensor) </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>under the Progress Software Common Component Specification Project </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Release License Agreement available at </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>https://community.progress.com/products/directions/common_component/p/releaselicenseagreement </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>The Interface definition is part of the Common Component Specification [CCSBE01]. The </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>file is considered as a Specification Implementation Condition as described </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>in section 2.1.1.1: If Licensor has made Specification Implementation </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Conditions available as of the date Licensee completes its Independent </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Implementation, then Licensee must, prior to making any claim that its </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Independent Implementation complies with the Specification, ensure that </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>the Independent Implementation satisfies all of the Specification </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Implementation Conditions. If Licensor subsequently makes available or </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>updates, from time to time, the Specification Implementation Conditions, </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>then Licensee will verify that its Independent Implementation satisfies the </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>latest version of the Specification Implementation Conditions within ninety </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>(90) days following Licensor's release thereof. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Contributors: </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Mike Fechner, Consultingwerk [2016] </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>IBusinessEntity </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>CCSBE 1.0 Interface for Business Entities </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Mike Fechner / Consultingwerk Ltd. </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Sun May 22 18:49:41 CEST 2016 </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.BusinessLogic.IGetDataResponse <a href='#020010wruJs6iiszoqxGKTN3JQ1Q=='> getData (IGetDataRequest, dataset-handle)</a>
+    </font>
+  </td>
+  <td class="cell">
+     Performs a read request <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010lO5iOg7uEh0NC92q72jKOg=='> getDataset (dataset-handle)</a>
+    </font>
+  </td>
+  <td class="cell">
+     Returns an empty instance of the primary ProDataset to the caller <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.BusinessLogic.IGetResultCountResponse <a href='#020010DuEONU96/X5n0mp17K7rzw=='> getResultCount (IGetDataRequest)</a>
+    </font>
+  </td>
+  <td class="cell">
+     Returns the count of the total number of result records or a guess
+of the result count to the caller <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010wruJs6iiszoqxGKTN3JQ1Q==" href="#Top">Top</a>
+                <a name=" <a href='Ccs.BusinessLogic.IGetDataResponse.html'>Ccs.BusinessLogic.IGetDataResponse</a> <a href='#020010wruJs6iiszoqxGKTN3JQ1Q=='> getData (IGetDataRequest, dataset-handle)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE <a href='Ccs.BusinessLogic.IGetDataResponse.html'>Ccs.BusinessLogic.IGetDataResponse</a> <a href='#020010wruJs6iiszoqxGKTN3JQ1Q=='> getData (IGetDataRequest, dataset-handle)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Performs a read request </td></tr><tr><td class='paramname'>Notes: </td><td class='paramdesc'> </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRequest</i>
+    </td>
+    <td>
+       <a href='Ccs.BusinessLogic.IGetDataRequest.html'>Ccs.BusinessLogic.IGetDataRequest</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        The IGetDataRequest instance with the getData request parameters
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>phDataset</i>
+    </td>
+    <td>
+       DATASET-HANDLE
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        OUTPUT Dataset
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='Ccs.BusinessLogic.IGetDataResponse.html'>Ccs.BusinessLogic.IGetDataResponse</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        The IGetDataResponse instance
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010lO5iOg7uEh0NC92q72jKOg==" href="#Top">Top</a>
+                <a name="  <a href='#020010lO5iOg7uEh0NC92q72jKOg=='> getDataset (dataset-handle)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010lO5iOg7uEh0NC92q72jKOg=='> getDataset (dataset-handle)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an empty instance of the primary ProDataset to the caller </td></tr><tr><td class='paramname'>Notes: </td><td class='paramdesc'>Used for catalog generation or initialization of dynamic user </td></tr><td class='paramname'></td><td class='paramdesc'>interfaces etc. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>phDataset</i>
+    </td>
+    <td>
+       DATASET-HANDLE
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        OUTPUT Dataset (not intended to be called BY-REFERENCE)
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010DuEONU96/X5n0mp17K7rzw==" href="#Top">Top</a>
+                <a name=" <a href='Ccs.BusinessLogic.IGetResultCountResponse.html'>Ccs.BusinessLogic.IGetResultCountResponse</a> <a href='#020010DuEONU96/X5n0mp17K7rzw=='> getResultCount (IGetDataRequest)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE <a href='Ccs.BusinessLogic.IGetResultCountResponse.html'>Ccs.BusinessLogic.IGetResultCountResponse</a> <a href='#020010DuEONU96/X5n0mp17K7rzw=='> getResultCount (IGetDataRequest)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns the count of the total number of result records or a guess </td></tr><td class='paramname'></td><td class='paramdesc'>of the result count to the caller </td></tr><tr><td class='paramname'>Notes: </td><td class='paramdesc'> </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRequest</i>
+    </td>
+    <td>
+       <a href='Ccs.BusinessLogic.IGetDataRequest.html'>Ccs.BusinessLogic.IGetDataRequest</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        The IGetDataRequest instance with the getResultCount request parameters
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='Ccs.BusinessLogic.IGetResultCountResponse.html'>Ccs.BusinessLogic.IGetResultCountResponse</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        The IGetResultCountResponse instance
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <font class="footer_timestamp">10.09.2017 15:56:55</font>
+    </BODY>
+</HTML>

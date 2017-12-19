@@ -1,0 +1,924 @@
+<!DOCTYPE html >
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>RestFacade.cls</title>
+
+<link rel="StyleSheet" href="../../css/stylesheet.css"
+	type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- package name  and class name-->
+	<div class="pkg_class_name">
+		 <a href="package.html">Spark.Core</a>: RestFacade CLASS 
+	</div>
+	<br>
+	<!--Class Name -->
+	<div  class="title_name">
+	RestFacade 
+	
+			FINAL
+		CLASS</div>
+
+	<!-- class comment should go here -->
+	<div class="paragraph">
+	<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Author(s)</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Notes</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Created</span>:
+	  				<br>
+	</div>
+	
+					<!-- Abstract modifier  -->
+	<div class="paragraph">
+	<span class="detail_field_title" style="font-size: 15px" width="50px">Modifiers</span>:&nbsp 
+		FINAL
+	</div>
+		
+		
+		<div class="paragraph">
+	<span class="detail_field_title" style="font-size: 13px;" width="50px">USE-WIDGET-POOL</span>:
+	  true<br>
+	</div>
+		
+	<!-- extends section-->
+				<div  class="section">Super Class</div>
+		<div  class="paragraph">
+		<span class="code">
+					<a href="../../Spark/Core/Interface/ServiceInterface.cls.html"
+			title="Spark.Core.Interface.ServiceInterface">			ServiceInterface
+</a>
+			</span>
+	</div>
+	
+	<!-- inherits section-->
+		<div  class="section">Interfaces</div>
+	<div  class="paragraph">
+		<span class="code">
+					<span class="code">
+							<a href="../../Spark/Core/Interface/IRestFacade.cls.html"
+			title="Spark.Core.Interface.IRestFacade">			IRestFacade
+</a>
+				</span>&nbsp 
+				</span>
+	</div>
+		
+
+	<!-- CONSTRUCTOR SUMMARY SECTION -->
+		<!-- CONSTRUCTOR SUMMARY SECTION END -->
+
+	<!-- methods summary section -->
+		<div class="title_name">
+		Methods<br>
+	</div>
+	
+	
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doCreate_Method"
+						title="doCreate">doCreate(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doDelete_Method"
+						title="doDelete">doDelete(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doDestroy_Method"
+						title="doDestroy">doDestroy(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doGet_Method"
+						title="doGet">doGet(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doPost_Method"
+						title="doPost">doPost(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doPut_Method"
+						title="doPut">doPut(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doRead_Method"
+						title="doRead">doRead(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#doUpdate_Method"
+						title="doUpdate">doUpdate(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#getCatalog_Method"
+						title="getCatalog">getCatalog(INPUT:character,INPUT:character,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#getCatalogAll_Method"
+						title="getCatalogAll">getCatalogAll(OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="RestFacade.cls.html#logoutUser_Method"
+						title="logoutUser">logoutUser(OUTPUT:decimal,OUTPUT:integer,OUTPUT:logical,OUTPUT:character)</a>
+				</div>
+			</td> 
+												</tr>
+			</table>
+	
+		<!-- method summary section end -->
+
+
+	<!-- EVENT SUMMARY SECTION -->
+		<!-- EVENT SUMMARY SECTION END -->
+
+	<!-- PROPERTY SUMMARY SECTION -->
+		<!-- PROPERTY SUMMARY SECTION END -->
+
+	
+<!-- VARIABLE SUMMARY SECTION -->
+<!-- VARIABLE SUMMARY SECTION END -->
+
+
+<!-- BUFFER SUMMARY SECTION -->
+<!-- BUFFER SUMMARY SECTION END -->
+
+<!-- DATASET SUMMARY SECTION -->
+<!-- DATASET SUMMARY SECTION END -->
+
+
+<!-- DATA-SOURCE SUMMARY SECTION -->
+<!-- DATA-SOURCE SUMMARY SECTION END -->
+
+<!-- QUERY SUMMARY SECTION -->
+<!-- QUERY SUMMARY SECTION END -->
+
+<!-- TEMP-TABLE SUMMARY SECTION -->
+<!-- TEMP-TABLE SUMMARY SECTION END -->
+	
+	<!-- ============ CONSTRUCTOR DETAIL ========== --> 
+		
+	<!-- ============ END CONSTRUCTOR DETAIL ========== --> 
+	<!-- ============ METHOD DETAIL ========== -->
+	
+		
+	<div class="title_name">
+		Method Detail<br>
+	</div>
+	 
+		<hr/>
+	<a name="doCreate_Method"></a>
+	<div class="section">doCreate method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doCreate(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doDelete_Method"></a>
+	<div class="section">doDelete method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doDelete(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doDestroy_Method"></a>
+	<div class="section">doDestroy method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doDestroy(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doGet_Method"></a>
+	<div class="section">doGet method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doGet(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doPost_Method"></a>
+	<div class="section">doPost method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doPost(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doPut_Method"></a>
+	<div class="section">doPut method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doPut(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doRead_Method"></a>
+	<div class="section">doRead method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doRead(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="doUpdate_Method"></a>
+	<div class="section">doUpdate method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">doUpdate(INPUT:character,INPUT:character,INPUT:character,INPUT:longchar,OUTPUT:logical,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMethodName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcServiceObj</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonRequest</span>&nbsp;
+										LONGCHAR			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="getCatalog_Method"></a>
+	<div class="section">getCatalog method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getCatalog(INPUT:character,INPUT:character,OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcServiceURI</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcResourceName</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="getCatalogAll_Method"></a>
+	<div class="section">getCatalogAll method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">getCatalogAll(OUTPUT:decimal,OUTPUT:integer,OUTPUT:longchar)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcJsonResponse</span>&nbsp;
+										LONGCHAR			
+					</div>
+								
+		<hr/>
+	<a name="logoutUser_Method"></a>
+	<div class="section">logoutUser method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">logoutUser(OUTPUT:decimal,OUTPUT:integer,OUTPUT:logical,OUTPUT:character)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pfElapsedTime</span>&nbsp;
+										DECIMAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piResponseCode</span>&nbsp;
+										INTEGER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">plResult</span>&nbsp;
+										LOGICAL			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcMessage</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+			
+	<!-- ============ END METHOD DETAIL ========== --> 
+	<!-- ============ EVENT DETAIL ========== -->
+		<!-- ============ END EVENT DETAIL ========== -->
+	<!-- ============ PROPERTY DETAIL ========== -->
+		<!-- ============ END PROPERTY DETAIL ========== -->
+
+	<!-- ============ VARIABLE DETAIL ========== -->
+<!-- ============ END VARIABLE DETAIL ========== -->
+
+<!-- ============ BUFFER DETAIL ========== -->
+<!-- ============ END BUFFER DETAIL ========== -->
+
+<!-- ============ DATASET DETAIL ========== -->
+<!-- ============ END DATASET DETAIL ========== -->
+<!-- ============ DATA-SOURCE DETAIL ========== -->
+<!-- ============ END DATA-SOURCE DETAIL ========== -->
+<!-- ============ QUERY DETAIL ========== -->
+<!-- ============ END QUERY DETAIL ========== -->
+<!-- ============ TEMP-TABLE DETAIL ========== -->
+<!-- ============ END TEMP-TABLE DETAIL ========== -->
+	<!-- copyright content placed here will be shown in all the output pages -->
+<footer>
+		<br>
+		<div class="copyright_style">
+			<p><!-- put your copyright here --></p>
+		</div>
+</footer></body>
+</html>
