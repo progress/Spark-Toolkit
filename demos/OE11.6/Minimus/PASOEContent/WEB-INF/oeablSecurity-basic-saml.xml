@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<b:beans xmlns:b="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd 
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!-- Enable autowiring -->
+    <context:annotation-config/>
+    <context:component-scan base-package="org.springframework.security.saml"/>
+    
+    <!-- To disable security for APSV, import apsv-none.xml (and comment out import of apsv-basic.xml)-->
+    <!-- To enable security for APSV, import apsv-basic.xml (and comment out import of apsv-none.xml) -->
+    <b:import resource="apsv-none.xml"/> 
+    <!--<b:import resource="apsv-basic.xml"/> -->
+
+    <!-- To disable security for SOAP, import apsv-none.xml (and comment out import of soap-basic.xml)-->
+    <!-- To enable security for SOAP, import apsv-basic.xml (and comment out import of soap-none.xml) -->
+    <b:import resource="soap-none.xml"/>
+    <!--<b:import resource="soap-basic-local.xml"/> --> 
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/rest/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="ifRequired" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth" 
+          realm="OpenEdge" >
+        <!--    Disable Metadata file Generation and Display filter-->
+        <!-- 
+        <custom-filter before="FIRST" ref="metadataGeneratorFilter"/>
+        <custom-filter after="PRE_AUTH_FILTER" ref="metadataDisplayFilter"/>
+        -->
+    
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+        
+        <!-- OpenEdge SAMLProcessing SSO Filter -->
+        
+        <custom-filter before="BASIC_AUTH_FILTER" 
+                       ref="samlProcessingFilter" />
+        
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+          
+        <custom-filter position="SWITCH_USER_FILTER"
+                       ref="OEClientPrincipalFilter" />
+        
+        <!-- HTTP REST/Mobile AppServer service -->
+        <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+        
+        <!-- authentication models -->
+        <http-basic />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+        
+    </http>
+
+    <!-- This HTTP security space represents the WSPD and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/web/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="ifRequired" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth" 
+          realm="OpenEdge" >
+        <!--    Disable Metadata file Generation and Display filter-->
+        <!-- 
+        <custom-filter before="FIRST" ref="metadataGeneratorFilter"/>
+        <custom-filter after="PRE_AUTH_FILTER" ref="metadataDisplayFilter"/>
+        -->
+    
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+        
+        <!-- OpenEdge SAMLProcessing SSO Filter -->
+        
+        <custom-filter before="BASIC_AUTH_FILTER" 
+                       ref="samlProcessingFilter" />
+        
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+          
+        <custom-filter position="SWITCH_USER_FILTER"
+                       ref="OEClientPrincipalFilter" />
+        
+        <intercept-url pattern="/web/**"  
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+        
+        <!-- authentication models -->
+        <http-basic />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+        
+    </http>
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+
+    <http pattern="/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="ifRequired" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth" 
+          realm="OpenEdge" >
+
+        <!--    Disable Metadata file Generation and Display filter-->
+        <!-- 
+        <custom-filter before="FIRST" ref="metadataGeneratorFilter"/>
+        <custom-filter after="PRE_AUTH_FILTER" ref="metadataDisplayFilter"/>
+        -->
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+        <!-- Restricted Mobile session class uses this page as part of its 
+             login() operation, protect it so it triggers user 
+             authentication -->
+        <intercept-url pattern="/static/home.html" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <!-- Mobile application restrictions section ends here -->
+
+        <!-- Restricted web application server-status page that gives
+             an admin/developer access to some web application information.
+             Must appear before the the wildcard access controls below -->
+        <intercept-url pattern="/static/ServerStatus.html" method="GET"
+                       access="hasAnyRole('ROLE_PSCUser','ROLE_PSCAdmin','ROLE_PSCDebug')"/>
+
+        <intercept-url pattern="/server/**"  method="GET"
+                       access="hasAnyRole('ROLE_PSCAdmin','ROLE_PSCDebug')"/>
+
+        <!-- Open access resources -->
+
+        <intercept-url pattern="/static/error/*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/images/*" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/auth/*" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/*" method="GET" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/*" method="GET" 
+                       access="permitAll()"/>
+
+
+        <!-- Restricted access HTTP static files -->
+        <intercept-url pattern="/static/**" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/static/home.html" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.htm*" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.gif" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.jpg" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.css" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.js" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.json" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.asp" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.inc" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <!-- Best practice - deny anything not explicitly granted. -->
+        <intercept-url pattern="/**" access="denyAll()"/>
+        
+        <!-- authentication models -->
+        <http-basic />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+        
+    </http>
+
+    <!-- Handler deciding where to redirect user after successful login -->
+    <b:bean id="successRedirectHandler"
+          class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+        <b:property name="defaultTargetUrl" value="/"/>
+    </b:bean>
+    
+    <!-- Register authentication manager with SAML provider -->
+    <authentication-manager id="oeablApplicationAuth">
+        <authentication-provider ref="oeSamlAuthenticationProvider"/>
+    </authentication-manager>
+    
+    <!-- Processing filter for WebSSO profile messages -->
+    <b:bean id="samlProcessingFilter" class="com.progress.appserv.services.security.OESamlProcessingFilter">
+        <b:property name="samlEntryPointHandler" ref="initializeSAMLEntryPoint"/>
+        <b:property name="authenticationManager" ref="oeablApplicationAuth"/>
+        <b:property name="authenticationSuccessHandler" ref="successRedirectHandler"/>
+        <!-- Uncomment the below section and 
+          1) Replace "https://localhost:8443/TestService/" with the URL value as configured in the IdP 
+          2) Replace "https://secure-test.IdP.com" with the actual URL value 
+        -->
+        <!--
+        <b:property name="defaultFilterProcessesUrl" value="https://localhost:8443/TestService/"/>
+        <b:property name="defaultIdpProcessingUrl" value="https://secure-test.IdP.com"/>
+        -->
+    </b:bean>
+        
+    <b:bean id="initializeSAMLEntryPoint" class="com.progress.appserv.services.security.OESamlEntryPointHandler">
+        <b:property name="defaultProfileOptions">
+        <b:bean class="org.springframework.security.saml.websso.WebSSOProfileOptions">
+            <b:property name="binding" value="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"/>
+            <b:property name="includeScoping" value="false"/>
+        </b:bean>
+        </b:property>
+    </b:bean>
+    
+     <!-- SAML 2.0 Web SSO profile -->
+    <b:bean id="webSSOprofile" class="org.springframework.security.saml.websso.WebSSOProfileImpl"/>
+    
+    <b:bean id="ecpprofile" class="org.springframework.security.saml.websso.WebSSOProfileImpl"/>
+        
+    <b:bean id="keyManager" class="org.springframework.security.saml.key.JKSKeyManager">
+        <b:constructor-arg value="WEB-INF/samlKeystore.keystore"/>
+        <!-- Uncomment the below section.
+             1) Replace "https://localhost:8443/TestService/" with the URL value used as alias
+                during security key generation using standard Java keytool generator
+             2) Replace "password"with the password used during security key generation using 
+                standard Java keytool generator
+        -->
+        <!--
+        <b:constructor-arg type="java.lang.String" value="password"/>
+        <b:constructor-arg>
+            <b:map>
+                <b:entry key="https://localhost:8443/TestService/" value="password"/>
+            </b:map>
+        </b:constructor-arg>
+        <b:constructor-arg type="java.lang.String" value="https://localhost:8443/TestService/"/>
+        -->
+    </b:bean>
+      
+    <!-- IDP Metadata configuration - paths to metadata of IDPs in circle of trust is here -->
+    <!-- Do no forget to call iniitalize method on providers -->
+
+    <b:bean id="metadata" class="org.springframework.security.saml.metadata.CachingMetadataManager">
+        <b:constructor-arg>
+            <b:list>
+                <!-- IDP Metadata file -->
+                
+                <b:bean class="org.springframework.security.saml.metadata.ExtendedMetadataDelegate">
+                    <b:constructor-arg>
+                        <b:bean class="org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider">
+                            <b:constructor-arg>
+                                <b:value type="java.io.File">WEB-INF/meta-psc-oerestadapter-idp-test.xml</b:value>
+                            </b:constructor-arg>
+                            <b:property name="parserPool" ref="parserPool"/>
+                        </b:bean>
+                    </b:constructor-arg>
+                    <b:constructor-arg>
+                             <b:bean class="org.springframework.security.saml.metadata.ExtendedMetadata">
+                            <b:property name="local" value="false"/> 
+                            <b:property name="alias" value="default"/>
+                            <b:property name="securityProfile" value="metaiop"/>
+                            <b:property name="requireArtifactResolveSigned" value="false"/>
+                            <b:property name="requireLogoutRequestSigned" value="false"/>
+                            <b:property name="requireLogoutResponseSigned" value="false"/>
+                            <b:property name="idpDiscoveryEnabled" value="false"/>
+                            <b:property name="ecpEnabled" value="true"/>
+                        </b:bean>
+                    </b:constructor-arg>
+                </b:bean>
+                
+                
+                <!-- SP Metadata file -->
+                <b:bean class="org.springframework.security.saml.metadata.ExtendedMetadataDelegate">
+                    <b:constructor-arg>
+                        <b:bean class="org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider">
+                            <b:constructor-arg>
+                                <b:value type="java.io.File">WEB-INF/metadata_-_RestSP.xml</b:value>
+                            </b:constructor-arg>
+                            <b:property name="parserPool" ref="parserPool"/>
+                        </b:bean>
+                    </b:constructor-arg>
+                    <b:constructor-arg>
+                             <b:bean class="org.springframework.security.saml.metadata.ExtendedMetadata">
+                            <b:property name="local" value="true"/> 
+                            <b:property name="alias" value="default"/>
+                            <b:property name="securityProfile" value="metaiop"/>
+                            <b:property name="requireArtifactResolveSigned" value="false"/>
+                            <b:property name="requireLogoutRequestSigned" value="false"/>
+                            <b:property name="requireLogoutResponseSigned" value="false"/>
+                            <b:property name="idpDiscoveryEnabled" value="false"/>
+                            <b:property name="ecpEnabled" value="true"/>
+                        </b:bean>
+                    </b:constructor-arg>
+                </b:bean>
+             </b:list>
+        </b:constructor-arg>
+    </b:bean>
+    
+    <!-- Provider of default SAML Context -->
+    <b:bean id="contextProvider" class="com.progress.appserv.services.security.OESamlContextProviderImpl">
+    </b:bean>
+    
+   
+    <!-- Class loading incoming SAML messages from httpRequest stream -->
+    <b:bean id="processor" class="com.progress.appserv.services.security.OESamlProcessorImpl">
+        <b:constructor-arg>
+            <b:list>
+                <b:ref bean="redirectBinding"/>
+                <b:ref bean="postBinding"/>
+                <!-- b:ref bean="artifactBinding"/ -->
+                <!-- b:ref bean="soapBinding"/ -->
+                <!-- b:ref bean="paosBinding"/ -->
+            </b:list>
+        </b:constructor-arg>
+    </b:bean>
+         
+     
+     <b:bean id="redirectBinding" class="org.springframework.security.saml.processor.HTTPRedirectDeflateBinding">
+        <b:constructor-arg ref="parserPool"/>
+    </b:bean>
+    
+    <b:bean id="postBinding" class="com.progress.appserv.services.security.OESamlHTTPPostBinding">
+        <b:constructor-arg ref="parserPool"/>
+        <b:constructor-arg ref="velocityEngine"/>
+    </b:bean>
+    
+     <b:bean id="velocityEngine" class="org.springframework.security.saml.util.VelocityFactory" factory-method="getEngine"/>
+     
+            
+    <!-- SAML Authentication Provider responsible for validating of received SAML messages -->
+    <b:bean id="oeSamlAuthenticationProvider" class="com.progress.appserv.services.security.OESamlAuthenticationProvider">
+        <!-- OPTIONAL property: can be used to store/load user data after login -->
+        <b:property name="userDetails" ref="userDetails" />
+        <b:property name="consumer" ref="consumer" />
+        <b:property name="hokConsumer" ref="hokConsumer" />
+        <b:property name="samlLogger" ref="samlLogger" />
+    </b:bean>
+    
+    <!-- SAML 2.0 Assertion UserDetails -->
+    <b:bean id="userDetails" class="com.progress.appserv.services.security.OESamlUserDetailsService">
+            <b:property name="grantedAuthorities" value="ROLE_PSCUser" />
+    </b:bean>
+    
+    <!-- SAML 2.0 Assertion Consumer -->
+    <b:bean id="consumer" class="com.progress.appserv.services.security.OESamlWebssoProfileConsumerImpl">
+        <b:property name="maxAssertionTime" value="30"/>
+        <b:property name="responseSkew" value="120"/>
+    </b:bean>
+    
+    <!-- SAML 2.0 Assertion Consumer -->
+    <b:bean id="hokConsumer" class="org.springframework.security.saml.websso.WebSSOProfileConsumerHoKImpl"/>
+    
+    <!-- Logger for SAML messages and events -->
+    <b:bean id="samlLogger" class="org.springframework.security.saml.log.SAMLDefaultLogger"/>
+    
+    <!-- Custom form login handlers for JSON requests -->
+    <b:bean id="OEAuthnSuccessHandler" 
+            class="com.progress.appserv.services.security.OEAuthnSuccessHandler">
+    </b:bean>
+
+    <b:bean id="OEAuthnFailureHandler" 
+            class="com.progress.appserv.services.security.OEAuthnFailHandler">
+    </b:bean>
+
+    <b:bean id="OEAccessDeniedHandler" 
+            class="com.progress.appserv.services.security.OEAccessDeniedHandler">
+    </b:bean>
+
+    <b:bean id="OELogoutSuccessHandler" 
+            class="com.progress.appserv.services.security.OELogoutSuccessHandler">
+    </b:bean>
+    
+    <!-- The security filter that turns a Spring token into an OpenEdge
+         ClientPrincipal object -->
+    <b:bean id="OEClientPrincipalFilter"
+             class="com.progress.appserv.services.security.OEClientPrincipalFilter" >
+             <!--
+             <b:property name="enablecp" value="false" />
+             <b:property name="domain" value="sample" />
+             <b:property name="roles" value="sample" />
+             <b:property name="authz" value="false" />
+             <b:property name="expires" value="600" />
+             <b:property name="accntinfo" value="true" />
+             <b:property name="properties" >
+                <b:map>
+                     <b:entry key="prop-1" value="string1"/>
+                     <b:entry key="prop-2" value="string2"/>
+                </b:map>
+             </b:property>
+             <b:property name="ccid" value="true" />
+             <b:property name="anonymous" value="true" />
+             <b:property name="appName" value="OE" />
+            --> 
+    </b:bean>
+    
+    
+     <!-- The security filter that implements the CORS standard for controling
+         cross site resource access by http clients. -->
+    <b:bean id="OECORSFilter"
+             class="com.progress.appserv.services.security.OECORSFilter" >
+			 <!-- These headers are used to support OE SSO. Enable them by default -->
+			 <b:property name="responseHeaders" value="Access-Control-Allow-Origin,Access-Control-Allow-Headers,X-CLIENT-CONTEXT-ID,X-OE-CLIENT-CONTEXT-ID" />
+             <!-- Examples:
+             <b:property name="allowAll" value="false" />
+             <b:property name="allowDomains" value="*" />
+             <b:property name="allowSubdomains" value="false" />
+             <b:property name="allowMethods" value="" />
+             <b:property name="messageHeaders" value="" />
+             <b:property name="responseHeaders" value="" />
+             <b:property name="supportCredentials" value="true" />
+             <b:property name="maxAge" value="-1" />
+             -->
+    </b:bean>
+    
+    <!-- Filter to generate sp provider metadata file  -->
+    <b:bean id="metadataGeneratorFilter"
+        class="org.springframework.security.saml.metadata.MetadataGeneratorFilter">
+        <b:constructor-arg>
+            <b:bean class="org.springframework.security.saml.metadata.MetadataGenerator">
+                <b:property name="signMetadata" value="false"/>
+            <!-- Uncomment the below section.
+                 1) Replace "https://localhost:8443/TestService/" that is used as 'entityId'
+                    with the URL used in service-provider meta-data file.
+                 2) Replace https://localhost:8443/TestService/" that is used as 'entityBaseURL'
+                    with the URL used in service-provider meta-data file.
+            -->
+            <!--
+                <b:property name="entityId" value="https://localhost:8443/TestService"/>
+                <b:property name="entityBaseURL" value="https://localhost:8443/TestService"/>
+            -->
+            </b:bean>
+        </b:constructor-arg>
+    </b:bean>
+
+        
+    <!-- Initialization of OpenSAML library-->
+    <b:bean class="org.springframework.security.saml.SAMLBootstrap"/>
+    
+    <b:bean id="metadataDisplayFilter" class="org.springframework.security.saml.metadata.MetadataDisplayFilter">
+        <!-- b:property name="filterSuffix" value="/saml/metadata"/ -->
+    </b:bean>
+    
+    <!-- XML parser pool needed for OpenSAML parsing -->
+    <b:bean id="parserPool" class="org.opensaml.xml.parse.BasicParserPool" scope="singleton"/>
+</b:beans>

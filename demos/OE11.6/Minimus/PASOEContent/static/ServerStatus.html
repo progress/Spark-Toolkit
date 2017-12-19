@@ -1,0 +1,762 @@
+<!doctype html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Progress Application Server</title>
+<meta http-equiv="Cache-Control" content="no-store" />
+
+<!-- Lato Fonts -->
+
+
+<!-- Pacific Common CSS (local) -->
+<style type="text/css">
+body, button, input, select, textarea {
+	font-family: Lato, Helvetica, Arial, Tahoma, sans-serif;
+	color: #4c4c4c;
+	font-size: 12px
+}
+
+.pacific-default-style {
+	font-family: Lato, Helvetica, Arial, Tahoma, sans-serif;
+	color: #4c4c4c;
+	font-size: 12px
+}
+
+.pacific-header {
+	background-color: #EF5022;
+	height: 35px;
+	width: 100%
+}
+
+.pacific-logo {
+	background-image: url(../static/images/pacific-logo.svg);
+	width: 237px;
+	height: 34px;
+	margin-left: 8px;
+	align: left;
+	float: left
+}
+
+.pacific-profile-menu {
+	float: right;
+	align: right
+}
+
+.pacific-product-header {
+	color: #fff;
+	background-color: #56565B;
+	height: 47px;
+	width: 100%;
+	font-size: 28px;
+	line-height: 47px;
+	vertical-align: middle
+}
+
+.pacific-product-logo {
+	align: left;
+	border: none
+}
+
+.pacific-page-title, .pacific-page-title h1 {
+	width: 100%;
+	font-weight: 300;
+	font-size: 38px;
+	color: #4C4C4C;
+	align: left
+}
+
+.pacific-section-title, .pacific-section-title h2 {
+	width: 100%;
+	font-weight: 300;
+	font-size: 26px;
+	color: #4C4C4C;
+	align: left
+}
+
+.pacific-button, .extjs-pacific-button button, .pacific-bootstrap .btn {
+	height: 40px;
+	min-width: 30px;
+	font-size: 16px;
+	border: none;
+	text-decoration: none;
+	background-color: #ff4e00;
+	line-height: 40px;
+	padding: 0 20px;
+	text-align: center;
+	color: #fff;
+	cursor: pointer;
+	border-radius: 0;
+	text-shadow: none;
+	background-image: none
+}
+
+.pacific-bootstrap .btn.btn-primary {
+	background-color: #ff4e00;
+	color: #fff;
+	border: none
+}
+
+.pacific-button:hover, .extjs-pacific-button button:hover, body.pacific-bootstrap .btn-primary:hover,
+	.pacific-button:focus, .extjs-pacific-button button:focus, body.pacific-bootstrap .btn-primary:focus
+	{
+	color: #fff;
+	background-color: #ff5f01;
+	box-shadow: 0 2px #ccc
+}
+
+.pacific-button:active, .extjs-pacific-button button:active, body.pacific-bootstrap .btn-primary:active
+	{
+	color: #fff;
+	background-color: #e54700;
+	box-shadow: 0 -2px #b53a00
+}
+
+.pacific-button.small, .extjs-pacific-button.small button,
+	.pacific-bootstrap .btn-small {
+	padding: 0 20px;
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px
+}
+
+.pacific-bootstrap .btn-mini .caret, .pacific-bootstrap .btn-small .caret
+	{
+	margin-top: 12px
+}
+
+.pacific-button.disabled, .pacific-button.disabled:hover,
+	.pacific-button.disabled:focus, .pacific-button.disabled:active,
+	.extjs-pacific-button.disabled button, .extjs-pacific-button.disabled button:hover,
+	.extjs-pacific-button.disabled button:focus, .extjs-pacific-button.disabled button:active,
+	body.pacific-bootstrap .btn-primary:disabled, body.pacific-bootstrap .btn-primary.disabled,
+	body.pacific-bootstrap .btn-primary.disabled:hover, body.pacific-bootstrap .btn-primary.disabled:focus,
+	body.pacific-bootstrap .btn-primary.disabled:active {
+	background-color: #ff4e00;
+	filter: Alpha(opacity = 40) !important;
+	opacity: .4 !important;
+	box-shadow: none;
+	cursor: default
+}
+
+.pacific-button.secondary, .extjs-pacific-button.secondary button,
+	.pacific-bootstrap .btn.btn-secondary {
+	background-color: #777
+}
+
+.pacific-bootstrap .btn.btn-secondary {
+	color: #fff;
+	border: none
+}
+
+.pacific-button.secondary:hover, .extjs-pacific-button.secondary button:hover,
+	.pacific-bootstrap .btn.btn-secondary:hover, .pacific-button.secondary:focus,
+	.extjs-pacific-button.secondary button:focus, .pacific-bootstrap .btn.btn-secondary:focus
+	{
+	background-color: #B1B1B1;
+	box-shadow: 0 2px #ccc;
+	outline: none
+}
+
+.pacific-button.secondary.disabled, .pacific-button.secondary.disabled:hover,
+	.extjs-pacific-button.secondary.disabled:hover, .pacific-button.secondary.disabled:focus,
+	.pacific-button.secondary.disabled:active, .extjs-pacific-button.secondary.disabled button,
+	.extjs-pacific-button.secondary.disabled button:hover,
+	.extjs-pacific-button.secondary.disabled button:focus,
+	.extjs-pacific-button.secondary.disabled button:active,
+	.pacific-bootstrap .btn.btn-secondary:disabled, .pacific-bootstrap .btn.btn-secondary.disabled,
+	.pacific-bootstrap .btn.btn-secondary.disabled:hover,
+	.pacific-bootstrap .btn.btn-secondary.disabled:focus,
+	.pacific-bootstrap .btn.btn-secondary.disabled:active {
+	background-color: #777;
+	filter: Alpha(opacity = 40);
+	opacity: .4;
+	box-shadow: none
+}
+
+.pacific-button.secondary:active, .extjs-pacific-button.secondary button:active,
+	.pacific-bootstrap .btn.btn-secondary:active {
+	background-color: #6b6b6b;
+	box-shadow: 0 -2px #565656
+}
+
+.pacific-line-separator, .extjs-pacific-line-separator hr {
+	border-bottom: 1pt solid #ccc;
+	margin-top: 5px;
+	margin-bottom: 20px
+}
+
+.pacific-hyperlink, .pacific-hyperlink a {
+	color: #1895c1;
+	text-decoration: none
+}
+
+.pacific-hyperlink.dark {
+	color: blue
+}
+
+.pacific-hyperlink:hover {
+	text-decoration: underline
+}
+
+.pacific-content-box {
+	padding: 10px
+}
+
+.pacific-breadcrumbs {
+	text-decoration: none;
+	font-size: 14px;
+	vertical-align: middle;
+	line-height: 30px
+}
+
+.pacific-breadcrumbs li {
+	color: #1895c1;
+	list-style: none;
+	display: inline
+}
+
+.pacific-breadcrumbs li:last-child {
+	color: #54565b
+}
+
+.pacific-breadcrumbs li:after {
+	content: " \003e ";
+	padding: 0 5px;
+	color: #000;
+	letter-spacing: -1.9px
+}
+
+.pacific-breadcrumbs li:last-child:after {
+	content: ""
+}
+
+.pacific-breadcrumbs a {
+	text-decoration: none;
+	cursor: pointer
+}
+
+.pacific-breadcrumbs a:hover {
+	text-decoration: underline
+}
+
+.pacific-loading-component {
+	background: url(../static/images/ajax-loader.gif) no-repeat;
+	height: 25px;
+	background-size: 25px 25px;
+	vertical-align: middle;
+	line-height: 25px;
+	font-size: 12px;
+	color: #4c4c4c
+}
+
+.pacific-loading-component span, .pacific-loading-component p {
+	padding-left: 35px
+}
+
+.pacific-loading-component.modal {
+	height: 34px;
+	line-height: 34px;
+	background-size: 34px 34px;
+	font-size: 17px
+}
+
+.pacific-loading-component.modal span {
+	padding-left: 46px
+}
+
+.pacific-error {
+	color: #dc0000;
+	background: url(../static/images/warning.png) no-repeat;
+	height: 16px;
+	line-height: 16px;
+	vertical-align: middle
+}
+
+.pacific-error span, .pacific-error p {
+	padding-left: 26px
+}
+
+.pacific-error.pacific-form-field {
+	height: 26px;
+	border: 1px solid;
+	background: rgba(220, 0, 0, .05)
+}
+
+.pacific-success {
+	font-size: 13px;
+	line-height: 32px;
+	background-color: #1eb29d;
+	min-height: 32px;
+	color: #fff;
+	vertical-align: middle
+}
+
+.pacific-success .icon {
+	background: url(../static/images/success.png) no-repeat;
+	height: 16px;
+	width: 16px;
+	float: left;
+	margin: 8px 15px
+}
+
+.pacific-success .close {
+	background: url(../static/images/close_default.png) no-repeat;
+	height: 16px;
+	width: 16px;
+	float: right;
+	margin: 8px 15px
+}
+
+.pacific-success .close:hover {
+	background: url(../static/images/close_over.png) no-repeat;
+	height: 16px
+}
+
+.pacific-popup-header {
+	background-color: #0a425b;
+	font-size: 26px;
+	font-weight: 300;
+	color: #fff;
+	line-height: 68px;
+	padding: 0 20px;
+	text-align: left;
+	vertical-align: middle
+}
+
+.pacific-popup-header.close-icon {
+	align: right
+}
+
+.pacific-popup-content {
+	padding: 20px 20px 30px
+}
+
+.pacific-footer {
+	background-color: #54555B;
+	height: 30px;
+	font-size: 10px;
+	color: #fff;
+	line-height: 30px;
+	vertical-align: middle
+}
+
+.pacific-footer .pacific-hyperlink, .pacific-footer .pacific-hyperlink a
+	{
+	color: #fff
+}
+</style>
+
+<!-- Custom Styles (local) -->
+<style type="text/css">
+BODY {
+	margin: 0;
+}
+
+.clear {
+	clear: both;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.icon-36 {
+	width: 36px;
+	height: 36px;
+}
+
+.icon-48 {
+	width: 48px;
+	height: 48px;
+}
+
+.icon-64 {
+	width: 64px;
+	height: 64px;
+}
+
+#header {
+	width: 100%;
+}
+
+#header #ProgressBanner {
+	height: 35px;
+	background-color: #FF4D00;
+	margin: 0;
+}
+
+#header #ProgressBanner #ProgressLogo {
+	width: 250px;
+	height: 35px;
+}
+
+#header #PASbanner {
+	height: 48px;
+	background-color: #56555A;
+	margin: 0;
+}
+
+#header #PASbanner H2 {
+	color: #FFF;
+	font-family: Lato;
+	font-size: 24px;
+	font-weight: normal;
+	margin: 0 0 0 0;
+	padding: 0;
+}
+
+#header #PASbanner H2 IMG {
+	vertical-align: -10px;
+	margin: 7px 5px 0 8px;
+}
+
+#PASmain {width 80%;
+	margin: 40px 10% 0 10%;
+}
+
+#PASmain #Server {
+	float: left;
+	width: 80%;
+	height: 380px;
+	border: 1px solid #DDD;
+}
+
+#Server #ServerInfo {
+	width: 100%;
+	float: left;
+	padding-top: 15px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+}
+
+#Server #ServerInfo #ServerIcon {
+	float: left;
+	padding: 5px 15px 0 0;
+}
+
+#Server #ServerInfo #ServerName {
+	float: left;
+}
+
+#Server #ServerInfo #ServerName H2 {
+	font-family: "Lato";
+	font-size: 32px;
+	font-weight: normal;
+	margin: 5px 0 8px 0;
+}
+
+#Server #ServerInfo #ServerName P {
+	color: #AAA;
+	font-size: 14px;
+	margin: 0;
+}
+
+#Server #ServerDetails {
+	float: left;
+	width: 100%;
+}
+
+#Server #ServerDetails .column {
+	float: left;
+	width: 50%;
+}
+
+#Server #ServerDetails DL {
+	overflow: auto;
+	float: left;
+	width: 100%;
+	margin: 18px 0 0 20px;
+}
+
+#Server #ServerDetails DL DT, #Server #ServerDetails DL DD {
+	float: left;
+	font-size: 13px;
+}
+
+#Server #ServerDetails DL DT {
+	clear: left;
+	width: 23%;
+	color: #AAA;
+	margin-right: 2%;
+	font-weight: normal;
+}
+
+#Server #ServerDetails DL DD {
+	width: 75%;
+	margin-left: 0;
+}
+
+#Server BUTTON {
+	margin: 45px 0 30px 0;
+}
+
+#Server BUTTON IMG {
+	width: 16px;
+	height: 16px;
+	vertical-align: -2px;
+	margin-right: 5px;
+}
+
+#PASmain #Links {
+	float: left;
+	width: 19%;
+	height: 380px;
+	background-color: #F2F2F2;
+	border-top: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+	border-bottom: 1px solid #DDD;
+}
+
+#PASmain #Links UL {
+	display: block;
+	list-style-type: none;
+	height: 380px;
+	margin: 0;
+	padding: 0;
+}
+
+#PASmain #Links UL LI {
+	display: block;
+	height: 33%;
+	border-bottom: 1px solid #DDD;
+	margin: 0;
+	padding: 0;
+}
+
+#PASmain #Links UL LI:first-child {
+	border-top: 0;
+}
+
+#PASmain #Links UL LI:last-child {
+	border-bottom: 0;
+}
+
+#PASmain #Links UL LI A {
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: #3F3F3F;
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+	text-align: center;
+}
+
+#PASmain #Links UL LI A:hover {
+	background: #e8e8e8;
+}
+
+#PASmain #Links UL LI IMG {
+	display: block;
+	border: 0;
+	margin: 0 auto 10px auto;
+	padding-top: 25px;
+}
+
+#PASmain #Links UL LI SPAN { -
+	-text-align: center;
+	padding: 10px 0;
+}
+
+#Footer {
+	clear: left;
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	height: 35px;
+	background-color: #53545A;
+	margin-top: -35px;
+}
+
+#Footer SPAN {
+	display: block;
+	float: right;
+	text-align: right;
+	color: #FFF;
+	font-size: 10px;
+	padding: 10px 12px 0 0;
+}
+</style>
+
+<script>
+	function updatePage() {
+		updateServerInfo();
+
+		document.getElementById('ManageApps').addEventListener('click', function() {
+			document.location = '/manager';
+		});
+
+	}
+
+	function tryGetUrl(url) {
+
+		var xhr;
+		var jsonObject = null;
+		xhr = new XMLHttpRequest();
+		xhr.open('GET', url, false);
+		xhr.send(null);
+		if (xhr.status !== 200) {
+            // Let the caller handle a null object return value
+			// throw new Error();
+        } else {
+		    jsonObject = JSON.parse(xhr.responseText);
+        }
+
+		return jsonObject;
+	}
+
+	function tryGetServerInfo() {
+
+		var jsonObject = null;
+		try {
+			jsonObject = tryGetUrl('../server');
+		} catch (e) {
+
+		}
+		return jsonObject;
+	}
+
+	function updateServerInfo() {
+
+		var jsonObject = tryGetServerInfo();
+		var apsv = document.getElementById('apsv');
+		var soap = document.getElementById('soap');
+		var rest = document.getElementById('rest');
+		var manager = document.getElementById('manager');
+
+		if (jsonObject) {
+			document.getElementById('OEVersion').innerHTML = jsonObject.ServerInfo.OEVersion;
+			document.getElementById('TCVersion').innerHTML = jsonObject.ServerInfo.TomcatVersion;
+			document.getElementById('JVMVersion').innerHTML = jsonObject.ServerInfo.JVMVersion;
+			document.getElementById('JVMVendor').innerHTML = jsonObject.ServerInfo.JVMVendor;
+			document.getElementById('OSName').innerHTML = jsonObject.ServerInfo.OSName;
+			document.getElementById('OSVersion').innerHTML = jsonObject.ServerInfo.OSVersion;
+			document.getElementById('OSArch').innerHTML = jsonObject.ServerInfo.OSArch;
+			document.getElementById('HostName').innerHTML = jsonObject.ServerInfo.HostName;
+			document.getElementById('IPAddress').innerHTML = jsonObject.ServerInfo.IPAddress;
+			document.getElementById('upTime').innerHTML = "Server has been running for " + jsonObject.UpTime;
+		} else {
+            // The serverAlert element does not exist
+			//document.getElementById('serverAlert').innerHTML = 'Server status information is disabled';
+			document.getElementById('OEVersion').innerHTML = "OpenEdge";
+			document.getElementById('TCVersion').innerHTML = "Unavailable";
+			document.getElementById('JVMVersion').innerHTML = "Unavailable";
+			document.getElementById('JVMVendor').innerHTML = "Unavailable";
+			document.getElementById('OSName').innerHTML = "Unavailable";
+			document.getElementById('OSVersion').innerHTML = "Unavailable";
+			document.getElementById('OSArch').innerHTML = "Unavailable";
+			document.getElementById('HostName').innerHTML = "Unavailable";
+			document.getElementById('IPAddress').innerHTML = "Unavailable";
+			document.getElementById('upTime').innerHTML = "Server has been running for: Unavailable";
+		}
+	}
+</script>
+
+</head>
+
+<body onLoad="updatePage()">
+
+	<div id="header">
+		<div id="ProgressBanner">
+			<img id="ProgressLogo" src="../static/images/progress-oe.png"
+				alt="Progress OpenEdge">
+		</div>
+		<div id="PASbanner">
+			<h2>
+				<img class="icon-36" src="../static/images/pas-logo.svg" alt="Icon">
+				<span>Progress Application Server</span>
+			</h2>
+		</div>
+	</div>
+
+	<div id="PASmain">
+		<div id="Server">
+			<div id="ServerInfo">
+				<div id="ServerIcon">
+					<img class="icon-64" src="../static/images/tomcat.svg"
+						alt="Apache Icon">
+				</div>
+				<div>
+					<h2 id="OEVersion"></h2>
+					<p id="upTime"></p>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div id="ServerDetails">
+				<div class="column left">
+
+					<dl>
+						<dt>Tomcat Version</dt>
+						<dd id="TCVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>JVM Version</dt>
+						<dd id="JVMVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>JVM Vendor</dt>
+						<dd id="JVMVendor"></dd>
+					</dl>
+
+					<dl>
+						<dt>Hostname</dt>
+						<dd id="HostName"></dd>
+					</dl>
+
+					<dl>
+						<dt>IP Address</dt>
+						<dd id="IPAddress"></dd>
+					</dl>
+
+				</div>
+				<div class="column right">
+
+					<dl>
+						<dt>OS Name</dt>
+						<dd id="OSName"></dd>
+					</dl>
+
+					<dl>
+						<dt>OS Version</dt>
+						<dd id="OSVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>OS Architecture</dt>
+						<dd id="OSArch"></dd>
+					</dl>
+
+				</div>
+			</div>
+
+			<div class="text-center">
+				<button id="ManageApps" class="pacific-button">
+					<img src="../static/images/gear.svg" alt="Gear"> Manage Web
+					Applications
+				</button>
+			</div>
+
+		</div>
+		<div id="Links">
+			<ul>
+				<li><a href="https://documentation.progress.com/output/ua/PAS/"><img class="icon-48"
+						src="../static/images/documentation.svg" alt="Icon"> <span>Documentation</span></a></li>
+				<li><a href="https://community.progress.com/community_groups/default.aspx"><img class="icon-48"
+						src="../static/images/communities.svg" alt="Icon"> <span>OpenEdge Communities</span></a></li>
+				<li><a href="https://community.progress.com/community_groups/openedge_development/default.aspx"><img class="icon-48"
+						src="../static/images/forum.svg" alt="Icon"> <span>OpenEdge Development Community</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="clear"></div>
+
+	<div id="Footer">
+		<span>Copyright &copy; 1993-2015 Progress Software Corporation. All rights reserved.</span>
+	</div>
+
+</body>
+</html>

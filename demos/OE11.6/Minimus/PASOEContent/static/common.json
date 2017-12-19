@@ -1,0 +1,189 @@
+{
+    "version": "1.4",
+    "lastModified": "Mon Nov 27 16:25:40 EST 2017",
+    "services": [{
+        "name": "common",
+        "address": "\/web\/pdo\/common",
+        "useRequest": true,
+        "resources": [{
+            "name": "user",
+            "path": "\/user",
+            "autoSave": true,
+            "operations": [
+                {
+                    "name": "contextFetch",
+                    "path": "\/contextFetch",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "contextName",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "contextValue",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                },
+                {
+                    "name": "locale",
+                    "path": "\/locale",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "userLanguage",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "userTimezone",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "changed",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                },
+                {
+                    "name": "session",
+                    "path": "\/session",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "anonymous",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "dateFormat",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "decimalPoint",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "domainName",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "expires",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "language",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "numericSeparator",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "serverTime",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "sessionID",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "timezone",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "fullname",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "username",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                },
+                {
+                    "name": "contextStore",
+                    "path": "\/contextStore",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "contextName",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "contextValue",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "success",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                },
+                {
+                    "name": "menu",
+                    "path": "\/menu",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [{
+                        "name": "menuData",
+                        "type": "RESPONSE_BODY"
+                    }]
+                },
+                {
+                    "name": "password",
+                    "path": "\/password",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "oldPassword",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "newPassword",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "changeSuccess",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "changeMessage",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                },
+                {
+                    "name": "translations",
+                    "path": "\/translations",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "langCode",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "localLanguage",
+                            "type": "RESPONSE_BODY"
+                        },
+                        {
+                            "name": "langStrings",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                }
+            ]
+        }]
+    }]
+}

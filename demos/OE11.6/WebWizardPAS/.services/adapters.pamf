@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lm:eCafModel xmlns:lm="http://www.progress.com/tools/caf/core/internal/logicalStructure/schema/v1.0" version="1.0">
+  <lm:serviceCollection adapterType="REST" usage="EXPOSE">
+    <lm:services displayName="WebWizard" id="WebWizard" product="Progress Developer Studio for OpenEdge" serviceFolder="Expose/rest/WebWizard" serviceName="WebWizard">
+      <lm:details>
+        <lm:adapterDetails>
+          <lm:properties>
+            <lm:properties name="applicationRelativePath">/WebWizard</lm:properties>
+            <lm:properties name="wizard_Generate::Generator.Business.Wizard..Generate::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapInput>&#xD;
+    &lt;mapping:rule source=&quot;${json.object['request'].string['paramObject']}&quot; target=&quot;${idl.param['paramObject']}&quot;/>&#xD;
+    &lt;mapping:rule source=&quot;${json.object['request'].string['forceCreate']}&quot; target=&quot;${idl.param['forceCreate']}&quot;/>&#xD;
+  &lt;/mapping:mapInput>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['resultMessage']}&quot; target=&quot;${json.object['response'].string['resultMessage']}&quot;/>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['resultCode']}&quot; target=&quot;${json.object['response'].integervalue['resultCode']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetCSS::Generator.Business.Wizard..GetCSS::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['cssList']}&quot; target=&quot;${json.object['response'].string['cssList']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetDatabases::Generator.Business.Wizard..GetDatabases::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['databaseList']}&quot; target=&quot;${json.object['response'].string['databaseList']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetFields::Generator.Business.Wizard..GetFields::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapInput>&#xD;
+    &lt;mapping:rule source=&quot;${json.object['request'].string['databaseName']}&quot; target=&quot;${idl.param['databaseName']}&quot;/>&#xD;
+    &lt;mapping:rule source=&quot;${json.object['request'].string['tableName']}&quot; target=&quot;${idl.param['tableName']}&quot;/>&#xD;
+  &lt;/mapping:mapInput>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['ttSchema']}&quot; target=&quot;${json.object['response'].object['ttSchema']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetIncludes::Generator.Business.Wizard..GetIncludes::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['includeList']}&quot; target=&quot;${json.object['response'].string['includeList']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetMetadata::Generator.Business.Wizard..GetMetadata::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['metadataList']}&quot; target=&quot;${json.object['response'].string['metadataList']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetTables::Generator.Business.Wizard..GetTables::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapInput>&#xD;
+    &lt;mapping:rule source=&quot;${json.object['request'].string['databaseName']}&quot; target=&quot;${idl.param['databaseName']}&quot;/>&#xD;
+  &lt;/mapping:mapInput>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['ttSchema']}&quot; target=&quot;${json.object['response'].object['ttSchema']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetTemplates::Generator.Business.Wizard..GetTemplates::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['DefaultCatalog']}&quot; target=&quot;${json.object['response'].string['DefaultCatalog']}&quot;/>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['Template']}&quot; target=&quot;${json.object['response'].object['Template']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_GetTooltips::Generator.Business.Wizard..GetTooltips::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['tooltipData']}&quot; target=&quot;${json.object['response'].string['tooltipData']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+            <lm:properties name="wizard_ParseInclude::Generator.Business.Wizard..ParseInclude::PUT">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;
+&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.progress.com/caf/mapping1.0&quot; xmlns:metadata=&quot;http://www.progress.com/caf/mapping1.0/toolingMetadata&quot;>&#xD;
+  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;
+    &lt;metadata:mapInput/>&#xD;
+    &lt;metadata:mapOutput/>&#xD;
+  &lt;/metadata:toolingMetadata>&#xD;
+  &lt;mapping:mapInput>&#xD;
+    &lt;mapping:rule source=&quot;${json.object['request'].string['includePath']}&quot; target=&quot;${idl.param['includePath']}&quot;/>&#xD;
+  &lt;/mapping:mapInput>&#xD;
+  &lt;mapping:mapOutput>&#xD;
+    &lt;mapping:rule source=&quot;${idl.param['includeData']}&quot; target=&quot;${json.object['response'].string['includeData']}&quot;/>&#xD;
+  &lt;/mapping:mapOutput>&#xD;
+  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;
+&lt;/mapping:messageMapping></lm:properties>
+          </lm:properties>
+        </lm:adapterDetails>
+        <lm:productDetails name="ABL_DATA_OBJECT">
+          <lm:properties>
+            <lm:properties name="ABL_DATA_OBJECT_SERVICE">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?>&lt;oe_mobile>&lt;service>&lt;name>WebWizard&lt;/name>&lt;resources>&lt;path>PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.cls&lt;/path>&lt;/resources>&lt;/service>&lt;/oe_mobile></lm:properties>
+          </lm:properties>
+        </lm:productDetails>
+      </lm:details>
+      <lm:nodes id="/WebWizard_groupingNode" name="WebWizard"/>
+      <lm:propertyDetails/>
+    </lm:services>
+  </lm:serviceCollection>
+  <lm:propertyDetails>
+    <lm:propertyFileLocation>WebWizard.properties</lm:propertyFileLocation>
+  </lm:propertyDetails>
+</lm:eCafModel>

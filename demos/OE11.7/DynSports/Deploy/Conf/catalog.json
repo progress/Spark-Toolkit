@@ -1,0 +1,39 @@
+{
+    "Config": {
+        "General": [{
+            "ApiVersion": 4.2,
+            "BusinessRoot": "Business",
+            "IdProperty": "id",
+            "PreLoader": "Common/preload.p",
+            "ReadFilter": "filter",
+            "ServicePrefix": "pdo",
+            "EnableDebugs": false
+        }],
+        "ServiceSource": [{
+            "ServiceName": "Common",
+            "ServiceURI": "/web/pdo/common",
+            "ClassPath": "Business",
+            "UseRequest": false
+        }, {
+            "ServiceName": "Ordering",
+            "ServiceURI": "/web/pdo/ordering",
+            "ClassPath": "Business.Ordering",
+            "UseRequest": false
+        }, {
+            "ServiceName": "Personnel",
+            "ServiceURI": "/web/pdo/personnel",
+            "ClassPath": "Business.Personnel",
+            "UseRequest": false
+        }, {
+            "ServiceName": "System",
+            "ServiceURI": "/web/pdo/system",
+            "ClassPath": "Business.System",
+            "UseRequest": false
+        }, {
+            "ServiceName": "Tests",
+            "ServiceURI": "/web/pdo/tests",
+            "ClassPath": "Business.UnitTest",
+            "UseRequest": false
+        }]
+    }
+}

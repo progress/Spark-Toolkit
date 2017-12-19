@@ -1,0 +1,425 @@
+{
+    "version": "1.5",
+    "lastModified": "Mon Dec 11 10:10:24 EST 2017",
+    "services": [{
+        "name": "common",
+        "address": "\/web\/pdo\/common",
+        "useRequest": false,
+        "resources": [
+            {
+                "name": "user",
+                "path": "\/user",
+                "autoSave": true,
+                "operations": [
+                    {
+                        "name": "resetPassword",
+                        "path": "\/resetPassword",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "username",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "emailAddr",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "resetCode",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "opSuccess",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "opMessage",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "session",
+                        "path": "\/session",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "anonymous",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "dateFormat",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "decimalPoint",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "domainName",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "expires",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "language",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "numericSeparator",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "serverTime",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "sessionID",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "timezone",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "fullname",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "username",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "emailAddr",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "sendResetCode",
+                        "path": "\/sendResetCode",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "username",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "emailAddr",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "opSuccess",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "opMessage",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "contextFetch",
+                        "path": "\/contextFetch",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "contextName",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "contextValue",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "menu",
+                        "path": "\/menu",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [{
+                            "name": "menuData",
+                            "type": "RESPONSE_BODY"
+                        }]
+                    },
+                    {
+                        "name": "contextStore",
+                        "path": "\/contextStore",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "contextName",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "contextValue",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "success",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "getProfile",
+                        "path": "\/getProfile",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "FirstName",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "LastName",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "Email",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "MobilePhone",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "MobileCarrier",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "UseTFA",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "TFAMethod",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "QR",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "setProfile",
+                        "path": "\/setProfile",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "FirstName",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "LastName",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "Email",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "MobilePhone",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "MobileCarrier",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "UseTFA",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "TFAMethod",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "updateSuccess",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "locale",
+                        "path": "\/locale",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "userLanguage",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "userTimezone",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "changed",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "translations",
+                        "path": "\/translations",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "langCode",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "localLanguage",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "langStrings",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "password",
+                        "path": "\/password",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "oldPassword",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "newPassword",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "changeSuccess",
+                                "type": "RESPONSE_BODY"
+                            },
+                            {
+                                "name": "changeMessage",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "tfa",
+                "path": "\/tfa",
+                "autoSave": true,
+                "operations": [{
+                    "name": "login",
+                    "path": "\/login",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "username",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "password",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "useTFA",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                }]
+            },
+            {
+                "name": "dashboard",
+                "path": "\/dashboard",
+                "autoSave": true,
+                "operations": [{
+                    "name": "statistics",
+                    "path": "\/statistics",
+                    "useBeforeImage": false,
+                    "type": "invoke",
+                    "verb": "put",
+                    "params": [
+                        {
+                            "name": "topStats",
+                            "type": "REQUEST_BODY"
+                        },
+                        {
+                            "name": "dashboardData",
+                            "type": "RESPONSE_BODY"
+                        }
+                    ]
+                }]
+            },
+            {
+                "name": "locality",
+                "path": "\/locality",
+                "autoSave": true,
+                "operations": [
+                    {
+                        "name": "provinces",
+                        "path": "\/provinces",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [{
+                            "name": "states",
+                            "type": "RESPONSE_BODY"
+                        }]
+                    },
+                    {
+                        "name": "states",
+                        "path": "\/states",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [{
+                            "name": "states",
+                            "type": "RESPONSE_BODY"
+                        }]
+                    },
+                    {
+                        "name": "stateProvince",
+                        "path": "\/stateProvince",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "country",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "states",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }]
+}

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
+      http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2.xsd 
+     http://www.springframework.org/schema/util
+     http://www.springframework.org/schema/util/spring-util.xsd" > 
+
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+    <!-- OAuth2 Token Generation Services -->
+    <http pattern="/oauth/**"
+          create-session="stateless"
+          entry-point-ref="oauth2ClientAuthenticationEntryPoint"
+          authentication-manager-ref="oauth2ClientAuthenticationManager"
+          use-expressions="true" >
+
+        <intercept-url pattern="/oauth/**"
+                       access="permitAll()"/>
+
+        <anonymous enabled="false"/>
+        <http-basic entry-point-ref="oauth2ClientAuthenticationEntryPoint" />
+        <custom-filter ref="oauth2ClientCredentialsTokenEndpointFilter" 
+                       before="BASIC_AUTH_FILTER"/>
+
+        <access-denied-handler ref="oauth2AccessDeniedHandler"/>
+
+        <headers defaults-disabled="false"
+                 disabled="false" />
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+    </http>
+
+    <!-- OAuth2 Authorization Server -->
+    <oauth:authorization-server 
+        client-details-service-ref="oauth2AuthorizationClientDetails" 
+        token-services-ref="oauth2ProviderTokenServices" 
+        user-approval-handler-ref="oauth2UserApprovalHandler" 
+        check-token-enabled="true" >
+
+        <oauth:authorization-code disabled="false" />
+        <oauth:implicit disabled="false" />
+        <oauth:refresh-token disabled="false" />
+        <oauth:client-credentials disabled="false" />
+        <oauth:password disabled="false" 
+               authentication-manager-ref="${http.all.authmanager}" />
+
+    </oauth:authorization-server>
+
+    <b:bean id="oauth2AccessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
+
+
+    <!-- OAuth2 Client Authentication Configuration -->
+    <b:bean id="oauth2ClientCredentialsTokenEndpointFilter"
+          class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+        <b:property name="authenticationManager" ref="oauth2ClientAuthenticationManager"/>
+        <b:property name="allowOnlyPost" value="true" />
+        <b:property name="allowSessionCreation" value="false" />
+    </b:bean>
+
+    <!-- OAuth2 Client Authentication failure handler -->
+    <b:bean id="oauth2ClientAuthenticationEntryPoint"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+        <b:property name="realmName" value="${oauth2.authSvc.realmName}"/>
+        <b:property name="typeName" value="Basic" />
+    </b:bean>
+
+    <!-- Create, store, validate, etc services for access and refresh tokens -->
+    <b:bean id="oauth2ProviderTokenServices" 
+        class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <b:property name="tokenStore" ref="jwtOAuth2TokenStore"/>
+        <b:property name="clientDetailsService" ref="oauth2AuthorizationClientDetails"/>
+
+        <b:property name="supportRefreshToken" value="${oauth2.authSvc.refreshToken.enable}"/>
+        <b:property name="accessTokenValiditySeconds" value="${oauth2.authSvc.accessToken.expiresSeconds}"/>
+        <b:property name="refreshTokenValiditySeconds" value="${oauth2.authSvc.refreshToken.expiresSeconds}" />
+        <b:property name="reuseRefreshToken" value="${oauth2.authSvc.refreshToken.reuse}" />
+    </b:bean>
+
+    <!-- Shared localOAuth2TokenStore in authFilters.xml -->
+
+    <!-- Shared jwtOAuth2TokenStore in authFilters.xml -->
+
+    <!-- Storage for Resource owner Authorization Code Grants -->
+    <b:bean id="oauth2ApprovalStore" 
+        class="org.springframework.security.oauth2.provider.approval.TokenApprovalStore">
+        <b:property name="tokenStore" ref="jwtOAuth2TokenStore"/>
+    </b:bean>
+
+    <!-- Handle Resource owner approval for client access to resource server -->
+    <b:bean id="oauth2UserApprovalHandler"
+          class="org.springframework.security.oauth2.provider.approval.ApprovalStoreUserApprovalHandler">
+        <b:property name="approvalStore" ref="oauth2ApprovalStore"/>
+        <b:property name="clientDetailsService" ref="oauth2AuthorizationClientDetails"/>
+        <b:property name="requestFactory">
+            <b:bean class="org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory">
+                <b:constructor-arg index="0" ref="oauth2AuthorizationClientDetails"/>
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <!-- OAuth2 Client's Authentication Manager -->
+    <authentication-manager id="oauth2ClientAuthenticationManager">
+        <authentication-provider user-service-ref="oauth2ClientDetailsUserService"/>
+        <authentication-provider>
+            <user-service properties="${local.userservice.properties}" />
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- Authentication User Details service for the AuthenticationManager -->
+    <b:bean id="oauth2ClientDetailsUserService"
+          class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+        <b:constructor-arg ref="oauth2AuthorizationClientDetails"/>
+        <!--
+        <b:property name="passwordEncoder" ref="bcryptEncoder" />
+        -->
+    </b:bean>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider>
+            <user-service properties="${local.userservice.properties}" />
+        </authentication-provider>
+	</authentication-manager>
+
+    <oauth:web-expression-handler id="oauthWebExpressionHandler"/>
+
+    <b:import resource="${oauth2.authSvc.clientCfg}"/> 
+
+</b:beans>

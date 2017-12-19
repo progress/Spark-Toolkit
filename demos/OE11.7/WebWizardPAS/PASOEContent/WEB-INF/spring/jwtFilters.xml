@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
+      http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2.xsd 
+     http://www.springframework.org/schema/util
+     http://www.springframework.org/schema/util/spring-util.xsd" > 
+      
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+    <!-- Import the OpenEdge filters that span all Login Model configuations -->
+    <b:import resource="sharedAuthFilters.xml"/> 
+
+    <!-- Authentication manager for OAuth Provider/Resource services that
+         will only allow access by users/clients that have been issued
+         a token by an authorizaiton service.  It contains just one account
+         with an password that cannot be reverse engineered.
+     -->
+    <authentication-manager id="oauthResourceAuthManager" >
+        <authentication-provider>
+            <password-encoder ref="bcryptEncoder" />
+            <user-service>
+                <user name="u1xgu62200xjixlpwdwsw"
+                      password="@@@@@@@@@@@@@@@@@@@@@@@@@"
+                      locked="true"
+                      disabled="true"
+                      authorities="none" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+    <!-- The Spring security interceptor that manages the authorization process for
+         access to OAuth2 data resources. -->
+        <!--
+        -->
+    <b:bean id="oauth2FilterSecurityInterceptor" 
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" >  
+        <b:property name="authenticationManager" ref="${http.authmanager}"/>
+        <b:property name="accessDecisionManager" ref="oauth2AccessDecisionManager"/>
+        <b:property name="securityMetadataSource" >
+            <b:bean id="jwtOEMetadataSource" 
+                    name="all"
+                    class="com.progress.appserv.services.security.OEMetadataSource" >
+                <b:constructor-arg value="all" />
+                <b:constructor-arg value="${oauth2.resSvc.requestmatcher}" />
+                <b:property name="interceptUrlFilePath" value="${oauth2.resSvc.csvpath}" />
+                <b:property name="defaultURL" value="/**" />
+                <b:property name="expressionHandler" ref="oauth2WebExpressionHandler" />
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <!-- Add the JWT's scope to the normal list of URL access control checking -->
+    <b:bean id="oauth2AccessDecisionManager" 
+        class="org.springframework.security.access.vote.UnanimousBased">
+            <b:constructor-arg>
+                <util:list>
+                    <b:bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter"/>
+                    <b:bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+                    <b:bean class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                        <b:property name="expressionHandler" ref="oauth2WebExpressionHandler"/>
+                    </b:bean>
+                </util:list>
+            </b:constructor-arg>
+    </b:bean>
+
+    <b:bean id="oauth2AccessDeniedHandler"
+          class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
+
+    <oauth:web-expression-handler id="oauth2WebExpressionHandler"/>
+
+    <b:bean id="oeOAuth2ExceptionRenderer"
+          class="com.progress.appserv.services.security.OEOAuth2ExceptionRenderer" >
+    </b:bean>
+
+    <!-- used to validate Bearer JWT [self-contained] tokens without using the
+         OAuth2 Client definitions -->
+    <b:bean id="jwtResourceTokenServices" 
+          class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <b:property name="tokenStore" ref="jwtOAuth2TokenStore" />
+    </b:bean>
+
+    <!-- used to validate Bearer JWT [self-contained] tokens using the OAuth2 Client definitions -->
+    <b:bean id="oauth2ResourceTokenServices" 
+          class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+        <b:property name="tokenStore" ref="jwtOAuth2TokenStore"/>
+        <b:property name="clientDetailsService" ref="oauth2ResourceClientDetails"/>
+    </b:bean>
+
+    <!-- used to validate Bearer JWT [random] tokens by accessing a SQL database shared with
+         the Authorization server and obtaining the real JWT token that is stored there -->
+    <!-- 
+    <b:bean id="jdbcResourceTokenServices" 
+        class="org.springframework.security.oauth2.client.token.JdbcClientTokenServices" >
+        <b:constructor-arg index="0" ref="oauth2ResSvcDataSource"/>
+    </b:bean>
+
+    <b:bean id="oauth2ResSvcDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <b:property name="driverClassName" value="${oauth2.resSvc.jdbcTokenService.driver}" />
+        <b:property name="url" value="${oauth2.resSvc.jdbcTokenService.url}" />
+        <b:property name="username" value="${oauth2.resSvc.jdbcTokenService.loginId}" />
+        <b:property name="password" value="${oauth2.resSvc.jdbcTokenService.loginPwd}" />
+    </b:bean>
+
+
+    <b:bean id="oauth2ResSvcJDBCTokenStore" 
+        class="org.springframework.security.oauth2.provider.token.store.JdbcTokenStore" >
+    </b:bean>
+    -->
+
+    <!-- used to validate Bearer JWT [random] tokens by accessing the Authorization
+         server and requesting the real JWT token be returned for authorization -->
+    <b:bean id="remoteResourceTokenServices" 
+          class="org.springframework.security.oauth2.provider.token.RemoteTokenServices">
+          <b:property name="checkTokenEndpointUrl" value="${oauth2.resSvc.remoteTokenService.url}" />
+          <b:property name="clientId" value="${oauth2.resSvc.remoteTokenService.loginId}" />
+          <b:property name="clientSecret" value="${oauth2.resSvc.remoteTokenService.loginPwd}" />
+          <b:property name="tokenName" value="${oauth2.resSvc.remoteTokenService.tokenName}" />
+          <b:property name="accessTokenConverter" ref="defaultAccessTokenConverter" />
+    </b:bean>
+
+
+    <!-- OAuth2 in memory token storage -->
+    <b:bean id="localOAuth2TokenStore" 
+        class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore" >
+        <b:property name="flushInterval" value="1000" />
+    </b:bean>
+
+    <!-- JWT access token storage and conversion services -->
+    <b:bean id="jwtOAuth2TokenStore" 
+        class="org.springframework.security.oauth2.provider.token.store.JwtTokenStore" >
+        <b:constructor-arg index="0" ref="jwtOAuth2TokenConverter"/>
+    </b:bean>
+
+
+    <b:bean id="macJwtSigner"
+        class="com.progress.appserv.services.security.OEMacVerifier" >
+        <b:constructor-arg index="0" value="${jwtToken.macAlg}" />
+        <b:constructor-arg index="1" value="${jwtToken.macKey}" />
+    </b:bean>
+
+    <b:bean id="macJwtVerifier"
+        class="com.progress.appserv.services.security.OEMacVerifier" >
+        <b:constructor-arg index="0" value="${jwtToken.macAlg}" />
+        <b:constructor-arg index="1" value="${jwtToken.macKey}" />
+    </b:bean>
+
+    <b:bean id="rsaJwtSigner"
+        class="com.progress.appserv.services.security.OEJksRsaKeySigner" >
+        <b:constructor-arg index="0" value="${jwtToken.jksKeystore.path}" />
+        <b:constructor-arg index="1" value="${jwtToken.jksKeystore.pwd}" />
+        <b:constructor-arg index="2" value="${jwtToken.jksKeystore.alias}" />
+    </b:bean>
+
+    <b:bean id="rsaJwtVerifier"
+        class="com.progress.appserv.services.security.OEJksRsaKeyVerifier" >
+        <b:constructor-arg index="0" value="${jwtToken.jksKeystore.path}" />
+        <b:constructor-arg index="1" value="${jwtToken.jksKeystore.pwd}" />
+        <b:constructor-arg index="2" value="${jwtToken.jksKeystore.alias}" />
+    </b:bean>
+
+    <!-- OAuth2 JSON web token converter with symmetric Resource/Authorization keys -->
+    <b:bean id="userTokenConverter"
+        class="com.progress.appserv.services.security.OEJwtUserAuthenticationConverter" >
+        <b:property name="defaultAuthorities" value="${jwtToken.defaultRoles}" />
+        <b:property name="jwtUsernameField" value="${jwtToken.usernameField}" />
+        <b:property name="mapScopeToAuthority" value="${jwtToken.mapScopeToRole}" />
+        <b:property name="scopePrefix" value="${jwtToken.scopeToRolePrefix}" />
+    </b:bean>
+
+    <b:bean id="defaultAccessTokenConverter"
+        class="com.progress.appserv.services.security.OEOAuth2AccessTokenConverter" >
+        <b:property name="includeGrantType" value="${jwtToken.includeAllClaims}" />
+        <b:property name="userTokenConverter" ref="userTokenConverter" />
+        <b:property name="includeAllClaims" value="${jwtToken.includeAllClaims}" />
+    </b:bean>
+
+
+    <!--
+        class="org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter" >
+    -->
+    <b:bean id="jwtOAuth2TokenConverter" 
+        class="com.progress.appserv.services.security.OEJwtAccessTokenConverter" >
+        <b:property name="signer" ref="${jwtToken.signatureAlg}JwtSigner" />
+        <b:property name="verifier" ref="${jwtToken.signatureAlg}JwtVerifier" />
+        <b:property name="accessTokenConverter" ref="defaultAccessTokenConverter" />
+    </b:bean>
+
+</b:beans>

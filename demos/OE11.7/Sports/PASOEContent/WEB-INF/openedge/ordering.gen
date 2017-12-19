@@ -1,0 +1,644 @@
+{"services": {"ordering": {
+    "version": "1.0.0",
+    "operations": {
+        "\/": {"GET": {
+            "contentType": "application\/json",
+            "statusCode": 200,
+            "file": "$CATALINA_BASE\/webapps\/$oepas-webapp\/static\/ordering.json"
+        }},
+        "\/customer": {"GET": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Ordering.CustomerBE",
+                "function": "ReadCustomer",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "dsCustomer",
+                        "ablType": "DATASET",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/customer\/count": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": false},
+            "entity": {
+                "name": "Business.Ordering.CustomerBE",
+                "function": "getCount",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "numRecs",
+                        "ablType": "INTEGER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "numRecs"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/customer\/submit": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Ordering.CustomerBE",
+                "function": "SubmitCustomer",
+                "arg": [{
+                    "ablName": "dsCustomer",
+                    "ablType": "DATASET",
+                    "ioMode": "INPUT-OUTPUT",
+                    "msgElem": {
+                        "type": "BODY",
+                        "name": null
+                    }
+                }]
+            }
+        }},
+        "\/salesrep": {"GET": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Ordering.SalesrepBE",
+                "function": "ReadSalesrep",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "dsSalesrep",
+                        "ablType": "DATASET",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/salesrep\/submit": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Ordering.SalesrepBE",
+                "function": "SubmitSalesrep",
+                "arg": [{
+                    "ablName": "dsSalesrep",
+                    "ablType": "DATASET",
+                    "ioMode": "INPUT-OUTPUT",
+                    "msgElem": {
+                        "type": "BODY",
+                        "name": null
+                    }
+                }]
+            }
+        }},
+        "\/salesrep\/count": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": false},
+            "entity": {
+                "name": "Business.Ordering.SalesrepBE",
+                "function": "getCount",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "numRecs",
+                        "ablType": "INTEGER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "numRecs"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/order": {"GET": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Ordering.OrderBE",
+                "function": "ReadOrder",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "dsOrder",
+                        "ablType": "DATASET",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/order\/count": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": false},
+            "entity": {
+                "name": "Business.Ordering.OrderBE",
+                "function": "getCount",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "numRecs",
+                        "ablType": "INTEGER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "numRecs"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/order\/submit": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Ordering.OrderBE",
+                "function": "SubmitOrder",
+                "arg": [{
+                    "ablName": "dsOrder",
+                    "ablType": "DATASET",
+                    "ioMode": "INPUT-OUTPUT",
+                    "msgElem": {
+                        "type": "BODY",
+                        "name": null
+                    }
+                }]
+            }
+        }}
+    },
+    "schemas": {
+        "dsCustomer": {"ttCustomer": {
+            "trackChanges": true,
+            "indexes": {
+                "pkSeq": {
+                    "primary": true,
+                    "unique": true,
+                    "word": false,
+                    "fields": ["seq:asc"]
+                },
+                "idxComments": {
+                    "primary": false,
+                    "unique": false,
+                    "word": false,
+                    "fields": ["Comments:asc"]
+                },
+                "idxCountryPost": {
+                    "primary": false,
+                    "unique": false,
+                    "word": false,
+                    "fields": [
+                        "Country:asc",
+                        "PostalCode:asc"
+                    ]
+                },
+                "idxCustNum": {
+                    "primary": false,
+                    "unique": true,
+                    "word": false,
+                    "fields": ["CustNum:asc"]
+                },
+                "idxName": {
+                    "primary": false,
+                    "unique": false,
+                    "word": false,
+                    "fields": ["Name:asc"]
+                },
+                "idxSalesRep": {
+                    "primary": false,
+                    "unique": false,
+                    "word": false,
+                    "fields": ["SalesRep:asc"]
+                }
+            },
+            "fields": [
+                {
+                    "name": "id",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "seq",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "CustNum",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "Name",
+                    "ablType": "CHARACTER",
+                    "extent": null,
+                    "serializeName": "CustName"
+                },
+                {
+                    "name": "Address",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Address2",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "City",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "State",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "PostalCode",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Country",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Contact",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Phone",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "SalesRep",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "CreditLimit",
+                    "ablType": "DECIMAL",
+                    "extent": null
+                },
+                {
+                    "name": "Balance",
+                    "ablType": "DECIMAL",
+                    "extent": null
+                },
+                {
+                    "name": "Terms",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Discount",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "Comments",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Fax",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "EmailAddress",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                }
+            ]
+        }},
+        "dsSalesrep": {"ttSalesrep": {
+            "trackChanges": true,
+            "indexes": {
+                "seq": {
+                    "primary": true,
+                    "unique": true,
+                    "word": false,
+                    "fields": ["seq:asc"]
+                },
+                "SalesRep": {
+                    "primary": false,
+                    "unique": true,
+                    "word": false,
+                    "fields": ["SalesRep:asc"]
+                }
+            },
+            "fields": [
+                {
+                    "name": "id",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "seq",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "SalesRep",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "RepName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Region",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "MonthQuota",
+                    "ablType": "INTEGER",
+                    "extent": 12
+                }
+            ]
+        }},
+        "dsOrder": {
+            "ttOrder": {
+                "trackChanges": true,
+                "indexes": {
+                    "seq": {
+                        "primary": true,
+                        "unique": true,
+                        "word": false,
+                        "fields": ["seq:asc"]
+                    },
+                    "CustOrder": {
+                        "primary": false,
+                        "unique": true,
+                        "word": false,
+                        "fields": [
+                            "CustNum:asc",
+                            "Ordernum:asc"
+                        ]
+                    },
+                    "OrderDate": {
+                        "primary": false,
+                        "unique": false,
+                        "word": false,
+                        "fields": ["OrderDate:asc"]
+                    },
+                    "OrderNum": {
+                        "primary": false,
+                        "unique": true,
+                        "word": false,
+                        "fields": ["OrderNum:asc"]
+                    },
+                    "OrderStatus": {
+                        "primary": false,
+                        "unique": false,
+                        "word": false,
+                        "fields": ["OrderStatus:asc"]
+                    },
+                    "SalesRep": {
+                        "primary": false,
+                        "unique": false,
+                        "word": false,
+                        "fields": ["SalesRep:asc"]
+                    }
+                },
+                "fields": [
+                    {
+                        "name": "id",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "seq",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "OrderNum",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "CustNum",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "OrderDate",
+                        "ablType": "DATE",
+                        "extent": null
+                    },
+                    {
+                        "name": "ShipDate",
+                        "ablType": "DATE",
+                        "extent": null
+                    },
+                    {
+                        "name": "PromiseDate",
+                        "ablType": "DATE",
+                        "extent": null
+                    },
+                    {
+                        "name": "Carrier",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "Instructions",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "PO",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "Terms",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "SalesRep",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "BillToID",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "ShipToID",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "OrderStatus",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "WarehouseNum",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "Creditcard",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "CustName",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "SalesRepName",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    }
+                ]
+            },
+            "ttOrderLine": {
+                "trackChanges": true,
+                "serializeName": "ttOrderLine",
+                "indexes": {
+                    "OrderLine": {
+                        "primary": true,
+                        "unique": true,
+                        "word": false,
+                        "fields": [
+                            "OrderNum:asc",
+                            "Linenum:asc"
+                        ]
+                    },
+                    "ItemNum": {
+                        "primary": false,
+                        "unique": false,
+                        "word": false,
+                        "fields": ["ItemNum:asc"]
+                    },
+                    "OrderLineStatus": {
+                        "primary": false,
+                        "unique": false,
+                        "word": false,
+                        "fields": ["OrderLineStatus:asc"]
+                    }
+                },
+                "fields": [
+                    {
+                        "name": "OrderNum",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "LineNum",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "ItemNum",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "Price",
+                        "ablType": "DECIMAL",
+                        "extent": null
+                    },
+                    {
+                        "name": "Qty",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "Discount",
+                        "ablType": "INTEGER",
+                        "extent": null
+                    },
+                    {
+                        "name": "ExtendedPrice",
+                        "ablType": "DECIMAL",
+                        "extent": null
+                    },
+                    {
+                        "name": "OrderLineStatus",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    },
+                    {
+                        "name": "ItemName",
+                        "ablType": "CHARACTER",
+                        "extent": null
+                    }
+                ]
+            }
+        }
+    }
+}}}

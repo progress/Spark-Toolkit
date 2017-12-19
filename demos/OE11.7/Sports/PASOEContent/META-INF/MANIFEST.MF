@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.9.1
+Created-By: 24.45-b08 (Oracle Corporation)
+OpenEdge-version: 11.7.2
+ABL-web-application-version: 0.0.0.0
+

@@ -1,0 +1,11 @@
+.
+PSC
+filename=_sec-authentication-system
+records=0000000000000
+ldbname=Sports2kMT
+timestamp=2012/06/21-15:51:41
+numformat=44,46
+dateformat=mdy-1950
+cpstream=UTF-8
+.
+0000000003

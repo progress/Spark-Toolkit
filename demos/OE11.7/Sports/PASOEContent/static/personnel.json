@@ -1,0 +1,347 @@
+{
+    "version": "1.5",
+    "lastModified": "Fri Dec 08 15:21:08 EST 2017",
+    "services": [{
+        "name": "personnel",
+        "address": "\/web\/pdo\/personnel",
+        "useRequest": false,
+        "resources": [
+            {
+                "name": "employee",
+                "path": "\/employee",
+                "autoSave": false,
+                "schema": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {"dsEmployee": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {"ttEmployee": {
+                            "type": "array",
+                            "primaryKey": ["EmpNum"],
+                            "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "_errorString": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "id",
+                                        "semanticType": "Internal"
+                                    },
+                                    "seq": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": null,
+                                        "title": "seq",
+                                        "semanticType": "Internal"
+                                    },
+                                    "EmpNum": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Emp No"
+                                    },
+                                    "LastName": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Last Name"
+                                    },
+                                    "FirstName": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "First Name"
+                                    },
+                                    "Address": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Address"
+                                    },
+                                    "Address2": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Address2"
+                                    },
+                                    "City": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "City"
+                                    },
+                                    "State": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "State"
+                                    },
+                                    "PostalCode": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Postal Code"
+                                    },
+                                    "HomePhone": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Home Phone"
+                                    },
+                                    "WorkPhone": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Work Phone"
+                                    },
+                                    "DeptCode": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Dept Code"
+                                    },
+                                    "Position": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Position"
+                                    },
+                                    "Birthdate": {
+                                        "type": "string",
+                                        "ablType": "DATE",
+                                        "default": null,
+                                        "title": "Birthdate",
+                                        "format": "date"
+                                    },
+                                    "StartDate": {
+                                        "type": "string",
+                                        "ablType": "DATE",
+                                        "default": null,
+                                        "title": "Start Date",
+                                        "format": "date"
+                                    },
+                                    "RemainingPTO": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Vacation Days Left",
+                                        "origName": "VacationDaysLeft"
+                                    },
+                                    "SickDaysLeft": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Sick Days Left"
+                                    }
+                                }
+                            }
+                        }}
+                    }}
+                },
+                "operations": [
+                    {
+                        "path": "?filter={filter}",
+                        "useBeforeImage": true,
+                        "type": "read",
+                        "verb": "get",
+                        "mappingType": "AFP",
+                        "capabilities": "filter,top,skip,id,sort,orderBy",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "dsEmployee",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "submit",
+                        "path": "\/submit",
+                        "useBeforeImage": true,
+                        "type": "submit",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsEmployee",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsEmployee",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "count",
+                        "path": "\/count?filter={filter}",
+                        "useBeforeImage": false,
+                        "type": "count",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "numRecs",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "family",
+                "path": "\/family",
+                "autoSave": false,
+                "schema": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {"dsFamily": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {"ttFamily": {
+                            "type": "array",
+                            "primaryKey": [
+                                "EmpNum",
+                                "RelativeName"
+                            ],
+                            "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "_errorString": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "id",
+                                        "semanticType": "Internal"
+                                    },
+                                    "seq": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": null,
+                                        "title": "seq",
+                                        "semanticType": "Internal"
+                                    },
+                                    "EmpNum": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Emp No"
+                                    },
+                                    "RelativeName": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Relative Name"
+                                    },
+                                    "Relation": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Relation"
+                                    },
+                                    "Birthdate": {
+                                        "type": "string",
+                                        "ablType": "DATE",
+                                        "default": null,
+                                        "title": "Birthdate",
+                                        "format": "date"
+                                    },
+                                    "CoveredOnBenefits": {
+                                        "type": "boolean",
+                                        "ablType": "LOGICAL",
+                                        "default": false,
+                                        "title": "Covered On Benefits"
+                                    },
+                                    "BenefitDate": {
+                                        "type": "string",
+                                        "ablType": "DATE",
+                                        "default": null,
+                                        "title": "Benefit Date",
+                                        "format": "date"
+                                    }
+                                }
+                            }
+                        }}
+                    }}
+                },
+                "operations": [
+                    {
+                        "name": "submit",
+                        "path": "\/submit",
+                        "useBeforeImage": true,
+                        "type": "submit",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsFamily",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsFamily",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "count",
+                        "path": "\/count?filter={filter}",
+                        "useBeforeImage": false,
+                        "type": "count",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "numRecs",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "?filter={filter}",
+                        "useBeforeImage": true,
+                        "type": "read",
+                        "verb": "get",
+                        "mappingType": "AFP",
+                        "capabilities": "filter,top,skip,id,sort,orderBy",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "dsFamily",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }]
+}

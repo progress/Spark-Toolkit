@@ -1,0 +1,29 @@
+<section class="hbox stretch" id="<Spark_TemplateName>View">
+    <aside class="bg-white">
+        <section class="vbox">
+            <header class="header bg-white b-b b-light">
+                <p class="h5">Maintain <Spark_MasterTable></p>
+            </header>
+            <section class="scrollable wrapper bg-light">
+                <form class="form-group" data-role="validator" name="searchForm" novalidate="novalidate">
+                    <div class="input-group m-t-sm" style="margin: 0 auto;">
+                        <input class="form-control input-s" name="<Spark_SearchField1Title>" placeholder="Search By <Spark_SearchField1Title>"
+                               data-bind="value:params.searchValue" style="width:300px"/>
+                        <span class="btn btn-default btn-sm" data-bind="click:doSearch">Search</span>
+                    </div>
+                </form>
+                <br/>
+                <form class="panel panel-default wrapper" name="editForm">
+                    <input type="hidden" name="id" data-bind="value:selectedRow.id"/>
+                    <div class="row m-b">
+                        <Spark_FormFields>
+                    </div>
+                    <span class="btn btn-primary" data-bind="click:saveRecord">Save</span>
+                    <span class="btn btn-default" data-bind="click:createNew">New</span>
+                    <span class="btn btn-default" data-bind="click:deleteRecord">Delete</span>
+                    <span class="btn btn-default" data-bind="click:cancelEdit">Cancel</span>
+                </form>
+            </section>
+        </section>
+    </aside>
+</section>

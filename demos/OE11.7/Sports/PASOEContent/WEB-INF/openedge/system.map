@@ -1,0 +1,585 @@
+{
+  "services": {
+    "system": {
+      "version": "1.0.0",
+      "operations": {
+        "\/": {
+          "GET": {
+            "contentType": "application\/json",
+            "statusCode": 200,
+            "file": "$CATALINA_BASE\/webapps\/$oepas-webapp\/static\/system.json"
+          }
+        },
+        "\/access": {
+        },
+        "\/access\/apply": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.System.Access",
+              "function": "setInterceptRules",
+              "arg": [
+                {
+                  "ablName": "rules",
+                  "ablType": "class Progress.Json.ObjectModel.JsonArray",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "rules"
+                  }
+                },
+                {
+                  "ablName": "success",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "success"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/access\/rules": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.System.Access",
+              "function": "getInterceptRules",
+              "arg": [
+                {
+                  "ablName": "rules",
+                  "ablType": "class Progress.Json.ObjectModel.JsonArray",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "rules"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/webdata": {
+          "GET": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": true
+            },
+            "entity": {
+              "name": "Business.System.WebData",
+              "function": "ReadWebData",
+              "arg": [
+                {
+                  "ablName": "filter",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "QUERY",
+                    "name": "filter"
+                  }
+                },
+                {
+                  "ablName": "dsWebDataStore",
+                  "ablType": "DATASET",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "BODY",
+                    "name": null
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/webprofile": {
+          "GET": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": true
+            },
+            "entity": {
+              "name": "Business.System.WebProfileBE",
+              "function": "ReadWebProfile",
+              "arg": [
+                {
+                  "ablName": "filter",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "QUERY",
+                    "name": "filter"
+                  }
+                },
+                {
+                  "ablName": "dsWebProfile",
+                  "ablType": "DATASET",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "BODY",
+                    "name": null
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/webprofile\/submit": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": true
+            },
+            "entity": {
+              "name": "Business.System.WebProfileBE",
+              "function": "SubmitWebProfile",
+              "arg": [
+                {
+                  "ablName": "dsWebProfile",
+                  "ablType": "DATASET",
+                  "ioMode": "INPUT-OUTPUT",
+                  "msgElem": {
+                    "type": "BODY",
+                    "name": null
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/webprofile\/count": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false
+            },
+            "entity": {
+              "name": "Business.System.WebProfileBE",
+              "function": "getCount",
+              "arg": [
+                {
+                  "ablName": "filter",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "QUERY",
+                    "name": "filter"
+                  }
+                },
+                {
+                  "ablName": "numRecs",
+                  "ablType": "INTEGER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "numRecs"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/webrole": {
+          "GET": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": true
+            },
+            "entity": {
+              "name": "Business.System.WebRoleBE",
+              "function": "ReadWebRole",
+              "arg": [
+                {
+                  "ablName": "filter",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "QUERY",
+                    "name": "filter"
+                  }
+                },
+                {
+                  "ablName": "dsWebRole",
+                  "ablType": "DATASET",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "BODY",
+                    "name": null
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/webrole\/count": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false
+            },
+            "entity": {
+              "name": "Business.System.WebRoleBE",
+              "function": "getCount",
+              "arg": [
+                {
+                  "ablName": "filter",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "QUERY",
+                    "name": "filter"
+                  }
+                },
+                {
+                  "ablName": "numRecs",
+                  "ablType": "INTEGER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "numRecs"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "schemas": {
+        "dsWebDataStore": {
+          "ttWebDataStore": {
+            "trackChanges": false,
+            "indexes": {
+              "pkSeq": {
+                "primary": true,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "seq:asc"
+                ]
+              },
+              "idxpkData": {
+                "primary": false,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "WebSessionID:desc",
+                  "ObjectName:desc"
+                ]
+              }
+            },
+            "fields": [
+              {
+                "name": "id",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "seq",
+                "ablType": "INTEGER",
+                "extent": null
+              },
+              {
+                "name": "WebSessionID",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "ObjectName",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "ObjectData",
+                "ablType": "clob",
+                "extent": null
+              }
+            ]
+          }
+        },
+        "dsWebProfile": {
+          "ttWebProfile": {
+            "trackChanges": true,
+            "indexes": {
+              "pkSeq": {
+                "primary": true,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "seq:asc"
+                ]
+              },
+              "idxpkDomainUser": {
+                "primary": false,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "Username:asc",
+                  "DomainName:asc"
+                ]
+              },
+              "idxEmail": {
+                "primary": false,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "Email:asc",
+                  "DomainName:asc"
+                ]
+              },
+              "idxNum": {
+                "primary": false,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "UserNum:asc"
+                ]
+              },
+              "idxName": {
+                "primary": false,
+                "unique": false,
+                "word": false,
+                "fields": [
+                  "LastName:asc",
+                  "FirstName:asc"
+                ]
+              }
+            },
+            "fields": [
+              {
+                "name": "id",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "seq",
+                "ablType": "INTEGER",
+                "extent": null
+              },
+              {
+                "name": "UserNum",
+                "ablType": "INTEGER",
+                "extent": null
+              },
+              {
+                "name": "Username",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "DomainName",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "Password",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "ResetCode",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "FirstName",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "LastName",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "IsActive",
+                "ablType": "LOGICAL",
+                "extent": null
+              },
+              {
+                "name": "IsLocked",
+                "ablType": "LOGICAL",
+                "extent": null
+              },
+              {
+                "name": "UseTFA",
+                "ablType": "LOGICAL",
+                "extent": null
+              },
+              {
+                "name": "TFAMethod",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "TFAToken",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "TFASecret",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "Email",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "CompanyName",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "JobTitle",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "HomePhone",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "WorkPhone",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "MobilePhone",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "MobileCarrier",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "SecurityQuestion",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "SecurityAnswer",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "PasswordExpires",
+                "ablType": "DATE",
+                "extent": null
+              },
+              {
+                "name": "ForcePWChange",
+                "ablType": "LOGICAL",
+                "extent": null
+              },
+              {
+                "name": "LockOutDate",
+                "ablType": "DATE",
+                "extent": null
+              },
+              {
+                "name": "LockOutTime",
+                "ablType": "INTEGER",
+                "extent": null
+              },
+              {
+                "name": "TaskAdjust",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "Comments",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "FirstLogin",
+                "ablType": "DATE",
+                "extent": null
+              },
+              {
+                "name": "LastLogin",
+                "ablType": "DATE",
+                "extent": null
+              },
+              {
+                "name": "LoginCount",
+                "ablType": "INTEGER",
+                "extent": null
+              },
+              {
+                "name": "ProfileRoles",
+                "ablType": "CHARACTER",
+                "extent": null
+              }
+            ]
+          }
+        },
+        "dsWebRole": {
+          "ttWebRole": {
+            "trackChanges": true,
+            "indexes": {
+              "pkSeq": {
+                "primary": true,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "seq:asc"
+                ]
+              },
+              "idxpkRoleID": {
+                "primary": false,
+                "unique": true,
+                "word": false,
+                "fields": [
+                  "RoleID:asc"
+                ]
+              }
+            },
+            "fields": [
+              {
+                "name": "id",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "seq",
+                "ablType": "INTEGER",
+                "extent": null
+              },
+              {
+                "name": "RoleID",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "RoleDesc",
+                "ablType": "CHARACTER",
+                "extent": null
+              },
+              {
+                "name": "TaskList",
+                "ablType": "CHARACTER",
+                "extent": null
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

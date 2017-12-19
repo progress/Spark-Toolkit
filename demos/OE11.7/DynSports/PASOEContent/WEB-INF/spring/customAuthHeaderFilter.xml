@@ -1,0 +1,161 @@
+<!-- Import this file is oeablSecurity-*.xml for enable property placeholder capability -->
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+    <!-- This Spring Security XML configuration file fragment holds bean definitions
+         for custom HTTP Authorization header handlers for BASIC and various forms of
+         SSO tokens. In this file will an OpenEdge developer edit the configuration 
+         for their private Authorization header handler.
+
+         THIS FILE WILL NOT BE OVERWRITEN BY ANY OPENEDGE UPDATE/PATCH PROCESS FOR OEABL
+         WEB APPLICATIONS. -->
+
+    <!-- Custom Authorization header filter that allows an OpenEdge customer the
+         ability to write a Java or ABL class that permits handling of a customized
+         HTTP Authorization header and it value.  The Java/ABL may be written to
+         validate a security token or input login credentials according to the
+         Authentication-scheme value.
+         
+         This is a placeholder using an OpenEdge supplied class that is a non operational
+         stub.  The ABL developer must configure their class and properties before
+         this feature can be used. -->
+    <b:bean id="customAuthorizationFilter"
+            class="com.progress.appserv.services.security.OEABLCallbackAuthorizationFilter" >
+        <b:constructor-arg index="0" ref="ablAuthzCallback" />
+
+        <!-- Required properties -->
+
+        <!-- Filter policy: {disabled | sufficient | required} 
+             [Default: disabled ] -->
+        <b:property name="authPolicy" value="${customAuthorizationFilter.authPolicy}" />
+
+        <!-- The Authorization header's authorization scheme name
+             This value must be set by the developer - it has no
+             default
+             [Default: none ] -->
+        <b:property name="authScheme" value="${customAuthorizationFilter.authScheme}" /> 
+
+        <!-- Optional base class properties -->
+
+        <!-- Client-type header check using Java reg-ex -->
+        <b:property name="authClientType" value="${customAuthorizationFilter.authClientType}" />
+
+        <!-- Name of HTTP header containing credentials/token -->
+        <b:property name="authHeader" value="${customAuthorizationFilter.authHeader}" />
+
+        <!-- Error response detail: 0 = safe; 1 = terse; 2 = debug 
+             [Default: 0 ] -->
+        <b:property name="authErrorDetail" value="${customAuthorizationFilter.authErrorDetail}" />
+
+        <!-- Require HTTPS  to protect Authorization header values
+             [Default: true ]-->
+        <b:property name="authSecurity" value="${customAuthorizationFilter.authSecurity}" />
+
+        <!-- If authenticating user-id/password - ignore failure 
+             and allow continuation to next filter bean
+             [Default:  false ] -->
+        <b:property name="ignoreFailure" value="${customAuthorizationFilter.ignoreFailure}" />
+
+        <b:property name="realmChallenge" value="${customAuthorizationFilter.realmChallenge}" />
+        <b:property name="tokenSecret" value="${customAuthorizationFilter.tokenSecret}" />
+        <b:property name="userIdFormat" value="%s=%s" />
+    </b:bean>
+    
+    <authentication-manager id="ablAuthzCallback" >
+        <authentication-provider ref="ablAuthzCallbackAuthProvider" />
+    </authentication-manager>
+    
+    <!-- Spring AuthenticationProvider that manages the task of authentication
+    using a user Authorization token intercepted by the OEABLCallbackAuthorizationFilter.  
+    It directly uses the OERealmUserDetailsImpl bean to do the real work and
+    create a Spring UserDetails object that will be placed in a Spring
+    authentication token. Do NOT change the Spring userDetailsService reference -->
+    <b:bean id="ablAuthzCallbackAuthProvider"
+        class="com.progress.appserv.services.security.OERealmAuthProvider" >
+        <b:property name="userDetailsService">
+                    <b:ref bean="ablAuthzCallbackUserDetails"/>
+        </b:property>
+        <b:property name="createCPAuthn" value="false" />
+        <b:property name="multiTenant" value="${customAuthorization.AuthProvider.multiTenant}" />
+        <b:property name="userDomain" value="${customAuthorization.AuthProvider.userDomain}" />
+        <!--
+        <b:property name="accntinfo" value="${customAuthorization.AuthProvider.accntinfo}" />
+        <b:property name="authz" value="${customAuthorization.AuthProvider.authz}"/>
+        <b:property name="expires" value="${customAuthorization.AuthProvider.expires}"/>
+        <b:property name="properties" >
+            <b:map>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.1.key}" 
+                          value="${customAuthorization.AuthProvider.properties.1.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.2.key}" 
+                          value="${customAuthorization.AuthProvider.properties.2.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.3.key}" 
+                          value="${customAuthorization.AuthProvider.properties.3.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.4.key}" 
+                          value="${customAuthorization.AuthProvider.properties.4.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.5.key}" 
+                          value="${customAuthorization.AuthProvider.properties.5.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.6.key}" 
+                          value="${customAuthorization.AuthProvider.properties.6.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.7.key}" 
+                          value="${customAuthorization.AuthProvider.properties.7.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.8.key}" 
+                          value="${customAuthorization.AuthProvider.properties.8.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.9.key}" 
+                          value="${customAuthorization.AuthProvider.properties.9.value}"/>
+                 <b:entry key="${customAuthorization.AuthProvider.properties.10.key}" 
+                          value="${customAuthorization.AuthProvider.properties.10.value}"/>
+            </b:map>
+         </b:property>
+        -->
+    </b:bean>
+
+    <!-- Spring UserDetailsService that connects to an AppServer Realm service
+         and uses it as a source of user account information during the
+         authentication step managed by the OERealmAuthProvider bean.
+         
+         The sample in this template requires changing the properties
+         "realmURL" and "realmClass" to contain the run-time AppServer
+         used for authentication and the developer supplied OOABL class
+         name. 
+         The location of where the OERealm server's OOABL class will be executed
+         may be within this PAS for OE server, or in a remote OpenEdge application server.
+         Thus following are the values that "realmURL" can take:
+         (1) "internal://nxgas" for local PAS for OE Server
+         (2) "http[s]://<host>[:<port>]/[oeabl-app-name/]apsv" for remote PAS for OE server  
+         (3) "http[s]://<host>[:<port>]/<aia-app-nam>/aia" for remote classic AppServer via AIA
+         (4) "AppServer[s]://<name-server-host>:<name-server-port>/<service-name>" for remote classic
+         AppServer using NameServer
+         (5) "AppServerDC[s]://<AppServer-host>:<AppServer-port>/<service-name>" for remote classic
+         AppServer using Direct Connect
+         -->
+    <b:bean id="ablAuthzCallbackUserDetails"
+            class="com.progress.appserv.services.security.OERealmUserDetailsImpl" >
+            <b:property name="realmURL" value="internal://nxgas" />
+            <b:property name="realmClass" value="${customAuthorization.UserDetails.realmClass}" />
+
+            <b:property name="grantedAuthorities" value="${customAuthorization.UserDetails.grantedAuthorities}" />
+            <b:property name="rolePrefix" value="${customAuthorization.UserDetails.rolePrefix}" />
+            <b:property name="roleAttrName" value="${customAuthorization.UserDetails.roleAttrName}" />
+            <b:property name="enabledAttrName" value="${customAuthorization.UserDetails.enabledAttrName}" />
+            <b:property name="lockedAttrName" value="${customAuthorization.UserDetails.lockedAttrName}" />
+            <b:property name="expiredAttrName" value="${customAuthorization.UserDetails.expiredAttrName}" />
+            <b:property name="propertiesAttrName" value="${customAuthorization.UserDetails.propertiesAttrName}" />
+            <b:property name="userIdAttrName" value="${customAuthorization.UserDetails.userIdAttrName}" />
+            <b:property name="appendRealmError" value="${customAuthorization.UserDetails.appendRealmError}" /> 
+
+            <!--
+            <b:property name="realmPwdAlg" value="0" />
+            <b:property name="realmTokenFile" value=""/>
+            <b:property name="certLocation" value=""/>
+            -->
+    </b:bean>
+
+
+
+
+</b:beans>

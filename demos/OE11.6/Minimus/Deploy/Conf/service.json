@@ -1,0 +1,18 @@
+{
+    "Config": {
+        "ServiceMapping": [{
+            "Service": "OpenEdge.Web.DataObject.IServiceRegistry",
+            "Implementation": "OpenEdge.Web.DataObject.ServiceRegistryImpl"
+        }, {
+            "Service": "Progress.Web.IWebHandler",
+            "Implementation": "OpenEdge.Web.DataObject.DataObjectHandler"
+        }],
+        "ServiceLifeCycle": [{
+            "ServiceMatch": "OpenEdge.Web.DataObject.ServiceRegistryImpl",
+            "LifeCycle": "Session"
+        }, {
+            "ServiceMatch": "OpenEdge.Web.DataObject.ServiceRegistryLoader",
+            "LifeCycle": "Session"
+        }]
+    }
+}

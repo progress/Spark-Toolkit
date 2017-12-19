@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+    
+    <!-- This Spring Security configuration file fragment holds all of the
+         AuthenticationManager bean definitions for all login models.  The 
+         bean definitions all obtain their property values from the 
+         oeablSecurity.properties files loaded by the properties-loader.xml 
+         configuration file. 
+         
+         ALL CONFIGURATION SHOULD BE CONTROLLED VIA THE oeablSecurity.properties
+         FILE.  IF THIS FILE MUST BE EDITED, USE PROPERTY VARIABLES AND
+         ADD A CORRESPONDING ENTRY INTO oeablSecurity.properties.   -->
+
+    <!--  START :: Authentication Managers configuration    -->
+        
+    <b:bean name="bcryptEncoder"
+        class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" >
+    </b:bean>
+
+    <!-- Authentication Manager (LOCAL)  
+         User accounts stored in a local text file, using clear-text passwords.
+         THIS IS NOT APPROPRIATE OUTSIDE OF THE DEVELOPMENT ENVIRONMENT -->
+    <authentication-manager id="local" >
+        <authentication-provider>
+            <user-service properties="${local.userservice.properties}" />
+        </authentication-provider>
+    </authentication-manager>
+
+    
+    <!-- Authentication Manager (LOCAL with password encoded)  
+         User accounts stored in a local text file, using strongly encoded
+         passwords.  However it lacks the history, and password rules 
+         required in some applications. It may be considered usable
+         in some production environments, but not all. -->
+    <authentication-manager id="extlocal" >
+        <authentication-provider>
+            <password-encoder ref="bcryptEncoder" />
+            <user-service properties="${local.userservice.properties}" />
+        </authentication-provider>
+    </authentication-manager>
+            
+    <!-- Authentication Manager (FULL-LDAP)  -->
+    
+    <!-- Full (complex) version of a standard LDAPv3 client access to a Directory 
+         Service for the purpose of:
+            1)  locating the DN of the user being auththenticated
+            2)  validating the user DN account password
+            3)  loading granted ROLEs (aka Spring Authorities) for the
+                user.  A MINIMUM of 1 ROLE IS REQUIRED TO SUCCESSFULLLY
+                LOGIN 
+
+         Refer to standard LDAP URL specification schemes 
+         for details.  You may, or may not, require a 'manager' fully 
+         qualified DN of a user account that has 'search' permission in the 
+         directory tree.
+
+         Consult your Directory Service admin for more information.
+    -->
+    <authentication-manager id="ldap" >
+        <authentication-provider ref="ldapAuthProvider" />
+    </authentication-manager>
+    
+    
+    <!-- The LDAP server connection context: who to log into LDAP as to perform a search for a
+         simple user account name, starting at the base DN -->
+    <b:bean id="ldapContextSource"
+        class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+
+        <!-- Provider Url an LDAP URL of the form ldap://localhost:389/base_dn -->
+        <b:constructor-arg value="${ldap.contxtSrc.url}"> </b:constructor-arg>
+        
+        <!-- Set the base suffix from which all operations should origin -->
+        <b:property name="base" value="${ldap.contxtSrc.base}" />
+
+        <!-- The LDAP user account name to login to the directory service with
+             in order to search for the user account being authenticated -->
+        <b:property name="userDn" value="${ldap.contxtSrc.userDn}" />
+
+        <!-- The LDAP user account name's password to login to the directory service with. -->
+        <b:property name="password" value="${ldap.contxtSrc.password}" />
+
+        <!-- Set to handle referrals, Default is 'ignore'; setting this flag to 'follow' 
+             will enable referrals to be automatically followed -->
+        <b:property name="referral" value="${ldap.contxtSrc.referral}"/>
+        
+        <b:property name="baseEnvironmentProperties">
+            <b:map>
+                <b:entry key="com.sun.jndi.ldap.connect.timeout" value="${ldap.contxtSrc.timeout}" />          
+            </b:map>  
+        </b:property>
+
+    </b:bean>
+
+    <!-- The LDAP user acount search operation's parameters used by the above ldapContextSource
+         that starts at a base DN, searches the entire subtree, and tries to find a user
+         object who's attribute matches the search filter
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch"
+        id="ldapSearchBean">
+
+        <!-- user search base for finding user account DN for authentication -->
+        <b:constructor-arg value="${ldap.search.base}" />
+
+        <!-- LDAP search query to match the authenticated user-ID input with a
+             LDAP user account object's attribute value -->
+        <b:constructor-arg value="${ldap.serach.attribute}" />
+        
+        <b:constructor-arg ref="ldapContextSource" />
+
+        <!-- Search the search base's object and all sub trees -->
+        <b:property name="searchSubtree" value="${ldap.search.subtree}" />
+    </b:bean>
+
+    <!-- How to "bind" to an LDAP server, where "bind" is equivalent to logging in 
+         You either bind using a DN pattern or perform a user account search
+         using the above ldapSearchBean 
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.authentication.BindAuthenticator"
+        id="ldapBindAuthenticator">
+        <b:constructor-arg ref="ldapContextSource" />
+        <b:property name="userSearch" ref="ldapSearchBean" />
+        <!-- Alternate to searching for the user's DN by using a fixed DN template.  This
+             can only be used when the user accounts are all contained within a single
+             branch of the directory tree.
+
+        <b:property name="userDnPatterns">
+           <b:list><b:value>"${sts.ldap.bind.userDnPatterns}"</b:value></b:list>
+        </b:property>
+        -->
+    </b:bean>
+
+    <!-- This describes which LDAP  user account role memberships (aks. Spring authoriteis) to return 
+         into the security token to be used by the application's authorization processes.  The authorities
+         are found by searching the LDAP directory for objects whose attributes contain the user 
+         accounts fully qualified DN as a member
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator"
+        id="ldapAuthoritiesPopulator">
+        <b:constructor-arg ref="ldapContextSource" />
+
+        <!-- LDAP connection url -->
+        <b:constructor-arg value="${ldap.authpopulator.searchBase}" />
+
+        <!-- Where to begin searching for user group memberships in the directory service -->
+        <b:property name="groupSearchFilter" value="${ldap.authpopulator.groupSearchFilter}" />
+
+        <!-- Map the LDAP group object attribute name to a Spring ROLE name -->
+        <b:property name="groupRoleAttribute" value="${ldap.authpopulator.groupRoleAttribute}" />
+        
+        <!-- How deep in the directory tree to search to user group memberships -->
+        <b:property name="searchSubtree" value="${ldap.authpopulator.searchSubtree}" />
+
+        <!-- Ignore Active Directory mapping objects -->
+        <b:property name="ignorePartialResultException" value="${ldap.authpopulator.ignorePartialResultException}" />
+
+        <!-- Assign a Spring Role name prefix ; default is ROLE_ -->
+        <b:property name="rolePrefix" value="${ldap.authpopulator.rolePrefix}" />
+        
+        <!-- Convert LDAP [group] ROLE names to upper case ; default is true -->
+        <b:property name="convertToUpperCase" value="${ldap.authpopulator.convertToUpperCase}" />
+    </b:bean>
+
+    <!-- This describes how to map LDAP user account (object) attributes into the security token
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.userdetails.InetOrgPersonContextMapper"
+        id="ldapUserDetailsContextMapper">
+    </b:bean>
+
+    <!-- The LDAP authentication provider plug-in, with its references to the beans that
+         implement binding to the service, populating roles, and how to make a connection.
+    -->
+    <b:bean id="ldapAuthProvider"
+        class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+
+        <!-- LDAP login bean -->
+        <b:constructor-arg ref="ldapBindAuthenticator" />
+
+        <!-- LDAP user account granted [ROLE] group loader bean -->
+        <b:constructor-arg ref="ldapAuthoritiesPopulator" />
+
+        <b:property name="useAuthenticationRequestCredentials" value="${ldap.authprovider.useAuthenticationRequestCredentials}" />
+
+        <!-- LDAP user account information loader bean -->
+        <b:property name="userDetailsContextMapper" ref="ldapUserDetailsContextMapper" />
+
+    </b:bean>
+    
+    
+    <!-- Authentication Manager (OE-REALM)  
+         This Authentication Manager's Authentication Provider and
+         User Details beans provide the ability for an ABL  application
+         to be a source of user accounts.  NOTE: The ABL application
+         IS NOT where authentication runs - that is inside Spring Security.
+         The ABL application performs the actions:
+            1)  validate the account exists
+            2)  verify the account's password
+            3)  supply user account STATE information
+            4)  supply user account ROLEs
+            
+         NOTE: Using a remote network connection with OERealm is very
+         dangerous to the enterprise and should always be used
+         with TLS
+
+         NOTE: It is dangerous to use the OERealm support without using
+         a Client-Principal to authenticate this client to the ABL
+         application code.
+
+    -->        
+    
+    <authentication-manager id="oerealm" >
+        <authentication-provider ref="OERealmAuthProvider" />
+    </authentication-manager>
+    
+    <!-- Spring AuthenticationProvider that manages the task of authentication
+    using a user account supplied by an AppServer Realm service.  It directly
+    uses the OERealmUserDetailsImpl bean to do the real work and
+    create a Spring UserDetails object that will be placed in a Spring
+    authentication token. Do NOT change the Spring userDetailsService reference -->
+    <b:bean id="OERealmAuthProvider"
+        class="com.progress.appserv.services.security.OERealmAuthProvider" >
+        <b:property name="userDetailsService">
+                    <b:ref bean="OERealmUserDetails"/>
+        </b:property>
+        <b:property name="createCPAuthn" value="true" />
+        <b:property name="multiTenant" value="${OERealm.AuthProvider.multiTenant}" />
+        <b:property name="userDomain" value="${OERealm.AuthProvider.userDomain}" />
+        <b:property name="accntinfo" value="${OERealm.AuthProvider.accntinfo}" />
+        <b:property name="authz" value="${OERealm.AuthProvider.authz}"/>
+        <b:property name="expires" value="${OERealm.AuthProvider.expires}"/>
+        <b:property name="properties" >
+            <b:map>
+                 <b:entry key="${OERealm.AuthProvider.properties.1.key}" 
+                          value="${OERealm.AuthProvider.properties.1.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.2.key}" 
+                          value="${OERealm.AuthProvider.properties.2.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.3.key}" 
+                          value="${OERealm.AuthProvider.properties.3.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.4.key}" 
+                          value="${OERealm.AuthProvider.properties.4.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.5.key}" 
+                          value="${OERealm.AuthProvider.properties.5.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.6.key}" 
+                          value="${OERealm.AuthProvider.properties.6.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.7.key}" 
+                          value="${OERealm.AuthProvider.properties.7.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.8.key}" 
+                          value="${OERealm.AuthProvider.properties.8.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.9.key}" 
+                          value="${OERealm.AuthProvider.properties.9.value}"/>
+                 <b:entry key="${OERealm.AuthProvider.properties.10.key}" 
+                          value="${OERealm.AuthProvider.properties.10.value}"/>
+            </b:map>
+         </b:property>
+    </b:bean>
+
+    <!-- Spring UserDetailsService that connects to an AppServer Realm service
+         and uses it as a source of user account information during the
+         authentication step managed by the OERealmAuthProvider bean.
+         
+         The sample in this template requires changing the properties
+         "realmURL" and "realmClass" to contain the run-time AppServer
+         used for authentication and the developer supplied OOABL class
+         name. 
+         The location of where the OERealm server's OOABL class will be executed
+         may be within this PAS for OE server, or in a remote OpenEdge application server.
+         Thus following are the values that "realmURL" can take:
+         (1) "internal://nxgas" for local PAS for OE Server
+         (2) "http[s]://<host>[:<port>]/[oeabl-app-name/]apsv" for remote PAS for OE server  
+         (3) "http[s]://<host>[:<port>]/<aia-app-nam>/aia" for remote classic AppServer via AIA
+         (4) "AppServer[s]://<name-server-host>:<name-server-port>/<service-name>" for remote classic
+         AppServer using NameServer
+         (5) "AppServerDC[s]://<AppServer-host>:<AppServer-port>/<service-name>" for remote classic
+         AppServer using Direct Connect
+         -->
+    <b:bean id="OERealmUserDetails"
+            class="com.progress.appserv.services.security.OERealmUserDetailsImpl" >
+            <b:property name="realmURL" value="${OERealm.UserDetails.realmURL}" />
+            <b:property name="realmClass" value="${OERealm.UserDetails.realmClass}" />
+            <b:property name="grantedAuthorities" value="${OERealm.UserDetails.grantedAuthorities}" />
+
+            <b:property name="rolePrefix" value="${OERealm.UserDetails.rolePrefix}" />
+            <b:property name="roleAttrName" value="${OERealm.UserDetails.roleAttrName}" />
+            <b:property name="enabledAttrName" value="${OERealm.UserDetails.enabledAttrName}" />
+            <b:property name="lockedAttrName" value="${OERealm.UserDetails.lockedAttrName}" />
+            <b:property name="expiredAttrName" value="${OERealm.UserDetails.expiredAttrName}" />
+            <b:property name="propertiesAttrName" value="${OERealm.UserDetails.propertiesAttrName}" />
+            <b:property name="userIdAttrName" value="${OERealm.UserDetails.userIdAttrName}" />
+
+            <b:property name="realmPwdAlg" value="${OERealm.UserDetails.realmPwdAlg}" />
+            <b:property name="realmTokenFile" value="${OERealm.UserDetails.realmTokenFile}" />
+            <b:property name="certLocation" value="${OERealm.UserDetails.certLocation}" />
+            <b:property name="appendRealmError" value="${OERealm.UserDetails.appendRealmError}" /> 
+    </b:bean>
+
+    <!-- Authentication Manager (ActiveDirectory)  
+         This Authentication Manager is a derivative of the standard 'ldap' configuration
+         found above, only with many hard-coded property values.  IF the Active Directory
+         architecture meets the hard-coded conditions this can be a VERY simple AD
+         configuration.  If the Active Directory archticture does NOT meet the hard-coded
+         property values, swith to using the 'ldap' or 'extldap' versions above.
+
+    -->        
+    
+    <authentication-manager id="ad" >
+        <authentication-provider ref="adAuthenticationProvider" />
+    </authentication-manager>
+    
+    <!-- This is an LDAP authentication provider for Microsoft's ActiveDirectory.  
+         It is an derivative of the primary LDAP provider above, but limited in scope 
+         and functionality specific to Active Directory.  It is provided as an alternative 
+         to the full LDAP authentication provider
+     -->
+    <b:bean id="adAuthenticationProvider"
+      class="org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider">
+        <b:constructor-arg index="0" value="${ad.user.domain}" />
+        <b:constructor-arg index="1" value="${ad.ldap.url}" />
+        <b:constructor-arg index="2" value="${ad.ldap.rootdn}" />
+        <b:property name="ConvertSubErrorCodesToExceptions" value="true" />
+        <b:property name="AuthoritiesMapper" ref="adAuthoritiesMapper" />
+    </b:bean>
+
+    <b:bean id="adAuthoritiesMapper"
+       class="org.springframework.security.core.authority.mapping.SimpleAuthorityMapper" >
+        <b:property name="prefix" value="${ad.AuthoritiesMapper.prefix}" />
+        <b:property name="convertToUpperCase" value="${ad.AuthoritiesMapper.convertToUpperCase}" />
+    </b:bean>
+    
+    <!--  End :: Authentication Manager configuration   -->
+    
+    <!-- Authentication manager reserved for PUBLIC anonymous authentication 
+         to the static and dynamic application content.
+     -->
+    <authentication-manager id="nullApplicationAuth" >
+        <authentication-provider>
+            <password-encoder ref="bcryptEncoder" />
+            <user-service>
+                <user name="u1xgu62200xjixlpwdwsw"
+                      password="@@@@@@@@@@@@@@@@@@@@@@@@@"
+                      locked="true"
+                      disabled="true"
+                      authorities="none" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+</b:beans>

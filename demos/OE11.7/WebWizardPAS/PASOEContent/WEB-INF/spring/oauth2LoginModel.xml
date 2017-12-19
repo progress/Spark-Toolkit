@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+      http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
+      http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2.xsd" > 
+
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for the OAuth2 Resource Server
+         functionality. The Resource server grants/denies access to web data
+         services based on the client's OAuth2 access token --> 
+
+    <!-- NOTE: the OAuth2 authorization service is explicitly disabled and
+         does not respond to the oauth2.AuthorizationServer.enable property.
+         The property and this import is put into place for inclusion in
+         a future, unspecified, release -->
+    <b:import resource="disableOAuth2AuthorizationServer.xml"/> 
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for the OAuth2 Resource Server
+         functionality. The Resource server grants/denies access to web data
+         services based on the client's OAuth2 access token --> 
+    <b:import resource="${oauth2.ResourceServer.enable}OAuth2ResourceServer.xml"/> 
+
+    <!-- Add in all of the JWT handling beans used to create and validate tokens for
+         and URL access -->
+    <b:import resource="jwtFilters.xml"/> 
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for all AuthenticationManagers
+         invoked by the security process.  The AuthenticationManager definitions
+         will perform physical connections to the source of user accounts, validate
+         the account exists, its state, and whether the account secret is valid.
+         --> 
+    <b:import resource="authManagers.xml"/> 
+
+</b:beans>

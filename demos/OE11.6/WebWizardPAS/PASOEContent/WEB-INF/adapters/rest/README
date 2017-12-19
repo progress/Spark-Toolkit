@@ -1,0 +1,128 @@
+##########################################################################
+##                                                                      ##
+##        Copyright (c) 1998-2015 by Progress Software Corporation      ##
+##                                                                      ##
+## All rights reserved.  No part of this program or document may be     ##
+## reproduced in any form or by any means without permission in writing ##
+## from Progress Software Corporation.                                  ##
+##                                                                      ##
+##########################################################################
+ 
+This README describes contents of the parent folder "rest". The contents
+of parent "rest" folder is used by the runtime to initialize REST transport
+for the oeabl service. The layout of the rest folder containing a deployed
+service e.g. <Service1>.paar will look like:
+
+/rest
+|
+---- <Service1>
+|    |
+|    ---- <Service1>.paar
+|    |
+|    ---- stagingDir
+|         |
+|         ---- Service1.restoe
+|         |
+|         ---- mapping.xml
+|         |
+|         ---- resourceModel.xml
+|         |
+|         ---- spring.xml
+|
+---- <Service2>
+|    .
+|    .
+|    .
+---- runtime.props
+
+Each new deployed service will have the same layout as explained for Service1 here.
+
+1) <Service1> - Directory
+   For each Service (as represented by .paar), new directory is created. The name
+   of the directory bears the name of the Service. This directory contains the 
+   (.paar) and another directory named "stagingDir" which is the inflated version
+   of the (.paar).The "stagingDir" is created when web application context is initialized
+   during Tomcat startup. This directory is deleted when the web application context
+   is destroyed during the Tomcat shutdown.
+
+2) stagingDir/<Service1>.paar [Progress Archive]
+   Archive file containing all the files required to create the REST service endpoint.
+   Used by REST runtime to create and manage endpoints. DO NOT DELETE.
+
+3) stagingDir/<Service1>.restoe
+   This file contains metadata for the AppServer procedure and the Input/Output params. 
+   EDIT NOT RECOMMENDED.
+
+4) stagingDir/mapping.xml
+   This file contains information regarding the mapping of Input/Output Parameters
+   of the Appserver procedure with the HTTP Request/Response parameters respectively.
+   EDIT NOT RECOMMENDED.
+
+5) stagingDir/resourceModel.xml
+   This file contains information regarding the mapping of AppServer procedure with 
+   the HTTP Verb and HTTP Path.
+   EDIT NOT RECOMMENDED.
+
+6) stagingDir/spring.xml
+   This file serves as seed of all the adapter functionality. The REST adapter runtime
+   uses this file to load all the mappings and procedure metadata. 
+   EDIT NOT RECOMMENDED.
+
+7) runtime.props
+   Property file containing default values of runtime properties.
+   Each deployed SOAP service will inherit property values for its own copy 
+   of runtime properties from this file.
+
+
+Deploying a PAAR (Progress Archive) in an OEABL Application for PAS Server. 
+===========================================================================
+
+The PAAR maps the Progress 4GL procedures that run on the Application Server.
+Deployment of PAAR can be performed using:
+
+1) deployREST.sh/deployREST.bat utility:
+   
+   - The utility reside in the PAS instance's bin folder i.e. {CATALINA_BASE}/bin.
+   
+   - General syntax to deploy a paar is:
+     Examples:
+       Deploy test.paar to OEABL WebApp named ROOT
+       # $CATALINA_BASE/bin/deployREST.sh /tmp/test.paar ROOT
+
+       Undeploy an existing REST service named test from OEABL WebApp ROOT
+       # $CATALINA_BASE/bin/deployREST.sh test ROOT -undeploy
+   
+   - Deployment requires a webapp context reload / server restart. To limit
+     production downtime, deploy all the required REST services first and then
+     performing Server restart.
+   
+   - Once deployed, a new folder is created in
+     $CATALINA_BASE/webapps/<OEABL WebApp>/WEB-INF/adapters/rest/<ServiceName>.
+     After the server restart, and successful load of the service by the runtime
+     [.xml, .restoe ] are created inside the stagingDir.
+     
+
+2) REST webservice call to oemanager webapp:
+
+   - oemanager webapp serves as a central utility to manage OEABL webapps.
+
+   - General syntax to deploy a paar is:
+     Examples:
+       Deploy test.paar to OEABL WebApp named ROOT
+        # curl -X POST --data-binary @test.paar
+        # http://<PASHostName>:<PASPortNum>/oemanager/applications/<InstanceName>/webapps/ROOT/transports/rest/oeservices
+        # -H "Accept: application/vnd.progress+json" 
+        # -H "Content-Type: application/vnd.progress.paar+xml" 
+        # -H "Content-Disposition: attachment; filename=test.paar" -v 
+
+       Undeploy an existing REST service named test from OEABL WebApp ROOT
+        # curl -X DELETE
+        # http://<PASHostName>:<PASPortNum>/oemanager/applications/<InstanceName>/webapps/ROOT/transports/rest/oeservices/test
+   
+    - Once deployed, a new folder is created in
+      $CATALINA_BASE/webapps/<OEABL WebApp>/WEB-INF/adapters/rest/<ServiceName>.
+      After the server restart, and successful load of the service by the runtime
+      [.xml, .restoe ] are created inside the stagingDir.
+
+    - oemanager automatically loads all the new definitions by performing 
+      a reload of the WebpApp by start/stop of the WebApp context.    

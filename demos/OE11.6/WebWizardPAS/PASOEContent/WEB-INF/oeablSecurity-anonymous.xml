@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing authentication, channel
+  - security and web URI beans.
+  -
+  - Only used by "filter" artifact.
+  -
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <b:import resource="apsv-none.xml"/>
+    <b:import resource="soap-none.xml"/>
+
+    <!-- This HTTP security space represents the public REST application URI
+         space and controle the authentication/authorization process to its 
+         dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/rest/**"
+        auto-config="false" 
+        use-expressions="true" 
+        create-session="stateless" 
+        disable-url-rewriting="true" 
+        authentication-manager-ref="oeablApplicationAuth"
+        entry-point-ref="http403ForbiddenEntryPoint"
+        realm="OpenEdge" >
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter after="SESSION_MANAGEMENT_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+        <!-- HTTP REST to AppServer gateway -->
+        <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+                    
+        
+        <!-- authentication model -->
+        <anonymous />
+
+        <!-- login session controls -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+
+    </http>
+
+    <!-- This HTTP security space represents the default public URI
+         space and controls the authentication/authorization process to its 
+         dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/**"
+        auto-config="false" 
+        use-expressions="true" 
+        create-session="stateless" 
+        disable-url-rewriting="true" 
+        authentication-manager-ref="oeablApplicationAuth" 
+        entry-point-ref="http403ForbiddenEntryPoint"
+        realm="OpenEdge" >
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- Standard web-application root for public data like index.html 
+             DO NOT grant /** permitAll() access  -->
+        <intercept-url pattern="/*" method="GET" 
+                    access="permitAll()"/>
+
+
+	<!-- CGI pages -->
+       	<intercept-url pattern="/webspeed/cgi-bin/**" method="GET"
+       		access="permitAll()"/>
+
+
+        <!-- Application public area example -->
+        <!--
+        <intercept-url pattern="/pub/**" access="permitAll()"/>
+        -->
+
+        <!-- HTTP dynamic JSP pages -->
+        <intercept-url pattern="/jsp/**" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/web/**" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <!-- Standard web-application root for public data like index.html 
+             DO NOT grant /** permitAll() access  -->
+        <intercept-url pattern="/index.htm*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/server/**" method="GET"
+                       access="permitAll()"/>
+
+        <!-- HTTP static files -->
+        <intercept-url pattern="/static/error/*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/auth/*" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/images/*" 
+                       access="permitAll()" />
+
+        <!-- Restricted access HTTP static files -->
+        <intercept-url pattern="/static/**" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.htm*" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.gif" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.jpg" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.css" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.js" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.json" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.asp" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.inc" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <!-- best practice: deny anything no explicitly granted -->
+        <intercept-url pattern="/**" access="denyAll()"/>
+
+        <!-- authentication model -->
+        <anonymous />
+
+        <!-- login session controls -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler error-page="/WEB-INF/jsp/errorPage.jsp" />
+
+    </http>
+
+    <!-- The security filter that turns a Spring token into an OpenEdge
+         ClientPrincipal object -->
+    <b:bean id="OEClientPrincipalFilter"
+             class="com.progress.appserv.services.security.OEClientPrincipalFilter" >
+             <!--
+             <b:property name="enablecp" value="false" />
+             <b:property name="anonymous" value="true" />
+             <b:property name="sealAnonymous" value="false" />
+             -->
+             <!--
+             <b:property name="key" value="" />
+             <b:property name="domain" value="sample" />
+             <b:property name="roles" value="sample" />
+             <b:property name="authz" value="true" />
+             <b:property name="expires" value="600" />
+             <b:property name="accntinfo" value="true" />
+             <b:property name="properties" >
+                <b:map>
+                     <b:entry key="prop-1" value="string1"/>
+                     <b:entry key="prop-2" value="string2"/>
+                </b:map>
+             </b:property>
+             <b:property name="ccid" value="false" />
+             <b:property name="appName" value="OE" />
+             -->
+    </b:bean>
+
+    <!-- The security filter that implements the CORS standard for controling
+         cross site resource access by http clients. -->
+    <b:bean id="OECORSFilter"
+             class="com.progress.appserv.services.security.OECORSFilter" >
+             <!-- Examples:
+             <b:property name="allowAll" value="false" />
+             <b:property name="allowDomains" value="*" />
+             <b:property name="allowSubdomains" value="false" />
+             <b:property name="allowMethods" value="" />
+             <b:property name="messageHeaders" value="" />
+             <b:property name="responseHeaders" value="" />
+             <b:property name="supportCredentials" value="true" />
+             <b:property name="maxAge" value="-1" />
+             -->
+    </b:bean>
+
+    <b:bean id="http403ForbiddenEntryPoint"   
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
+
+
+    <!-- Authentication manager reserved for PUBLIC anonymous authentication 
+         to the static and dynamic application content.
+     -->
+    <authentication-manager id="oeablApplicationAuth" >
+    </authentication-manager>
+</b:beans>

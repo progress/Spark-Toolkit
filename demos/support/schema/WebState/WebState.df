@@ -1,0 +1,2565 @@
+ADD SEQUENCE "WebAuditLogIDSeq"
+  INITIAL 10000
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "WebBatchJobSeq"
+  INITIAL 10000
+  INCREMENT 5
+  CYCLE-ON-LIMIT no
+
+ADD SEQUENCE "WebBatchJobHistorySeq"
+  INITIAL 10000
+  INCREMENT 5
+  CYCLE-ON-LIMIT no
+
+ADD TABLE "WebAgentControl"
+  AREA "Data Area"
+  DESCRIPTION "Listing of agents running batch processes"
+  DUMP-NAME "WebAgentControl"
+
+ADD FIELD "AgentNum" OF "WebAgentControl" AS integer 
+  FORMAT "999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "AgentStatus" OF "WebAgentControl" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  MAX-WIDTH 50
+  ORDER 20
+
+ADD FIELD "ReqShutdown" OF "WebAgentControl" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  MAX-WIDTH 1
+  ORDER 60
+
+ADD FIELD "NumJobsProcessed" OF "WebAgentControl" AS integer 
+  FORMAT "9999999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "NapInterval" OF "WebAgentControl" AS integer 
+  FORMAT "99"
+  INITIAL "10"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "ApplicationNum" OF "WebAgentControl" AS integer 
+  FORMAT "9999999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "StartDate" OF "WebAgentControl" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  MAX-WIDTH 12
+  ORDER 40
+
+ADD FIELD "add_userid" OF "WebAgentControl" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 110
+
+ADD FIELD "chg_dt" OF "WebAgentControl" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 120
+
+ADD FIELD "chg_time" OF "WebAgentControl" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 130
+
+ADD FIELD "chg_userid" OF "WebAgentControl" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 140
+
+ADD FIELD "add_dt" OF "WebAgentControl" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "add_time" OF "WebAgentControl" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "AgentPID" OF "WebAgentControl" AS integer 
+  FORMAT ">>>>999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD INDEX "pkAgentKey" ON "WebAgentControl" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "AgentNum" ASCENDING 
+
+ADD INDEX "idxPID" ON "WebAgentControl" 
+  AREA "Index Area"
+  INDEX-FIELD "AgentPID" ASCENDING 
+
+ADD TABLE "WebAuditLog"
+  AREA "Data Area"
+  DESCRIPTION "User activity log, providing link between session and user profile tables"
+  DUMP-NAME "webauditlog"
+
+ADD FIELD "LogDate" OF "WebAuditLog" AS date 
+  DESCRIPTION "Date log was captured"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Log Date"
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "LogTime" OF "WebAuditLog" AS integer 
+  DESCRIPTION "Time in seconds past midnight that log was captured"
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "Log Time"
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "LogDesc" OF "WebAuditLog" AS character 
+  DESCRIPTION "Log description"
+  FORMAT "X(300)"
+  INITIAL ""
+  LABEL "Description"
+  MAX-WIDTH 289
+  ORDER 40
+
+ADD FIELD "Username" OF "WebAuditLog" AS character 
+  DESCRIPTION "User's gcUsername, if any"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Username"
+  MAX-WIDTH 32
+  ORDER 50
+
+ADD FIELD "WebFile" OF "WebAuditLog" AS character 
+  DESCRIPTION "Webspeed object that is being run"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Web File"
+  MAX-WIDTH 32
+  ORDER 70
+
+ADD FIELD "WebSessionID" OF "WebAuditLog" AS character 
+  DESCRIPTION "User's session ID"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Session ID"
+  MAX-WIDTH 32
+  ORDER 80
+
+ADD FIELD "WebServerName" OF "WebAuditLog" AS character 
+  DESCRIPTION "Web server name"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Server Name"
+  MAX-WIDTH 39
+  ORDER 100
+
+ADD FIELD "WSServerName" OF "WebAuditLog" AS character 
+  DESCRIPTION "Webspeed server name"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "WebSpeed Server"
+  MAX-WIDTH 32
+  ORDER 110
+
+ADD FIELD "PID" OF "WebAuditLog" AS integer 
+  DESCRIPTION "WebSpeed Agent process ID"
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "PID"
+  MAX-WIDTH 4
+  ORDER 120
+
+ADD FIELD "LogType" OF "WebAuditLog" AS character 
+  DESCRIPTION "Log type"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Log Type"
+  MAX-WIDTH 32
+  ORDER 130
+
+ADD FIELD "AuditLogID" OF "WebAuditLog" AS integer 
+  DESCRIPTION "Unique audit log ID, populated from AuditLogIDSeq sequence"
+  FORMAT ">,>>>,>>9"
+  INITIAL "0"
+  LABEL "ID"
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "WebHitID" OF "WebAuditLog" AS integer 
+  FORMAT "ZZZZZ9"
+  INITIAL "0"
+  LABEL "Hit ID"
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "WebSite" OF "WebAuditLog" AS character 
+  DESCRIPTION "Display for specific website"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Web Site"
+  MAX-WIDTH 40
+  ORDER 60
+
+ADD INDEX "pkAuditLogID" ON "WebAuditLog" 
+  AREA "Index Area"
+  PRIMARY
+  INDEX-FIELD "AuditLogID" ASCENDING 
+
+ADD INDEX "idxCompany" ON "WebAuditLog" 
+  AREA "Index Area"
+  INDEX-FIELD "WebSite" ASCENDING 
+  INDEX-FIELD "LogDate" ASCENDING 
+  INDEX-FIELD "LogTime" ASCENDING 
+
+ADD INDEX "idxDateTime" ON "WebAuditLog" 
+  AREA "Index Area"
+  INDEX-FIELD "LogDate" ASCENDING 
+  INDEX-FIELD "LogTime" ASCENDING 
+
+ADD INDEX "idxLogTypeDT" ON "WebAuditLog" 
+  AREA "Index Area"
+  INDEX-FIELD "LogType" ASCENDING 
+  INDEX-FIELD "LogDate" ASCENDING 
+  INDEX-FIELD "LogTime" ASCENDING 
+
+ADD INDEX "idxUserName" ON "WebAuditLog" 
+  AREA "Index Area"
+  INDEX-FIELD "Username" ASCENDING 
+  INDEX-FIELD "WebSite" ASCENDING 
+  INDEX-FIELD "LogDate" ASCENDING 
+  INDEX-FIELD "LogTime" ASCENDING 
+
+ADD INDEX "idxWebSessionID" ON "WebAuditLog" 
+  AREA "Index Area"
+  INDEX-FIELD "WebSessionID" ASCENDING 
+  INDEX-FIELD "WebHitID" ASCENDING 
+
+ADD INDEX "wiLogDesc" ON "WebAuditLog" 
+  AREA "Index Area"
+  WORD
+  INDEX-FIELD "LogDesc" ASCENDING 
+
+ADD TABLE "WebBatchJobHeader"
+  AREA "Data Area"
+  DESCRIPTION "Header table for batch jobs"
+  DUMP-NAME "WebBatchJobHeader"
+
+ADD FIELD "BatchJobID" OF "WebBatchJobHeader" AS int64 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "ID"
+  MAX-WIDTH 8
+  ORDER 10
+
+ADD FIELD "Description" OF "WebBatchJobHeader" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  MAX-WIDTH 70
+  ORDER 80
+
+ADD FIELD "Active" OF "WebBatchJobHeader" AS logical 
+  FORMAT "Active/Inactive"
+  INITIAL "Active"
+  MAX-WIDTH 1
+  ORDER 20
+
+ADD FIELD "RunOnce" OF "WebBatchJobHeader" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  MAX-WIDTH 1
+  ORDER 60
+
+ADD FIELD "TaskName" OF "WebBatchJobHeader" AS character 
+  FORMAT "x(65)"
+  INITIAL ""
+  MAX-WIDTH 130
+  ORDER 70
+
+ADD FIELD "TimeOfDay" OF "WebBatchJobHeader" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "DateToRun" OF "WebBatchJobHeader" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "DayOfWeek" OF "WebBatchJobHeader" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  MAX-WIDTH 70
+  ORDER 40
+
+ADD FIELD "LastQueued" OF "WebBatchJobHeader" AS datetime 
+  FORMAT "99/99/9999 HH:MM:SS"
+  INITIAL ?
+  MAX-WIDTH 8
+  ORDER 90
+
+ADD FIELD "add_time" OF "WebBatchJobHeader" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 110
+
+ADD FIELD "add_userid" OF "WebBatchJobHeader" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 120
+
+ADD FIELD "chg_dt" OF "WebBatchJobHeader" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 130
+
+ADD FIELD "chg_time" OF "WebBatchJobHeader" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 140
+
+ADD FIELD "chg_userid" OF "WebBatchJobHeader" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 150
+
+ADD FIELD "add_dt" OF "WebBatchJobHeader" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD INDEX "pkBatchJobID" ON "WebBatchJobHeader" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BatchJobID" ASCENDING 
+
+ADD INDEX "idxDateToRun" ON "WebBatchJobHeader" 
+  AREA "Index Area"
+  INDEX-FIELD "Active" ASCENDING 
+  INDEX-FIELD "DateToRun" ASCENDING 
+
+ADD INDEX "idxDOW" ON "WebBatchJobHeader" 
+  AREA "Index Area"
+  WORD
+  INDEX-FIELD "DayOfWeek" ASCENDING 
+
+ADD TABLE "WebBatchJobHistory"
+  AREA "Data Area"
+  DESCRIPTION "History table for batch jobs"
+  DUMP-NAME "WebBatchJobHistory"
+
+ADD FIELD "BatchJobID" OF "WebBatchJobHistory" AS int64 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "ID"
+  MAX-WIDTH 8
+  ORDER 20
+
+ADD FIELD "BatchJobStatus" OF "WebBatchJobHistory" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 40
+  ORDER 30
+
+ADD FIELD "JobErrors" OF "WebBatchJobHistory" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  MAX-WIDTH 174
+  ORDER 60
+
+ADD FIELD "HistoryID" OF "WebBatchJobHistory" AS int64 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "ID"
+  MAX-WIDTH 8
+  ORDER 10
+
+ADD FIELD "TaskName" OF "WebBatchJobHistory" AS character 
+  FORMAT "x(65)"
+  INITIAL ""
+  MAX-WIDTH 130
+  ORDER 50
+
+ADD FIELD "add_dt" OF "WebBatchJobHistory" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "add_time" OF "WebBatchJobHistory" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "add_userid" OF "WebBatchJobHistory" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 90
+
+ADD FIELD "chg_dt" OF "WebBatchJobHistory" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "chg_time" OF "WebBatchJobHistory" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 110
+
+ADD FIELD "chg_userid" OF "WebBatchJobHistory" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 120
+
+ADD FIELD "RunDate" OF "WebBatchJobHistory" AS date 
+  FORMAT "99/99/99"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD INDEX "pkHistoryID" ON "WebBatchJobHistory" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "HistoryID" ASCENDING 
+
+ADD INDEX "idxBatchJobHist" ON "WebBatchJobHistory" 
+  AREA "Index Area"
+  INDEX-FIELD "BatchJobID" ASCENDING 
+  INDEX-FIELD "RunDate" ASCENDING 
+
+ADD INDEX "idxRunDate" ON "WebBatchJobHistory" 
+  AREA "Index Area"
+  INDEX-FIELD "RunDate" ASCENDING 
+
+ADD TABLE "WebBatchJobParameter"
+  AREA "Data Area"
+  DESCRIPTION "Parameters for batch jobs"
+  DUMP-NAME "WebBatchJobParameter"
+
+ADD FIELD "BatchJobID" OF "WebBatchJobParameter" AS int64 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "ID"
+  MAX-WIDTH 8
+  ORDER 10
+
+ADD FIELD "ParamSeq" OF "WebBatchJobParameter" AS integer 
+  FORMAT "zzzz9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "ParamDataType" OF "WebBatchJobParameter" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  MAX-WIDTH 30
+  ORDER 30
+
+ADD FIELD "ParamValue" OF "WebBatchJobParameter" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  MAX-WIDTH 70
+  ORDER 60
+
+ADD FIELD "ParamName" OF "WebBatchJobParameter" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 50
+
+ADD FIELD "add_dt" OF "WebBatchJobParameter" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "add_time" OF "WebBatchJobParameter" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "add_userid" OF "WebBatchJobParameter" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 90
+
+ADD FIELD "chg_dt" OF "WebBatchJobParameter" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "chg_time" OF "WebBatchJobParameter" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 110
+
+ADD FIELD "chg_userid" OF "WebBatchJobParameter" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 120
+
+ADD FIELD "ParamType" OF "WebBatchJobParameter" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  MAX-WIDTH 24
+  ORDER 40
+
+ADD INDEX "pkIDSeq" ON "WebBatchJobParameter" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BatchJobID" ASCENDING 
+  INDEX-FIELD "ParamSeq" ASCENDING 
+
+ADD INDEX "idxOptionType" ON "WebBatchJobParameter" 
+  AREA "Index Area"
+  INDEX-FIELD "ParamDataType" ASCENDING 
+
+ADD TABLE "WebBatchJobQueue"
+  AREA "Data Area"
+  DESCRIPTION "Queue for batch jobs"
+  DUMP-NAME "WebBatchJobQueue"
+
+ADD FIELD "BatchJobID" OF "WebBatchJobQueue" AS int64 
+  FORMAT "zzzzzzzz9"
+  INITIAL "0"
+  LABEL "ID"
+  MAX-WIDTH 8
+  ORDER 10
+
+ADD FIELD "DateToRun" OF "WebBatchJobQueue" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "TimeToRun" OF "WebBatchJobQueue" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "LastQueued" OF "WebBatchJobQueue" AS datetime 
+  FORMAT "99/99/9999 HH:MM:SS"
+  INITIAL ?
+  MAX-WIDTH 8
+  ORDER 40
+
+ADD FIELD "JobStatus" OF "WebBatchJobQueue" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  MAX-WIDTH 24
+  ORDER 50
+
+ADD FIELD "add_dt" OF "WebBatchJobQueue" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "add_time" OF "WebBatchJobQueue" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "add_userid" OF "WebBatchJobQueue" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD FIELD "chg_dt" OF "WebBatchJobQueue" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "chg_time" OF "WebBatchJobQueue" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "chg_userid" OF "WebBatchJobQueue" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 110
+
+ADD INDEX "pkDateTime" ON "WebBatchJobQueue" 
+  AREA "Index Area"
+  PRIMARY
+  INDEX-FIELD "DateToRun" ASCENDING 
+  INDEX-FIELD "TimeToRun" ASCENDING 
+
+ADD INDEX "idxJobID" ON "WebBatchJobQueue" 
+  AREA "Index Area"
+  INDEX-FIELD "BatchJobID" ASCENDING 
+
+ADD TABLE "WebContext"
+  AREA "Data Area"
+  DESCRIPTION "User data to be persisted across web sessions"
+  DUMP-NAME "webcontext"
+
+ADD FIELD "IdentityName" OF "WebContext" AS character 
+  DESCRIPTION "Name of object or user"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Identity Name"
+  MAX-WIDTH 24
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "ContextType" OF "WebContext" AS character 
+  DESCRIPTION "Type of context"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Type"
+  MAX-WIDTH 30
+  ORDER 20
+
+ADD FIELD "ContextViewID" OF "WebContext" AS character 
+  DESCRIPTION "Name of object where context is primarily used"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "View ID"
+  MAX-WIDTH 40
+  ORDER 30
+
+ADD FIELD "ContextSeqNo" OF "WebContext" AS integer 
+  DESCRIPTION "Sequence number for this entry"
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Sequence"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "ContextTitle" OF "WebContext" AS character 
+  DESCRIPTION "Title of context entry"
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Title"
+  MAX-WIDTH 60
+  ORDER 40
+
+ADD FIELD "ContextData" OF "WebContext" AS character 
+  FORMAT "x(200)"
+  INITIAL ""
+  LABEL "Data"
+  MAX-WIDTH 200
+  ORDER 60
+
+ADD INDEX "pkWebContext" ON "WebContext" 
+  AREA "Index Area"
+  PRIMARY
+  INDEX-FIELD "IdentityName" ASCENDING 
+  INDEX-FIELD "ContextType" ASCENDING 
+  INDEX-FIELD "ContextViewID" ASCENDING 
+  INDEX-FIELD "ContextTitle" ASCENDING 
+  INDEX-FIELD "ContextSeqNo" ASCENDING 
+
+ADD TABLE "WebDataStore"
+  AREA "Data Area"
+  DESCRIPTION "Temporary storage area for large text objects (such as serialized temp-tables or datasets)"
+  DUMP-NAME "webdatastore"
+
+ADD FIELD "WebSessionID" OF "WebDataStore" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Session ID"
+  MAX-WIDTH 80
+  ORDER 10
+
+ADD FIELD "ObjectName" OF "WebDataStore" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Object Name"
+  MAX-WIDTH 40
+  COLUMN-LABEL "Name"
+  ORDER 20
+
+ADD FIELD "ObjectData" OF "WebDataStore" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  LOB-AREA "LOB Area"
+  LOB-BYTES 104857600
+  LOB-SIZE 100M
+  CLOB-CODEPAGE "UTF-8"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 2
+  ORDER 30
+
+ADD FIELD "add_dt" OF "WebDataStore" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "add_time" OF "WebDataStore" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "add_userid" OF "WebDataStore" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 60
+
+ADD FIELD "chg_dt" OF "WebDataStore" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_time" OF "WebDataStore" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "chg_userid" OF "WebDataStore" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 90
+
+ADD INDEX "pkDataStore" ON "WebDataStore" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "WebSessionID" ASCENDING 
+  INDEX-FIELD "ObjectName" ASCENDING 
+
+ADD TABLE "WebFileStore"
+  AREA "Data Area"
+  DESCRIPTION "Persistent storage area for large binary objects (such as uploaded files)"
+  DUMP-NAME "webfilestore"
+
+ADD FIELD "Username" OF "WebFileStore" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Username"
+  MAX-WIDTH 60
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "FileName" OF "WebFileStore" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Name"
+  MAX-WIDTH 120
+  ORDER 20
+
+ADD FIELD "FileExt" OF "WebFileStore" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Extension"
+  MAX-WIDTH 8
+  ORDER 30
+
+ADD FIELD "FileData" OF "WebFileStore" AS blob 
+  FORMAT "x(8)"
+  INITIAL ?
+  LOB-AREA "LOB Area"
+  LOB-BYTES 104857600
+  LOB-SIZE 100M
+  ORDER 50
+
+ADD FIELD "add_dt" OF "WebFileStore" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "add_time" OF "WebFileStore" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "add_userid" OF "WebFileStore" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD FIELD "chg_dt" OF "WebFileStore" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "chg_time" OF "WebFileStore" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "chg_userid" OF "WebFileStore" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 110
+
+ADD FIELD "FileSize" OF "WebFileStore" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Size"
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD INDEX "pkFileStore" ON "WebFileStore" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Username" ASCENDING 
+  INDEX-FIELD "FileName" ASCENDING 
+  INDEX-FIELD "FileExt" ASCENDING 
+
+ADD TABLE "WebHelp"
+  AREA "Data Area"
+  DESCRIPTION "Application help topics"
+  DUMP-NAME "WebHelp"
+
+ADD FIELD "ScreenName" OF "WebHelp" AS character 
+  DESCRIPTION "Name of screen for help topic"
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 16
+  ORDER 20
+
+ADD FIELD "ObjectName" OF "WebHelp" AS character 
+  DESCRIPTION "Specific object on screen"
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 16
+  ORDER 30
+
+ADD FIELD "TextLang" OF "WebHelp" AS character 
+  DESCRIPTION "Language of help topic"
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 16
+  ORDER 40
+
+ADD FIELD "HelpText" OF "WebHelp" AS clob 
+  DESCRIPTION "Help topic text"
+  FORMAT "x(100)"
+  INITIAL ?
+  LOB-AREA "LOB Area"
+  LOB-BYTES 104857600
+  LOB-SIZE 100M
+  CLOB-CODEPAGE "iso8859-1"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 2
+  ORDER 50
+
+ADD FIELD "add_dt" OF "WebHelp" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "add_time" OF "WebHelp" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "add_userid" OF "WebHelp" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD FIELD "chg_dt" OF "WebHelp" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "chg_time" OF "WebHelp" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "chg_userid" OF "WebHelp" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 110
+
+ADD FIELD "ModuleName" OF "WebHelp" AS character 
+  DESCRIPTION "Module classification for screen (pos, admin, etc.)"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Module"
+  MAX-WIDTH 80
+  ORDER 10
+
+ADD INDEX "pkScreenLang" ON "WebHelp" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ModuleName" ASCENDING 
+  INDEX-FIELD "ScreenName" ASCENDING 
+  INDEX-FIELD "ObjectName" ASCENDING 
+  INDEX-FIELD "TextLang" ASCENDING 
+
+ADD TABLE "WebLookup"
+  AREA "Data Area"
+  DESCRIPTION "Commonly used lists and codes"
+  DUMP-NAME "weblookup"
+
+ADD FIELD "LookupType" OF "WebLookup" AS character 
+  DESCRIPTION "Identifier of the list - all lookup records with same type belong in same list."
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Lookup Type"
+  MAX-WIDTH 40
+  ORDER 10
+
+ADD FIELD "LookupDescr" OF "WebLookup" AS character 
+  DESCRIPTION "Full description of the lookup item."
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Lookup Description"
+  MAX-WIDTH 60
+  ORDER 30
+
+ADD FIELD "LookupCode" OF "WebLookup" AS character 
+  DESCRIPTION "Short code identifying the lookup value"
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Lookup Code"
+  MAX-WIDTH 18
+  ORDER 20
+
+ADD FIELD "add_dt" OF "WebLookup" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "add_time" OF "WebLookup" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "add_userid" OF "WebLookup" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 60
+
+ADD FIELD "chg_dt" OF "WebLookup" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_time" OF "WebLookup" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "chg_userid" OF "WebLookup" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 90
+
+ADD INDEX "pkTypeCode" ON "WebLookup" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "LookupType" ASCENDING 
+  INDEX-FIELD "LookupCode" ASCENDING 
+
+ADD TABLE "WebMenu"
+  AREA "Data Area"
+  DESCRIPTION "Node information for menu structures"
+  DUMP-NAME "webmenu"
+
+ADD FIELD "ItemType" OF "WebMenu" AS character 
+  DESCRIPTION "Item type (Primary, TopLevel, SubMenu, Entry)"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "ItemType"
+  MAX-WIDTH 18
+  ORDER 30
+
+ADD FIELD "add_time" OF "WebMenu" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 150
+
+ADD FIELD "add_userid" OF "WebMenu" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 160
+
+ADD FIELD "chg_dt" OF "WebMenu" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 170
+
+ADD FIELD "chg_time" OF "WebMenu" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 180
+
+ADD FIELD "chg_userid" OF "WebMenu" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 190
+
+ADD FIELD "add_dt" OF "WebMenu" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 140
+
+ADD FIELD "MenuParent" OF "WebMenu" AS character 
+  DESCRIPTION "Parent menu item"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Parent"
+  MAX-WIDTH 80
+  ORDER 50
+
+ADD FIELD "ItemName" OF "WebMenu" AS character 
+  DESCRIPTION "Menu item name"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Item Name"
+  MAX-WIDTH 80
+  ORDER 90
+
+ADD FIELD "MenuOrd" OF "WebMenu" AS integer 
+  DESCRIPTION "Menu order"
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Order"
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "WebSite" OF "WebMenu" AS character 
+  DESCRIPTION "Display for specific website"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Web Site"
+  MAX-WIDTH 16
+  ORDER 10
+
+ADD FIELD "TaskID" OF "WebMenu" AS character 
+  DESCRIPTION "Required minimum security task for access"
+  FORMAT "X(100)"
+  INITIAL ""
+  LABEL "Task ID"
+  MAX-WIDTH 25
+  ORDER 120
+
+ADD FIELD "BrokerEnv" OF "WebMenu" AS character 
+  DESCRIPTION "Defines which broker this menu entry applies to."
+  FORMAT "X(20)"
+  INITIAL "*"
+  LABEL "Broker Name"
+  MAX-WIDTH 24
+  HELP "Please enter the broker this menu entry applies to."
+  ORDER 20
+
+ADD FIELD "MenuEvent" OF "WebMenu" AS character 
+  DESCRIPTION "Menu event"
+  FORMAT "x(80)"
+  INITIAL ""
+  LABEL "Menu Event"
+  MAX-WIDTH 160
+  ORDER 60
+
+ADD FIELD "ItemIcon" OF "WebMenu" AS character 
+  DESCRIPTION "Menu icon name"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Item Icon"
+  MAX-WIDTH 40
+  ORDER 100
+
+ADD FIELD "MenuArgs" OF "WebMenu" AS character 
+  DESCRIPTION "Menu arguments"
+  FORMAT "x(200)"
+  INITIAL ""
+  LABEL "Menu Args"
+  MAX-WIDTH 400
+  ORDER 80
+
+ADD FIELD "LaunchStyle" OF "WebMenu" AS character 
+  DESCRIPTION "Manner of launching event"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Launch Style"
+  MAX-WIDTH 40
+  ORDER 110
+
+ADD FIELD "MinVersion" OF "WebMenu" AS decimal 
+  DESCRIPTION "Minimum software version needed before item should be picked"
+  FORMAT ">>99.99"
+  INITIAL "0"
+  MAX-WIDTH 17
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "MenuID" OF "WebMenu" AS character 
+  DESCRIPTION "Unique, static value to identify this menu item"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Menu ID"
+  MAX-WIDTH 40
+  ORDER 70
+
+ADD INDEX "pkMenuItem" ON "WebMenu" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "WebSite" ASCENDING 
+  INDEX-FIELD "ItemType" ASCENDING 
+  INDEX-FIELD "MenuOrd" ASCENDING 
+  INDEX-FIELD "MenuParent" ASCENDING 
+  INDEX-FIELD "ItemName" ASCENDING 
+  INDEX-FIELD "BrokerEnv" ASCENDING 
+
+ADD INDEX "idxItem" ON "WebMenu" 
+  AREA "Index Area"
+  INDEX-FIELD "ItemName" ASCENDING 
+  INDEX-FIELD "WebSite" ASCENDING 
+  INDEX-FIELD "BrokerEnv" ASCENDING 
+
+ADD INDEX "idxMenuID" ON "WebMenu" 
+  AREA "Index Area"
+  INDEX-FIELD "MenuID" ASCENDING 
+
+ADD TABLE "WebMenuTranslate"
+  AREA "Data Area"
+  DESCRIPTION "Translations for menu item names"
+  DUMP-NAME "webmenutranslate"
+
+ADD FIELD "MenuID" OF "WebMenuTranslate" AS character 
+  DESCRIPTION "Unique, static value to identify this menu item"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Menu ID"
+  MAX-WIDTH 40
+  ORDER 10
+
+ADD FIELD "ItemName" OF "WebMenuTranslate" AS character 
+  DESCRIPTION "Menu item name"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Item Name"
+  MAX-WIDTH 80
+  ORDER 30
+
+ADD FIELD "MenuLang" OF "WebMenuTranslate" AS character 
+  DESCRIPTION "Target language for text"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Lang"
+  MAX-WIDTH 40
+  ORDER 20
+
+ADD INDEX "pkLang" ON "WebMenuTranslate" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "MenuID" ASCENDING 
+  INDEX-FIELD "MenuLang" ASCENDING 
+
+ADD TABLE "WebProfile"
+  AREA "Data Area"
+  DESCRIPTION "Authenticated user profile information"
+  DUMP-NAME "webprofile"
+
+ADD FIELD "Username" OF "WebProfile" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Username"
+  MAX-WIDTH 16
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "Password" OF "WebProfile" AS character 
+  DESCRIPTION "Encoded password"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Password"
+  MAX-WIDTH 108
+  ORDER 40
+
+ADD FIELD "FirstName" OF "WebProfile" AS character 
+  DESCRIPTION "User first name"
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "First Name"
+  MAX-WIDTH 16
+  ORDER 60
+
+ADD FIELD "LastName" OF "WebProfile" AS character 
+  DESCRIPTION "User last name"
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Last Name"
+  MAX-WIDTH 16
+  ORDER 70
+
+ADD FIELD "IsActive" OF "WebProfile" AS logical 
+  DESCRIPTION "User account is active"
+  FORMAT "yes/no"
+  INITIAL "yes"
+  LABEL "Is Active"
+  MAX-WIDTH 1
+  ORDER 80
+
+ADD FIELD "Email" OF "WebProfile" AS character 
+  DESCRIPTION "E-mail address"
+  FORMAT "X(80)"
+  INITIAL ""
+  LABEL "Email"
+  MAX-WIDTH 34
+  ORDER 140
+
+ADD FIELD "IsLocked" OF "WebProfile" AS logical 
+  DESCRIPTION "User account is locked"
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Is Locked"
+  MAX-WIDTH 1
+  ORDER 90
+
+ADD FIELD "LoginCount" OF "WebProfile" AS integer 
+  DESCRIPTION "Login attempt counter"
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "Login Count"
+  MAX-WIDTH 4
+  ORDER 330
+
+ADD FIELD "HomePhone" OF "WebProfile" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Home Phone"
+  MAX-WIDTH 20
+  ORDER 170
+
+ADD FIELD "SecurityAnswer" OF "WebProfile" AS character 
+  DESCRIPTION "Response to security question provided"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Security Answer"
+  MAX-WIDTH 50
+  ORDER 220
+
+ADD FIELD "PasswordExpires" OF "WebProfile" AS date 
+  DESCRIPTION "Date password expires"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Expires"
+  MAX-WIDTH 4
+  ORDER 230
+
+ADD FIELD "TaskAdjust" OF "WebProfile" AS character 
+  DESCRIPTION "List of task adjustments, following CAN-DO syntax"
+  FORMAT "X(1000)"
+  INITIAL ""
+  LABEL "Task Adjustment"
+  MAX-WIDTH 500
+  ORDER 290
+
+ADD FIELD "add_userid" OF "WebProfile" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 360
+
+ADD FIELD "chg_dt" OF "WebProfile" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 370
+
+ADD FIELD "chg_time" OF "WebProfile" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 380
+
+ADD FIELD "chg_userid" OF "WebProfile" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 390
+
+ADD FIELD "OldPassword" OF "WebProfile" AS character 
+  DESCRIPTION "Comma-separated list of previously used encrypted passwords."
+  FORMAT "X(1000)"
+  INITIAL ""
+  LABEL "Old Password"
+  MAX-WIDTH 510
+  ORDER 240
+
+ADD FIELD "add_dt" OF "WebProfile" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 340
+
+ADD FIELD "add_time" OF "WebProfile" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 350
+
+ADD FIELD "LockOutDate" OF "WebProfile" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Lockout Date"
+  MAX-WIDTH 4
+  ORDER 260
+
+ADD FIELD "LockOutTime" OF "WebProfile" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  LABEL "LockOut Time"
+  MAX-WIDTH 4
+  ORDER 270
+
+ADD FIELD "SecurityRole" OF "WebProfile" AS character 
+  DESCRIPTION "Default role(s); use WebRoleProfile for dynamic control"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Security Role"
+  MAX-WIDTH 24
+  ORDER 280
+
+ADD FIELD "LastLogin" OF "WebProfile" AS date 
+  DESCRIPTION "Date of last successful login"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Last Login"
+  MAX-WIDTH 4
+  ORDER 320
+
+ADD FIELD "ForcePWChange" OF "WebProfile" AS logical 
+  DESCRIPTION "Force user to change their password at time of next login"
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Must Change Password"
+  MAX-WIDTH 1
+  ORDER 250
+
+ADD FIELD "Comments" OF "WebProfile" AS character 
+  DESCRIPTION "Comments about this user"
+  FORMAT "x(1000)"
+  INITIAL ""
+  LABEL "Comments"
+  MAX-WIDTH 120
+  ORDER 300
+
+ADD FIELD "FirstLogin" OF "WebProfile" AS date 
+  DESCRIPTION "Date at First Login"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "First Time Login"
+  MAX-WIDTH 4
+  ORDER 310
+
+ADD FIELD "DomainName" OF "WebProfile" AS character 
+  DESCRIPTION "Domain Name for Tenancy"
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Domain"
+  MAX-WIDTH 16
+  ORDER 30
+
+ADD FIELD "CompanyName" OF "WebProfile" AS character 
+  DESCRIPTION "User company"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Company"
+  MAX-WIDTH 80
+  ORDER 150
+
+ADD FIELD "JobTitle" OF "WebProfile" AS character 
+  DESCRIPTION "Job title"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Title"
+  MAX-WIDTH 40
+  ORDER 160
+
+ADD FIELD "WorkPhone" OF "WebProfile" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Work Phone"
+  MAX-WIDTH 20
+  ORDER 180
+
+ADD FIELD "SecurityQuestion" OF "WebProfile" AS character 
+  DESCRIPTION "Arbitrary question for account security"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Security Question"
+  MAX-WIDTH 80
+  ORDER 210
+
+ADD FIELD "UserNum" OF "WebProfile" AS integer 
+  DESCRIPTION "Unique, sequential number for each user account"
+  FORMAT ">>>>>9"
+  INITIAL ?
+  LABEL "UserNum"
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "ResetCode" OF "WebProfile" AS character 
+  DESCRIPTION "Temporary code for password reset"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Reset Code"
+  MAX-WIDTH 40
+  ORDER 50
+
+ADD FIELD "MobilePhone" OF "WebProfile" AS character 
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Mobile Phone"
+  MAX-WIDTH 20
+  ORDER 190
+
+ADD FIELD "MobileCarrier" OF "WebProfile" AS character 
+  DESCRIPTION "For SMS purposes, name of mobile service provider"
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "Mobile Carrier"
+  MAX-WIDTH 20
+  ORDER 200
+
+ADD FIELD "UseTFA" OF "WebProfile" AS logical 
+  DESCRIPTION "Utilize Two-Factor Authentication"
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Use TFA"
+  MAX-WIDTH 1
+  ORDER 100
+
+ADD FIELD "TFAMethod" OF "WebProfile" AS character 
+  DESCRIPTION "Method for TFA implementation: Email, SMS, or Device"
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "TFA Method"
+  MAX-WIDTH 20
+  ORDER 110
+
+ADD FIELD "TFAToken" OF "WebProfile" AS character 
+  DESCRIPTION "Temporary TFA token to be used for comparision (typically for email or SMS usage)"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "TFA Token"
+  MAX-WIDTH 40
+  ORDER 120
+
+ADD FIELD "TFASecret" OF "WebProfile" AS character 
+  DESCRIPTION "Secret (private) key used for TFA device"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "TFA Secret"
+  MAX-WIDTH 40
+  ORDER 130
+
+ADD INDEX "pkDomainUser" ON "WebProfile" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Username" ASCENDING 
+  INDEX-FIELD "DomainName" ASCENDING 
+
+ADD INDEX "idxEmail" ON "WebProfile" 
+  AREA "Index Area"
+  UNIQUE
+  INDEX-FIELD "Email" ASCENDING 
+  INDEX-FIELD "DomainName" ASCENDING 
+
+ADD INDEX "idxName" ON "WebProfile" 
+  AREA "Index Area"
+  INDEX-FIELD "LastName" ASCENDING 
+  INDEX-FIELD "FirstName" ASCENDING 
+
+ADD INDEX "idxNum" ON "WebProfile" 
+  AREA "Index Area"
+  UNIQUE
+  INDEX-FIELD "UserNum" ASCENDING 
+
+ADD TABLE "WebRole"
+  AREA "Data Area"
+  DESCRIPTION "Master table for grouping task access rights"
+  DUMP-NAME "webrole"
+
+ADD FIELD "RoleID" OF "WebRole" AS character 
+  DESCRIPTION "User role ID"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Role ID"
+  MAX-WIDTH 16
+  ORDER 10
+
+ADD FIELD "RoleDesc" OF "WebRole" AS character 
+  DESCRIPTION "User role description"
+  FORMAT "X(200)"
+  INITIAL ""
+  LABEL "Description"
+  MAX-WIDTH 80
+  ORDER 20
+
+ADD FIELD "add_dt" OF "WebRole" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "add_time" OF "WebRole" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "add_userid" OF "WebRole" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 50
+
+ADD FIELD "chg_dt" OF "WebRole" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "chg_time" OF "WebRole" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_userid" OF "WebRole" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD INDEX "pkRoleID" ON "WebRole" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "RoleID" ASCENDING 
+
+ADD TABLE "WebRoleProfile"
+  AREA "Data Area"
+  DESCRIPTION "Role-to-profile cross-reference"
+  DUMP-NAME "webroleprofile"
+
+ADD FIELD "RoleID" OF "WebRoleProfile" AS character 
+  DESCRIPTION "User role ID"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Role ID"
+  MAX-WIDTH 60
+  ORDER 10
+
+ADD FIELD "Username" OF "WebRoleProfile" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Username"
+  MAX-WIDTH 60
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "add_dt" OF "WebRoleProfile" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "add_time" OF "WebRoleProfile" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "add_userid" OF "WebRoleProfile" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 50
+
+ADD FIELD "chg_dt" OF "WebRoleProfile" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "chg_time" OF "WebRoleProfile" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_userid" OF "WebRoleProfile" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD INDEX "pkRoleProfile" ON "WebRoleProfile" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "RoleID" ASCENDING 
+  INDEX-FIELD "Username" ASCENDING 
+
+ADD TABLE "WebRoleTask"
+  AREA "Data Area"
+  DESCRIPTION "Role-to-task cross-reference"
+  DUMP-NAME "webroletask"
+
+ADD FIELD "RoleID" OF "WebRoleTask" AS character 
+  DESCRIPTION "User role ID"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Role ID"
+  MAX-WIDTH 16
+  ORDER 10
+
+ADD FIELD "TaskID" OF "WebRoleTask" AS character 
+  DESCRIPTION "Task ID"
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Task ID"
+  MAX-WIDTH 25
+  ORDER 20
+
+ADD FIELD "add_dt" OF "WebRoleTask" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "add_time" OF "WebRoleTask" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "add_userid" OF "WebRoleTask" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 50
+
+ADD FIELD "chg_dt" OF "WebRoleTask" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "chg_time" OF "WebRoleTask" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_userid" OF "WebRoleTask" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD INDEX "pkRoleTask" ON "WebRoleTask" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "RoleID" ASCENDING 
+  INDEX-FIELD "TaskID" ASCENDING 
+
+ADD TABLE "WebSearch"
+  AREA "Data Area"
+  DESCRIPTION "Word listing for searches"
+  DUMP-NAME "websearch"
+
+ADD FIELD "ObjectName" OF "WebSearch" AS character 
+  DESCRIPTION "Name of the object (table)"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Object Name"
+  MAX-WIDTH 40
+  ORDER 10
+
+ADD FIELD "ObjectKey" OF "WebSearch" AS character 
+  DESCRIPTION "Compound key values for object"
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "Object Key"
+  MAX-WIDTH 120
+  ORDER 30
+
+ADD FIELD "ObjectRow" OF "WebSearch" AS character 
+  DESCRIPTION "Current RowID of this object"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Object Row"
+  MAX-WIDTH 40
+  ORDER 20
+
+ADD FIELD "WordList" OF "WebSearch" AS character 
+  DESCRIPTION "List of words associated with this object"
+  FORMAT "x(200)"
+  INITIAL ""
+  LABEL "Word List"
+  MAX-WIDTH 400
+  ORDER 50
+
+ADD FIELD "ObjectSummary" OF "WebSearch" AS character 
+  DESCRIPTION "Short summary for object"
+  FORMAT "x(80)"
+  INITIAL ""
+  LABEL "Summary"
+  MAX-WIDTH 160
+  ORDER 40
+
+ADD INDEX "pkObjectID" ON "WebSearch" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ObjectName" ASCENDING 
+  INDEX-FIELD "ObjectRow" ASCENDING 
+
+ADD INDEX "widxWords" ON "WebSearch" 
+  AREA "Index Area"
+  WORD
+  INDEX-FIELD "WordList" ASCENDING 
+
+ADD TABLE "WebSemaphore"
+  AREA "Data Area"
+  DESCRIPTION "Table to hold semaphore locks so that processes can be protected from deadlocks"
+  DUMP-NAME "websemaphore"
+
+ADD FIELD "SemaphoreName" OF "WebSemaphore" AS character 
+  DESCRIPTION "Name of the resource being locked.  Use namespacing if desired"
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 40
+  ORDER 10
+
+ADD FIELD "SemaphoreExpires" OF "WebSemaphore" AS datetime 
+  DESCRIPTION "When the semaphore expires.  (Process updates this while semaphore is still needed, and semaphore is deleted explicitly upon completion, so this is used for cleanup purposes mostly)"
+  FORMAT "99/99/9999 HH:MM:SS.SSS"
+  INITIAL ?
+  MAX-WIDTH 8
+  ORDER 20
+
+ADD FIELD "Username" OF "WebSemaphore" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Username"
+  MAX-WIDTH 60
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "SemaphoreNote" OF "WebSemaphore" AS character 
+  DESCRIPTION "Helpful note set by calling process and available to contending process"
+  FORMAT "x(40)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 40
+
+ADD FIELD "AppliesTo" OF "WebSemaphore" AS character 
+  DESCRIPTION "If the semaphore is only for a certain set of data, you can use this field as an additional key to that data."
+  FORMAT "x(40)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 50
+
+ADD INDEX "pkNameAppliesTo" ON "WebSemaphore" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  DESCRIPTION "Primary Unique index on semaphoreName and appliesTo"
+  INDEX-FIELD "SemaphoreName" ASCENDING 
+  INDEX-FIELD "AppliesTo" ASCENDING 
+
+ADD INDEX "idxUserSemaphore" ON "WebSemaphore" 
+  AREA "Index Area"
+  DESCRIPTION "Index to allow us to find a given user's semaphores"
+  INDEX-FIELD "Username" ASCENDING 
+  INDEX-FIELD "SemaphoreName" ASCENDING 
+
+ADD TABLE "WebSession"
+  AREA "Data Area"
+  DESCRIPTION "One record for each session over the web."
+  DUMP-NAME "websession"
+
+ADD FIELD "WebSessionID" OF "WebSession" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 10
+
+ADD FIELD "RemoteAddr" OF "WebSession" AS character 
+  FORMAT "X(40)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 20
+
+ADD FIELD "WebHitCount" OF "WebSession" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "StartDate" OF "WebSession" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "LastDate" OF "WebSession" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "StartTime" OF "WebSession" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "LastTime" OF "WebSession" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "SessionReferrer" OF "WebSession" AS character 
+  DESCRIPTION "The HTTP_Referrer CGI variable for the start of this session"
+  FORMAT "X(80)"
+  INITIAL ""
+  MAX-WIDTH 160
+  ORDER 80
+
+ADD FIELD "SessionActive" OF "WebSession" AS logical 
+  DESCRIPTION "Whether or not the session is still active and can receive hits."
+  FORMAT "yes/no"
+  INITIAL "yes"
+  MAX-WIDTH 1
+  ORDER 90
+
+ADD FIELD "CookiesEnabled" OF "WebSession" AS logical 
+  DESCRIPTION "Whether or not the user is allowing cookies to be set and returned to the server.  Yes in this field indicates that the user has definitely not allowed our cookie to be set and returned.  No means that we have not detected a lack of a cookie."
+  FORMAT "yes/no"
+  INITIAL "yes"
+  MAX-WIDTH 1
+  ORDER 100
+
+ADD FIELD "SessionUserAgent" OF "WebSession" AS character 
+  DESCRIPTION "The type and version of browser the individual is using to surf the web."
+  FORMAT "X(100)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 110
+
+ADD FIELD "ScreenHeight" OF "WebSession" AS integer 
+  DESCRIPTION "height of the user's screen"
+  FORMAT ">>>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 120
+
+ADD FIELD "ScreenWidth" OF "WebSession" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  HELP "Width of the user's screen (in pixels)"
+  ORDER 130
+
+ADD INDEX "pkWebSession" ON "WebSession" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  DESCRIPTION "Primary Unique Index of the WebSession Table"
+  INDEX-FIELD "WebSessionID" ASCENDING 
+
+ADD INDEX "idxLastDateTime" ON "WebSession" 
+  AREA "Index Area"
+  INDEX-FIELD "LastDate" ASCENDING 
+  INDEX-FIELD "LastTime" ASCENDING 
+
+ADD INDEX "idxSessionActive" ON "WebSession" 
+  AREA "Index Area"
+  INDEX-FIELD "SessionActive" ASCENDING 
+
+ADD INDEX "idxStartDateTime" ON "WebSession" 
+  AREA "Index Area"
+  INDEX-FIELD "StartDate" ASCENDING 
+  INDEX-FIELD "StartTime" ASCENDING 
+
+ADD TABLE "WebSessionAttribute"
+  AREA "Data Area"
+  DESCRIPTION "Attributes of the WebSession"
+  DUMP-NAME "websessionattribute"
+
+ADD FIELD "AttributeName" OF "WebSessionAttribute" AS character 
+  DESCRIPTION "Name of the attribute"
+  FORMAT "x(60)"
+  INITIAL ""
+  MAX-WIDTH 120
+  ORDER 20
+
+ADD FIELD "add_dt" OF "WebSessionAttribute" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD FIELD "add_time" OF "WebSessionAttribute" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "add_userid" OF "WebSessionAttribute" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 90
+
+ADD FIELD "AttributeValue" OF "WebSessionAttribute" AS character 
+  DESCRIPTION "The actual value of the attribute (the textual representation of it)"
+  FORMAT "x(256)"
+  INITIAL ""
+  MAX-WIDTH 512
+  ORDER 30
+
+ADD FIELD "chg_dt" OF "WebSessionAttribute" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "chg_time" OF "WebSessionAttribute" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_userid" OF "WebSessionAttribute" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 80
+
+ADD FIELD "WebSessionID" OF "WebSessionAttribute" AS character 
+  DESCRIPTION "ID of the session to which this attribute belongs."
+  FORMAT "X(40)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 10
+
+ADD INDEX "pkSessionAttribute" ON "WebSessionAttribute" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "WebSessionID" ASCENDING 
+  INDEX-FIELD "AttributeName" ASCENDING 
+
+ADD TABLE "WebSessionStat"
+  AREA "Data Area"
+  DESCRIPTION "Stats for each request/response within a session"
+  DUMP-NAME "websessionstat"
+
+ADD FIELD "WebSessionID" OF "WebSessionStat" AS character 
+  DESCRIPTION "ID of the session to which this attribute belongs."
+  FORMAT "X(40)"
+  INITIAL ""
+  MAX-WIDTH 80
+  ORDER 10
+
+ADD FIELD "WebHitID" OF "WebSessionStat" AS integer 
+  DESCRIPTION "Unique, incremental identifier of this request for a session"
+  FORMAT "ZZZZZ9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 20
+
+ADD FIELD "RequestMethod" OF "WebSessionStat" AS character 
+  DESCRIPTION "HTTP request method used (GET, POST, etc.)"
+  FORMAT "X(10)"
+  INITIAL ""
+  MAX-WIDTH 20
+  ORDER 30
+
+ADD FIELD "RequestDate" OF "WebSessionStat" AS date 
+  DESCRIPTION "Date on which this request occurred."
+  FORMAT "99/99/9999"
+  INITIAL "TODAY"
+  MAX-WIDTH 4
+  ORDER 140
+
+ADD FIELD "RequestTime" OF "WebSessionStat" AS integer 
+  DESCRIPTION "When this request occurred (in miliseconds)."
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 150
+
+ADD FIELD "WebReferer" OF "WebSessionStat" AS character 
+  DESCRIPTION "The HTTP referer for this request"
+  FORMAT "X(100)"
+  INITIAL ""
+  MAX-WIDTH 200
+  ORDER 70
+
+ADD FIELD "LogNote" OF "WebSessionStat" AS character 
+  DESCRIPTION "Any sort of note pertaining to this hit, just so that we can analyze the hit report and better troubleshoot errors."
+  FORMAT "X(200)"
+  INITIAL ""
+  MAX-WIDTH 400
+  ORDER 180
+
+ADD FIELD "AgentPID" OF "WebSessionStat" AS character 
+  DESCRIPTION "Agent PID"
+  FORMAT "X(10)"
+  INITIAL ""
+  MAX-WIDTH 20
+  ORDER 170
+
+ADD FIELD "RequestData" OF "WebSessionStat" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  LOB-AREA "LOB Area"
+  LOB-BYTES 10485760
+  LOB-SIZE 10M
+  CLOB-CODEPAGE "UTF-8"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 2
+  ORDER 80
+
+ADD FIELD "ResponseData" OF "WebSessionStat" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  LOB-AREA "LOB Area"
+  LOB-BYTES 104857600
+  LOB-SIZE 100M
+  CLOB-CODEPAGE "UTF-8"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 2
+  ORDER 100
+
+ADD FIELD "RequestSize" OF "WebSessionStat" AS decimal 
+  DESCRIPTION "Size of request data packet in KB (pre-calculated for speed)"
+  FORMAT "->>>,>>>,>>9.999"
+  INITIAL "0"
+  MAX-WIDTH 18
+  DECIMALS 3
+  ORDER 90
+
+ADD FIELD "ResponseSize" OF "WebSessionStat" AS decimal 
+  DESCRIPTION "Size of response data packet in KB (pre-calculated for speed)"
+  FORMAT "->>>,>>>,>>9.999"
+  INITIAL "0"
+  MAX-WIDTH 18
+  DECIMALS 3
+  ORDER 110
+
+ADD FIELD "ElapsedTime" OF "WebSessionStat" AS decimal 
+  DESCRIPTION "Elapsed time of this request/response"
+  FORMAT "->>>,>>9.999"
+  INITIAL "0"
+  MAX-WIDTH 18
+  DECIMALS 3
+  ORDER 160
+
+ADD FIELD "ContentType" OF "WebSessionStat" AS character 
+  DESCRIPTION "Content type of the returned data."
+  FORMAT "x(80)"
+  INITIAL ""
+  MAX-WIDTH 160
+  ORDER 120
+
+ADD FIELD "ReturnStatus" OF "WebSessionStat" AS character 
+  DESCRIPTION "HTTP status returned for this request."
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 40
+  ORDER 130
+
+ADD FIELD "WebGateway" OF "WebSessionStat" AS character 
+  DESCRIPTION "Type of gateway used for request (json-rpc, xml-rpc, webspeed, other)"
+  FORMAT "x(100)"
+  INITIAL ""
+  MAX-WIDTH 200
+  ORDER 60
+
+ADD FIELD "RequestObject" OF "WebSessionStat" AS character 
+  DESCRIPTION "The name of the object run on this request"
+  FORMAT "x(80)"
+  INITIAL ""
+  MAX-WIDTH 160
+  ORDER 40
+
+ADD FIELD "MethodName" OF "WebSessionStat" AS character 
+  DESCRIPTION "Name of method run within request object (if applicable)"
+  FORMAT "x(60)"
+  INITIAL ""
+  MAX-WIDTH 120
+  ORDER 50
+
+ADD INDEX "pkWebSessionStat" ON "WebSessionStat" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "WebSessionID" ASCENDING 
+  INDEX-FIELD "WebHitID" ASCENDING 
+
+ADD INDEX "idxDateAgentTime" ON "WebSessionStat" 
+  AREA "Index Area"
+  INDEX-FIELD "RequestDate" ASCENDING 
+  INDEX-FIELD "AgentPID" ASCENDING 
+  INDEX-FIELD "RequestTime" ASCENDING 
+
+ADD INDEX "idxDateTime" ON "WebSessionStat" 
+  AREA "Index Area"
+  INDEX-FIELD "RequestDate" ASCENDING 
+  INDEX-FIELD "RequestTime" ASCENDING 
+
+ADD INDEX "idxRequest" ON "WebSessionStat" 
+  AREA "Index Area"
+  INDEX-FIELD "RequestObject" ASCENDING 
+  INDEX-FIELD "MethodName" ASCENDING 
+
+ADD TABLE "WebSetting"
+  AREA "Data Area"
+  DESCRIPTION "Contains settings and permissions for the application"
+  DUMP-NAME "websetting"
+
+ADD FIELD "BrokerEnv" OF "WebSetting" AS character 
+  DESCRIPTION "Account Identification to which this record applies"
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Broker Environment"
+  MAX-WIDTH 80
+  ORDER 10
+
+ADD FIELD "IDType" OF "WebSetting" AS character 
+  DESCRIPTION "Type of ID that BrokerEnv refers to."
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "ID Type"
+  MAX-WIDTH 16
+  ORDER 20
+
+ADD FIELD "SettingType" OF "WebSetting" AS character 
+  DESCRIPTION "Type of setting this record is.  In other words, the portion or aspect of the program that this setting falls into."
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Setting Type"
+  MAX-WIDTH 40
+  ORDER 30
+
+ADD FIELD "SettingName" OF "WebSetting" AS character 
+  DESCRIPTION "Name of the specific setting to which this record applies."
+  FORMAT "X(40)"
+  INITIAL ""
+  LABEL "Setting Name"
+  MAX-WIDTH 80
+  ORDER 40
+
+ADD FIELD "SettingValue" OF "WebSetting" AS character 
+  DESCRIPTION "The actual value of the setting"
+  FORMAT "X(500)"
+  INITIAL ""
+  LABEL "Setting Value"
+  MAX-WIDTH 512
+  ORDER 50
+
+ADD FIELD "SettingDesc" OF "WebSetting" AS character 
+  DESCRIPTION "Description of what this setting does"
+  FORMAT "X(1000)"
+  INITIAL ""
+  LABEL "Description"
+  MAX-WIDTH 2000
+  ORDER 80
+
+ADD FIELD "add_dt" OF "WebSetting" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 100
+
+ADD FIELD "add_time" OF "WebSetting" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 110
+
+ADD FIELD "add_userid" OF "WebSetting" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 120
+
+ADD FIELD "chg_dt" OF "WebSetting" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 130
+
+ADD FIELD "chg_time" OF "WebSetting" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 140
+
+ADD FIELD "chg_userid" OF "WebSetting" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 150
+
+ADD INDEX "pkSetting" ON "WebSetting" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  DESCRIPTION "Primary Unique Index of the Setting Table"
+  INDEX-FIELD "BrokerEnv" ASCENDING 
+  INDEX-FIELD "IDType" ASCENDING 
+  INDEX-FIELD "SettingType" ASCENDING 
+  INDEX-FIELD "SettingName" ASCENDING 
+
+ADD INDEX "idxTypeName" ON "WebSetting" 
+  AREA "Index Area"
+  INDEX-FIELD "SettingType" ASCENDING 
+  INDEX-FIELD "SettingName" ASCENDING 
+
+ADD INDEX "idxTypes" ON "WebSetting" 
+  AREA "Index Area"
+  INDEX-FIELD "IDType" ASCENDING 
+  INDEX-FIELD "SettingType" ASCENDING 
+
+ADD TABLE "WebTask"
+  AREA "Data Area"
+  DESCRIPTION "Pages, objects or functions used to grant/revoke security access to a user"
+  DUMP-NAME "webtask"
+
+ADD FIELD "TaskID" OF "WebTask" AS character 
+  DESCRIPTION "Task ID"
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "Task ID"
+  MAX-WIDTH 25
+  ORDER 10
+
+ADD FIELD "TaskDesc" OF "WebTask" AS character 
+  DESCRIPTION "Task description"
+  FORMAT "X(200)"
+  INITIAL ""
+  LABEL "Description"
+  MAX-WIDTH 90
+  ORDER 20
+
+ADD FIELD "add_dt" OF "WebTask" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "add_time" OF "WebTask" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 60
+
+ADD FIELD "add_userid" OF "WebTask" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 70
+
+ADD FIELD "chg_dt" OF "WebTask" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "chg_time" OF "WebTask" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 90
+
+ADD FIELD "chg_userid" OF "WebTask" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 100
+
+ADD FIELD "TaskGroup" OF "WebTask" AS character 
+  DESCRIPTION "Task group"
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Group"
+  MAX-WIDTH 40
+  ORDER 30
+
+ADD FIELD "TaskAction" OF "WebTask" AS character 
+  DESCRIPTION "Task action"
+  FORMAT "x(80)"
+  INITIAL ""
+  LABEL "Action"
+  MAX-WIDTH 160
+  ORDER 40
+
+ADD INDEX "pkTaskID" ON "WebTask" 
+  AREA "Index Area"
+  PRIMARY
+  INDEX-FIELD "TaskID" ASCENDING 
+
+ADD TABLE "WebTranslate"
+  AREA "Data Area"
+  DESCRIPTION "Translation table for text strings"
+  DUMP-NAME "WebTranslate"
+
+ADD FIELD "TextID" OF "WebTranslate" AS integer 
+  DESCRIPTION "Unique identifier for text to be translated"
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 10
+
+ADD FIELD "TextLang" OF "WebTranslate" AS character 
+  DESCRIPTION "Target language for text"
+  FORMAT "x(20)"
+  INITIAL ""
+  MAX-WIDTH 16
+  ORDER 20
+
+ADD FIELD "TextTrans" OF "WebTranslate" AS character 
+  DESCRIPTION "Translated text for ID"
+  FORMAT "x(100)"
+  INITIAL ""
+  MAX-WIDTH 16
+  ORDER 30
+
+ADD FIELD "add_time" OF "WebTranslate" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 50
+
+ADD FIELD "add_userid" OF "WebTranslate" AS character 
+  DESCRIPTION "User ID of the person who added this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 60
+
+ADD FIELD "chg_dt" OF "WebTranslate" AS date 
+  DESCRIPTION "Date record was changed"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD FIELD "chg_time" OF "WebTranslate" AS integer 
+  DESCRIPTION "Time this record was added"
+  FORMAT "99999"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 80
+
+ADD FIELD "chg_userid" OF "WebTranslate" AS character 
+  DESCRIPTION "User ID of the person who last changed this record."
+  FORMAT "X(30)"
+  INITIAL ""
+  MAX-WIDTH 60
+  ORDER 90
+
+ADD FIELD "add_dt" OF "WebTranslate" AS date 
+  DESCRIPTION "Date record was added"
+  FORMAT "99/99/9999"
+  INITIAL ?
+  MAX-WIDTH 4
+  ORDER 40
+
+ADD INDEX "pkTextLang" ON "WebTranslate" 
+  AREA "Index Area"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TextID" ASCENDING 
+  INDEX-FIELD "TextLang" ASCENDING 
+
+.
+PSC
+cpstream=UTF-8
+.
+0000061030

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<configuration debug="false" scan="true" scanPeriod="5 seconds" >
+  <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+    <discriminator class="ch.qos.logback.classic.sift.JNDIBasedContextDiscriminator">
+      <defaultValue>unknown</defaultValue>
+    </discriminator>
+    <sift>
+      <appender name="FILE-${contextName}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append> 
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+          <fileNamePattern>${catalina.base}/logs/${contextName}.%d{yyyy-MM-dd}.log</fileNamePattern> 
+        </rollingPolicy>
+        <encoder>
+          <!-- add the timestamp as milliseconds to facilitate logfile post processing     -->
+          <!--                                                                             -->
+          <!-- <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
+          <pattern>%d{HH:mm:ss.SSS}/%r [%thread] %-5level %logger{36} - %msg%n</pattern>
+          <!--                                                                             -->
+        </encoder>
+      </appender>
+    </sift>
+  </appender>
+
+<!-- The oeabl web application employs the Java LogBack logging service.  The LogBack
+     service allows you to control the logging based on:
+
+     a) Java pakage name : by package name, inclusive of all classes in all sub-packages
+     b) A single Java class : by fully qualified Java class name
+
+     As seen below, the format for logging service configuration entry
+     <logger name="{package-name|class-path}" level="{level}" />
+
+     The logging levels are specified in upper-case and are, in order of verbosity :
+        ERROR (least information)
+        WARN
+        INFO
+        DEBUG
+        TRACE (most information)
+
+     The logging configuration provided in this file represents a portion of the
+     full LogBack functionality.  Please refer to the LogBack reference documentation 
+     for more advanced configurations not found in this configuration.
+
+     The following sections identify various transports and subsystems involved in 
+     processing a PAS for OE client's request and scheduling its execution in the 
+     multi-session ABL agent process(es). Uncomment the individual packages or classes
+     as needed.
+
+-->
+    
+<!-- APSV adapter -->
+<!--     <logger name="com.progress.appserv.adapters.apsv" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.AskPing" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.Broker" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.Management" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.Properties" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.Request" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.Timing" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.apsv.Sessions" level="INFO"/> -->
+    
+<!-- REST adapter -->
+<!--     <logger name="com.progress.appserv.adapters.rest" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.rest.Adapter" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.rest.Binding" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.rest.Context" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.rest.Management" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.rest.Request" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.rest.Timing" level="INFO"/> -->
+
+<!-- SOAP adapter -->
+<!--     <logger name="com.progress.appserv.adapters.soap" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.Actional" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.Adapter" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.Management" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.Object" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.ObjectPool" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.Properties" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.Request" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.adapters.soap.WSDL" level="INFO"/> -->
+    
+<!-- WEB adapter -->
+<!--    <logger name="com.progress.appserv.adapters.web.Broker" level="INFO"/> -->
+<!--    <logger name="com.progress.appserv.adapters.web.Management" level="INFO"/> -->
+<!--    <logger name="com.progress.appserv.adapters.web.Properties" level="INFO"/> -->
+<!--    <logger name="com.progress.appserv.adapters.web.Request" level="INFO"/> -->
+<!--    <logger name="com.progress.appserv.adapters.web.Timing" level="INFO"/> -->
+<!--    <logger name="com.progress.appserv.adapters.web.WebOutputStreamer" level="INFO"/> -->
+
+<!-- General AppServer names -->
+<!--     <logger name="com.progress.O4gl" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Agent" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.AskPing" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Basic" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Broker" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Debug" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Mgmt" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Prop" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Rqst" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Session" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.UBNET" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.Timing" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.IdleResourceWatchdog" level="WARN"/> -->
+<!--     <logger name="com.progress.appserv.PoolMgt.Agent" level="WARN"/> -->
+<!--     <logger name="com.progress.appserv.PoolMgt.Connection" level="WARN"/> -->
+
+<!-- Property Reader -->
+<!--     <logger name="com.progress.appserv.services.Properties" level="INFO"/> -->
+    
+<!-- OpenEdge endpoint -->
+<!--     <logger name="com.progress.appserv.endpoints.oe.Endpoint" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.endpoints.oe.Request" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.endpoints.oe.TypeConversion" level="INFO"/> -->
+
+<!-- OpenEdge metrics collection and management -->
+<!--     <logger name="com.progress.appserv.services.metrics.OEMetricsBean" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.services.metrics.OEMetricsManager" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.services.metrics.PASOEMetrics" level="INFO"/> -->
+<!--     <logger name="com.progress.appserv.services.metrics.OEMetricsUtil" level="INFO"/> -->
+
+<!-- oemanager -->
+<!--      <logger name="com.progress.appserv.manager.services.RESTDeployerService" level="INFO"/> -->
+<!--      <logger name="com.progress.appserv.manager.util.ZipUtil" level="INFO"/> -->
+<!--      <logger name="com.progress.appserv.manager.services.SOAPDeployerService" level="INFO"/> -->
+
+
+<!--  OEABL Security -->
+
+<!-- OpenEdge: Spring to OpenEdge ClientPrincipal token management -->
+<!-- 
+        <logger name="com.progress.appserv.services.security.OEClientPrincipalFilter" level="INFO"/> 
+        <logger name="com.progress.auth" level="INFO"/> 
+-->
+
+<!-- OpenEdge: HTTP Form login/logout process handlers -->
+<!-- 
+        <logger name="com.progress.appserv.services.security.OEFormAuthnEntryPointHandler" level="INFO"/> 
+        <logger name="com.progress.appserv.services.security.OELogoutSuccessHandler" level="INFO"/> 
+        <logger name="com.progress.appserv.services.security.OEAuthnSuccessHandler" level="INFO"/> 
+        <logger name="com.progress.appserv.services.security.OEAuthnFailHandler" level="INFO"/> 
+        <logger name="com.progress.appserv.services.security.OEAccessDeniedHandler" level="INFO"/> 
+-->
+
+<!-- OpenEdge: HTTP Session start/stop event handler -->
+<!-- 
+        <logger name="com.progress.appserv.clientrt.broker.SessionLifeCycleListener" level="INFO"/> 
+-->
+
+<!-- OpenEdge: OEABL subsystem logging (inclusive) -->
+<!-- 
+     <logger name="com.progress.appserv.services.security" level="INFO"/>  
+-->
+
+<!-- Spring: all logging (inclusive) -->
+<!-- 
+        <logger name="org.springframework" level="INFO"/> 
+-->
+
+<!--  Spring: HTTP login/logout session control process -->
+<!-- 
+        <logger name="org.springframework.security.core.session" level="INFO"/>
+        <logger name="org.springframework.security.web.session" level="INFO"/>
+-->
+
+<!--  Spring: HTTP user login/logout authentication process -->
+<!-- 
+        <logger name="org.springframework.security.authentication" level="INFO"/>
+        <logger name="org.springframework.security.web.authentication" level="INFO"/>
+        <logger name="org.springframework.security.web.access" level="INFO"/>
+        <logger name="org.springframework.security.web.context" level="INFO"/>
+-->
+
+<!--  Spring: HTTP user URL authorization process -->
+<!-- 
+        <logger name="org.springframework.security.access" level="INFO"/>
+-->
+
+<!--  Spring: LDAP user login authentication provider (for user login authentication proces) -->
+<!--
+        <logger name="org.springframework.security.ldap" level="INFO"/>
+        <logger name="org.springframework.ldap" level="INFO"/>
+-->
+
+<!--  Spring Security SAML -->
+<!--
+          <logger name="org.springframework.security.saml" level="INFO"/>
+          <logger name="org.opensaml" level="INFO"/>
+          <logger name=" PROTOCOL_MESSAGE " level="INFO"/>
+-->
+
+  <root level="WARN">
+    <appender-ref ref="SIFT" /> 
+  </root>
+</configuration>
+

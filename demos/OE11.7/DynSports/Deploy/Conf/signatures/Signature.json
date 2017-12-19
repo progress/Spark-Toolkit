@@ -1,0 +1,152 @@
+[
+  "Project.Business.EntityBE": [
+    "super": "Spark.Core.Service.SparkEntity",
+    "abstract": false,
+    "final": false,
+    "interface": false,
+    "statics": false,
+    "constructors": [
+      "EntityBE": [
+        "mode": "Public",
+        "params": [
+        ]
+      ]
+    ],
+    "properties": [
+      "resourceName": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Project.Business.EntityBE",
+        "mode": "Public",
+        "override": true,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "character"
+      ],
+      "primaryKeys": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Project.Business.EntityBE",
+        "mode": "Public",
+        "override": true,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "character"
+      ],
+      "mappingType": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Project.Business.EntityBE",
+        "mode": "Public",
+        "override": true,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "character"
+      ],
+      "capabilities": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Project.Business.EntityBE",
+        "mode": "Public",
+        "override": true,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "character"
+      ],
+      "operations": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Project.Business.EntityBE",
+        "mode": "Public",
+        "override": true,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "character"
+      ],
+      "ProDataSet": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Spark.Core.Service.SparkEntity",
+        "mode": "Public",
+        "override": false,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "handle"
+      ],
+      "entityName": [
+        "origin": "Project.Business.EntityBE",
+        "defined": "Spark.Core.Service.SparkEntity",
+        "mode": "Public",
+        "override": false,
+        "static": false,
+        "readable": true,
+        "writable": true,
+        "type": "character"
+      ]
+    ],
+    "variables": [
+    ],
+    "methods": [
+      "readData": [
+        "return": "void",
+        "params": [
+          [
+            "mode": "Input",
+            "name": "filter",
+            "type": "character"
+          ],
+          [
+            "mode": "Output",
+            "name": "numRecs",
+            "type": "integer"
+          ],
+          [
+            "mode": "Output",
+            "name": "phDataSet",
+            "type": "datasethandle"
+          ]
+        ]
+      ],
+      "createData": [
+        "return": "void",
+        "params": [
+          [
+            "mode": "InputOutput",
+            "name": "phDataSet",
+            "type": "datasethandle"
+          ]
+        ]
+      ],
+      "updateData": [
+        "return": "void",
+        "params": [
+          [
+            "mode": "InputOutput",
+            "name": "phDataSet",
+            "type": "datasethandle"
+          ]
+        ]
+      ],
+      "deleteData": [
+        "return": "void",
+        "params": [
+          [
+            "mode": "InputOutput",
+            "name": "phDataSet",
+            "type": "datasethandle"
+          ]
+        ]
+      ],
+      "submitData": [
+        "return": "void",
+        "params": [
+          [
+            "mode": "InputOutput",
+            "name": "phDataSet",
+            "type": "datasethandle"
+          ]
+        ]
+      ]
+    ]
+  ]
+]

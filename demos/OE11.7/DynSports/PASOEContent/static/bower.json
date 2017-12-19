@@ -1,0 +1,20 @@
+{
+  "name": "spark",
+  "version": "4.2.0",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "animate-css": "*",
+    "bootstrap": "3.3.7",
+    "font-awesome": "4.x",
+    "jquery": "1.12.x",
+    "jszip": "2.6.1"
+  }
+}

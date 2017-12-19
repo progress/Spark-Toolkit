@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Test</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" src="http://normalize-css.googlecode.com/svn/trunk/normalize.css" />
+        <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript">
+            function doSubmit(){
+                // Location of data endpoint, plus data to send.
+                var sessionID = document.forms[0].elements["sessionID"].value || null;
+                var url = "http://" + window.location.hostname + ":1337/" + sessionID;
+                var data = document.forms[0].elements["data"].value || "{}";
+                var jsonData = null;
+                try {
+                    // Always parse in a try/catch block!
+                    jsonData = JSON.parse(data);
+                } catch(parseErr) {
+                    alert("Error parsing data: " + parseErr.message);
+                }
+
+                // Provide specific settings for this AJAX call.
+                if (jsonData) {
+                    var settings = {
+                        data: JSON.stringify(jsonData),
+                        dataType: "json",
+                        type: "POST",
+                        success: function(data, textStatus, jqXHR){
+                            // Update a DIV by given ID on success.
+                            var newString = "<b>" + data.response + "</b>";
+                            $("#mainContent").html(newString);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            var error = ("An error occurred:\n" + errorThrown);
+                            $("#mainContent").html(error);
+                        }
+                    };
+    
+                    // Use AJAX to return data from the URL.
+                    $.ajax(url, settings);
+                }
+
+                // Clear previous message.
+                $("#mainContent").html("");
+            }
+        </script>
+    </head>
+
+    <body>
+        <form method="post" id="test-form">
+            <label for="sessionID">sessionID:</label>
+            <input type="text" id="sessionID" name="sessionID" maxlength="40" size="50" value="16098284CEE58A3A04109348675532A1" />
+            <br/>
+            <br/>
+            <label for="data">Data:</label><br/>
+            <textarea id="data" name="data" rows="20" cols="100" wrap="soft">
+{
+    "messages": [{
+        "messageType": "info",
+        "messageText": "This is only a test."
+    }]
+}
+            </textarea>
+            <br/>
+            <br/>
+            <input type="button" value="Submit" id="post-action" onclick="javascript:doSubmit();">
+        </form>
+        <br/>
+        <br/>
+        <div id="mainContent">
+        </div>
+    </body>
+</html>

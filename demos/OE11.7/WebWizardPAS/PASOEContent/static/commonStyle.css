@@ -1,0 +1,278 @@
+@import
+	url(https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700)
+	;
+
+body {
+	margin: 0px;
+	background-image: url("../static/images/graphic-5.png");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: contain;
+	background-position: center bottom;
+}
+
+body, button, input, select, textarea {
+	font-family: Roboto, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+}
+
+.button, input[type=button], input[type=submit], input[type=reset],
+	button {
+	height: 30px;
+	background-color: #d94819;
+	font-weight: 400;
+	padding: 3px 6px 3px 6px;
+	cursor: pointer;
+	background-clip: border-box;
+	border: 2px solid transparent;
+	font-size: 13px;
+	color: white;
+	text-align: center;
+	text-shadow: 0px 0px;
+	text-transform: uppercase;
+}
+
+.button:HOVER, input[type=button]:HOVER, input[type=submit]:HOVER, input[type=reset]:HOVER,
+	button:HOVER {
+	background-color: #f54b00;
+}
+
+.button:disabled, input[type=button]:disabled, input[type=submit]:disabled,
+	input[type=reset]:disabled, button:disabled {
+	filter: Alpha(opacity = 40);
+	opacity: .4;
+	cursor: inherit;
+}
+
+.button.secondary, input[type=button].secondary, input[type=submit].secondary,
+	input[type=reset].secondary, button.secondary {
+	background-color: #777777;
+}
+
+.button:HOVER.secondary, input[type=button]:HOVER.secondary, input[type=submit]:HOVER.secondary,
+	input[type=reset]:HOVER.secondary, button:HOVER.secondary {
+	background-color: #B1B1B1;
+}
+
+.clear {
+	clear: both;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.icon-36 {
+	width: 36px;
+	height: 36px;
+}
+
+.icon-48 {
+	width: 48px;
+	height: 48px;
+}
+
+.icon-64 {
+	width: 64px;
+	height: 64px;
+}
+
+#header {
+	width: 100%;
+}
+
+#header #ProgressBanner {
+	height: 39px;
+	background-color: #1E1F24;
+	margin: 0;
+}
+
+#header #ProgressBanner #ProgressLogo {
+	height: 39px;
+}
+
+#header #PASbanner {
+	height: 48px;
+	background-color: #56555A;
+	margin: 0;
+}
+
+#header #PASbanner H2 {
+	color: #FFF;
+	font-size: 24px;
+	font-weight: normal;
+	margin: 0 0 0 0;
+	padding: 0;
+}
+
+#header #PASbanner H2 IMG {
+	vertical-align: -10px;
+	margin: 7px 5px 0 8px;
+}
+
+#PASmain {width 80%;
+	margin: 40px 10% 0 10%;
+}
+
+#PASmain #Server {
+	float: left;
+	width: 80%;
+	height: 380px;
+	border: 1px solid #DDD;
+	background: #FFF;
+}
+
+#Server #ServerInfo {
+	width: 100%;
+	float: left;
+	padding-top: 15px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+}
+
+#Server #ServerInfo #ServerIcon {
+	float: left;
+	padding: 5px 15px 0 0;
+}
+
+#Server #ServerInfo #ServerName {
+	float: left;
+}
+
+#Server #ServerInfo #ServerName H2 {
+	font-family: "Lato";
+	font-size: 32px;
+	font-weight: normal;
+	margin: 5px 0 8px 0;
+}
+
+#Server #ServerInfo #ServerName P {
+	color: #AAA;
+	font-size: 14px;
+	margin: 0;
+}
+
+#Server #ServerDetails {
+	float: left;
+	width: 100%;
+}
+
+#Server #ServerDetails .column {
+	float: left;
+	width: 50%;
+}
+
+#Server #ServerDetails DL {
+	overflow: auto;
+	float: left;
+	width: 100%;
+	margin: 18px 0 0 20px;
+}
+
+#Server #ServerDetails DL DT, #Server #ServerDetails DL DD {
+	float: left;
+	font-size: 13px;
+}
+
+#Server #ServerDetails DL DT {
+	clear: left;
+	width: 23%;
+	color: #AAA;
+	margin-right: 2%;
+	font-weight: normal;
+}
+
+#Server #ServerDetails DL DD {
+	width: 75%;
+	margin-left: 0;
+}
+
+#Server BUTTON {
+	margin: 45px 0 30px 0;
+}
+
+#Server BUTTON IMG {
+	width: 16px;
+	height: 16px;
+	vertical-align: -2px;
+	margin-right: 5px;
+}
+
+#PASmain #Links {
+	float: left;
+	width: 19%;
+	height: 380px;
+	background-color: #F2F2F2;
+	border-top: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+	border-bottom: 1px solid #DDD;
+}
+
+#PASmain #Links UL {
+	display: block;
+	list-style-type: none;
+	height: 380px;
+	margin: 0;
+	padding: 0;
+}
+
+#PASmain #Links UL LI {
+	display: block;
+	height: 33%;
+	border-bottom: 1px solid #DDD;
+	margin: 0;
+	padding: 0;
+}
+
+#PASmain #Links UL LI:first-child {
+	border-top: 0;
+}
+
+#PASmain #Links UL LI:last-child {
+	border-bottom: 0;
+}
+
+#PASmain #Links UL LI A {
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: #3F3F3F;
+	font-size: 14px;
+	font-weight: bold;
+	text-decoration: none;
+	text-align: center;
+}
+
+#PASmain #Links UL LI A:hover {
+	background: #e8e8e8;
+}
+
+#PASmain #Links UL LI IMG {
+	display: block;
+	border: 0;
+	margin: 0 auto 10px auto;
+	padding-top: 25px;
+}
+
+#PASmain #Links UL LI SPAN { -
+	-text-align: center;
+	padding: 10px 0;
+}
+
+#Footer {
+	clear: left;
+	position: fixed;
+	bottom : 0px;
+	width: 100%;
+	height: 30px;
+	background-color: #373a3f;
+}
+
+#Footer SPAN {
+	display: block;
+	float: right;
+	text-align: right;
+	color: #FFF;
+	font-size: 10px;
+	padding: 10px 12px 0 0;
+}

@@ -1,0 +1,18 @@
+{
+    "Config": {
+        "General": [{
+            "ApiVersion": 3.3,
+            "BusinessRoot": "Business",
+            "IdProperty": "id",
+            "PreLoader": "Common/preload.p",
+            "ReadFilter": "filter",
+            "EnableDebugs": false
+        }],
+        "ServiceSource": [{
+            "ServiceName": "Common",
+            "ServiceURI": "/web/pdo/common",
+            "ClassPath": "Business",
+            "UseRequest": true
+        }]
+    }
+}

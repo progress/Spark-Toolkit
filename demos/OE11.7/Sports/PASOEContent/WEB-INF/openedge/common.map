@@ -1,0 +1,849 @@
+{
+  "services": {
+    "common": {
+      "version": "1.0.0",
+      "operations": {
+        "\/": {
+          "GET": {
+            "contentType": "application\/json",
+            "statusCode": 200,
+            "file": "$CATALINA_BASE\/webapps\/$oepas-webapp\/static\/common.json"
+          }
+        },
+        "\/user": {
+        },
+        "\/user\/resetPassword": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "resetPassword",
+              "arg": [
+                {
+                  "ablName": "username",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "username"
+                  }
+                },
+                {
+                  "ablName": "emailAddr",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "emailAddr"
+                  }
+                },
+                {
+                  "ablName": "resetCode",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "resetCode"
+                  }
+                },
+                {
+                  "ablName": "opSuccess",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "opSuccess"
+                  }
+                },
+                {
+                  "ablName": "opMessage",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "opMessage"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/session": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "getSessionInfo",
+              "arg": [
+                {
+                  "ablName": "anonymous",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "anonymous"
+                  }
+                },
+                {
+                  "ablName": "dateFormat",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "dateFormat"
+                  }
+                },
+                {
+                  "ablName": "decimalPoint",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "decimalPoint"
+                  }
+                },
+                {
+                  "ablName": "domainName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "domainName"
+                  }
+                },
+                {
+                  "ablName": "expires",
+                  "ablType": "DATETIME-TZ",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "expires"
+                  }
+                },
+                {
+                  "ablName": "language",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "language"
+                  }
+                },
+                {
+                  "ablName": "numericSeparator",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "numericSeparator"
+                  }
+                },
+                {
+                  "ablName": "serverTime",
+                  "ablType": "DATETIME-TZ",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "serverTime"
+                  }
+                },
+                {
+                  "ablName": "sessionID",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "sessionID"
+                  }
+                },
+                {
+                  "ablName": "timezone",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "timezone"
+                  }
+                },
+                {
+                  "ablName": "fullname",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "fullname"
+                  }
+                },
+                {
+                  "ablName": "username",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "username"
+                  }
+                },
+                {
+                  "ablName": "emailAddr",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "emailAddr"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/sendResetCode": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "sendResetCode",
+              "arg": [
+                {
+                  "ablName": "username",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "username"
+                  }
+                },
+                {
+                  "ablName": "emailAddr",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "emailAddr"
+                  }
+                },
+                {
+                  "ablName": "opSuccess",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "opSuccess"
+                  }
+                },
+                {
+                  "ablName": "opMessage",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "opMessage"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/contextFetch": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "contextFetch",
+              "arg": [
+                {
+                  "ablName": "contextName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "contextName"
+                  }
+                },
+                {
+                  "ablName": "contextValue",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "contextValue"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/menu": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "getMenu",
+              "arg": [
+                {
+                  "ablName": "menuData",
+                  "ablType": "class Progress.Json.ObjectModel.JsonArray",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "menuData"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/contextStore": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "contextStore",
+              "arg": [
+                {
+                  "ablName": "contextName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "contextName"
+                  }
+                },
+                {
+                  "ablName": "contextValue",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "contextValue"
+                  }
+                },
+                {
+                  "ablName": "success",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "success"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/getProfile": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "getProfile",
+              "arg": [
+                {
+                  "ablName": "FirstName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "FirstName"
+                  }
+                },
+                {
+                  "ablName": "LastName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "LastName"
+                  }
+                },
+                {
+                  "ablName": "Email",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "Email"
+                  }
+                },
+                {
+                  "ablName": "MobilePhone",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "MobilePhone"
+                  }
+                },
+                {
+                  "ablName": "MobileCarrier",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "MobileCarrier"
+                  }
+                },
+                {
+                  "ablName": "UseTFA",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "UseTFA"
+                  }
+                },
+                {
+                  "ablName": "TFAMethod",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "TFAMethod"
+                  }
+                },
+                {
+                  "ablName": "QR",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "QR"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/setProfile": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "setProfile",
+              "arg": [
+                {
+                  "ablName": "FirstName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "FirstName"
+                  }
+                },
+                {
+                  "ablName": "LastName",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "LastName"
+                  }
+                },
+                {
+                  "ablName": "Email",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "Email"
+                  }
+                },
+                {
+                  "ablName": "MobilePhone",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "MobilePhone"
+                  }
+                },
+                {
+                  "ablName": "MobileCarrier",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "MobileCarrier"
+                  }
+                },
+                {
+                  "ablName": "UseTFA",
+                  "ablType": "LOGICAL",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "UseTFA"
+                  }
+                },
+                {
+                  "ablName": "TFAMethod",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "TFAMethod"
+                  }
+                },
+                {
+                  "ablName": "updateSuccess",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "updateSuccess"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/locale": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "setLocale",
+              "arg": [
+                {
+                  "ablName": "userLanguage",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "userLanguage"
+                  }
+                },
+                {
+                  "ablName": "userTimezone",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "userTimezone"
+                  }
+                },
+                {
+                  "ablName": "changed",
+                  "ablType": "class Progress.Json.ObjectModel.JsonArray",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "changed"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/translations": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "getTranslations",
+              "arg": [
+                {
+                  "ablName": "langCode",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "langCode"
+                  }
+                },
+                {
+                  "ablName": "localLanguage",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "localLanguage"
+                  }
+                },
+                {
+                  "ablName": "langStrings",
+                  "ablType": "class Progress.Json.ObjectModel.JsonObject",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "langStrings"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/user\/password": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.UserData",
+              "function": "changePassword",
+              "arg": [
+                {
+                  "ablName": "oldPassword",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "oldPassword"
+                  }
+                },
+                {
+                  "ablName": "newPassword",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "newPassword"
+                  }
+                },
+                {
+                  "ablName": "changeSuccess",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "changeSuccess"
+                  }
+                },
+                {
+                  "ablName": "changeMessage",
+                  "ablType": "CHARACTER",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "changeMessage"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/tfa": {
+        },
+        "\/tfa\/login": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.TwoFactor",
+              "function": "clientLogin",
+              "arg": [
+                {
+                  "ablName": "username",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "username"
+                  }
+                },
+                {
+                  "ablName": "password",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "password"
+                  }
+                },
+                {
+                  "ablName": "useTFA",
+                  "ablType": "LOGICAL",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "useTFA"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/dashboard": {
+        },
+        "\/dashboard\/statistics": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.Dashboard",
+              "function": "getStats",
+              "arg": [
+                {
+                  "ablName": "topStats",
+                  "ablType": "INTEGER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "topStats"
+                  }
+                },
+                {
+                  "ablName": "dashboardData",
+                  "ablType": "DATASET",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "body",
+                    "name": "dashboardData"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/locality": {
+        },
+        "\/locality\/provinces": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.Locality",
+              "function": "getProvinces",
+              "arg": [
+                {
+                  "ablName": "states",
+                  "ablType": "TABLE",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "body",
+                    "name": "states"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/locality\/states": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.Locality",
+              "function": "getStates",
+              "arg": [
+                {
+                  "ablName": "states",
+                  "ablType": "TABLE",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "body",
+                    "name": "states"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "\/locality\/stateProvince": {
+          "PUT": {
+            "contentType": "application\/json",
+            "options": {
+              "writeBI": false,
+              "requestEnvelope": false,
+              "responseEnvelope": false
+            },
+            "entity": {
+              "name": "Business.Locality",
+              "function": "getStateProvince",
+              "arg": [
+                {
+                  "ablName": "country",
+                  "ablType": "CHARACTER",
+                  "ioMode": "INPUT",
+                  "msgElem": {
+                    "type": "field",
+                    "name": "country"
+                  }
+                },
+                {
+                  "ablName": "states",
+                  "ablType": "TABLE",
+                  "ioMode": "OUTPUT",
+                  "msgElem": {
+                    "type": "body",
+                    "name": "states"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "schemas": {
+      }
+    }
+  }
+}

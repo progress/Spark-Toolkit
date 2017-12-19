@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing authentication, channel
+  - security and web URI beans.
+  -
+  - Only used by "filter" artifact.
+  -
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+     <!-- To enable HTTP BASIC security for APSV, set apsv.security.enable=basic 
+         in WEB-INF/oeablSecurity.properties file-->
+    <b:import resource="apsv-${apsv.security.enable}-extern.xml"/> 
+
+    <!-- To enable HTTP BASIC   security for SOAP, set soap.security.enable=basic 
+         in WEB-INF/oeablSecurity.properties file-->
+    <b:import resource="soap-${soap.security.enable}-extern.xml"/>
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+     -->
+    <http pattern="/rest/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="nullApplicationAuth"
+          realm="${http.rest.realm}" >
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls 
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="restFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+        
+        <!-- URL access controls -->
+
+        <!-- NOTE:  all XML <intercept-url> elements have been
+             replaced by the 'restFilterSecurityInterceptor' and
+             the oeablSecurity.csv configuration file.
+        <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+        -->
+
+        <!-- authentication models -->
+        <!-- the role names here need to be coordinated with the container's
+             <auth-constraint> configuration in web.xml.  The role names
+             contained in this element then need to be defined in the
+             <intercept-url> elements above.
+         -->
+        <jee mappable-roles="${http.jee.rest.mappableRoles}" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+
+    </http>
+    
+    <!-- This HTTP security space represents the WSPD and controls 
+         the authentication/authorization process to its dynamic/static content.  
+     -->
+    <http pattern="/web/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="nullApplicationAuth"
+          realm="OpenEdge" >
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls 
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="webFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+        
+        <!-- URL access controls -->
+
+        <!-- NOTE:  all XML <intercept-url> elements have been
+             replaced by the 'webFilterSecurityInterceptor' and
+             the oeablSecurity.csv configuration file.
+            <intercept-url pattern="/web/**"  
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+        -->
+
+        <!-- authentication models -->
+        <!-- the role names here need to be coordinated with the container's
+             <auth-constraint> configuration in web.xml.  The role names
+             contained in this element then need to be defined in the
+             <intercept-url> elements above.
+         -->
+        <jee mappable-roles="${http.jee.web.mappableRoles}" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+
+    </http>
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+     -->
+    <http pattern="/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="nullApplicationAuth"
+          realm="OpenEdge">
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls 
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="defaultFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+        
+        <!-- URL access controls -->
+
+        <!-- NOTE: All <intercept-url> elments have been replaced by 
+             'defaultFilterSecurityInterceptor' and the 
+             oeablSecurity.csv configuration file. -->
+
+        <!-- authentication models -->
+        <!-- the role names here need to be coordinated with the container's
+             <auth-constraint> configuration in web.xml.  The role names
+             contained in this element then need to be defined in the
+             <intercept-url> elements above.
+         -->
+        <jee mappable-roles="${http.jee.mappableRoles}" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+
+    </http>
+
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for the security process, and
+         allows that process to manage the HTTP requests/responses and 
+         invoking the user authentication process. --> 
+    <b:import resource="authFilters.xml"/> 
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for all AuthenticationManagers
+         invoked by the security process.  The AuthenticationManager definitions
+         will perform physical connections to the source of user accounts, validate
+         the account exists, its state, and whether the account secret is valid.
+         --> 
+    <b:import resource="authManagers.xml"/> 
+
+    <!-- Authentication manager reserved for PUBLIC anonymous authentication 
+         to the static and dynamic application content.
+     -->
+    <authentication-manager id="oeablApplicationAuth" >
+        <!--
+        <authentication-provider-->
+            <!-- Uncomment to add strong password hashing in users.properties 
+            <password-encoder hash="sha" >
+                <salt-source user-property="username" />
+            </password-encoder>
+            -->
+            <!--
+            <user-service properties="/WEB-INF/users.properties" />
+        </authentication-provider>
+        -->
+    </authentication-manager>
+</b:beans>

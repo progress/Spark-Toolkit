@@ -1,0 +1,90 @@
+<project name="DemoTools" basedir="." default="usage">
+
+    <target name="usage">
+        <echo message="Usage Instructions:"/>
+        <echo message="ant show_info - Show OE information"/>
+        <echo message="ant build_pl - Create PL archive for business classes"/>
+    </target>
+
+    <target name="test">
+        <!-- Simple test of ant; outputs a timestamp to a file. -->
+        <tstamp>
+            <format property="time" pattern="MM/dd/yyyy hh:mm:ss aa" unit="hour"/>
+        </tstamp>
+        <echo file="test.txt" append="false" message="This message was output by ant: ${time}"/>
+        <echo message="See test.txt for details"/>
+    </target>
+
+    <target name="init_env">
+        <property environment="env"/>
+
+        <!-- Set a property if environment is Windows. -->
+        <condition property="isWin32">
+            <os family="windows"/>
+        </condition>
+
+        <!-- Set a property if environment is Unix. -->
+        <condition property="isUnix">
+            <os family="unix"/>
+        </condition>
+
+        <!-- Set a property if environment is 32bit. -->
+        <condition property="is32bit">
+            <or>
+                <os arch="x86"/>
+                <os arch="i386"/>
+            </or>
+        </condition>
+
+        <!-- Set a property if environment is 64bit. -->
+        <condition property="is64bit">
+            <not>
+                <or>
+                    <os arch="x86"/>
+                    <os arch="i386"/>
+                </or>
+            </not>
+        </condition>
+
+        <echo message="OS Arch: ${os.arch}"/>
+    </target>
+
+    <target name="init_oe" depends="init_env">
+        <taskdef resource="PCT.properties" classpath="../../../tools/PCT.jar"/>
+        <PCTVersion/>
+
+        <!-- Check if DLC is set as an environment variable. -->
+        <fail message="$DLC path is not set">
+            <condition>
+                <and>
+                    <not><isset property="dlcHome"/></not>
+                    <not><isset property="env.DLC"/></not>
+                </and>
+            </condition>
+        </fail>
+        <property name="dlcHome" value="${env.DLC}"/>
+        <echo message="DLC Home: ${dlcHome}"/>
+
+        <!-- Locate the OE version file, and read into a property. -->
+        <ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" arch="oeArch" fullVersion="full"/>
+        <property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
+        <echo message="OpenEdge Version: ${oe.version}"/>
+    </target>
+
+    <target name="show_info">
+        <antcall target="init_oe"/>
+    </target>
+
+    <target name="build_pl" depends="init_oe">
+        <delete dir="build" quiet="true"/>
+        <delete file="DynSports.pl" quiet="true"/>
+
+        <!-- Build PL file with source and R-code. -->
+        <PCTLibrary destfile="DynSports.pl" dlcHome="${dlcHome}">
+            <fileset dir="${basedir}">
+                <include name="**/*.r"/>
+            </fileset>
+        </PCTLibrary>
+    </target>
+
+</project>

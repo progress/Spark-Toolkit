@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html class="app bg-light" lang="en-us">
+    <head>
+        <meta charset="utf-8" />
+        <title>Application Login</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/animate-css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/font.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/icon.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/<Spark_CSSFile>" />
+        <link rel="stylesheet" type="text/css" href="assets/css/override.css" />
+        <!-- Core Libraries -->
+        <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/kendo.all.min.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <section class="vbox">
+            <span id="notification"></span>
+            <div id="content" class="wrapper-md m-t-xl">
+                <div class="container aside-xl">
+                    <img src="assets/img/logo.png" class="center-block img-responsive m-b-lg">
+                    <section class="card wrapper-lg bg-dark box-shadow">
+                        <form id="loginForm" role="form" data-role="validator" novalidate="novalidate">
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <input type="text" name="Username" placeholder="Username"
+                                           class="form-control no-border text-md"
+                                           data-bind="value:params.username" required/>
+                                </div>
+                                <div class="list-group-item">
+                                    <input type="password" name="Password" placeholder="Password"
+                                           class="form-control no-border text-md"
+                                           data-bind="value:params.password" required/>
+                                </div>
+                            </div>
+                            <button name="login" type="button" class="btn btn-lg btn-primary btn-block" data-bind="click:doLogin"></button>
+                        </form>
+                    </section>
+                </div>
+            </div>
+        </section>
+        <!-- Library Extensions -->
+        <script type="text/javascript" src="vendor/psc/lib/progress.all.min.js"></script>
+        <script type="text/javascript" src="vendor/spark/lib/spark.min.js"></script>
+        <script type="text/javascript" src="vendor/spark/lib/plugins.js"></script>
+        <script type="text/javascript">
+            var app = (function(){
+                "use strict";
+
+                // Clear session data for this user.
+                spark.clearSessionObject("ApplicationContext");
+
+                // Selector of element where notifications should be anchored.
+                var notificationSelector = "#notification";
+
+                // Set the language code according to browser preference.
+                // Only English (default), Spanish, and French are currently supported.
+                var langCode = spark.getCookie("language");
+                if (langCode === "") {
+                    langCode = window.navigator.language;
+                }
+
+                // Normalize the given language code.
+                switch(langCode){
+                    case "es":
+                    case "es-ES":
+                        // Spanish
+                        langCode = "es-ES";
+                        break;
+                    case "fr":
+                    case "fr-FR":
+                        // French
+                        langCode = "fr-FR";
+                        break;
+                    default:
+                        // English
+                        langCode = "en-US";
+                        break;
+                };
+                spark.setCookie("language", langCode);
+
+                // Determine the proper language abbreviation based on preference.
+                if (!kendo.cultures[langCode]) {
+                    // Only load the appropriate culture files for KendoUI if not present.
+                    $.getScript("vendor/kendo/js/cultures/kendo.culture." + langCode + ".min.js")
+                        .done(function(){
+                            kendo.culture(langCode);
+                        });
+                    $.getScript("vendor/kendo/js/messages/kendo.messages." + langCode + ".min.js")
+                        .done(function(){
+                            kendo.culture(langCode);
+                        });
+                }
+                if (!window.local || !local.strings || !local.strings[langCode]) {
+                    // Append appropriate application strings as based on the current language.
+                    $.getScript("assets/js/local.strings." + langCode + ".js")
+                        .done(function(){
+                            if (local && local.strings && local.strings[langCode]) {
+                                local.strings.current = local.strings[langCode];
+                                // Trigger a translation of any available text on the page.
+                                translateView();
+                            }
+                        });
+                }
+
+                function getLanguageStrings(){
+                    // Load translated strings from server.
+                    var userJSDO = spark.createJSDO("user");
+                    userJSDO.invoke("translations", {"langCode": langCode})
+                        .then(function(jsdo, result, request){
+                            // Populate local variable with any translated strings.
+                            spark.strings.addTranslatedStrings((request.response || {}).langStrings || {});
+
+                            // Change culture as based on language preference of the user.
+                            kendo.culture(langCode);
+
+                            // Trigger a translation of any available text on the page.
+                            translateView();
+                        });
+                }
+
+                function getText(originalText){
+                    // Returns a locally translated string, if available.
+                    if (local.strings && local.strings.current) {
+                        if (local.strings.current.application[originalText]) {
+                            // Return a general application string from static data.
+                            return local.strings.current.application[originalText];
+                        }
+                    }
+
+                    // Return a translated string from the internal library.
+                    // If a string does not exist, return original text as-is.
+                    return spark.strings.getTranslatedString(originalText);
+                }
+
+                function translateForm(formSelector){
+                    // Run standard translation on a form using a specific method.
+                    spark.form.translateForm(formSelector, getText);
+                }
+
+                function translateView(){
+                    // Update certain common elements using hard-coded strings.
+                    $("#loginForm input[name=Username]").attr("placeholder", local.strings.current.common.username);
+                    $("#loginForm input[name=Password]").attr("placeholder", local.strings.current.common.password);
+                    $("#loginForm button[name=login]").html(local.strings.current.common.login);
+
+                    // Convert the placeholders for all input types.
+                    translateForm("#loginForm");
+                }
+
+                var _notificationArea = null;
+                function showMessage(message, type){
+                    if (!_notificationArea) {
+                        // Create notification widget as needed, when not present.
+                        var options = {
+                            appendTo: null,
+                            position: {
+                                pinned: false,
+                                right: 30,
+                                top: 50
+                            },
+                            stacking: "down",
+                            width: 300,
+                            height: 40
+                        };
+                        _notificationArea = spark.notify.setNotificationArea(notificationSelector, options);
+                    }
+                    if (_notificationArea) {
+                        _notificationArea.showNotification(message, type);
+                    }
+                }
+
+                /***** Initialization *****/
+
+                // Create an observable object for login.
+                var _processing = null;
+                var loginVM = kendo.observable({
+                    params: {
+                        username: "",
+                        password: ""
+                    },
+                    doLogin: function(ev){
+                        var params = this.toJSON().params;
+                        var validator = $("#loginForm").kendoValidator().data("kendoValidator");
+                        if (!_processing && validator.validate()) {
+                            _processing = true; // Denote the method is running.
+
+                            // Remember the credentials in case the user reloads the page.
+                            // This is necessary to log back in to access the JSDO catalog.
+                            spark.setSessionObject("username", params.username);
+
+                            // Show an indicator that the login is proceeding.
+                            kendo.ui.progress($("#loginForm"), true);
+
+                            function doSessionLogin(){
+                                // Clear session data and perform login.
+                                spark.clearSessionObject("sessionInfo");
+                                spark.getJsdoSession().login(params.username, params.password)
+                                    .done(function(){
+                                        // Redirect when session info returned.
+                                        var target = spark.getSessionObject("loginTarget");
+                                        if (target && target !== "") {
+                                            window.location.href = target;
+                                        } else {
+                                            window.location.href = "app.html";
+                                        }
+                                    })
+                                    .fail(function(){
+                                        resetAttempt(); // Reset any prompts/flags.
+
+                                        // Clear the credentials if login failed.
+                                        spark.clearSessionObject("username");
+                                        showMessage(getText("Login Failed"), "error");
+                                    });
+                            }
+
+                            function resetAttempt(){
+                                kendo.ui.progress($("#loginForm"), false);
+                                _processing = false;
+                            }
+
+                            if (spark.getJsdoSession().loginResult === progress.data.Session.LOGIN_SUCCESS) {
+                                // Make sure any previous session is logged out.
+                                spark.getJsdoSession().logout()
+                                    .then(doSessionLogin, resetAttempt);
+                            } else {
+                                // Otherwise no existing login for session.
+                                doSessionLogin();
+                            }
+                        } else {
+                            if (ev) {
+                                ev.preventDefault();
+                            }
+                        }
+                    }
+                });
+
+                $(document).ready(function(){
+                    // Configure essential global variables. Modify as necessary for this application.
+                    var firstFolder = window.location.pathname ? "/" + window.location.pathname.split("/")[1] : "/";
+                    var serviceURI = (firstFolder === "/static") ? "/" : firstFolder;
+                    var catalogURI = serviceURI + "/web/pdo";
+                    var authModel = progress.data.Session.AUTH_TYPE_FORM;
+
+                    // Create authentication provider, obtains anonymous access to back-end.
+                    spark.checkAuthentication(serviceURI, authModel)
+                        .then(function(authProvider, result, info){
+                            // If able to get anonymous access, create JSDO session and obtain catalog.
+                            spark.createSession(serviceURI, catalogURI, authModel)
+                                .then(function(){
+                                    // Update languages after session created, catalog downloaded.
+                                    getLanguageStrings();
+                                });
+                        }, function(){
+                            console.log("Unable to authenticate.");
+                        });
+
+                    // Bind login form to MVVM observable.
+                    kendo.bind($("#loginForm"), loginVM);
+
+                    // Perform login on "enter" keypress when on password field.
+                    var keyOptions = {
+                        onEnter: function(){
+                            // Perform immediate login attempt on Enter key.
+                            loginVM.set("params.password", $("#loginForm input[name=Password]").val());
+                            loginVM.doLogin();
+                        }
+                    }
+                    spark.field.addKeypressEvent("#loginForm input[name=Password]", keyOptions);
+
+                    // Set the year in the footer.
+                    $("#year").html(new Date().getFullYear());
+                });
+
+                return {
+                    showMessage: showMessage,
+                    getText: getText
+                };
+            })();
+        </script>
+    </body>
+</html>

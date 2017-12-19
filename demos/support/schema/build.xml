@@ -1,0 +1,70 @@
+<project name="DatabaseCreation" basedir="." default="usage">
+
+    <target name="usage">
+        <echo message="Usage Instructions:"/>
+        <echo message="ant create - Create new Sports2000 and WebState DB's"/>
+        <echo message="    -Dpath=[PATH] = location for databases (Default: C:\Databases)"/>
+    </target>
+
+    <target name="init_env">
+        <property environment="env"/>
+
+        <!-- Check if DLC is set as an environment variable. -->
+        <fail message="$DLC path is not set">
+            <condition>
+                <and>
+                    <not><isset property="dlcHome"/></not>
+                    <not><isset property="env.DLC"/></not>
+                </and>
+            </condition>
+        </fail>
+        <property name="dlcHome" value="${env.DLC}"/>
+        <echo message="DLC Home: ${dlcHome}"/>
+
+        <!-- Determine current operating system in use. -->
+        <echo message="OS Arch: ${os.arch}"/>
+        <condition property="isWin64">
+            <os family="windows"/>
+        </condition>
+        <condition property="isUnix">
+            <os family="unix"/>
+        </condition>
+    </target>
+
+    <target name="init_unix" if="isUnix">
+        <property name="scriptSuffix" value="sh"/>
+    </target>
+
+    <target name="init_windows" if="isWin64">
+        <property name="scriptSuffix" value="bat"/>
+    </target>
+
+    <target name="create" depends="init_env,init_unix,init_windows">
+		<taskdef resource="PCT.properties" classpath="../../framework/server/tools/PCT.jar"/>
+        <PCTVersion/>
+
+        <!-- Prepare defaults for any properties that are not set. -->
+        <property name="path" value="C:\Databases"/>
+
+		<mkdir dir="${path}"/>
+		<mkdir dir="${path}/Sports2000"/>
+		<mkdir dir="${path}/WebState"/>
+
+		<PCTCreateBase dbName="Sports2000" destDir="${path}/Sports2000" dlcHome="${dlcHome}"
+		               blockSize="4" cpInternal="utf=8" largeFiles="true"
+					   structFile="${basedir}/Sports2000/Sports2000.st" schemaFile="${basedir}/Sports2000/Sports2000.df">
+		</PCTCreateBase>
+		<PCTLoadData srcDir="${basedir}/Sports2000/Data" dlcHome="${dlcHome}">
+		    <DBConnection dbName="Sports2000" dbDir="${path}/Sports2000" singleUser="true"/>
+		</PCTLoadData>
+
+		<PCTCreateBase dbName="WebState" destDir="${path}/WebState" dlcHome="${dlcHome}"
+					   blockSize="4" cpInternal="utf=8" largeFiles="true"
+					   structFile="${basedir}/WebState/WebState.st" schemaFile="${basedir}/WebState/WebState.df">
+		</PCTCreateBase>
+		<PCTLoadData srcDir="${basedir}/WebState/Data" dlcHome="${dlcHome}">
+		    <DBConnection dbName="WebState" dbDir="${path}/WebState" singleUser="true"/>
+		</PCTLoadData>
+	</target>
+
+</project>

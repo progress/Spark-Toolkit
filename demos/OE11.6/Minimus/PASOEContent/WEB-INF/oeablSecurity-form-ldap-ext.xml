@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!-- To disable security for APSV, import apsv-none.xml (and comment out import of apsv-basic.xml)-->
+    <!-- To enable security for APSV, import apsv-basic.xml (and comment out import of apsv-none.xml) -->
+    <b:import resource="apsv-none.xml"/> 
+    <!--<b:import resource="apsv-basic.xml"/> -->
+
+    <!-- To disable security for SOAP, import apsv-none.xml (and comment out import of soap-basic.xml)-->
+    <!-- To enable security for SOAP, import apsv-basic.xml (and comment out import of soap-none.xml) -->
+    <b:import resource="soap-none.xml"/>
+    <!--<b:import resource="soap-basic-local.xml"/> --> 
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/rest/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth" 
+          entry-point-ref="OEFormEntryPoint"
+          realm="OpenEdge" >
+
+        <!-- OpenEdge PRE AUTH Filter  -->
+        <custom-filter position="PRE_AUTH_FILTER" 
+                       ref="OEPreauthfilter" />
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter after="SESSION_MANAGEMENT_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+        <!-- HTTP REST/Mobile AppServer service -->
+        <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <!-- authentication model -->
+        <form-login login-page="/static/auth/login.jsp" 
+                    login-processing-url="/static/auth/j_spring_security_check"
+                    always-use-default-target="false"
+                    default-target-url="/" 
+                    authentication-failure-url="/static/auth/loginfail.html"
+                    authentication-success-handler-ref="OEAuthnSuccessHandler" 
+                    authentication-failure-handler-ref="OEAuthnFailureHandler"  />
+
+        <logout logout-url="/static/auth/j_spring_security_logout" 
+                success-handler-ref="OELogoutSuccessHandler"
+                invalidate-session="true" 
+                delete-cookies="JSESSIONID" />
+
+        <!--  
+        <remember-me />
+        -->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+        <!-- login session controls -->
+        <session-management session-fixation-protection="none" />
+
+    </http>
+    
+    <!-- This HTTP security space represents the WSPD and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/web/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth" 
+          entry-point-ref="OEFormEntryPoint"
+          realm="OpenEdge" >
+
+        <!-- OpenEdge PRE AUTH Filter  -->
+        <custom-filter position="PRE_AUTH_FILTER" 
+                       ref="OEPreauthfilter" />
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter after="SESSION_MANAGEMENT_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+        <intercept-url pattern="/web/**"  
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <!-- authentication model -->
+        <form-login login-page="/static/auth/login.jsp" 
+                    login-processing-url="/static/auth/j_spring_security_check"
+                    always-use-default-target="false"
+                    default-target-url="/" 
+                    authentication-failure-url="/static/auth/loginfail.html"
+                    authentication-success-handler-ref="OEAuthnSuccessHandler" 
+                    authentication-failure-handler-ref="OEAuthnFailureHandler"  />
+
+        <logout logout-url="/static/auth/j_spring_security_logout" 
+                success-handler-ref="OELogoutSuccessHandler"
+                invalidate-session="true" 
+                delete-cookies="JSESSIONID" />
+
+        <!--  
+        <remember-me />
+        -->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+        <!-- login session controls -->
+        <session-management session-fixation-protection="none" />
+
+    </http>
+
+    <!-- This HTTP security space represents the default public URI
+         space and controls the authentication/authorization process to its 
+         dynamic/static content.  
+         NB:  Define Role names in the <intercept-url> as UPPERCASE because 
+         Spring Security LDAP bean will always UPPERCASE the role name
+         it obtains from the LDAP directory service. 
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+
+    <http pattern="/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth" 
+          entry-point-ref="OEFormEntryPoint" 
+          realm="OpenEdge" >
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+
+        <!-- Restricted Mobile session class uses this page as part of its 
+             login() operation, protect it so it triggers user 
+             authentication -->
+        <intercept-url pattern="/static/home.html" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <!-- Mobile application restrictions section ends here -->
+
+        <!-- Restricted web application server-status page that gives
+             an admin/developer access to some web application information.
+             Must appear before the the wildcard access controls below -->
+        <intercept-url pattern="/static/ServerStatus.html" method="GET"
+                       access="hasAnyRole('ROLE_PSCUSER','ROLE_PSCADMIN','ROLE_PSCDEBUG')"/>
+
+        <intercept-url pattern="/server/**"  method="GET"
+                       access="hasAnyRole('ROLE_PSCADMIN','ROLE_PSCDEBUG')"/>
+
+        <!-- Open access resources -->
+
+        <intercept-url pattern="/*" method="GET" 
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/*" method="GET" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/error/*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/images/*" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/auth/*" 
+                       access="permitAll()" />
+
+        <!-- Restricted access HTTP static files -->
+        <intercept-url pattern="/static/**" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/static/home.html" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.htm*" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.gif" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.jpg" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.css" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.js" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.json" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.asp" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/**/*.inc" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUSER')"/>
+
+        <intercept-url pattern="/*" method="GET" 
+                       access="permitAll()"/>
+
+        <!-- Best practice - deny anything not explicitly granted. -->
+        <intercept-url pattern="/**" access="denyAll()"/>
+
+        <!-- authentication model -->
+        <form-login login-page="/static/auth/login.jsp" 
+            login-processing-url="/static/auth/j_spring_security_check"
+            always-use-default-target="false"
+            default-target-url="/" 
+            authentication-failure-url="/static/auth/loginfail.html"
+            authentication-success-handler-ref="OEAuthnSuccessHandler" 
+            authentication-failure-handler-ref="OEAuthnFailureHandler"  />
+
+        <logout logout-url="/static/auth/j_spring_security_logout" 
+            success-handler-ref="OELogoutSuccessHandler"
+            invalidate-session="true" 
+            delete-cookies="JSESSIONID" />
+
+        <!--  
+        <remember-me />
+        -->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+        <!-- login session controls -->
+        <session-management session-fixation-protection="none" />
+
+    </http>
+
+    <!-- The Pre-auth security filter for  SSO  -->
+    <b:bean id="OEPreauthfilter" 
+             class="com.progress.appserv.services.security.OERequestHeaderAuthenticationFilter">
+          <!-- USER-EDIT: To turn on SSO :
+               1. Set "enabled" property to true 
+               2. For single-domain supply the Domain Access Code as the value for "key" property 
+               3. For multi-domain supply the absolute path of a 'registryFile' generated using OpenEdge's  
+                  $DLC/bin/gendomreg.bat utility as "registryFile" property -->
+           <b:property name="enabled" value="false"/> 
+           <b:property name="key" value=""/>     
+           <!-- <b:property name="registryFile" value= "" /> -->
+           <b:property name="encoding" value="OECP"/> 
+           <b:property name="headername" value="X-OE-CLIENT-CONTEXT-ID"/>  
+           <b:property name="authenticationManager" ref="authenticationManager" />
+    </b:bean>
+    
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider ref="preauthAuthProvider" />
+    </authentication-manager>
+    
+    <b:bean id="preauthAuthProvider" 
+             class="com.progress.appserv.services.security.OEPreAuthenticatedAuthenticationProvider">  
+            <!--  
+            <b:property name="rolePrefix" value="ROLE_" />
+            <b:property name="enabledAttrName" value="ATTR_ENABLED" />
+            <b:property name="lockedAttrName" value="ATTR_LOCKED" />
+            <b:property name="expiredAttrName" value="ATTR_EXPIRED" /> 
+            -->
+    </b:bean>
+
+
+    <!-- The security filter that turns a Spring token into an OpenEdge
+         ClientPrincipal object -->
+    <b:bean id="OEClientPrincipalFilter"
+             class="com.progress.appserv.services.security.OEClientPrincipalFilter">
+             <!--
+             <b:property name="enablecp" value="false" />
+             <b:property name="domain" value="sample" />
+             <b:property name="roles" value="sample" />
+             <b:property name="authz" value="false" />
+             <b:property name="expires" value="600" />
+             <b:property name="accntinfo" value="true" />
+             <b:property name="properties" >
+                <b:map>
+                     <b:entry key="prop-1" value="string1"/>
+                     <b:entry key="prop-2" value="string2"/>
+                </b:map>
+             </b:property>
+             <b:property name="ccid" value="true" />
+             <b:property name="anonymous" value="true" />
+             <b:property name="appName" value="OE" />
+             -->
+    </b:bean>
+
+    <!-- The security filter that implements the CORS standard for controling
+         cross site resource access by http clients. -->
+    <b:bean id="OECORSFilter"
+             class="com.progress.appserv.services.security.OECORSFilter" >
+			 <!-- These headers are used to support OE SSO. Enable them by default -->
+			 <b:property name="responseHeaders" value="Access-Control-Allow-Origin,Access-Control-Allow-Headers,X-CLIENT-CONTEXT-ID,X-OE-CLIENT-CONTEXT-ID" />
+             <!-- Examples:
+             <b:property name="allowAll" value="false" />
+             <b:property name="allowDomains" value="*" />
+             <b:property name="allowSubdomains" value="false" />
+             <b:property name="allowMethods" value="" />
+             <b:property name="messageHeaders" value="" />
+             <b:property name="responseHeaders" value="" />
+             <b:property name="supportCredentials" value="true" />
+             <b:property name="maxAge" value="-1" />
+             -->
+    </b:bean>
+
+    <!-- Custom form login handlers for JSON requests -->
+    <b:bean id="OEAuthnSuccessHandler" 
+            class="com.progress.appserv.services.security.OEAuthnSuccessHandler">
+    </b:bean>
+
+    <b:bean id="OEAuthnFailureHandler" 
+            class="com.progress.appserv.services.security.OEAuthnFailHandler">
+    </b:bean>
+
+    <b:bean id="OEAccessDeniedHandler" 
+            class="com.progress.appserv.services.security.OEAccessDeniedHandler">
+    </b:bean>
+
+    <b:bean id="OELogoutSuccessHandler" 
+            class="com.progress.appserv.services.security.OELogoutSuccessHandler">
+    </b:bean>
+
+    <b:bean id="OEFormEntryPoint"
+            class="com.progress.appserv.services.security.OEFormAuthnEntryPointHandler">
+            <b:constructor-arg value="/static/auth/login.jsp" />
+    </b:bean>
+
+    <!-- The LDAP server connection context: who to log into LDAP as to perform a search for a
+         simple user account name, starting at the base DN 
+    -->
+    <b:bean id="ldapContextSource"
+        class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+
+        <b:constructor-arg value="ldap://enter_hostname:389/root_dn_here"> </b:constructor-arg>
+
+        <b:property name="base" value="" />
+
+        <!-- The LDAP user account name to login to the directory service with
+             in order to search for the user account being authenticated -->
+        <b:property name="userDn" value="uid=admin,ou=system" />
+
+        <!-- The LDAP user account name's password to login to the directory service with. -->
+        <b:property name="password" value="admin" />
+    </b:bean>
+
+    <!-- The LDAP user acount search operation's parameters used by the above ldapContextSource
+         that starts at a base DN, searches the entire subtree, and tries to find a user
+         object who's attribute matches the search filter
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch"
+        id="ldapSearchBean">
+
+        <!-- user search base for finding user account DN for authentication -->
+        <b:constructor-arg value="dc=example,dc=com" />
+
+
+        <!-- LDAP search query to match the authenticated user-ID input with a
+             LDAP user account object's attribute value -->
+        <b:constructor-arg value="(uid={0})" />
+        
+        <b:constructor-arg ref="ldapContextSource" />
+
+        <!-- Search the search base's object and all sub trees -->
+        <b:property name="searchSubtree" value="true" />
+    </b:bean>
+
+    <!-- How to "bind" to an LDAP server, where "bind" is equivalent to logging in 
+         You either bind using a DN pattern or perform a user account search
+         using the above ldapSearchBean 
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.authentication.BindAuthenticator"
+        id="ldapBindAuthenticator">
+        <b:constructor-arg ref="ldapContextSource" />
+        <b:property name="userSearch" ref="ldapSearchBean" />
+        <!-- Alternate to searching for the user's DN by using a fixed DN template.  This
+             can only be used when the user accounts are all contained within a single
+             branch of the directory tree.
+
+        <b:property name="userDnPatterns">
+           <b:list><b:value>"${sts.ldap.bind.userDnPatterns}"</b:value></b:list>
+        </b:property>
+        -->
+    </b:bean>
+
+    <!-- This describes which LDAP  user account role memberships (aks. Spring authoriteis) to return 
+         into the security token to be used by the application's authorization processes.  The authorities
+         are found by searching the LDAP directory for objects whose attributes contain the user 
+         accounts fully qualified DN as a member
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator"
+        id="ldapAuthoritiesPopulator">
+        <b:constructor-arg ref="ldapContextSource" />
+
+        <!-- LDAP connection url -->
+        <b:constructor-arg value="dc=example,dc=com" />
+
+        <!-- Where to begin searching for user group memberships in the directory service -->
+        <b:property name="groupSearchFilter" value="(member={0})" />
+
+        <!-- Map the LDAP group object attribute name to a Spring ROLE name -->
+        <b:property name="groupRoleAttribute" value="cn" />
+        
+        <!-- How deep in the directory tree to search to user group memberships -->
+        <b:property name="searchSubtree" value="true" />
+
+        <!-- Ignore Active Directory mapping objects -->
+        <b:property name="ignorePartialResultException" value="true" />
+
+        <!-- Assign a Spring Role name prefix ; default is ROLE_ -->
+        <b:property name="rolePrefix" value="ROLE_" />
+        
+        <!-- Convert LDAP [group] ROLE names to upper case ; default is true -->
+        <b:property name="convertToUpperCase" value="true" />
+    </b:bean>
+
+    <!-- This describes how to map LDAP user account (object) attributes into the security token
+     -->
+    <b:bean
+        class="org.springframework.security.ldap.userdetails.InetOrgPersonContextMapper"
+        id="ldapUserDetailsContextMapper">
+    </b:bean>
+
+    <!-- The LDAP authentication provider plug-in, with its references to the beans that
+         implement binding to the service, populating roles, and how to make a connection.
+    -->
+    <b:bean id="ldapAuthProvider"
+        class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+
+        <!-- LDAP login bean -->
+        <b:constructor-arg ref="ldapBindAuthenticator" />
+
+        <!-- LDAP user account granted [ROLE] group loader bean -->
+        <b:constructor-arg ref="ldapAuthoritiesPopulator" />
+
+        <b:property name="useAuthenticationRequestCredentials" value="false" />
+
+        <!-- LDAP user account information loader bean -->
+        <b:property name="userDetailsContextMapper" ref="ldapUserDetailsContextMapper" />
+
+    </b:bean>
+
+    <!-- Authentication manager reserved for PUBLIC anonymous authn 
+         to the static and dynaic application content.
+         The parameters for the <ldap-authentication-provider> element
+         is dependent on the design and implementation of the
+         Directory Service.  Consult with the administrator for help
+         with defining the correct search filters and object attrubutes
+         to use.
+         WARNING: The ldap authentication provider upper cases all role
+         names found for the authenticated user in the directory service.
+         This affects setting the role names in the above <intercept-url>
+         elements.  Example: ldap name "OEUsers"  Spring role name "ROLE_OEUSERS"
+     -->
+    <authentication-manager id="oeablApplicationAuth" >
+        <authentication-provider ref="ldapAuthProvider" />
+    </authentication-manager>
+	
+</b:beans>

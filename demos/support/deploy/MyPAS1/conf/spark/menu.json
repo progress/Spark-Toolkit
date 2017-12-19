@@ -1,0 +1,53 @@
+[
+  {
+    "text": "Dashboard",
+    "url": "#\/"
+  },
+  {
+    "text": "Browse",
+    "items": [
+      {
+        "text": "Employee Read-Only Grid",
+        "url": "#\/EmployeeGridSPA"
+      },
+      {
+        "text": "Webdata Read-Only Grid",
+        "url": "#\/WebdataGridSPA"
+      }
+    ]
+  },
+  {
+    "text": "Maintenance",
+    "items": [
+      {
+        "text": "Order Grid & Form",
+        "url": "#\/OrderGridFormSPA"
+      },
+      {
+        "text": "Order Updateable Grid",
+        "url": "#\/OrderUpdGridSPA"
+      },
+      {
+        "text": "Customer Update Grid",
+        "url": "#\/CustomerUpdGridSPA"
+      },
+      {
+        "text": "Customer Order Grid Over Grid",
+        "url": "#\/CustomerOrderGridOverGridSPA"
+      },
+      {
+        "text": "Order\/OrderLine Grid Inside Grid",
+        "url": "#\/OrderOrderGridInGridSPA"
+      }
+    ]
+  },
+  {
+    "text": "Transaction",
+    "items": [
+    ]
+  },
+  {
+    "text": "Logout",
+    "url": "#\/logout"
+  }
+]

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prgs:model xmlns:prgs="http://www.progress.com/caf/camel/component/prgrs" id="resourceModel">
+  <prgs:resource name="wizard_ParseInclude" path="/wizard/parse">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..ParseInclude" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetDatabases" path="/wizard/databases">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetDatabases" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetTooltips" path="/wizard/tooltips">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetTooltips" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetCSS" path="/wizard/css">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetCSS" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetTemplates" path="/wizard/templates">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetTemplates" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_Generate" path="/wizard/generate">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..Generate" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetFields" path="/wizard/fields">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetFields" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetMetadata" path="/wizard/metadata">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetMetadata" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetIncludes" path="/wizard/includes">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetIncludes" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+  <prgs:resource name="wizard_GetTables" path="/wizard/tables">
+    <prgs:operation consumes="application/json" idls="WebWizardPAS/.services/PASOEContent/WEB-INF/openedge/Generator/Business/Wizard.pidl::com.progress.openedge.pdt.bpmbindings" name="Generator.Business.Wizard..GetTables" path="" produces="application/json" verb="PUT"/>
+  </prgs:resource>
+</prgs:model>

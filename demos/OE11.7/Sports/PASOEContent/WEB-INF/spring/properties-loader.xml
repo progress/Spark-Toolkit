@@ -1,0 +1,36 @@
+<!-- Import this file is oeablSecurity-*.xml for enable property placeholder capability -->
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+	<!-- Sequence of external property sources that can be referenced via ${xxx} variables
+         in the configuration files.
+         The precedence order is:
+            1) local properties definitions (via the Spring bean reference "localProperties")
+            2) oeablSecurity.properties in oeabl web application's WEB-INF folder
+            3) oeablSecurity.properties in the PASOE instance's ablapps/<abl-app-name>/conf/ folder
+            4) oeablSecurity.properties in the PASOE instance's /conf folder
+            5) oeablSecurity.properties in DLC/servers/pasoe template's /conf folder
+
+         Note: properties may be recursive in that one property declaration's value
+               may be another property variable
+    -->
+	<b:bean id="propertyConfigurator"
+            class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+      <b:property name="LocalOverride" value="true" />
+      <b:property name="properties" ref="localProperties" />
+      <b:property name="ignoreResourceNotFound" value="true" />
+      <b:property name="locations">
+               <b:list>
+                    <b:value>file:${catalina.home}/conf/oeablSecurity.properties</b:value>
+                    <b:value>file:${catalina.base}/conf/oeablSecurity.properties</b:value>
+                    <b:value>file:${catalina.base}/ablapps/${oeabl.ablapp.name}/conf/oeablSecurity.properties</b:value>
+                    <b:value>file:${catalina.base}/webapps/${oeabl.webapp.name}/WEB-INF/oeablSecurity.properties</b:value>
+               </b:list>
+      </b:property>
+    </b:bean>
+</b:beans>

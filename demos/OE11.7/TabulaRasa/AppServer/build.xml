@@ -1,0 +1,169 @@
+<project name="ServerCreation" basedir="." default="usage">
+
+    <target name="usage" description="Usage Instructions">
+        <echo message="Usage Instructions:"/>
+        <echo message="ant create - Build a new PAS instance with PMFO"/>
+        <echo message="    -Dhttp=[HTTP_PORT] = port for HTTP connections (Default: 8880)"/>
+        <echo message="    -Dhttps=[HTTPS_PORT] = port for HTTPS connections (Default: 8881)"/>
+        <echo message="    -Dajp=[AJP13_PORT] = port for AJP13 connections (Default: 8882)"/>
+        <echo message="    -Dshut=[SHUTDOWN_PORT] = Tomcat shutdown port (Default: 8883)"/>
+        <echo message="    -Dalias=[INSTANCE_NAME] = new instance name (Default: MyPAS1)"/>
+        <echo message="    -Dpath=[INSTANCE_PATH] = new instance path (Default: C:/PASOE)"/>
+        <echo message="    -Dablapp=[INSTANCE_NAME] = default ABL App name (Default: {alias})"/>
+        <echo message="ant upgrade - Upgrade a PAS isntance with PMFO"/>
+        <echo message="    -Dalias=[INSTANCE_NAME] = new instance name (Default: MyPAS1)"/>
+        <echo message="    -Dpath=[INSTANCE_PATH] = new instance path (Default: C:/PASOE)"/>
+        <echo message="ant enable_oerealm - Enable use of OERealm by copying config files"/>
+        <echo message="    -Dalias=[INSTANCE_NAME] = new instance name (Default: MyPAS1)"/>
+    </target>
+
+    <target name="create" depends="_init_env,_init_unix,_init_windows">
+        <!-- Prepare defaults for any properties that are not set. -->
+        <property name="http" value="8880"/>
+        <property name="https" value="8881"/>
+        <property name="ajp" value="8882"/>
+        <property name="shut" value="8883"/>
+
+        <!-- Begin by creating an instance. -->
+        <antcall target="_create_instance"/>
+    </target>
+
+    <target name="upgrade" depends="_init_env,_init_unix,_init_windows">
+        <!-- Tailor the instance using the deployment directory. -->
+        <antcall target="_tailor_instance"/>
+
+        <!-- Merge any available properties to the instance. -->
+        <antcall target="_merge_properties"/>
+    </target>
+
+    <target name="enable_oerealm" depends="_init_env,_dir_check" if="pas.exists">
+        <!-- Copy files for use with OERealm security. -->
+        <mkdir dir="${pas.path}/conf/spark"/>
+        <copy file="${deploy}/Realm/SparkRealm.cp" toDir="${pas.path}/common/lib"/>
+        <copy file="${deploy}/Realm/SparkRealm.json" toDir="${pas.path}/conf/spark"/>
+    </target>
+
+    <target name="_init_env">
+        <property environment="env"/>
+
+        <!-- Check if DLC is set as an environment variable. -->
+        <fail message="$DLC path is not set">
+            <condition>
+                <and>
+                    <not><isset property="dlcHome"/></not>
+                    <not><isset property="env.DLC"/></not>
+                </and>
+            </condition>
+        </fail>
+        <property name="dlcHome" value="${env.DLC}"/>
+        <property name="dlc.bin" value="${dlcHome}/bin"/>
+        <echo message="DLC Home: ${dlcHome}"/>
+
+        <!-- Define standard variables for this environment. -->
+        <property name="alias" value="MyPAS1"/>
+        <property name="path" value="C:/PASOE"/>
+        <property name="pas.root" value="${path}"/>
+        <property name="pas.path" value="${pas.root}/${alias}"/>
+        <property name="pas.bin" value="${pas.path}/bin"/>
+        <property name="pas.conf.pmfo" value="spark"/>
+        <property name="ablapp" value="${alias}"/>
+        <property name="deploy" value="${basedir}/../Deploy/Conf"/>
+
+        <!-- Determine current operating system in use. -->
+        <echo message="OS Arch: ${os.arch}"/>
+        <condition property="isWin64">
+            <os family="windows"/>
+        </condition>
+        <condition property="isUnix">
+            <os family="unix"/>
+        </condition>
+    </target>
+
+    <target name="_init_unix" if="isUnix">
+        <property name="scriptSuffix" value=".sh"/>
+    </target>
+
+    <target name="_init_windows" if="isWin64">
+        <property name="scriptSuffix" value=".bat"/>
+    </target>
+
+    <target name="_create_instance">
+        <!-- Create the PAS instance using the values (or defaults) provided. -->
+        <echo message="Creating PAS instance '${alias}' at ${pas.path} with ports ${http}/${https}/${ajp}/${shut}..."/>
+        <exec dir="${dlc.bin}" executable="pasman${scriptSuffix}" output="create_${alias}.txt" failonerror="true">
+            <arg value="create"/>
+            <arg value="-v"/>
+            <arg value="-f"/>
+            <arg line="-p ${http}"/>
+            <arg line="-P ${https}"/>
+            <arg line="-j ${ajp}"/>
+            <arg line="-s ${shut}"/>
+            <arg line="-N ${alias}"/>
+            <arg value="${pas.path}"/>
+            <arg value="${ablapp}"/>
+        </exec>
+        <echo message="See file create_${alias}.txt for details of PAS server creation."/>
+
+        <!-- Tailor the instance using the deployment directory. -->
+        <antcall target="_tailor_instance"/>
+
+        <!-- Merge any available properties to the instance. -->
+        <antcall target="_merge_properties"/>
+    </target>
+
+    <target name="_dir_check">
+        <!-- Check if deployment directory exists. -->
+        <condition property="deploy.exists">
+            <available file="${basedir}/../Deploy" type="dir"/>
+        </condition>
+
+        <!-- Check if properties file exists. -->
+        <condition property="merge.exists">
+            <available file="${basedir}/merge.openedge.properties" type="file"/>
+        </condition>
+
+        <!-- Check if properties file exists. -->
+        <condition property="pas.exists">
+            <available file="${pas.path}/conf/openedge.properties" type="file"/>
+        </condition>
+    </target>
+
+    <target name="_tailor_instance" depends="_dir_check" if="deploy.exists">
+        <!-- Copy the PL/PF files to the new PAS instance. -->
+        <copy toDir="${pas.path}/openedge">
+            <fileset dir="${basedir}">
+                <include name="*.pl"/>
+                <include name="*.pf"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy initial configuration files to the PAS instance. -->
+        <mkdir dir="${pas.path}/conf/${pas.conf.pmfo}"/>
+        <mkdir dir="${pas.path}/conf/${pas.conf.pmfo}/signatures"/>
+        <copy toDir="${pas.path}/conf/${pas.conf.pmfo}">
+            <fileset dir="${deploy}">
+                <include name="*.cp"/>
+                <include name="*.json"/>
+            </fileset>
+        </copy>
+
+        <!-- Enable OERealm by providing necessary configs. -->
+        <antcall target="enable_oerealm"/>
+    </target>
+
+    <target name="_merge_properties" depends="_dir_check" if="merge.exists">
+        <!-- Make a copy of the default merge file, named for the instance. -->
+        <copy file="${basedir}/merge.openedge.properties" tofile="${basedir}/merge.openedge.properties.${alias}">
+            <filterset>
+                <filter token="APPNAME" value="${alias}"/>
+            </filterset>
+        </copy>
+
+        <!-- Merge the intitial properties for the instance. -->
+        <echo message="Merging initial properties from 'merge.openedge.properties.${alias}'."/>
+        <exec executable="${pas.path}/bin/oeprop${scriptSuffix}" output="merge_${alias}.txt" failonerror="true">
+            <arg line="-f ${basedir}/merge.openedge.properties.${alias}"/>
+        </exec>
+    </target>
+
+</project>

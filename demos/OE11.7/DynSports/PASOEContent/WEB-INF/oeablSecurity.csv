@@ -1,0 +1,46 @@
+# "url-pattern","<method>","<spring-access-expression>"
+
+############## Intercept-url definitions for the APSV transport URIs ###############
+"/apsv/**","HEAD","permitAll()"
+"/apsv/**","GET","permitAll()"
+"/apsv/**","POST","permitAll()"
+
+############## Intercept-url definitions for the REST transport URIs ###############
+"/rest/_oeping","*","permitAll()"
+"/rest/**","*","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the SOAP transport URIs ###############
+"/soap/wsdl/**","GET","hasAnyRole('ROLE_PSCUser')"
+"/soap/**","POST","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the WEB transport URIs ###############
+"/web/pdo","GET","permitAll()"
+"/web/*/pdo","GET","permitAll()"
+"/web/pdo/*","GET","permitAll()"
+"/web/*/pdo/*","GET","permitAll()"
+"/web/pdo/common/tfa/*","PUT","permitAll()"
+"/web/*/pdo/common/tfa/*","PUT","permitAll()"
+"/web/pdo/common/user/*","*","permitAll()"
+"/web/*/pdo/common/user/*","*","permitAll()"
+"/web/pdo/system/access/*","*","hasAnyRole('ROLE_WebAdmin')"
+"/web/pdo/tests/**","*","permitAll()"
+"/web/*/pdo/tests/**","*","permitAll()"
+"/web/sample/**","*","permitAll()"
+"/web/status/all","GET","hasAnyRole('ROLE_PSCUser','ROLE_ANONYMOUS')"
+"/web/status/server","GET","hasAnyRole('ROLE_PSCUser','ROLE_ANONYMOUS')"
+"/web/status/login","GET","hasAnyRole('ROLE_PSCUser')"
+"/web/test/**","*","permitAll()"
+"/web/**","*","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the default URI space #################
+"/static/home.html","GET","hasAnyRole('ROLE_PSCUser')"
+"/static/auth/*","*","permitAll()"
+"/static/app.html","*","hasAnyRole('ROLE_PSCUser')"
+"/static/app2.html","*","hasAnyRole('ROLE_PSCUser')"
+"/static/app/views/**","*","hasAnyRole('ROLE_PSCUser')"
+"/static/**","GET","permitAll()"
+"/*","GET","permitAll()"
+
+# Best practice - deny anything not explicitly granted
+"/**","*","denyAll()"
+

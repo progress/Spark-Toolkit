@@ -1,0 +1,404 @@
+{"services": {"personnel": {
+    "version": "1.0.0",
+    "operations": {
+        "\/": {"GET": {
+            "contentType": "application\/json",
+            "statusCode": 200,
+            "file": "$CATALINA_BASE\/webapps\/$oepas-webapp\/static\/personnel.json"
+        }},
+        "\/employee": {
+            "PUT": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.EmployeeBE",
+                    "function": "UpdateEmployee",
+                    "arg": [{
+                        "ablName": "dsEmployee",
+                        "ablType": "DATASET",
+                        "ioMode": "INPUT-OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }]
+                }
+            },
+            "DELETE": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.EmployeeBE",
+                    "function": "DeleteEmployee",
+                    "arg": [{
+                        "ablName": "dsEmployee",
+                        "ablType": "DATASET",
+                        "ioMode": "INPUT-OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }]
+                }
+            },
+            "POST": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.EmployeeBE",
+                    "function": "CreateEmployee",
+                    "arg": [{
+                        "ablName": "dsEmployee",
+                        "ablType": "DATASET",
+                        "ioMode": "INPUT-OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }]
+                }
+            },
+            "GET": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.EmployeeBE",
+                    "function": "ReadEmployee",
+                    "arg": [
+                        {
+                            "ablName": "filter",
+                            "ablType": "CHARACTER",
+                            "ioMode": "INPUT",
+                            "msgElem": {
+                                "type": "QUERY",
+                                "name": "filter"
+                            }
+                        },
+                        {
+                            "ablName": "dsEmployee",
+                            "ablType": "DATASET",
+                            "ioMode": "OUTPUT",
+                            "msgElem": {
+                                "type": "BODY",
+                                "name": null
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "\/employee\/count": {"GET": {
+            "contentType": "application\/json",
+            "options": {"writeBI": false},
+            "entity": {
+                "name": "Business.Personnel.EmployeeBE",
+                "function": "CountRecs",
+                "arg": [
+                    {
+                        "ablName": "filter",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "QUERY",
+                            "name": "filter"
+                        }
+                    },
+                    {
+                        "ablName": "numRecs",
+                        "ablType": "INTEGER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/employee\/submit": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Personnel.EmployeeBE",
+                "function": "SubmitEmployee",
+                "arg": [{
+                    "ablName": "dsEmployee",
+                    "ablType": "DATASET",
+                    "ioMode": "INPUT-OUTPUT",
+                    "msgElem": {
+                        "type": "BODY",
+                        "name": null
+                    }
+                }]
+            }
+        }},
+        "\/family": {
+            "POST": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.FamilyBE",
+                    "function": "CreateFamily",
+                    "arg": [{
+                        "ablName": "dsFamily",
+                        "ablType": "DATASET",
+                        "ioMode": "INPUT-OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }]
+                }
+            },
+            "GET": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.FamilyBE",
+                    "function": "ReadFamily",
+                    "arg": [
+                        {
+                            "ablName": "filter",
+                            "ablType": "CHARACTER",
+                            "ioMode": "INPUT",
+                            "msgElem": {
+                                "type": "QUERY",
+                                "name": "filter"
+                            }
+                        },
+                        {
+                            "ablName": "dsFamily",
+                            "ablType": "DATASET",
+                            "ioMode": "OUTPUT",
+                            "msgElem": {
+                                "type": "BODY",
+                                "name": null
+                            }
+                        }
+                    ]
+                }
+            },
+            "PUT": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.FamilyBE",
+                    "function": "UpdateFamily",
+                    "arg": [{
+                        "ablName": "dsFamily",
+                        "ablType": "DATASET",
+                        "ioMode": "INPUT-OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }]
+                }
+            },
+            "DELETE": {
+                "contentType": "application\/json",
+                "options": {"writeBI": true},
+                "entity": {
+                    "name": "Business.Personnel.FamilyBE",
+                    "function": "DeleteFamily",
+                    "arg": [{
+                        "ablName": "dsFamily",
+                        "ablType": "DATASET",
+                        "ioMode": "INPUT-OUTPUT",
+                        "msgElem": {
+                            "type": "BODY",
+                            "name": null
+                        }
+                    }]
+                }
+            }
+        },
+        "\/family\/submit": {"PUT": {
+            "contentType": "application\/json",
+            "options": {"writeBI": true},
+            "entity": {
+                "name": "Business.Personnel.FamilyBE",
+                "function": "SubmitFamily",
+                "arg": [{
+                    "ablName": "dsFamily",
+                    "ablType": "DATASET",
+                    "ioMode": "INPUT-OUTPUT",
+                    "msgElem": {
+                        "type": "BODY",
+                        "name": null
+                    }
+                }]
+            }
+        }}
+    },
+    "schemas": {
+        "dsEmployee": {"ttEmployee": {
+            "trackChanges": true,
+            "indexes": {
+                "pkSeq": {
+                    "primary": true,
+                    "unique": true,
+                    "word": false,
+                    "fields": ["seq"]
+                },
+                "idxDeptCode": {
+                    "primary": false,
+                    "unique": false,
+                    "word": false,
+                    "fields": ["DeptCode"]
+                },
+                "idxEmpNo": {
+                    "primary": false,
+                    "unique": true,
+                    "word": false,
+                    "fields": ["EmpNum"]
+                },
+                "idxName": {
+                    "primary": false,
+                    "unique": true,
+                    "word": false,
+                    "fields": [
+                        "LastName",
+                        "FirstName"
+                    ]
+                }
+            },
+            "fields": [
+                {
+                    "name": "id",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "seq",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "EmpNum",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "LastName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "FirstName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Address",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Address2",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "City",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "State",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "PostalCode",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "HomePhone",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "WorkPhone",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "DeptCode",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Position",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Birthdate",
+                    "ablType": "DATE",
+                    "extent": null
+                },
+                {
+                    "name": "StartDate",
+                    "ablType": "DATE",
+                    "extent": null
+                },
+                {
+                    "name": "VacationDaysLeft",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "SickDaysLeft",
+                    "ablType": "INTEGER",
+                    "extent": null
+                }
+            ]
+        }},
+        "dsFamily": {"ttFamily": {
+            "trackChanges": true,
+            "indexes": {"EmpNoRelativeName": {
+                "primary": true,
+                "unique": true,
+                "word": false,
+                "fields": [
+                    "EmpNum",
+                    "RelativeName"
+                ]
+            }},
+            "fields": [
+                {
+                    "name": "EmpNum",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "RelativeName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Relation",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "Birthdate",
+                    "ablType": "DATE",
+                    "extent": null
+                },
+                {
+                    "name": "CoveredOnBenefits",
+                    "ablType": "LOGICAL",
+                    "extent": null
+                },
+                {
+                    "name": "BenefitDate",
+                    "ablType": "DATE",
+                    "extent": null
+                }
+            ]
+        }}
+    }
+}}}

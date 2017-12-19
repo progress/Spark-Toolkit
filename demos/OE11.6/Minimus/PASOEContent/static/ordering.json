@@ -1,0 +1,779 @@
+{
+    "version": "1.4",
+    "lastModified": "Mon Nov 27 16:25:21 EST 2017",
+    "services": [{
+        "name": "ordering",
+        "address": "\/web\/pdo\/ordering",
+        "useRequest": true,
+        "resources": [
+            {
+                "name": "customer",
+                "path": "\/customer",
+                "autoSave": false,
+                "schema": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {"dsCustomer": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {"ttCustomer": {
+                            "type": "array",
+                            "primaryKey": ["CustNum"],
+                            "foreignKeys": [{
+                                "fields": ["SalesRep"],
+                                "parent": {
+                                    "name": "salesrep.ttSalesrep",
+                                    "fields": ["SalesRep"]
+                                }
+                            }],
+                            "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "_errorString": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "id",
+                                        "semanticType": "Internal"
+                                    },
+                                    "seq": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "seq",
+                                        "semanticType": "Internal"
+                                    },
+                                    "CustNum": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Cust Num"
+                                    },
+                                    "Country": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "USA",
+                                        "title": "Country"
+                                    },
+                                    "Name": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Name",
+                                        "editable": "false"
+                                    },
+                                    "Address": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Address"
+                                    },
+                                    "Address2": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Address2"
+                                    },
+                                    "City": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "City"
+                                    },
+                                    "State": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "State"
+                                    },
+                                    "PostalCode": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Postal Code"
+                                    },
+                                    "Contact": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Contact"
+                                    },
+                                    "Phone": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Phone",
+                                        "semanticType": "PhoneNumber"
+                                    },
+                                    "SalesRep": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Sales Rep"
+                                    },
+                                    "CreditLimit": {
+                                        "type": "number",
+                                        "ablType": "DECIMAL",
+                                        "default": 1500,
+                                        "title": "Credit Limit",
+                                        "semanticType": "Currency"
+                                    },
+                                    "Balance": {
+                                        "type": "number",
+                                        "ablType": "DECIMAL",
+                                        "default": 0,
+                                        "title": "Balance",
+                                        "semanticType": "Currency"
+                                    },
+                                    "Terms": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "Net30",
+                                        "title": "Terms"
+                                    },
+                                    "Discount": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Discount"
+                                    },
+                                    "Comments": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Comments"
+                                    },
+                                    "Fax": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Fax"
+                                    },
+                                    "EmailAddress": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Email"
+                                    }
+                                }
+                            }
+                        }}
+                    }}
+                },
+                "operations": [
+                    {
+                        "path": "",
+                        "useBeforeImage": true,
+                        "type": "update",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsCustomer",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsCustomer",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "error",
+                        "path": "\/error",
+                        "useBeforeImage": false,
+                        "type": "invoke",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "errorCode",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "errorMessage",
+                                "type": "REQUEST_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "\/count?filter={filter}",
+                        "useBeforeImage": false,
+                        "type": "count",
+                        "verb": "get",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "numRecs",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "submit",
+                        "path": "\/submit",
+                        "useBeforeImage": true,
+                        "type": "submit",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsCustomer",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsCustomer",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": true,
+                        "type": "create",
+                        "verb": "post",
+                        "params": [
+                            {
+                                "name": "dsCustomer",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsCustomer",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": true,
+                        "type": "delete",
+                        "verb": "delete",
+                        "params": [
+                            {
+                                "name": "dsCustomer",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsCustomer",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "?filter={filter}",
+                        "useBeforeImage": true,
+                        "type": "read",
+                        "verb": "get",
+                        "mappingType": "AFP",
+                        "capabilities": "filter,top,skip,id,sort,orderBy",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "dsCustomer",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "salesrep",
+                "path": "\/salesrep",
+                "autoSave": false,
+                "schema": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {"dsSalesrep": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {"ttSalesrep": {
+                            "type": "array",
+                            "primaryKey": ["SalesRep"],
+                            "items": {
+                                "additionalProperties": false,
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "_errorString": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "id": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "id",
+                                        "semanticType": "Internal"
+                                    },
+                                    "seq": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "seq",
+                                        "semanticType": "Internal"
+                                    },
+                                    "SalesRep": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Sales Rep"
+                                    },
+                                    "RepName": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Rep Name"
+                                    },
+                                    "Region": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "",
+                                        "title": "Region"
+                                    },
+                                    "MonthQuota": {
+                                        "type": "array",
+                                        "maxItems": 12,
+                                        "items": {"type": "integer"},
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "semanticType": "Currency"
+                                    }
+                                }
+                            }
+                        }}
+                    }}
+                },
+                "operations": [
+                    {
+                        "name": "submit",
+                        "path": "\/submit",
+                        "useBeforeImage": false,
+                        "type": "submit",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsSalesrep",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsSalesrep",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": false,
+                        "type": "delete",
+                        "verb": "delete",
+                        "params": [
+                            {
+                                "name": "dsSalesrep",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsSalesrep",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "\/count?filter={filter}",
+                        "useBeforeImage": false,
+                        "type": "count",
+                        "verb": "get",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "numRecs",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": false,
+                        "type": "create",
+                        "verb": "post",
+                        "params": [
+                            {
+                                "name": "dsSalesrep",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsSalesrep",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "?filter={filter}",
+                        "useBeforeImage": false,
+                        "type": "read",
+                        "verb": "get",
+                        "mappingType": "JFP",
+                        "capabilities": "ablFilter,top,skip,id,orderBy",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "dsSalesrep",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": false,
+                        "type": "update",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsSalesrep",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsSalesrep",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "order",
+                "path": "\/order",
+                "autoSave": false,
+                "schema": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {"dsOrder": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "ttOrder": {
+                                "type": "array",
+                                "primaryKey": ["Ordernum"],
+                                "items": {
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "semanticType": "Internal"
+                                        },
+                                        "_errorString": {
+                                            "type": "string",
+                                            "semanticType": "Internal"
+                                        },
+                                        "id": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "",
+                                            "title": "id",
+                                            "semanticType": "Internal"
+                                        },
+                                        "seq": {
+                                            "type": "integer",
+                                            "ablType": "INTEGER",
+                                            "default": 0,
+                                            "title": "seq",
+                                            "semanticType": "Internal"
+                                        },
+                                        "Ordernum": {
+                                            "type": "integer",
+                                            "ablType": "INTEGER",
+                                            "default": 0,
+                                            "title": "Order Num"
+                                        },
+                                        "CustNum": {
+                                            "type": "integer",
+                                            "ablType": "INTEGER",
+                                            "default": 0,
+                                            "title": "Cust Num"
+                                        },
+                                        "OrderDate": {
+                                            "type": "string",
+                                            "ablType": "DATE",
+                                            "default": "today",
+                                            "title": "Ordered",
+                                            "format": "date"
+                                        },
+                                        "ShipDate": {
+                                            "type": "string",
+                                            "ablType": "DATE",
+                                            "default": null,
+                                            "title": "Shipped",
+                                            "format": "date"
+                                        },
+                                        "PromiseDate": {
+                                            "type": "string",
+                                            "ablType": "DATE",
+                                            "default": null,
+                                            "title": "Promised",
+                                            "format": "date"
+                                        },
+                                        "Carrier": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "",
+                                            "title": "Carrier"
+                                        },
+                                        "Instructions": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "",
+                                            "title": "Instructions"
+                                        },
+                                        "PO": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "",
+                                            "title": "PO"
+                                        },
+                                        "Terms": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "Net30",
+                                            "title": "Terms"
+                                        },
+                                        "SalesRep": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "",
+                                            "title": "Sales Rep"
+                                        },
+                                        "BillToID": {
+                                            "type": "integer",
+                                            "ablType": "INTEGER",
+                                            "default": 0,
+                                            "title": "Bill To ID"
+                                        },
+                                        "ShipToID": {
+                                            "type": "integer",
+                                            "ablType": "INTEGER",
+                                            "default": 0,
+                                            "title": "Ship To ID"
+                                        },
+                                        "OrderStatus": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "Ordered",
+                                            "title": "Order Status"
+                                        },
+                                        "WarehouseNum": {
+                                            "type": "integer",
+                                            "ablType": "INTEGER",
+                                            "default": 0,
+                                            "title": "Warehouse Num"
+                                        },
+                                        "Creditcard": {
+                                            "type": "string",
+                                            "ablType": "CHARACTER",
+                                            "default": "Visa",
+                                            "title": "Credit Card"
+                                        },
+                                        "ttOrderLine": {
+                                            "type": "array",
+                                            "items": {"$ref": "#\/properties\/dsOrder\/properties\/ttOrderLine"}
+                                        }
+                                    }
+                                }
+                            },
+                            "ttOrderLine": {
+                                "type": "object",
+                                "primaryKey": ["Ordernum"],
+                                "additionalProperties": false,
+                                "properties": {
+                                    "_id": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "_errorString": {
+                                        "type": "string",
+                                        "semanticType": "Internal"
+                                    },
+                                    "Ordernum": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Order Num"
+                                    },
+                                    "Linenum": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Line Num"
+                                    },
+                                    "Itemnum": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Item Num"
+                                    },
+                                    "Price": {
+                                        "type": "number",
+                                        "ablType": "DECIMAL",
+                                        "default": 0,
+                                        "title": "Price"
+                                    },
+                                    "Qty": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Qty"
+                                    },
+                                    "Discount": {
+                                        "type": "integer",
+                                        "ablType": "INTEGER",
+                                        "default": 0,
+                                        "title": "Discount"
+                                    },
+                                    "ExtendedPrice": {
+                                        "type": "number",
+                                        "ablType": "DECIMAL",
+                                        "default": 0,
+                                        "title": "Extended Price"
+                                    },
+                                    "OrderLineStatus": {
+                                        "type": "string",
+                                        "ablType": "CHARACTER",
+                                        "default": "Ordered",
+                                        "title": "Order Line Status"
+                                    }
+                                }
+                            }
+                        }
+                    }}
+                },
+                "relations": [{
+                    "relationName": "OrderLines",
+                    "parentName": "ttOrder",
+                    "childName": "ttOrderLine",
+                    "relationFields": [{
+                        "parentFieldName": "Ordernum",
+                        "childFieldName": "Ordernum"
+                    }]
+                }],
+                "operations": [
+                    {
+                        "path": "",
+                        "useBeforeImage": true,
+                        "type": "update",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsOrder",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsOrder",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": true,
+                        "type": "create",
+                        "verb": "post",
+                        "params": [
+                            {
+                                "name": "dsOrder",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsOrder",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "?filter={filter}",
+                        "useBeforeImage": true,
+                        "type": "read",
+                        "verb": "get",
+                        "mappingType": "AFP",
+                        "capabilities": "filter,top,skip,id,sort,orderBy",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "dsOrder",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "\/count?filter={filter}",
+                        "useBeforeImage": false,
+                        "type": "count",
+                        "verb": "get",
+                        "params": [
+                            {
+                                "name": "filter",
+                                "type": "QUERY"
+                            },
+                            {
+                                "name": "numRecs",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "submit",
+                        "path": "\/submit",
+                        "useBeforeImage": true,
+                        "type": "submit",
+                        "verb": "put",
+                        "params": [
+                            {
+                                "name": "dsOrder",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsOrder",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    },
+                    {
+                        "path": "",
+                        "useBeforeImage": true,
+                        "type": "delete",
+                        "verb": "delete",
+                        "params": [
+                            {
+                                "name": "dsOrder",
+                                "type": "REQUEST_BODY"
+                            },
+                            {
+                                "name": "dsOrder",
+                                "type": "RESPONSE_BODY"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }]
+}

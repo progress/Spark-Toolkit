@@ -1,0 +1,3039 @@
+ADD TABLE "AddressDetail"
+  AREA "Data"
+  DESCRIPTION "Address detail table.  Use with AddressXref with ParentId or directly on  owning table."
+  DUMP-NAME "addressdetail"
+
+ADD FIELD "AddressLine1" OF "AddressDetail" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "Address"
+  POSITION 3
+  MAX-WIDTH 70
+  HELP "Please enter an address."
+  ORDER 10
+
+ADD FIELD "City" OF "AddressDetail" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "City"
+  POSITION 4
+  MAX-WIDTH 50
+  HELP "Please enter a city."
+  ORDER 30
+
+ADD FIELD "PostalCode" OF "AddressDetail" AS character 
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Postal Code"
+  POSITION 6
+  MAX-WIDTH 20
+  HELP "Please enter the appropriate Postal Code."
+  ORDER 40
+
+ADD FIELD "AddressDetailId" OF "AddressDetail" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 7
+  MAX-WIDTH 25
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "CountryCode" OF "AddressDetail" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 8
+  MAX-WIDTH 16
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "AddressLine2" OF "AddressDetail" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "Address"
+  POSITION 9
+  MAX-WIDTH 70
+  HELP "Please enter an address."
+  ORDER 20
+
+ADD FIELD "State" OF "AddressDetail" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "State"
+  POSITION 10
+  MAX-WIDTH 40
+  HELP "Please enter the state abbreviation."
+  ORDER 50
+
+ADD INDEX "Address_PK" ON "AddressDetail" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "AddressDetailId" ASCENDING 
+
+ADD INDEX "Country_FK" ON "AddressDetail" 
+  AREA "Indexes"
+  INDEX-FIELD "CountryCode" ASCENDING 
+
+ADD INDEX "State_FK" ON "AddressDetail" 
+  AREA "Indexes"
+  INDEX-FIELD "State" ASCENDING 
+
+ADD TABLE "AddressType"
+  AREA "Data"
+  DUMP-NAME "addresstype"
+
+ADD FIELD "AddressType" OF "AddressType" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "Address Type"
+  POSITION 3
+  MAX-WIDTH 70
+  HELP "Please enter an address Type."
+  ORDER 10
+  MANDATORY
+
+ADD INDEX "AddressType_PK" ON "AddressType" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "AddressType" ASCENDING 
+
+ADD TABLE "AddressXref"
+  AREA "Data"
+  DESCRIPTION "Xref for AddressDetail, AddressType and parent Object ID from other table"
+  DUMP-NAME "addressxref"
+
+ADD FIELD "ParentId" OF "AddressXref" AS character 
+  DESCRIPTION "Object ID from parent table"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "AddressDetailId" OF "AddressXref" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 6
+  MAX-WIDTH 72
+  ORDER 3
+  MANDATORY
+
+ADD FIELD "AddressType" OF "AddressXref" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "Address Type"
+  POSITION 7
+  MAX-WIDTH 70
+  HELP "Please enter an address Type."
+  ORDER 4
+  MANDATORY
+
+ADD FIELD "TenantId" OF "AddressXref" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 8
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD INDEX "AddressXref_PK" ON "AddressXref" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ParentId" ASCENDING 
+  INDEX-FIELD "AddressType" ASCENDING 
+
+ADD INDEX "AddressDetail_FK" ON "AddressXref" 
+  AREA "Indexes"
+  INDEX-FIELD "AddressDetailId" ASCENDING 
+
+ADD INDEX "Parent_FK" ON "AddressXref" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ParentId" ASCENDING 
+
+ADD TABLE "ApplicationUser"
+  AREA "Data"
+  DESCRIPTION "The application's user table. Contains login names, passwords and mappings to login domains."
+  DUMP-NAME "applicationuser"
+
+ADD FIELD "ApplicationUserId" OF "ApplicationUser" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "TenantId" OF "ApplicationUser" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 2
+  MANDATORY
+
+ADD FIELD "CustomerId" OF "ApplicationUser" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 72
+  ORDER 3
+
+ADD FIELD "EmployeeId" OF "ApplicationUser" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 5
+  MAX-WIDTH 72
+  ORDER 4
+
+ADD FIELD "LocaleId" OF "ApplicationUser" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 6
+  MAX-WIDTH 72
+  ORDER 5
+
+ADD FIELD "SupplierId" OF "ApplicationUser" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 7
+  MAX-WIDTH 72
+  ORDER 6
+
+ADD FIELD "LoginName" OF "ApplicationUser" AS character 
+  DESCRIPTION "Unique login name across the entire application"
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 8
+  MAX-WIDTH 100
+  ORDER 61
+
+ADD FIELD "Password" OF "ApplicationUser" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 9
+  MAX-WIDTH 100
+  ORDER 71
+
+ADD FIELD "LastLoginDate" OF "ApplicationUser" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  POSITION 10
+  MAX-WIDTH 12
+  ORDER 81
+
+ADD FIELD "LastLoginLocation" OF "ApplicationUser" AS character 
+  DESCRIPTION "Last login IP address or resolved host"
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 11
+  MAX-WIDTH 100
+  ORDER 91
+
+ADD FIELD "LoginDomain" OF "ApplicationUser" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Domain"
+  POSITION 12
+  MAX-WIDTH 60
+  HELP "Please enter a name."
+  ORDER 101
+
+ADD INDEX "ApplicationUser_PK" ON "ApplicationUser" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ApplicationUserId" ASCENDING 
+
+ADD INDEX "Customer_FK" ON "ApplicationUser" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD INDEX "Employee_FK" ON "ApplicationUser" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "EmployeeId" ASCENDING 
+
+ADD INDEX "Login" ON "ApplicationUser" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "LoginName" ASCENDING 
+  INDEX-FIELD "LoginDomain" ASCENDING 
+
+ADD INDEX "Supplier_FK" ON "ApplicationUser" 
+  AREA "Indexes"
+  INDEX-FIELD "SupplierId" ASCENDING 
+
+ADD TABLE "Benefits"
+  AREA "Data"
+  DESCRIPTION "The benefits table contains employee benefits."
+  DUMP-NAME "benefits"
+
+ADD FIELD "HealthCare" OF "Benefits" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Health Care"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "Please enter the Health Care field."
+  LENGTH 0
+  ORDER 20
+
+ADD FIELD "LifeInsurance" OF "Benefits" AS integer 
+  FORMAT "$>>,>>>,>>>"
+  INITIAL "0"
+  LABEL "Life Insurance"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Please enter the Life Insurance field."
+  ORDER 30
+
+ADD FIELD "Pension401K" OF "Benefits" AS integer 
+  FORMAT ">>,>>9"
+  INITIAL "0"
+  LABEL "Pension401K"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter the 401K field."
+  ORDER 40
+
+ADD FIELD "StockPurchase" OF "Benefits" AS integer 
+  FORMAT ">>,>>9"
+  INITIAL "0"
+  LABEL "Stock Purchase"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Please enter the Stock Purchase field."
+  ORDER 50
+
+ADD FIELD "MedicalSpending" OF "Benefits" AS integer 
+  FORMAT ">>,>>9"
+  INITIAL "0"
+  LABEL "Medical Spending"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Please enter the Medical Spending field."
+  ORDER 60
+
+ADD FIELD "DependentCare" OF "Benefits" AS integer 
+  FORMAT ">>,>>9"
+  INITIAL "0"
+  LABEL "Dependent Care"
+  POSITION 8
+  MAX-WIDTH 4
+  HELP "Please enter the dependent care field."
+  ORDER 70
+
+ADD FIELD "BenefitsId" OF "Benefits" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "EmployeeId" OF "Benefits" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 25
+  ORDER 2
+  MANDATORY
+
+ADD FIELD "TenantId" OF "Benefits" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 13
+  MAX-WIDTH 32
+  ORDER 3
+  MANDATORY
+
+ADD INDEX "Benefits_PK" ON "Benefits" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "BenefitsId" ASCENDING 
+
+ADD INDEX "Employee_FK" ON "Benefits" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "EmployeeId" ASCENDING 
+
+ADD TABLE "Bin"
+  AREA "Data"
+  DESCRIPTION "The bin table is used to represent the bins in each warehouse that contain items."
+  DUMP-NAME "bin"
+
+ADD FIELD "Qty" OF "Bin" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Qty"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Please enter a quantity."
+  ORDER 30
+
+ADD FIELD "BinNum" OF "Bin" AS integer 
+  FORMAT "zzzzzzzzz9"
+  INITIAL "0"
+  LABEL "Bin Num"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter a bin number"
+  ORDER 40
+  MANDATORY
+
+ADD FIELD "BinName" OF "Bin" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Bin Name"
+  POSITION 6
+  MAX-WIDTH 60
+  HELP "Please enter a bin name"
+  ORDER 50
+
+ADD FIELD "WarehouseId" OF "Bin" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 8
+  MAX-WIDTH 25
+  ORDER 2
+  MANDATORY
+
+ADD FIELD "BinId" OF "Bin" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+  MANDATORY
+
+ADD INDEX "Bin_PK" ON "Bin" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "BinId" ASCENDING 
+
+ADD INDEX "BinNum" ON "Bin" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "BinNum" ASCENDING 
+
+ADD INDEX "Warehouse_FK" ON "Bin" 
+  AREA "Indexes"
+  INDEX-FIELD "WarehouseId" ASCENDING 
+
+ADD TABLE "ComponentItem"
+  AREA "Data"
+  DESCRIPTION "Component items of a FinishedItem"
+  DUMP-NAME "componentitem"
+
+ADD FIELD "ItemId" OF "ComponentItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+
+ADD FIELD "FinishedItemId" OF "ComponentItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 2
+
+ADD FIELD "Qty" OF "ComponentItem" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  POSITION 6
+  MAX-WIDTH 19
+  DECIMALS 4
+  ORDER 22
+
+ADD FIELD "TenantId" OF "ComponentItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 21
+  MAX-WIDTH 25
+  ORDER 4
+
+ADD INDEX "Component_PK" ON "ComponentItem" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "FinishedItemId" ASCENDING 
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "Item_FK" ON "ComponentItem" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD TABLE "ContactDetail"
+  AREA "Data"
+  DESCRIPTION "Individual detail for a contact (eg email address, phone number)"
+  DUMP-NAME "contactdetail"
+
+ADD FIELD "Detail" OF "ContactDetail" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 2
+  MAX-WIDTH 100
+  ORDER 10
+
+ADD FIELD "ContactDetailId" OF "ContactDetail" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD INDEX "ContactDetail_PK" ON "ContactDetail" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ContactDetailId" ASCENDING 
+
+ADD INDEX "Detail_W" ON "ContactDetail" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "Detail" ASCENDING 
+
+ADD TABLE "ContactType"
+  AREA "Data"
+  DESCRIPTION "The contact type (eg work email, fax)"
+  DUMP-NAME "contacttype"
+
+ADD FIELD "Name" OF "ContactType" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  POSITION 2
+  MAX-WIDTH 70
+  ORDER 10
+
+ADD INDEX "ContactType_PK" ON "ContactType" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD TABLE "ContactXref"
+  AREA "Data"
+  DESCRIPTION "Cross-reference for contacts, between types, detail"
+  DUMP-NAME "contactxref"
+
+ADD FIELD "TenantId" OF "ContactXref" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "ParentId" OF "ContactXref" AS character 
+  DESCRIPTION "Object ID from parent table"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 2
+
+ADD FIELD "ContactDetailId" OF "ContactXref" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 72
+  ORDER 3
+  MANDATORY
+
+ADD FIELD "ContactType" OF "ContactXref" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  POSITION 5
+  MAX-WIDTH 70
+  ORDER 4
+
+ADD INDEX "Contact_Xref_PK" ON "ContactXref" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ContactType" ASCENDING 
+  INDEX-FIELD "ParentId" ASCENDING 
+
+ADD INDEX "ContactDetail_FK" ON "ContactXref" 
+  AREA "Indexes"
+  INDEX-FIELD "ContactDetailId" ASCENDING 
+
+ADD INDEX "Parent_FK" ON "ContactXref" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ParentId" ASCENDING 
+
+ADD TABLE "Country"
+  AREA "Data"
+  DUMP-NAME "country"
+
+ADD FIELD "Name" OF "Country" AS character 
+  FORMAT "X(35)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 70
+  ORDER 10
+
+ADD FIELD "Code" OF "Country" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 16
+  ORDER 20
+  MANDATORY
+
+ADD INDEX "Country_PK" ON "Country" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD INDEX "Name" ON "Country" 
+  AREA "Indexes"
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD TABLE "Customer"
+  AREA "Data"
+  DESCRIPTION "The customer table contains customer  information including  balance."
+  DUMP-NAME "customer"
+
+ADD FIELD "CustNum" OF "Customer" AS integer 
+  FORMAT ">>>>9"
+  INITIAL "0"
+  LABEL "Cust Num"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Please enter a customer number."
+  ORDER 10
+
+ADD FIELD "Name" OF "Customer" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 60
+  HELP "Please enter a name."
+  ORDER 30
+
+ADD FIELD "Comments" OF "Customer" AS character 
+  FORMAT "x(80)"
+  INITIAL ""
+  LABEL "Comments"
+  POSITION 12
+  MAX-WIDTH 160
+  HELP "Please enter comments."
+  ORDER 180
+
+ADD FIELD "CreditLimit" OF "Customer" AS decimal 
+  DESCRIPTION "Maximum credit"
+  FORMAT "->,>>>,>>9"
+  INITIAL "1500"
+  LABEL "Credit Limit"
+  POSITION 13
+  MAX-WIDTH 17
+  HELP "Please enter a Credit Limit."
+  DECIMALS 2
+  ORDER 130
+
+ADD FIELD "Balance" OF "Customer" AS decimal 
+  FORMAT "->,>>>,>>9.99"
+  INITIAL "0"
+  LABEL "Balance"
+  POSITION 14
+  MAX-WIDTH 17
+  HELP "Please enter a balance."
+  DECIMALS 2
+  ORDER 140
+
+ADD FIELD "Terms" OF "Customer" AS character 
+  FORMAT "x(20)"
+  INITIAL "Net30"
+  LABEL "Terms"
+  POSITION 15
+  MAX-WIDTH 40
+  HELP "Please enter terms"
+  ORDER 150
+
+ADD FIELD "Discount" OF "Customer" AS integer 
+  FORMAT ">>9%"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 16
+  MAX-WIDTH 4
+  HELP "Please enter a percentage from 0 to 100."
+  ORDER 170
+
+ADD FIELD "Language" OF "Customer" AS character 
+  DESCRIPTION "Language Code of the local name."
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "Language"
+  POSITION 17
+  MAX-WIDTH 16
+  COLUMN-LABEL "Language"
+  HELP "Specify the language code of the local name if used."
+  ORDER 230
+
+ADD FIELD "CustomerId" OF "Customer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 20
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "TenantId" OF "Customer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 21
+  MAX-WIDTH 25
+  ORDER 4
+
+ADD FIELD "SalesrepId" OF "Customer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 22
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "PrimaryLocaleId" OF "Customer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 23
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD INDEX "Customer_PK" ON "Customer" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD INDEX "Comments" ON "Customer" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "Comments" ASCENDING 
+
+ADD INDEX "CustNum" ON "Customer" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "Locale_FK" ON "Customer" 
+  AREA "Indexes"
+  INDEX-FIELD "PrimaryLocaleId" ASCENDING 
+
+ADD INDEX "Name" ON "Customer" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD INDEX "Salesrep_FK" ON "Customer" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "SalesrepId" ASCENDING 
+
+ADD TABLE "CustomerAddress"
+  AREA "Data"
+  DESCRIPTION "Xref for AddressDetail, AddressType and Customer"
+  DUMP-NAME "customeraddress"
+
+ADD FIELD "CustomerId" OF "CustomerAddress" AS character 
+  DESCRIPTION "Object ID from parent table"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "AddressDetailId" OF "CustomerAddress" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 6
+  MAX-WIDTH 72
+  ORDER 3
+  MANDATORY
+
+ADD FIELD "AddressType" OF "CustomerAddress" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "Address Type"
+  POSITION 7
+  MAX-WIDTH 70
+  HELP "Please enter an address Type."
+  ORDER 4
+  MANDATORY
+
+ADD FIELD "TenantId" OF "CustomerAddress" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 8
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD INDEX "CustomerAddress_PK" ON "CustomerAddress" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+  INDEX-FIELD "AddressType" ASCENDING 
+
+ADD INDEX "AddressDetail_FK" ON "CustomerAddress" 
+  AREA "Indexes"
+  INDEX-FIELD "AddressDetailId" ASCENDING 
+
+ADD INDEX "Parent_FK" ON "CustomerAddress" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD TABLE "CustomerContact"
+  AREA "Data"
+  DESCRIPTION "Cross-reference for contacts, between types, detail and customers"
+  DUMP-NAME "customercontact"
+
+ADD FIELD "TenantId" OF "CustomerContact" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "CustomerId" OF "CustomerContact" AS character 
+  DESCRIPTION "Object ID from parent table"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 2
+
+ADD FIELD "ContactDetailId" OF "CustomerContact" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 72
+  ORDER 3
+  MANDATORY
+
+ADD FIELD "ContactType" OF "CustomerContact" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  POSITION 5
+  MAX-WIDTH 70
+  ORDER 4
+
+ADD INDEX "Contact_Xref_PK" ON "CustomerContact" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ContactType" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD INDEX "ContactDetail_FK" ON "CustomerContact" 
+  AREA "Indexes"
+  INDEX-FIELD "ContactDetailId" ASCENDING 
+
+ADD INDEX "Parent_FK" ON "CustomerContact" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD TABLE "Dealer"
+  AREA "Data"
+  DESCRIPTION "Information specific to a dealership."
+  DUMP-NAME "dealer"
+
+ADD FIELD "TenantId" OF "Dealer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "DealerId" OF "Dealer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 11
+  MANDATORY
+
+ADD FIELD "Name" OF "Dealer" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 4
+  MAX-WIDTH 60
+  HELP "Please enter a name."
+  ORDER 21
+
+ADD FIELD "StreetAddressId" OF "Dealer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 5
+  MAX-WIDTH 72
+  ORDER 31
+
+ADD FIELD "InfoEmailContactId" OF "Dealer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 6
+  MAX-WIDTH 72
+  ORDER 41
+
+ADD FIELD "SalesEmailContactId" OF "Dealer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 7
+  MAX-WIDTH 72
+  ORDER 51
+
+ADD FIELD "SwitchboardPhoneNumberId" OF "Dealer" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 8
+  MAX-WIDTH 72
+  ORDER 61
+
+ADD FIELD "Code" OF "Dealer" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 9
+  MAX-WIDTH 16
+  ORDER 71
+  MANDATORY
+
+ADD INDEX "Dealer_PK" ON "Dealer" 
+  AREA "Indexes"
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "DealerId" ASCENDING 
+
+ADD INDEX "Code" ON "Dealer" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD INDEX "Name" ON "Dealer" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD TABLE "Department"
+  AREA "Data"
+  DESCRIPTION "The department contains a master listing of departments."
+  DUMP-NAME "department"
+
+ADD FIELD "Code" OF "Department" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Department Code"
+  POSITION 2
+  MAX-WIDTH 6
+  HELP "Please enter the Dept Code."
+  LENGTH 0
+  ORDER 10
+
+ADD FIELD "Name" OF "Department" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 30
+  HELP "Please enter the Dept Name"
+  LENGTH 0
+  ORDER 20
+
+ADD FIELD "ParentDepartmentId" OF "Department" AS character 
+  DESCRIPTION "Parent Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "TenantId" OF "Department" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 6
+  MAX-WIDTH 72
+  ORDER 3
+  MANDATORY
+
+ADD FIELD "DepartmentId" OF "Department" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD INDEX "Department_PK" ON "Department" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "DepartmentId" ASCENDING 
+
+ADD INDEX "Code" ON "Department" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD TABLE "Employee"
+  AREA "Data"
+  DESCRIPTION "The employee table stores employee information including name and address"
+  DUMP-NAME "employee"
+
+ADD FIELD "LastName" OF "Employee" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Last Name"
+  POSITION 2
+  MAX-WIDTH 50
+  HELP "Please enter the last name."
+  LENGTH 0
+  ORDER 10
+
+ADD FIELD "FirstName" OF "Employee" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "First Name"
+  POSITION 3
+  MAX-WIDTH 30
+  HELP "Please enter the First Name."
+  LENGTH 0
+  ORDER 20
+
+ADD FIELD "Position" OF "Employee" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Position"
+  POSITION 10
+  MAX-WIDTH 40
+  HELP "Please enter the position."
+  LENGTH 0
+  ORDER 90
+
+ADD FIELD "VacationDaysLeft" OF "Employee" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Vacation Days Left"
+  POSITION 13
+  MAX-WIDTH 4
+  HELP "Please enter Vacation Days Left."
+  ORDER 100
+
+ADD FIELD "SickDaysLeft" OF "Employee" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Sick Days Left"
+  POSITION 14
+  MAX-WIDTH 4
+  HELP "Please enter Sick Days Left."
+  ORDER 110
+
+ADD FIELD "EmpNum" OF "Employee" AS integer 
+  FORMAT "zzzzzzzzz9"
+  INITIAL "0"
+  LABEL "Emp No"
+  POSITION 15
+  MAX-WIDTH 4
+  HELP "Please enter the Emp Num"
+  ORDER 5
+
+ADD FIELD "StartDate" OF "Employee" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Start Date"
+  POSITION 16
+  MAX-WIDTH 4
+  HELP "Please enter a Start Date"
+  ORDER 98
+
+ADD FIELD "Birthdate" OF "Employee" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Birthdate"
+  POSITION 17
+  MAX-WIDTH 4
+  HELP "Please enter the birth date."
+  ORDER 97
+
+ADD FIELD "EmployeeId" OF "Employee" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 18
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "DepartmentId" OF "Employee" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 19
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "Photo" OF "Employee" AS blob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 20
+  LOB-AREA "Data"
+  LOB-BYTES 209715200
+  LOB-SIZE 200M
+  ORDER 120
+
+ADD FIELD "Resume" OF "Employee" AS blob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 21
+  LOB-AREA "Data"
+  LOB-BYTES 104857600
+  LOB-SIZE 100M
+  ORDER 130
+
+ADD FIELD "TenantId" OF "Employee" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 22
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD FIELD "DealerId" OF "Employee" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 23
+  MAX-WIDTH 72
+  ORDER 140
+
+ADD INDEX "Employee_PK" ON "Employee" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "EmployeeId" ASCENDING 
+
+ADD INDEX "Dealer_FK" ON "Employee" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "DepartmentId" ASCENDING 
+
+ADD INDEX "Department_FK" ON "Employee" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "DepartmentId" ASCENDING 
+
+ADD INDEX "EmpNo" ON "Employee" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "EmpNum" ASCENDING 
+
+ADD TABLE "Family"
+  AREA "Data"
+  DESCRIPTION "The family table tracks an employee's family"
+  DUMP-NAME "family"
+
+ADD FIELD "RelativeName" OF "Family" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Relative Name"
+  POSITION 2
+  MAX-WIDTH 30
+  HELP "Please enter the Relative Name"
+  LENGTH 0
+  ORDER 10
+
+ADD FIELD "Relation" OF "Family" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Relation"
+  POSITION 3
+  MAX-WIDTH 30
+  HELP "Please enter Spouse or Child."
+  LENGTH 0
+  ORDER 20
+
+ADD FIELD "Birthdate" OF "Family" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Birthdate"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Please enter a Birthdate"
+  ORDER 30
+
+ADD FIELD "BenefitDate" OF "Family" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Benefit Date"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter the Date relative added to benefits."
+  ORDER 40
+
+ADD FIELD "CoveredOnBenefits" OF "Family" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Covered On Benefits"
+  POSITION 6
+  MAX-WIDTH 1
+  HELP "Please enter the Covered on Benefits field."
+  ORDER 35
+
+ADD FIELD "FamilyId" OF "Family" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "TenantId" OF "Family" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 10
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "EmployeeId" OF "Family" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD INDEX "Family_PK" ON "Family" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "FamilyId" ASCENDING 
+
+ADD INDEX "Employee_FK" ON "Family" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "EmployeeId" ASCENDING 
+
+ADD TABLE "Feedback"
+  AREA "Data"
+  DESCRIPTION "The feedback table allows customers to provide feedback about what they like and don't like."
+  DUMP-NAME "feedback"
+
+ADD FIELD "ContactName" OF "Feedback" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Contact Name"
+  POSITION 2
+  MAX-WIDTH 60
+  HELP "Please enter the contact"
+  LENGTH 0
+  ORDER 10
+
+ADD FIELD "Company" OF "Feedback" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Company"
+  POSITION 3
+  MAX-WIDTH 40
+  HELP "Please enter the company"
+  LENGTH 0
+  ORDER 20
+
+ADD FIELD "Comments" OF "Feedback" AS character 
+  FORMAT "x(80)"
+  INITIAL ""
+  LABEL "Comments"
+  POSITION 7
+  MAX-WIDTH 160
+  HELP "Please enter comments."
+  LENGTH 0
+  ORDER 60
+
+ADD FIELD "Rating" OF "Feedback" AS integer 
+  FORMAT "9"
+  INITIAL "0"
+  LABEL "Rating"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Please enter the rating"
+  ORDER 80
+
+ADD FIELD "FeedbackId" OF "Feedback" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 10
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "TenantId" OF "Feedback" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 32
+  ORDER 3
+
+ADD FIELD "DepartmentId" OF "Feedback" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 32
+  ORDER 2
+
+ADD INDEX "Feedback_PK" ON "Feedback" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "FeedbackId" ASCENDING 
+
+ADD INDEX "Comments" ON "Feedback" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "Comments" ASCENDING 
+
+ADD INDEX "Company" ON "Feedback" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "Company" ASCENDING 
+
+ADD INDEX "ContactName" ON "Feedback" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ContactName" ASCENDING 
+
+ADD INDEX "Department_FK" ON "Feedback" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "DepartmentId" ASCENDING 
+
+ADD INDEX "Rating" ON "Feedback" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Rating" ASCENDING 
+
+ADD TABLE "FinishedItem"
+  AREA "Data"
+  DESCRIPTION "A unique, completed item for sale. Composed of a number of ComponentItems."
+  DUMP-NAME "finisheditem"
+
+ADD FIELD "FinishedItemId" OF "FinishedItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "ItemId" OF "FinishedItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 11
+
+ADD FIELD "StatusDate" OF "FinishedItem" AS datetime 
+  FORMAT "99/99/9999 HH:MM:SS.SSS"
+  INITIAL ?
+  POSITION 4
+  MAX-WIDTH 8
+  ORDER 21
+
+ADD FIELD "StatusId" OF "FinishedItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 5
+  MAX-WIDTH 72
+  ORDER 31
+  MANDATORY
+
+ADD FIELD "ExternalId" OF "FinishedItem" AS character 
+  FORMAT "x(32)"
+  INITIAL ""
+  POSITION 6
+  MAX-WIDTH 100
+  ORDER 41
+
+ADD FIELD "TenantId" OF "FinishedItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 32
+  ORDER 5
+
+ADD INDEX "FinishedItem_PK" ON "FinishedItem" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "FinishedItemId" ASCENDING 
+
+ADD INDEX "ExternalId" ON "FinishedItem" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ExternalId" ASCENDING 
+
+ADD INDEX "Status_FK" ON "FinishedItem" 
+  AREA "Indexes"
+  INDEX-FIELD "StatusId" ASCENDING 
+
+ADD TABLE "InventoryTrans"
+  AREA "Data"
+  DESCRIPTION "The inventorytrans table contains information about the movement of inventory."
+  DUMP-NAME "inventorytrans"
+
+ADD FIELD "InvTransNum" OF "InventoryTrans" AS integer 
+  FORMAT "zzzzzzzzz9"
+  INITIAL "0"
+  LABEL "Inventory Trans Num"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Please enter an inventory trans number"
+  ORDER 10
+
+ADD FIELD "Qty" OF "InventoryTrans" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Qty"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter the quantity."
+  ORDER 40
+
+ADD FIELD "TransDate" OF "InventoryTrans" AS datetime 
+  FORMAT "99/99/9999 HH:MM:SS.SSS"
+  INITIAL ?
+  LABEL "Trans Datetime"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Please enter the trans date."
+  ORDER 60
+
+ADD FIELD "InvType" OF "InventoryTrans" AS character 
+  FORMAT "X(12)"
+  INITIAL ""
+  LABEL "Type"
+  POSITION 8
+  MAX-WIDTH 24
+  HELP "Please enter the type."
+  ORDER 70
+
+ADD FIELD "TransferId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "ItemId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 13
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "POId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 14
+  MAX-WIDTH 32
+  ORDER 3
+
+ADD FIELD "WarehouseId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 15
+  MAX-WIDTH 32
+  ORDER 4
+
+ADD FIELD "OrderId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 16
+  MAX-WIDTH 32
+  ORDER 6
+
+ADD FIELD "BinId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 17
+  MAX-WIDTH 32
+  ORDER 5
+
+ADD FIELD "TenantId" OF "InventoryTrans" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 18
+  MAX-WIDTH 32
+  ORDER 7
+
+ADD INDEX "InventoryTrans_PK" ON "InventoryTrans" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "TransferId" ASCENDING 
+
+ADD INDEX "Item_FK" ON "InventoryTrans" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "POId" ON "InventoryTrans" 
+  AREA "Indexes"
+  INDEX-FIELD "POId" ASCENDING 
+
+ADD INDEX "WarehouseId" ON "InventoryTrans" 
+  AREA "Indexes"
+  INDEX-FIELD "WarehouseId" ASCENDING 
+
+ADD TABLE "Invoice"
+  AREA "Data"
+  DESCRIPTION "The invoice table contains transactions for the receivable module."
+  DUMP-NAME "invoice"
+
+ADD FIELD "InvoiceNum" OF "Invoice" AS integer 
+  FORMAT "zzzzzzzzz9"
+  INITIAL "0"
+  LABEL "Invoice Num"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Please enter an Invoice Number"
+  ORDER 50
+
+ADD FIELD "InvoiceDate" OF "Invoice" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Invoice Date"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Please enter an invoice date"
+  ORDER 60
+
+ADD FIELD "Amount" OF "Invoice" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "Amount"
+  POSITION 5
+  MAX-WIDTH 17
+  HELP "Please enter total invoice amt including shipping and sales."
+  DECIMALS 2
+  ORDER 70
+
+ADD FIELD "TotalPaid" OF "Invoice" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "Total Paid"
+  POSITION 6
+  MAX-WIDTH 17
+  HELP "Please enter Total Paid."
+  DECIMALS 2
+  ORDER 80
+
+ADD FIELD "Adjustment" OF "Invoice" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "Adjustment"
+  POSITION 7
+  MAX-WIDTH 17
+  HELP "Please enter adjustment."
+  DECIMALS 2
+  ORDER 90
+
+ADD FIELD "ShipCharge" OF "Invoice" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "Ship Charge"
+  POSITION 9
+  MAX-WIDTH 17
+  HELP "Please enter a Ship Charge."
+  DECIMALS 2
+  ORDER 100
+
+ADD FIELD "TenantId" OF "Invoice" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 32
+  ORDER 3
+
+ADD FIELD "InvoiceId" OF "Invoice" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 13
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD INDEX "Invoice_PK" ON "Invoice" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "InvoiceId" ASCENDING 
+
+ADD INDEX "InvoiceDate" ON "Invoice" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "InvoiceDate" ASCENDING 
+
+ADD INDEX "InvoiceNum" ON "Invoice" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "InvoiceNum" ASCENDING 
+
+ADD TABLE "Item"
+  AREA "Data"
+  DESCRIPTION "The item table provides a quick reference for items in stock and quantity on-hand."
+  DUMP-NAME "item"
+
+ADD FIELD "ItemNum" OF "Item" AS integer 
+  FORMAT "zzzzzzzzz9"
+  INITIAL "0"
+  LABEL "Item Num"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Please enter the item  number ."
+  ORDER 10
+
+ADD FIELD "ItemName" OF "Item" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Item Name"
+  POSITION 3
+  MAX-WIDTH 50
+  HELP "Please enter an item name."
+  ORDER 20
+
+ADD FIELD "Price" OF "Item" AS decimal 
+  FORMAT "->,>>>,>>9.99"
+  INITIAL "0"
+  LABEL "Price"
+  POSITION 5
+  MAX-WIDTH 17
+  HELP "Please enter a Price."
+  DECIMALS 2
+  ORDER 22
+
+ADD FIELD "Description" OF "Item" AS character 
+  FORMAT "X(400)"
+  INITIAL ""
+  LABEL "Description"
+  POSITION 6
+  MAX-WIDTH 400
+  HELP "Please enter a description."
+  ORDER 110
+
+ADD FIELD "OnHand" OF "Item" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "On Hand"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Please enter On Hand Qty"
+  ORDER 50
+
+ADD FIELD "Allocated" OF "Item" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Allocated"
+  POSITION 8
+  MAX-WIDTH 4
+  HELP "Please enter allocated"
+  ORDER 60
+
+ADD FIELD "ReOrder" OF "Item" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Re Order"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Please enter reorder qty"
+  ORDER 80
+
+ADD FIELD "OnOrder" OF "Item" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "On Order"
+  POSITION 10
+  MAX-WIDTH 4
+  HELP "Please enter On Order Qty"
+  ORDER 90
+
+ADD FIELD "TenantId" OF "Item" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 32
+  ORDER 5
+
+ADD FIELD "Special" OF "Item" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Special"
+  POSITION 13
+  MAX-WIDTH 16
+  HELP "Please enter special information"
+  LENGTH 0
+  ORDER 140
+
+ADD FIELD "Weight" OF "Item" AS decimal 
+  FORMAT "->>,>>9.99"
+  INITIAL "0"
+  LABEL "Weight"
+  POSITION 14
+  MAX-WIDTH 17
+  HELP "Please enter weight."
+  DECIMALS 2
+  ORDER 150
+
+ADD FIELD "MinQty" OF "Item" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Min Qty"
+  POSITION 15
+  MAX-WIDTH 4
+  HELP "Please enter a min qty"
+  ORDER 160
+
+ADD FIELD "ItemId" OF "Item" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 16
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "Photo" OF "Item" AS blob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 17
+  LOB-AREA "Data"
+  LOB-BYTES 51200
+  LOB-SIZE 50K
+  ORDER 170
+
+ADD FIELD "ItemTypeId" OF "Item" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 18
+  MAX-WIDTH 72
+  ORDER 4
+  MANDATORY
+
+ADD INDEX "Item_PK" ON "Item" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "Description" ON "Item" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "Description" ASCENDING 
+
+ADD INDEX "ItemName" ON "Item" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ItemName" ASCENDING 
+
+ADD INDEX "ItemName_W" ON "Item" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "ItemName" ASCENDING 
+
+ADD INDEX "ItemNum" ON "Item" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ItemNum" ASCENDING 
+
+ADD INDEX "ItemType_FK" ON "Item" 
+  AREA "Indexes"
+  INDEX-FIELD "ItemTypeId" ASCENDING 
+
+ADD TABLE "ItemOption"
+  AREA "Data"
+  DESCRIPTION "Contains all possible options which can be used to create a FinishedItem. Smiliar to ComponentItems"
+  DUMP-NAME "itemoption"
+
+ADD FIELD "ChildItemId" OF "ItemOption" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 10
+
+ADD FIELD "ItemId" OF "ItemOption" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "StandardOption" OF "ItemOption" AS logical 
+  DESCRIPTION "Indicates whether this is a standard option"
+  FORMAT "yes/no"
+  INITIAL "no"
+  POSITION 6
+  MAX-WIDTH 1
+  ORDER 40
+
+ADD FIELD "TenantId" OF "ItemOption" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 32
+  ORDER 5
+
+ADD FIELD "Quantity" OF "ItemOption" AS decimal 
+  FORMAT ">>,>>9.9<<<"
+  INITIAL "0"
+  POSITION 13
+  MAX-WIDTH 15
+  DECIMALS 4
+  ORDER 30
+
+ADD INDEX "ItemOption_PK" ON "ItemOption" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ItemId" ASCENDING 
+  INDEX-FIELD "ChildItemId" ASCENDING 
+
+ADD INDEX "ChildItem_FK" ON "ItemOption" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ChildItemId" ASCENDING 
+
+ADD TABLE "ItemType"
+  AREA "Data"
+  DUMP-NAME "itemtype"
+
+ADD FIELD "ItemTypeId" OF "ItemType" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "Name" OF "ItemType" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 70
+  ORDER 20
+
+ADD FIELD "Description" OF "ItemType" AS character 
+  FORMAT "x(200)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 400
+  ORDER 30
+
+ADD INDEX "ItemType_PK" ON "ItemType" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "ItemTypeId" ASCENDING 
+
+ADD INDEX "Name" ON "ItemType" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD TABLE "Locale"
+  AREA "Data"
+  DESCRIPTION "The local default table contains default information for the application."
+  DUMP-NAME "locale"
+
+ADD FIELD "StateLabel" OF "Locale" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "State Label"
+  POSITION 5
+  MAX-WIDTH 30
+  HELP "Please enter the State Label"
+  ORDER 40
+
+ADD FIELD "PostCodeFormat" OF "Locale" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Post Code Format"
+  POSITION 6
+  MAX-WIDTH 30
+  HELP "Please enter the Post Code Format"
+  ORDER 50
+
+ADD FIELD "PhoneFormat" OF "Locale" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "Phone Format"
+  POSITION 7
+  MAX-WIDTH 30
+  HELP "Please enter phone format"
+  ORDER 60
+
+ADD FIELD "DateFormat" OF "Locale" AS character 
+  FORMAT "x(8)"
+  INITIAL "MDY"
+  LABEL "Date Format"
+  POSITION 8
+  MAX-WIDTH 16
+  HELP "Please enter the date format."
+  ORDER 80
+
+ADD FIELD "CurrencySymbol" OF "Locale" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Currency Symbol"
+  POSITION 9
+  MAX-WIDTH 12
+  HELP "Please enter the currency symbol"
+  ORDER 70
+
+ADD FIELD "Name" OF "Locale" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  POSITION 10
+  MAX-WIDTH 70
+  ORDER 100
+
+ADD FIELD "LocaleId" OF "Locale" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "Country" OF "Locale" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 12
+  MAX-WIDTH 16
+  ORDER 90
+  MANDATORY
+
+ADD INDEX "Locale_PK" ON "Locale" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "LocaleId" ASCENDING 
+
+ADD INDEX "Country_FK" ON "Locale" 
+  AREA "Indexes"
+  INDEX-FIELD "Country" ASCENDING 
+
+ADD INDEX "Name" ON "Locale" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD TABLE "Order"
+  AREA "Data"
+  DESCRIPTION "The order table contains order header information."
+  DUMP-NAME "order"
+
+ADD FIELD "OrderNum" OF "Order" AS integer 
+  FORMAT "zzzzzzzzz9"
+  INITIAL "0"
+  LABEL "Order Num"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Please enter an order number."
+  ORDER 60
+
+ADD FIELD "OrderDate" OF "Order" AS date 
+  FORMAT "99/99/99"
+  INITIAL "TODAY"
+  LABEL "Ordered"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Please enter the date of order."
+  ORDER 90
+
+ADD FIELD "ShipDate" OF "Order" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Shipped"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter the ship date."
+  ORDER 100
+
+ADD FIELD "PromiseDate" OF "Order" AS date 
+  FORMAT "99/99/99"
+  INITIAL ?
+  LABEL "Promised"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Please enter the Promise Date."
+  ORDER 110
+
+ADD FIELD "Carrier" OF "Order" AS character 
+  DESCRIPTION "Should lookup valid carriers."
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Carrier"
+  POSITION 7
+  MAX-WIDTH 50
+  HELP "Please enter the carrier."
+  ORDER 120
+
+ADD FIELD "Instructions" OF "Order" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Instructions"
+  POSITION 8
+  MAX-WIDTH 100
+  HELP "Please enter Instructions"
+  ORDER 130
+
+ADD FIELD "CustomerPO" OF "Order" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "PO"
+  POSITION 9
+  MAX-WIDTH 40
+  HELP "Please enter the PO."
+  ORDER 140
+
+ADD FIELD "Terms" OF "Order" AS character 
+  DESCRIPTION "This should default to the TERMS specified by the CUSTOMER record."
+  FORMAT "x(20)"
+  INITIAL "Net30"
+  LABEL "Terms"
+  POSITION 10
+  MAX-WIDTH 40
+  HELP "Please enter the terms."
+  ORDER 150
+
+ADD FIELD "Creditcard" OF "Order" AS character 
+  FORMAT "x(20)"
+  INITIAL "Visa"
+  LABEL "Credit Card"
+  POSITION 16
+  MAX-WIDTH 40
+  HELP "Please enter the credit card."
+  ORDER 210
+
+ADD FIELD "OrderId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 17
+  MAX-WIDTH 32
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "CustomerId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 18
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "SalesrepId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 19
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD FIELD "FromEmail" OF "Order" AS logical 
+  DESCRIPTION "Specifies if the order originated from email"
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Email Order"
+  POSITION 21
+  MAX-WIDTH 1
+  COLUMN-LABEL "Email Order"
+  HELP "Specify if order originated from Email"
+  ORDER 230
+
+ADD FIELD "EmailDate" OF "Order" AS datetime-tz 
+  DESCRIPTION "Date of originating email"
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Email Date"
+  POSITION 22
+  MAX-WIDTH 12
+  COLUMN-LABEL "Email Date"
+  HELP "Date of Order Email"
+  ORDER 240
+
+ADD FIELD "EnteredDate" OF "Order" AS datetime 
+  DESCRIPTION "Dateand time the order was entered."
+  FORMAT "99/99/9999 HH:MM:SS.SSS"
+  INITIAL "NOW"
+  LABEL "Entered"
+  POSITION 23
+  MAX-WIDTH 8
+  COLUMN-LABEL "Entered"
+  HELP "Specify Date Time order entered."
+  ORDER 250
+
+ADD FIELD "EmailMessage" OF "Order" AS clob 
+  FORMAT "x(8)"
+  INITIAL ?
+  POSITION 24
+  LOB-AREA "Data"
+  LOB-BYTES 65536
+  LOB-SIZE 64K
+  CLOB-CODEPAGE "iso8859-1"
+  CLOB-COLLATION "basic"
+  CLOB-TYPE 1
+  ORDER 220
+
+ADD FIELD "TenantId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 25
+  MAX-WIDTH 25
+  ORDER 4
+
+ADD FIELD "BillingAddressId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 26
+  MAX-WIDTH 72
+  ORDER 8
+
+ADD FIELD "InventoryTransId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 27
+  MAX-WIDTH 72
+  ORDER 260
+
+ADD FIELD "InvoiceId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 28
+  MAX-WIDTH 72
+  ORDER 5
+
+ADD FIELD "StatusId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 29
+  MAX-WIDTH 72
+  ORDER 7
+
+ADD FIELD "ShippingAddressId" OF "Order" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 30
+  MAX-WIDTH 72
+  ORDER 9
+
+ADD INDEX "Order_PK" ON "Order" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
+
+ADD INDEX "BillingAddress_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "BillingAddressId" ASCENDING 
+
+ADD INDEX "Customer_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD INDEX "InventoryTrans_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "InventoryTransId" ASCENDING 
+
+ADD INDEX "Invoice_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "InvoiceId" ASCENDING 
+
+ADD INDEX "OrderDate" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "OrderDate" ASCENDING 
+
+ADD INDEX "OrderNum" ON "Order" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "OrderNum" ASCENDING 
+
+ADD INDEX "Salesrep_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "SalesrepId" ASCENDING 
+
+ADD INDEX "ShippingAddress_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "ShippingAddressId" ASCENDING 
+
+ADD INDEX "Status_FK" ON "Order" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "StatusId" ASCENDING 
+
+ADD TABLE "OrderLine"
+  AREA "Data"
+  DESCRIPTION "The orderline table contains order detail information including item number and quantity ordered."
+  DUMP-NAME "orderline"
+
+ADD FIELD "LineNum" OF "OrderLine" AS integer 
+  DESCRIPTION "To be generated automatically by key value generator!"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Line Num"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Please enter the line number"
+  ORDER 20
+
+ADD FIELD "Price" OF "OrderLine" AS decimal 
+  DESCRIPTION "This field should get its default from the ITEM file's price field."
+  FORMAT "->,>>>,>>9.99"
+  INITIAL "0"
+  LABEL "Price"
+  POSITION 5
+  MAX-WIDTH 17
+  HELP "Please enter the price"
+  DECIMALS 2
+  ORDER 40
+
+ADD FIELD "Qty" OF "OrderLine" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Qty"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Please enter the quantity."
+  ORDER 50
+
+ADD FIELD "Discount" OF "OrderLine" AS integer 
+  FORMAT ">>9%"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 7
+  MAX-WIDTH 4
+  HELP "Please enter a discount."
+  ORDER 70
+
+ADD FIELD "TenantId" OF "OrderLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 10
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "OrderId" OF "OrderLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "ItemId" OF "OrderLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD FIELD "StatusId" OF "OrderLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 13
+  MAX-WIDTH 72
+  ORDER 80
+  MANDATORY
+
+ADD FIELD "FinishedItemId" OF "OrderLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 14
+  MAX-WIDTH 72
+  ORDER 4
+  MANDATORY
+
+ADD INDEX "OrderLine_PK" ON "OrderLine" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "OrderId" ASCENDING 
+  INDEX-FIELD "LineNum" ASCENDING 
+
+ADD INDEX "FinishedITem_FK" ON "OrderLine" 
+  AREA "Indexes"
+  INDEX-FIELD "FinishedItemId" ASCENDING 
+
+ADD INDEX "Item_FK" ON "OrderLine" 
+  AREA "Indexes"
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "Status_FK" ON "OrderLine" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "StatusId" ASCENDING 
+
+ADD TABLE "POLine"
+  AREA "Data"
+  DESCRIPTION "The poline table contains the PO detail information including the item and quantity on the PO."
+  DUMP-NAME "poline"
+
+ADD FIELD "LineNum" OF "POLine" AS integer 
+  DESCRIPTION "To be generated automatically by key value generator!"
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Line Num"
+  POSITION 2
+  MAX-WIDTH 4
+  HELP "Please enter the Line Number"
+  ORDER 20
+
+ADD FIELD "Price" OF "POLine" AS decimal 
+  DESCRIPTION "This field should get its default from the Item file's price field."
+  FORMAT "->,>>>,>>9.99"
+  INITIAL "0"
+  LABEL "Price"
+  POSITION 4
+  MAX-WIDTH 17
+  HELP "Please enter the Price"
+  DECIMALS 2
+  ORDER 40
+
+ADD FIELD "Qty" OF "POLine" AS integer 
+  FORMAT "->>>>9"
+  INITIAL "0"
+  LABEL "Qty"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter the quantity."
+  ORDER 50
+
+ADD FIELD "Discount" OF "POLine" AS integer 
+  FORMAT ">>9%"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 6
+  MAX-WIDTH 4
+  HELP "Please enter the discount."
+  ORDER 70
+
+ADD FIELD "StatusId" OF "POLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "ItemId" OF "POLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD FIELD "PurchaseOrderId" OF "POLine" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD INDEX "POLine_PK" ON "POLine" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "PurchaseOrderId" ASCENDING 
+  INDEX-FIELD "LineNum" ASCENDING 
+
+ADD INDEX "Item_FK" ON "POLine" 
+  AREA "Indexes"
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "Status_FK" ON "POLine" 
+  AREA "Indexes"
+  INDEX-FIELD "StatusId" ASCENDING 
+
+ADD TABLE "PurchaseOrder"
+  AREA "Data"
+  DESCRIPTION "The purchaseorder table contains information pertaining to the purchase order including: PO number and status."
+  DUMP-NAME "purchaseorder"
+
+ADD FIELD "DateEntered" OF "PurchaseOrder" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Date Entered"
+  POSITION 3
+  MAX-WIDTH 4
+  HELP "Please enter today's date."
+  ORDER 20
+
+ADD FIELD "ReceiveDate" OF "PurchaseOrder" AS date 
+  FORMAT "99/99/9999"
+  INITIAL ?
+  LABEL "Date Received"
+  POSITION 5
+  MAX-WIDTH 4
+  HELP "Please enter the Receive Date"
+  ORDER 40
+
+ADD FIELD "StatusId" OF "PurchaseOrder" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 7
+  MAX-WIDTH 72
+  ORDER 3
+  MANDATORY
+
+ADD FIELD "SupplierId" OF "PurchaseOrder" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 8
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "PurchaseOrderId" OF "PurchaseOrder" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD INDEX "PurchaseOrder_PK" ON "PurchaseOrder" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "PurchaseOrderId" ASCENDING 
+
+ADD INDEX "Status_FK" ON "PurchaseOrder" 
+  AREA "Indexes"
+  INDEX-FIELD "StatusId" ASCENDING 
+
+ADD INDEX "Supplier_FK" ON "PurchaseOrder" 
+  AREA "Indexes"
+  INDEX-FIELD "SupplierId" ASCENDING 
+
+ADD TABLE "RefCall"
+  AREA "Data"
+  DESCRIPTION "The refcall table contains information about a sale."
+  DUMP-NAME "refcall"
+
+ADD FIELD "CallNum" OF "RefCall" AS character 
+  FORMAT "x(6)"
+  INITIAL ""
+  LABEL "Call Num"
+  POSITION 2
+  MAX-WIDTH 12
+  HELP "Please enter the call number."
+  ORDER 10
+
+ADD FIELD "Detail" OF "RefCall" AS character 
+  FORMAT "x(300)"
+  INITIAL ""
+  LABEL "Call Detail"
+  POSITION 7
+  MAX-WIDTH 600
+  HELP "Please enter text"
+  ORDER 60
+
+ADD FIELD "RefCallId" OF "RefCall" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "SalesrepId" OF "RefCall" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 10
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD FIELD "CustomerId" OF "RefCall" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "TenantId" OF "RefCall" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 12
+  MAX-WIDTH 32
+  ORDER 5
+
+ADD FIELD "ParentRefCallId" OF "RefCall" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 13
+  MAX-WIDTH 72
+  ORDER 4
+  MANDATORY
+
+ADD FIELD "CallDate" OF "RefCall" AS datetime-tz 
+  FORMAT "99/99/9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL ?
+  LABEL "Call Date"
+  POSITION 14
+  MAX-WIDTH 12
+  HELP "Please enter the call date."
+  ORDER 70
+
+ADD INDEX "RefCall_PK" ON "RefCall" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "RefCallId" ASCENDING 
+
+ADD INDEX "CallDetail" ON "RefCall" 
+  AREA "Indexes"
+  WORD
+  INDEX-FIELD "Detail" ASCENDING 
+
+ADD INDEX "CallNum" ON "RefCall" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CallNum" ASCENDING 
+
+ADD INDEX "Customer_FK" ON "RefCall" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "CustomerId" ASCENDING 
+
+ADD INDEX "ParentRefCall_FK" ON "RefCall" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "ParentRefCallId" ASCENDING 
+
+ADD INDEX "Salesrep_FK" ON "RefCall" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "SalesrepId" ASCENDING 
+
+ADD TABLE "SalesRegion"
+  AREA "Data"
+  DESCRIPTION "Describes sales regions"
+  DUMP-NAME "salesregion"
+
+ADD FIELD "TenantId" OF "SalesRegion" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "Name" OF "SalesRegion" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 70
+  ORDER 11
+
+ADD INDEX "SalesRegion_PK" ON "SalesRegion" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD TABLE "Salesrep"
+  AREA "Data"
+  DESCRIPTION "The salesrep table contains sales representative information"
+  DUMP-NAME "salesrep"
+
+ADD FIELD "SalesRegion" OF "Salesrep" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "Region"
+  POSITION 3
+  MAX-WIDTH 16
+  HELP "Please enter the Sales Region covered by this salesman."
+  ORDER 30
+
+ADD FIELD "Code" OF "Salesrep" AS character 
+  FORMAT "x(4)"
+  INITIAL ""
+  LABEL "Rep Code"
+  POSITION 4
+  MAX-WIDTH 8
+  HELP "Please enter the Sales Rep."
+  ORDER 3
+
+ADD FIELD "AnnualQuota" OF "Salesrep" AS integer 
+  FORMAT ">,>>>,>>>,>>9"
+  INITIAL "0"
+  LABEL "Annual Quota"
+  POSITION 5
+  MAX-WIDTH 264
+  HELP "Please enter the Annual Quota."
+  ORDER 40
+
+ADD FIELD "EmployeeId" OF "Salesrep" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 8
+  MAX-WIDTH 72
+  ORDER 50
+  MANDATORY
+
+ADD FIELD "TenantId" OF "Salesrep" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 2
+
+ADD FIELD "SalesrepId" OF "Salesrep" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 10
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD INDEX "Salesrep_PK" ON "Salesrep" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "SalesrepId" ASCENDING 
+
+ADD INDEX "Employee_FK" ON "Salesrep" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "EmployeeId" ASCENDING 
+
+ADD INDEX "SalesRegion_FK" ON "Salesrep" 
+  AREA "Indexes"
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "SalesRegion" ASCENDING 
+
+ADD INDEX "SalesRep" ON "Salesrep" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "TenantId" ASCENDING 
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD TABLE "State"
+  AREA "Data"
+  DESCRIPTION "The state table contains state abbreviations and corresponding sales regions"
+  DUMP-NAME "state"
+
+ADD FIELD "State" OF "State" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "State"
+  POSITION 2
+  MAX-WIDTH 40
+  HELP "Please enter the state abbreviation."
+  ORDER 10
+
+ADD FIELD "StateName" OF "State" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "State Name"
+  POSITION 3
+  MAX-WIDTH 40
+  HELP "Please enter the full state name."
+  ORDER 20
+
+ADD FIELD "Country" OF "State" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  POSITION 6
+  MAX-WIDTH 16
+  ORDER 60
+  MANDATORY
+
+ADD FIELD "Timezone" OF "State" AS integer 
+  FORMAT "->,>>>,>>9"
+  INITIAL "0"
+  POSITION 7
+  MAX-WIDTH 4
+  ORDER 70
+
+ADD INDEX "State_PK" ON "State" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Country" ASCENDING 
+  INDEX-FIELD "State" ASCENDING 
+
+ADD TABLE "StatusDetail"
+  AREA "Data"
+  DUMP-NAME "statusdetail"
+
+ADD FIELD "StatusDetailId" OF "StatusDetail" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "Code" OF "StatusDetail" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  POSITION 3
+  MAX-WIDTH 30
+  ORDER 20
+
+ADD FIELD "Description" OF "StatusDetail" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 30
+
+ADD INDEX "StatusDetail_PK" ON "StatusDetail" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "StatusDetailId" ASCENDING 
+
+ADD INDEX "Code" ON "StatusDetail" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD TABLE "Supplier"
+  AREA "Data"
+  DESCRIPTION "The supplier table contains a supplier's name, address and additional information pertaining to the supplier."
+  DUMP-NAME "supplier"
+
+ADD FIELD "Name" OF "Supplier" AS character 
+  DESCRIPTION "Enter Supplier Name"
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "Name"
+  HELP "Please enter the Supplier's Name."
+  LENGTH 0
+  ORDER 20
+
+ADD FIELD "Comments" OF "Supplier" AS character 
+  FORMAT "x(80)"
+  INITIAL ""
+  LABEL "Comments"
+  POSITION 12
+  MAX-WIDTH 160
+  COLUMN-LABEL "Comments"
+  HELP "Please enter comments."
+  LENGTH 0
+  ORDER 30
+
+ADD FIELD "Discount" OF "Supplier" AS integer 
+  FORMAT ">>9%"
+  INITIAL "0"
+  LABEL "Discount"
+  POSITION 16
+  MAX-WIDTH 4
+  HELP "Please enter a percentage from 0 to 100."
+  ORDER 40
+
+ADD FIELD "SupplierId" OF "Supplier" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 17
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "Code" OF "Supplier" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  POSITION 18
+  MAX-WIDTH 30
+  ORDER 10
+
+ADD INDEX "Supplier_PK" ON "Supplier" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "SupplierId" ASCENDING 
+
+ADD INDEX "Code" ON "Supplier" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD TABLE "SupplierItem"
+  AREA "Data"
+  DESCRIPTION "The supplieritem lists all of the items that are supplied by a particlar supplier."
+  DUMP-NAME "supplieritem"
+
+ADD FIELD "ItemId" OF "SupplierItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 5
+  MAX-WIDTH 25
+  ORDER 2
+
+ADD FIELD "SupplierId" OF "SupplierItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 6
+  MAX-WIDTH 25
+  ORDER 3
+
+ADD FIELD "SupplierItemXrefId" OF "SupplierItem" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 9
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD INDEX "SupplierItem_PK" ON "SupplierItem" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "SupplierId" ASCENDING 
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "Item_FK" ON "SupplierItem" 
+  AREA "Indexes"
+  INDEX-FIELD "ItemId" ASCENDING 
+
+ADD INDEX "Supplier_FK" ON "SupplierItem" 
+  AREA "Indexes"
+  INDEX-FIELD "SupplierId" ASCENDING 
+
+ADD TABLE "Tenant"
+  AREA "Data"
+  DESCRIPTION "The master tenant table. This table also contains the parent/child relationships shown in the diagram above."
+  DUMP-NAME "tenant"
+
+ADD FIELD "TenantId" OF "Tenant" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 2
+  MAX-WIDTH 72
+  ORDER 1
+  MANDATORY
+
+ADD FIELD "ParentTenantId" OF "Tenant" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 3
+  MAX-WIDTH 72
+  ORDER 2
+
+ADD FIELD "Name" OF "Tenant" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  POSITION 4
+  MAX-WIDTH 100
+  ORDER 12
+  MANDATORY
+
+ADD FIELD "LocaleId" OF "Tenant" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 5
+  MAX-WIDTH 72
+  ORDER 22
+
+ADD INDEX "Tenant_PK" ON "Tenant" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "TenantId" ASCENDING 
+
+ADD INDEX "Name" ON "Tenant" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "Name" ASCENDING 
+
+ADD INDEX "Parent_FK" ON "Tenant" 
+  AREA "Indexes"
+  INDEX-FIELD "ParentTenantId" ASCENDING 
+
+ADD TABLE "Warehouse"
+  AREA "Data"
+  DESCRIPTION "The warehouse table contains warehouse information including warehouse name and address."
+  DUMP-NAME "warehouse"
+
+ADD FIELD "Name" OF "Warehouse" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  LABEL "Warehouse Name"
+  POSITION 3
+  MAX-WIDTH 60
+  HELP "Please enter a warehouse name."
+  ORDER 20
+
+ADD FIELD "WarehouseId" OF "Warehouse" AS character 
+  DESCRIPTION "Object ID"
+  FORMAT "x(32)"
+  INITIAL ?
+  POSITION 11
+  MAX-WIDTH 32
+  ORDER 1
+
+ADD FIELD "Code" OF "Warehouse" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  POSITION 12
+  MAX-WIDTH 30
+  ORDER 100
+
+ADD INDEX "Warehouse_PK" ON "Warehouse" 
+  AREA "Indexes"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "WarehouseId" ASCENDING 
+
+ADD INDEX "Code" ON "Warehouse" 
+  AREA "Indexes"
+  UNIQUE
+  INDEX-FIELD "Code" ASCENDING 
+
+ADD INDEX "Name" ON "Warehouse" 
+  AREA "Indexes"
+  INDEX-FIELD "Name" ASCENDING 
+
+.
+PSC
+cpstream=UTF-8
+.
+0000065292

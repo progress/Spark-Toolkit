@@ -1,0 +1,119 @@
+<!doctype html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Progress Application Server for OpenEdge</title>
+<meta http-equiv="Cache-Control" content="no-store" />
+<link rel="stylesheet" type="text/css" href="commonStyle.css" />
+
+
+</head>
+
+<body>
+
+	<div id="header">
+		<div id="ProgressBanner">
+			<img id="ProgressLogo" src="../static/images/progress.png"
+				alt="Progress OpenEdge">
+		</div>
+		<div id="PASbanner">
+			<h2>
+				<img class="icon-36" src="../static/images/pas-logo.svg" alt="Icon">
+				<span>Progress Application Server for OpenEdge</span>
+			</h2>
+		</div>
+	</div>
+
+	<div id="PASmain">
+		<div id="Server">
+			<div id="ServerInfo">
+				<div id="ServerIcon">
+					<img class="icon-64" src="../static/images/tomcat.png"
+						alt="Apache Icon">
+				</div>
+				<div>
+					<h2 id="OEVersion"></h2>
+					<p id="upTime"></p>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div id="ServerDetails">
+				<div class="column left">
+
+					<dl>
+						<dt>Tomcat Version</dt>
+						<dd id="TCVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>JVM Version</dt>
+						<dd id="JVMVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>PAS Version</dt>
+						<dd id="PASVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>Hostname</dt>
+						<dd id="HostName"></dd>
+					</dl>
+
+					<dl>
+						<dt>IP Address</dt>
+						<dd id="IPAddress"></dd>
+					</dl>
+
+				</div>
+				<div class="column right">
+
+					<dl>
+						<dt>OS Name</dt>
+						<dd id="OSName"></dd>
+					</dl>
+
+					<dl>
+						<dt>OS Version</dt>
+						<dd id="OSVersion"></dd>
+					</dl>
+
+					<dl>
+						<dt>OS Architecture</dt>
+						<dd id="OSArch"></dd>
+					</dl>
+
+				</div>
+			</div>
+
+			<div class="text-center">
+				<button id="ManageApps" class="progress-button">
+					<img src="../static/images/gear.png" alt="Gear"> Manage Web
+					Applications
+				</button>
+			</div>
+
+		</div>
+		<div id="Links">
+			<ul>
+				<li><a href="https://documentation.progress.com/output/ua/PAS/"><img class="icon-48"
+						src="../static/images/documentation.png" alt="Icon"> <span>Documentation</span></a></li>
+				<li><a href="https://community.progress.com/community_groups/default.aspx"><img class="icon-48"
+						src="../static/images/communities.png" alt="Icon"> <span>OpenEdge Communities</span></a></li>
+				<li><a href="https://community.progress.com/community_groups/openedge_development/default.aspx"><img class="icon-48"
+						src="../static/images/forum.png" alt="Icon"> <span>OpenEdge Development Community</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="clear">
+	</div>
+
+	<div id="Footer">
+		<span>Copyright &copy; 1993-2016 Progress Software Corporation. All rights reserved.</span>
+	</div>
+	<!--  script at the bottom to avoid in-lined call do update -->
+<script src="serverstatus.js"></script>
+</body>
+</html>

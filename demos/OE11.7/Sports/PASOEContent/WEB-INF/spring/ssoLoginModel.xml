@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+    <!-- Spring Security authentication process references for <custom-filter> definitions:
+         CHANNEL_FILTER
+                                        <== OECORSFilter
+         SECURITY_CONTEXT_FILTER            /default/
+         CONCURRENT_SESSION_FILTER          /default/
+         HEADERS_FILTER                     /default/
+         CSRF_FILTER                        /default/
+         LOGOUT_FILTER                      <logout>
+         X509_FILTER                        /default/
+         PRE_AUTH_FILTER                <== OEPreauthfilter (Rollbase)
+         CAS_FILTER                         /default/
+         FORM_LOGIN_FILTER                  <http-form>
+                                        <== OESSOFilter
+         BASIC_AUTH_FILTER                  <http-basic>
+                                        <== customAuthorizationFilter
+         SERVLET_API_SUPPORT_FILTER         /default/
+         REMEMBER_ME_FILTER                 /default/
+         ANONYMOUS_FILTER                   <anonymous>
+         SESSION_MANAGEMENT_FILTER          <session-management>
+         EXCEPTION_TRANSLATION_FILTER       /default/
+         FILTER_SECURITY_INTERCEPTOR        /default/
+         SWITCH_USER_FILTER             <== OEClientPrincipalFilter
+     -->
+
+    <!-- The HTTP BASIC security for REST is disabled for a SSO pure configuration. -->
+    <b:import resource="apsv-none-extern.xml"/> 
+
+    <!-- The HTTP BASIC security for SOAP is disabled for a SSO pure configuration. -->
+    <b:import resource="soap-none-extern.xml"/>
+
+    <!-- This HTTP security space represents the public REST application URI
+         space and controle the authentication/authorization process to its 
+         dynamic/static content.  
+     -->
+    <http pattern="/rest/**"
+          auto-config="false"
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="nullApplicationAuth" 
+          entry-point-ref="OEAuthenticationEntryPoint"
+          realm="${http.rest.realm}" >
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+        <!-- OpenEdge PRE AUTH Filter  -->
+        <custom-filter position="PRE_AUTH_FILTER" 
+                       ref="OEPreauthfilter" />
+
+        <!-- OpenEdge SSO Authorization header Filter -->
+        <custom-filter before="BASIC_AUTH_FILTER"
+                       ref="OESSOFilter" />
+
+        <!-- Custom Authorization header Filter -->
+        <custom-filter after="BASIC_AUTH_FILTER"
+                       ref="customAuthorizationFilter" />
+
+         <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls 
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="restFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+        
+        <!-- NOTE:  all XML <intercept-url> elements have been
+             replaced by the 'restFilterSecurityInterceptor' and
+             the oeablSecurity.csv configuration file.
+            <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+        --> 
+
+        <!-- logout is not normally part of basic authentication, but is
+              used by OpenEdge Mobile to end any sessions that may have
+              been created -->
+        <logout logout-url="${http.logout.url}"
+                success-handler-ref="OELogoutSuccessHandler"
+                invalidate-session="true" 
+                delete-cookies="${http.logout.deletecookie}" />
+        
+        <headers defaults-disabled="false"
+                 disabled="false" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+    </http>
+    
+  
+    <!-- This HTTP security space represents the public WSPD URI
+         space and controle the authentication/authorization process to its 
+         dynamic/static content.  
+     -->
+    <http pattern="/web/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="nullApplicationAuth"
+          entry-point-ref="OEAuthenticationEntryPoint"
+          realm="${http.web.realm}" >
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+        <!-- OpenEdge PRE AUTH Filter  -->
+        <custom-filter position="PRE_AUTH_FILTER" 
+                       ref="OEPreauthfilter" />
+
+        <!-- OpenEdge SSO Authorization header Filter -->
+        <custom-filter before="BASIC_AUTH_FILTER"
+                       ref="OESSOFilter" />
+
+        <!-- Custom Authorization header Filter -->
+        <custom-filter after="BASIC_AUTH_FILTER"
+                       ref="customAuthorizationFilter" />
+
+         <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="webFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+
+        <!-- NOTE:  all XML <intercept-url> elements have been
+             replaced by the 'webFilterSecurityInterceptor' and
+             the oeablSecurity.csv configuration file.
+            <intercept-url pattern="/web/**"  
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+        -->
+
+        <headers defaults-disabled="false"
+                 disabled="false" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+    </http>
+
+    <!-- This HTTP security space represents the default public URI
+         space and controls the authentication/authorization process to its 
+         dynamic/static content.  
+     -->
+    <http pattern="/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="nullApplicationAuth"
+          entry-point-ref="OEAuthenticationEntryPoint"
+          realm="${http.realm}" >
+
+        <!-- Standard web-application root for public data like index.html 
+             DO NOT grant /** permitAll() access  -->
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- OpenEdge SSO Authorization header Filter -->
+        <custom-filter before="BASIC_AUTH_FILTER"
+                       ref="OESSOFilter" />
+
+        <!-- Custom Authorization header Filter -->
+        <custom-filter after="BASIC_AUTH_FILTER"
+                       ref="customAuthorizationFilter" />
+
+        <!-- URL access controls 
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="defaultFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+
+        <!-- NOTE: All <intercept-url> elments have been replaced by 
+             'defaultFilterSecurityInterceptor' and the 
+             oeablSecurity.csv configuration file. -->
+
+
+        <headers defaults-disabled="false"
+                 disabled="false" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+    </http>
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for the security process, and
+         allows that process to manage the HTTP requests/responses and 
+         invoking the user authentication process. --> 
+    <b:import resource="authFilters.xml"/> 
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for all AuthenticationManagers
+         invoked by the security process.  The AuthenticationManager definitions
+         will perform physical connections to the source of user accounts, validate
+         the account exists, its state, and whether the account secret is valid.
+         --> 
+    <b:import resource="authManagers.xml"/> 
+
+</b:beans>

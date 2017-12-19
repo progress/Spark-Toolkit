@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AppServer:AppServerEndpointBean xs:schemaLocation="urn:schemas-progress-com:bpm:appserverbean:0001 appserverbean0001.xsd urn:schemas-progress-com:WSAD:0010 wsad0010.xsd" id="AppServerEndpoint" xmlns:AppServer="urn:schemas-progress-com:bpm:appserverbean:0001" xmlns:bpm="urn:schemas-progress-com:WSAD:0010" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance">
+  <AppServer:userName xs:nil="true"/>
+  <AppServer:password xs:nil="true"/>
+  <AppServer:extraInfo xs:nil="true"/>
+  <AppServer:sessionMode>1</AppServer:sessionMode>
+  <bpm:ApplicationRuntimeProperties>
+    <bpm:runtimePropertyVersion>4</bpm:runtimePropertyVersion>
+    <bpm:staleO4GLObjectTimeout>0</bpm:staleO4GLObjectTimeout>
+    <bpm:minSessions>1</bpm:minSessions>
+    <bpm:maxSessions>0</bpm:maxSessions>
+    <bpm:initialSessions>1</bpm:initialSessions>
+    <bpm:idleSessionTimeout>0</bpm:idleSessionTimeout>
+    <bpm:requestWaitTimeout>-1</bpm:requestWaitTimeout>
+    <bpm:serviceAvailable>1</bpm:serviceAvailable>
+    <bpm:serviceFaultLevel>2</bpm:serviceFaultLevel>
+    <bpm:waitIfBusy>1</bpm:waitIfBusy>
+    <bpm:connectionLifetime>0</bpm:connectionLifetime>
+    <bpm:minIdleConnections>0</bpm:minIdleConnections>
+    <bpm:appServerKeepalive>denyClientASK,allowServerASK</bpm:appServerKeepalive>
+    <bpm:clientASKActivityTimeout>60</bpm:clientASKActivityTimeout>
+    <bpm:clientASKResponseTimeout>60</bpm:clientASKResponseTimeout>
+  </bpm:ApplicationRuntimeProperties>
+</AppServer:AppServerEndpointBean>

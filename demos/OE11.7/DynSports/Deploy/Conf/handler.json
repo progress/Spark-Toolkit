@@ -1,0 +1,13 @@
+{
+    "Config": {
+        "Handler": [{
+            "ClassName": "Spark.Core.Handler.DataObjectHandler",
+            "FacadeType": "Local",
+            "ServerName": ""
+        }],
+        "ServerMapping": [{
+            "ServerName": "RemoteSports",
+            "RemoteProc": "Spark/Core/ApsvFacade.p"
+        }]
+    }
+}

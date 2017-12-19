@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing authentication, channel
+  - security and web URI beans.
+  -
+  - Only used by "filter" artifact.
+  -
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+    <b:import resource="apsv-none-extern.xml"/>
+    <b:import resource="soap-none-extern.xml"/>
+
+    <!-- This HTTP security space represents the web application's public URI
+         space and controls the authentication/authorization process to its 
+         dynamic/static content.  
+     -->
+    <http pattern="/**"
+        auto-config="false" 
+        use-expressions="true" 
+        create-session="stateless" 
+        disable-url-rewriting="true" 
+        authentication-manager-ref="nullApplicationAuth" 
+        entry-point-ref="http403ForbiddenEntryPoint"
+        realm="OpenEdge" >
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- Standard web-application root for public data like index.html 
+             DO NOT grant /** permitAll() access  -->
+        <intercept-url pattern="/*" method="GET" 
+                    access="permitAll()"/>
+
+
+	<!-- CGI pages -->
+       	<intercept-url pattern="/webspeed/cgi-bin/**" method="GET"
+       		access="permitAll()"/>
+
+
+        <!-- Application public area example -->
+        <!--
+        <intercept-url pattern="/pub/**" access="permitAll()"/>
+        -->
+
+        <!-- PASOE rest transport -->
+        <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <!-- PASOE web transport -->
+        <intercept-url pattern="/web/**" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <!-- HTTP dynamic JSP pages -->
+        <intercept-url pattern="/jsp/**" method="GET"
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <!-- Standard web-application root for public data like index.html 
+             DO NOT grant /** permitAll() access  -->
+        <intercept-url pattern="/index.htm*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/server/**" method="GET"
+                       access="permitAll()"/>
+
+        <!-- HTTP static files -->
+        <intercept-url pattern="/static/error/*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/auth/*" method="GET"
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/images/*" method="GET"
+                       access="permitAll()" />
+
+        <!-- Restricted access HTTP static files -->
+        <intercept-url pattern="/static/**" method="GET"
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.htm*" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.gif" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.jpg" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.css" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.js" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.json" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.asp" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <intercept-url pattern="/**/*.inc" method="GET" 
+                       access="hasAnyRole('ROLE_ANONYMOUS')"/>
+
+        <!-- best practice: deny anything no explicitly granted -->
+        <intercept-url pattern="/**" access="denyAll()"/>
+
+        <!-- authentication model -->
+        <anonymous />
+
+        <!-- login session controls -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler error-page="/WEB-INF/jsp/errorPage.jsp" />
+
+        <headers defaults-disabled="false"
+                 disabled="false" />
+
+        <!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+        <csrf disabled="true"/>
+
+    </http>
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for the security process, and
+         allows that process to manage the HTTP requests/responses and 
+         invoking the user authentication process. --> 
+    <b:import resource="authFilters.xml"/> 
+
+    <!-- Import the Spring Security configuration file fragment that contains
+         all of the explict bean declarations for all AuthenticationManagers
+         invoked by the security process.  The AuthenticationManager definitions
+         will perform physical connections to the source of user accounts, validate
+         the account exists, its state, and whether the account secret is valid.
+         --> 
+    <b:import resource="authManagers.xml"/> 
+
+</b:beans>

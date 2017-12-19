@@ -1,0 +1,7 @@
+-db webstate -H localhost -S 8500
+-db sports2000 -H localhost -S 8600
+-cpinternal UTF-8
+-cpstream UTF-8
+-mmax 8192
+-D 1000
+-errorstack

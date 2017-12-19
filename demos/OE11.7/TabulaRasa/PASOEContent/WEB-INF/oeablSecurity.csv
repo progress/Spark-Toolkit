@@ -1,0 +1,32 @@
+# "url-pattern","<method>","<spring-access-expression>"
+
+############## Intercept-url definitions for the APSV transport URIs ###############
+"/apsv/**","HEAD","hasAnyRole('ROLE_PSCUser')"
+"/apsv/**","GET","hasAnyRole('ROLE_PSCUser')"
+"/apsv/**","POST","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the REST transport URIs ###############
+"/rest/_oeping","*","permitAll()"
+"/rest/**","*","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the SOAP transport URIs ###############
+"/soap/wsdl/**","GET","hasAnyRole('ROLE_PSCUser')"
+"/soap/**","POST","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the WEB transport URIs ###############
+"/web/pdo","GET","permitAll()"
+"/web/pdo/*","GET","permitAll()"
+"/web/pdo/common/user/*","*","permitAll()"
+"/web/**","*","hasAnyRole('ROLE_PSCUser')"
+
+############## Intercept-url definitions for the default URI space #################
+"/static/home.html","GET","hasAnyRole('ROLE_PSCUser')"
+"/static/auth/*","*","permitAll()"
+"/static/app.html","*","hasAnyRole('ROLE_PSCUser')"
+"/static/app/views/**","*","hasAnyRole('ROLE_PSCUser')"
+"/static/**","GET","permitAll()"
+"/*","GET","permitAll()"
+
+# Best practice - deny anything not explicitly granted
+"/**","*","denyAll()"
+

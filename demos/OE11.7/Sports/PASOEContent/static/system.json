@@ -1,0 +1,547 @@
+{
+  "version": "1.5",
+  "lastModified": "Mon Dec 11 14:34:01 EST 2017",
+  "services": [
+    {
+      "name": "system",
+      "address": "\/web\/pdo\/system",
+      "useRequest": false,
+      "resources": [
+        {
+          "name": "access",
+          "path": "\/access",
+          "autoSave": true,
+          "operations": [
+            {
+              "name": "apply",
+              "path": "\/apply",
+              "useBeforeImage": false,
+              "type": "invoke",
+              "verb": "put",
+              "params": [
+                {
+                  "name": "rules",
+                  "type": "REQUEST_BODY"
+                },
+                {
+                  "name": "success",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            },
+            {
+              "name": "rules",
+              "path": "\/rules",
+              "useBeforeImage": false,
+              "type": "invoke",
+              "verb": "put",
+              "params": [
+                {
+                  "name": "rules",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "webdata",
+          "path": "\/webdata",
+          "autoSave": true,
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "dsWebDataStore": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ttWebDataStore": {
+                    "type": "array",
+                    "primaryKey": [
+                      "WebSessionID",
+                      "ObjectName"
+                    ],
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "semanticType": "Internal"
+                        },
+                        "_errorString": {
+                          "type": "string",
+                          "semanticType": "Internal"
+                        },
+                        "id": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "id",
+                          "semanticType": "Internal"
+                        },
+                        "seq": {
+                          "type": "integer",
+                          "ablType": "INTEGER",
+                          "default": null,
+                          "title": "seq",
+                          "semanticType": "Internal"
+                        },
+                        "WebSessionID": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "SessionID"
+                        },
+                        "ObjectName": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Object"
+                        },
+                        "ObjectData": {
+                          "type": "null",
+                          "ablType": "clob",
+                          "default": null,
+                          "title": "Data"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "operations": [
+            {
+              "path": "?filter={filter}",
+              "useBeforeImage": true,
+              "type": "read",
+              "verb": "get",
+              "mappingType": "AFP",
+              "capabilities": "filter,top,skip,id,sort,orderBy",
+              "params": [
+                {
+                  "name": "filter",
+                  "type": "QUERY"
+                },
+                {
+                  "name": "dsWebDataStore",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "webprofile",
+          "path": "\/webprofile",
+          "autoSave": false,
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "dsWebProfile": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ttWebProfile": {
+                    "type": "array",
+                    "primaryKey": [
+                      "Username",
+                      "DomainName"
+                    ],
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "semanticType": "Internal"
+                        },
+                        "_errorString": {
+                          "type": "string",
+                          "semanticType": "Internal"
+                        },
+                        "id": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "id",
+                          "semanticType": "Internal"
+                        },
+                        "seq": {
+                          "type": "integer",
+                          "ablType": "INTEGER",
+                          "default": null,
+                          "title": "seq",
+                          "semanticType": "Internal"
+                        },
+                        "UserNum": {
+                          "type": "integer",
+                          "ablType": "INTEGER",
+                          "default": 0,
+                          "title": "UserNum"
+                        },
+                        "Username": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Username"
+                        },
+                        "DomainName": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Domain"
+                        },
+                        "Password": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Password"
+                        },
+                        "ResetCode": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Reset Code"
+                        },
+                        "FirstName": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "First Name"
+                        },
+                        "LastName": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Last Name"
+                        },
+                        "IsActive": {
+                          "type": "boolean",
+                          "ablType": "LOGICAL",
+                          "default": false,
+                          "title": "Is Active"
+                        },
+                        "IsLocked": {
+                          "type": "boolean",
+                          "ablType": "LOGICAL",
+                          "default": false,
+                          "title": "Is Locked"
+                        },
+                        "UseTFA": {
+                          "type": "boolean",
+                          "ablType": "LOGICAL",
+                          "default": false,
+                          "title": "Use TFA"
+                        },
+                        "TFAMethod": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "TFA Method"
+                        },
+                        "TFAToken": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "TFA Token"
+                        },
+                        "TFASecret": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "TFA Secret"
+                        },
+                        "Email": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Email"
+                        },
+                        "CompanyName": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Company"
+                        },
+                        "JobTitle": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Title"
+                        },
+                        "HomePhone": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Home Phone",
+                          "semanticType": "PhoneNumber"
+                        },
+                        "WorkPhone": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Work Phone",
+                          "semanticType": "PhoneNumber"
+                        },
+                        "MobilePhone": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Mobile Phone"
+                        },
+                        "MobileCarrier": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Mobile Carrier"
+                        },
+                        "SecurityQuestion": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Security Question"
+                        },
+                        "SecurityAnswer": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Security Answer"
+                        },
+                        "PasswordExpires": {
+                          "type": "string",
+                          "ablType": "DATE",
+                          "default": null,
+                          "title": "Expires",
+                          "format": "date"
+                        },
+                        "ForcePWChange": {
+                          "type": "boolean",
+                          "ablType": "LOGICAL",
+                          "default": false,
+                          "title": "Must Change Password"
+                        },
+                        "LockOutDate": {
+                          "type": "string",
+                          "ablType": "DATE",
+                          "default": null,
+                          "title": "Lockout Date",
+                          "format": "date"
+                        },
+                        "LockOutTime": {
+                          "type": "integer",
+                          "ablType": "INTEGER",
+                          "default": 0,
+                          "title": "LockOut Time"
+                        },
+                        "TaskAdjust": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Task Adjustment"
+                        },
+                        "Comments": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Comments"
+                        },
+                        "FirstLogin": {
+                          "type": "string",
+                          "ablType": "DATE",
+                          "default": null,
+                          "title": "First Time Login",
+                          "format": "date"
+                        },
+                        "LastLogin": {
+                          "type": "string",
+                          "ablType": "DATE",
+                          "default": null,
+                          "title": "Last Login",
+                          "format": "date"
+                        },
+                        "LoginCount": {
+                          "type": "integer",
+                          "ablType": "INTEGER",
+                          "default": 0,
+                          "title": "Login Count"
+                        },
+                        "ProfileRoles": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Roles"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "operations": [
+            {
+              "path": "?filter={filter}",
+              "useBeforeImage": true,
+              "type": "read",
+              "verb": "get",
+              "mappingType": "AFP",
+              "capabilities": "filter,top,skip,id,sort,orderBy",
+              "params": [
+                {
+                  "name": "filter",
+                  "type": "QUERY"
+                },
+                {
+                  "name": "dsWebProfile",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            },
+            {
+              "name": "submit",
+              "path": "\/submit",
+              "useBeforeImage": true,
+              "type": "submit",
+              "verb": "put",
+              "params": [
+                {
+                  "name": "dsWebProfile",
+                  "type": "REQUEST_BODY"
+                },
+                {
+                  "name": "dsWebProfile",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            },
+            {
+              "name": "count",
+              "path": "\/count?filter={filter}",
+              "useBeforeImage": false,
+              "type": "count",
+              "verb": "put",
+              "params": [
+                {
+                  "name": "filter",
+                  "type": "QUERY"
+                },
+                {
+                  "name": "numRecs",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "webrole",
+          "path": "\/webrole",
+          "autoSave": true,
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "dsWebRole": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ttWebRole": {
+                    "type": "array",
+                    "primaryKey": [
+                      "RoleID"
+                    ],
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "_id": {
+                          "type": "string",
+                          "semanticType": "Internal"
+                        },
+                        "_errorString": {
+                          "type": "string",
+                          "semanticType": "Internal"
+                        },
+                        "id": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "id",
+                          "semanticType": "Internal"
+                        },
+                        "seq": {
+                          "type": "integer",
+                          "ablType": "INTEGER",
+                          "default": null,
+                          "title": "seq",
+                          "semanticType": "Internal"
+                        },
+                        "RoleID": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Role"
+                        },
+                        "RoleDesc": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Description"
+                        },
+                        "TaskList": {
+                          "type": "string",
+                          "ablType": "CHARACTER",
+                          "default": "",
+                          "title": "Tasks"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "operations": [
+            {
+              "path": "?filter={filter}",
+              "useBeforeImage": true,
+              "type": "read",
+              "verb": "get",
+              "mappingType": "AFP",
+              "capabilities": "filter,top,skip,id,sort,orderBy",
+              "params": [
+                {
+                  "name": "filter",
+                  "type": "QUERY"
+                },
+                {
+                  "name": "dsWebRole",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            },
+            {
+              "name": "count",
+              "path": "\/count?filter={filter}",
+              "useBeforeImage": false,
+              "type": "count",
+              "verb": "put",
+              "params": [
+                {
+                  "name": "filter",
+                  "type": "QUERY"
+                },
+                {
+                  "name": "numRecs",
+                  "type": "RESPONSE_BODY"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

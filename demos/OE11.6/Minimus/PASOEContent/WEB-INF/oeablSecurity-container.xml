@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing authentication, channel
+  - security and web URI beans.
+  -
+  - Only used by "filter" artifact.
+  -
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+
+    <!-- To disable security for APSV, import apsv-none.xml (and comment out import of apsv-basic.xml)-->
+    <!-- To enable security for APSV, import apsv-basic.xml (and comment out import of apsv-none.xml) -->
+    <b:import resource="apsv-none.xml"/> 
+    <!--<b:import resource="apsv-basic.xml"/> -->
+
+    <!-- To disable security for SOAP, import apsv-none.xml (and comment out import of soap-basic.xml)-->
+    <!-- To enable security for SOAP, import apsv-basic.xml (and comment out import of soap-none.xml) -->
+    <b:import resource="soap-none.xml"/>
+    <!--<b:import resource="soap-basic-local.xml"/> --> 
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/rest/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth"
+          realm="OpenEdge" >
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER"
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+        <!-- HTTP REST/Mobile AppServer service -->
+        <intercept-url pattern="/rest/**" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <!-- authentication models -->
+        <!-- the role names here need to be coordinated with the container's
+             <auth-constraint> configuration in web.xml.  The role names
+             contained in this element then need to be defined in the
+             <intercept-url> elements above.
+         -->
+        <jee mappable-roles="ROLE_PSCUser" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+    </http>
+    
+    <!-- This HTTP security space represents the WSPD and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/web/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth"
+          realm="OpenEdge" >
+
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER"
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+        <intercept-url pattern="/web/**"  
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <!-- authentication models -->
+        <!-- the role names here need to be coordinated with the container's
+             <auth-constraint> configuration in web.xml.  The role names
+             contained in this element then need to be defined in the
+             <intercept-url> elements above.
+         -->
+        <jee mappable-roles="ROLE_PSCUser" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+    </http>
+
+    <!-- This HTTP security space represents the REST service and controls 
+         the authentication/authorization process to its dynamic/static content.  
+         ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+     -->
+    <http pattern="/**"
+          auto-config="false" 
+          use-expressions="true" 
+          create-session="stateless" 
+          disable-url-rewriting="true" 
+          authentication-manager-ref="oeablApplicationAuth"
+          realm="OpenEdge">
+
+        <!-- OpenEdge CORS Filter -->
+        <custom-filter before="SECURITY_CONTEXT_FILTER" 
+                       ref="OECORSFilter" />
+
+        <!-- URL access controls -->
+
+        <!-- Restricted Mobile session class uses this page as part of its 
+             login() operation, protect it so it triggers user 
+             authentication -->
+        <intercept-url pattern="/static/home.html" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <!-- Mobile application restrictions section ends here -->
+
+        <!-- Restricted web application server-status page that gives
+             an admin/developer access to some web application information.
+             Must appear before the the wildcard access controls below -->
+        <intercept-url pattern="/static/ServerStatus.html" method="GET"
+                       access="hasAnyRole('ROLE_PSCUser','ROLE_PSCAdmin','ROLE_PSCDebug')"/>
+
+        <intercept-url pattern="/server/**"  method="GET"
+                       access="hasAnyRole('ROLE_PSCAdmin','ROLE_PSCDebug')"/>
+
+        <!-- Open access resources -->
+
+        <intercept-url pattern="/*" method="GET" 
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/*" method="GET" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/error/*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/images/*" 
+                       access="permitAll()" />
+
+        <intercept-url pattern="/static/auth/*" 
+                       access="permitAll()" />
+
+        <!-- Restricted access HTTP static files -->
+        <intercept-url pattern="/static/**" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/static/home.html" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.htm*" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.gif" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.jpg" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.css" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.js" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.json" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.asp" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/**/*.inc" method="GET" 
+                       access="hasAnyRole('ROLE_PSCUser')"/>
+
+        <intercept-url pattern="/*" method="GET" 
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/error/*" method="GET"
+                       access="permitAll()"/>
+
+        <intercept-url pattern="/static/auth/*" 
+                       access="permitAll()" />
+
+        <!-- Best practice deny all that is not explicitly granted -->
+        <intercept-url pattern="/**" access="denyAll()"/>
+
+        <!-- authentication models -->
+        <!-- the role names here need to be coordinated with the container's
+             <auth-constraint> configuration in web.xml.  The role names
+             contained in this element then need to be defined in the
+             <intercept-url> elements above.
+         -->
+        <jee mappable-roles="ROLE_PSCUser" />
+
+        <!-- login session controls 
+             note: comment out if session-creation is stateless -->
+        <!--session-management session-fixation-protection="none" /-->
+
+        <!-- error handlers -->
+        <access-denied-handler ref="OEAccessDeniedHandler" />
+
+    </http>
+
+    <!-- The security filter that turns a Spring token into an OpenEdge
+         ClientPrincipal object -->
+    <b:bean id="OEClientPrincipalFilter"
+            class="com.progress.appserv.services.security.OEClientPrincipalFilter">
+             <!--
+             <b:property name="enablecp" value="false" />
+             <b:property name="domain" value="sample" />
+             <b:property name="roles" value="sample" />
+             <b:property name="authz" value="false" />
+             <b:property name="expires" value="600" />
+             <b:property name="accntinfo" value="true" />
+             <b:property name="properties" >
+                <b:map>
+                     <b:entry key="prop-1" value="string1"/>
+                     <b:entry key="prop-2" value="string2"/>
+                </b:map>
+             </b:property>
+             <b:property name="ccid" value="true" />
+             <b:property name="anonymous" value="true" />
+             <b:property name="appName" value="OE" />
+             -->
+    </b:bean>
+
+    <!-- The security filter that implements the CORS standard for controlling
+         cross site resource access by http clients. -->
+    <b:bean id="OECORSFilter"
+            class="com.progress.appserv.services.security.OECORSFilter" >
+			 <!-- These headers are used to support OE SSO. Enable them by default -->
+			 <b:property name="responseHeaders" value="Access-Control-Allow-Origin,Access-Control-Allow-Headers,X-CLIENT-CONTEXT-ID,X-OE-CLIENT-CONTEXT-ID" />
+             <!-- Examples:
+             <b:property name="allowAll" value="false" />
+             <b:property name="allowDomains" value="*" />
+             <b:property name="allowSubdomains" value="false" />
+             <b:property name="allowMethods" value="" />
+             <b:property name="messageHeaders" value="" />
+             <b:property name="responseHeaders" value="" />
+             <b:property name="supportCredentials" value="true" />
+             <b:property name="maxAge" value="-1" />
+             -->
+    </b:bean>
+
+    <b:bean id="OEAccessDeniedHandler" 
+            class="com.progress.appserv.services.security.OEAccessDeniedHandler">
+    </b:bean>
+
+    <!-- Authentication manager reserved for PUBLIC anonymous authentication 
+         to the static and dynamic application content.
+     -->
+    <authentication-manager id="oeablApplicationAuth" >
+        <!--
+        <authentication-provider-->
+            <!-- Uncomment to add strong password hashing in users.properties 
+            <password-encoder hash="sha" >
+                <salt-source user-property="username" />
+            </password-encoder>
+            -->
+            <!--
+            <user-service properties="/WEB-INF/users.properties" />
+        </authentication-provider>
+        -->
+    </authentication-manager>
+
+</b:beans>

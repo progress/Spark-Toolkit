@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
+                        http://www.springframework.org/schema/util
+                        http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    <!-- Import the OpenEdge developer editable configuation for a customized
+         HTTP Authorization header handling -->
+    <b:import resource="customAuthHeaderFilter.xml"/> 
+
+    <!-- This Spring Security configuration file fragment holds all of the
+         security process filter bean definitions for all login models and
+         AuthenticationManagers.  The bean definitions all obtain their property 
+         values from the oeablSecurity.properties files loaded by the 
+         properties-loader.xml configuration file. 
+         
+         ALL CONFIGURATION SHOULD BE CONTROLLED VIA THE oeablSecurity.properties
+         FILE.  IF THIS FILE MUST BE EDITED, USE PROPERTY VARIABLES AND
+         ADD A CORRESPONDING ENTRY INTO oeablSecurity.properties.   -->
+
+    <!-- Custom form login handlers for JSON requests -->
+
+    <!-- This bean is called when executing the HTTP BASIC login model and
+         the validation of the Authorization header fails.  It will produce 
+         a HTTP response for browsers (html) or REST (json) according to the
+         accept header. -->
+    <b:bean id="OEAuthenticationEntryPoint"
+        class="com.progress.appserv.services.security.OEBasicAuthenticationEntryPoint">
+        <b:property name="realmName" value="OE" />
+    </b:bean>
+
+    <!-- This bean is called when executing the SOAP BASIC login model and
+         the validation of the Authorization header fails.  It will produce
+         a 401 resource without body -->
+    <b:bean id="OEAuthenticationSOAPEntryPoint"
+        class="com.progress.appserv.services.security.OEBasicSOAPAuthenticationEntryPoint">
+        <b:property name="realmName" value="OE" />
+    </b:bean>
+
+    <!-- This bean is called when executing the HTTP Form login model and
+         the validation of the user-id/password passes.  It will produce 
+         a HTTP response for browsers (html) or REST (json) according to the
+         accept header.
+         
+         When OECP SSO is enabled this bean will initiate the creation and
+         return of a Client-Principal access token and refresh token in an
+         OAuth2 JSON format. -->
+    <b:bean id="OEAuthnSuccessHandler" 
+        class="com.progress.appserv.services.security.OEAuthnSuccessHandler">
+        
+        <!-- OE SSO token manager used to support OpenEdge SSO tokens -->
+        <b:property name="tokenManager" ref="OESSOTokenManager" />
+
+        <!-- Error response detail: 0 = safe; 1 = terse; 2 = debug 
+             [Default: 0 ] -->
+        <b:property name="tokenErrorDetail" value="${OEAuthnSuccessHandler.tokenErrorDetail}" />
+
+        <!-- Require the direct-login's SSO Token request to be in an HTTPS
+             request.  [Default: true] -->
+        <b:property name="tokenSecure" value="${OEAuthnSuccessHandler.tokenSecure}" />
+
+     </b:bean>
+
+    <!-- This bean is called when executing the HTTP Form login model and
+         the validation of the user-id/password fails.  It will produce 
+         a HTTP response for browsers (html) or REST (json) according to the
+         HTTP request's accept header.
+         
+         When OECP SSO is enabled this bean will initiate the creation and
+         return of a OAuth2 style JSON error in the HTTP response. -->
+    <b:bean id="OEAuthnFailureHandler" 
+        class="com.progress.appserv.services.security.OEAuthnFailHandler">
+
+        <!-- OE SSO token manager used to support OpenEdge SSO tokens -->
+        <b:property name="tokenManager" ref="OESSOTokenManager" />
+
+        <!-- Error response detail: 0 = safe; 1 = terse; 2 = debug 
+             [Default: 0 ] -->
+        <b:property name="tokenErrorDetail" value="${OEAuthnFailureHandler.tokenErrorDetail}" />
+
+     </b:bean>
+
+    <!-- This bean is called when an client is denied access via the <intercept-url>
+         URL access controls.  It will produce a HTTP response for browsers (html) or
+         REST (JSON) according to the HTTP request's accept header. -->
+    <b:bean id="OEAccessDeniedHandler" 
+            class="com.progress.appserv.services.security.OEAccessDeniedHandler">
+    </b:bean>
+
+    <!-- This bean is called when an client executes the logout URL action.
+         It will produce a HTTP response for browsers (html) or REST (JSON) 
+         according to the HTTP request's accept header. -->
+    <b:bean id="OELogoutSuccessHandler" 
+            class="com.progress.appserv.services.security.OELogoutSuccessHandler">
+    </b:bean>
+
+    <!-- This bean is called when executing the HTTP Form login model and the client 
+         has not been authenticated (i.e. they are the ANONYMOUS user), AND the client 
+         requests access to a URL that requires an authenticated user via the URL's 
+         <intercept-url> access control.  Its job is to notify the client that
+         login is required to access the URL.
+         
+         It will produce a HTTP response for browsers (html) or REST (JSON) 
+         according to the HTTP request's accept header. -->
+    <b:bean id="OEFormEntryPoint"
+            class="com.progress.appserv.services.security.OEFormAuthnEntryPointHandler">
+            <b:constructor-arg value="/static/auth/login.jsp" />
+
+        <!-- OE SSO token manager used to support OpenEdge SSO tokens -->
+        <b:property name="tokenManager" ref="OESSOTokenManager" />
+
+        <!-- Error response detail: 0 = safe; 1 = terse; 2 = debug 
+             [Default:  0 ] -->
+        <b:property name="tokenErrorDetail" value="${OEFormEntryPoint.tokenErrorDetail}" />
+
+     </b:bean>
+
+    <!-- This bean provides OpenEdge [ClientPrincipal] SSO token utilities
+         for either SSO token producers or SSO  token consumers. 
+         The OEAuthnSuccessHandler, OEAuthnFailureHandler, and
+         OEFormAuthnEntryPointHandler will reference this bean. -->
+    <b:bean id="OESSOTokenManager" 
+        class="com.progress.appserv.services.security.OECPSSOTokenManager" >
+        <b:property name="oecpFilter" ref="OEClientPrincipalFilter" />
+
+        <!-- Required class properties shown with default values -->
+
+        <!-- SSO token generation policy {disabled|ifRequired|always} 
+             Disabled indicates never return a SSO token, even if the
+                client requests one
+
+             The ifRequired setting requires the 
+                /static/auth/j_spring_security_check URL to include the
+                option '?OECP=true' .
+
+             Always indicates returning a SSO token on each successful
+                user login
+
+             [Default: disabled] -->
+        <b:property name="tokenPolicy" value="${OESSOTokenManager.tokenPolicy}" />
+
+        <!-- The name of the URL option name used in login & refresh
+             operations.
+             [Default: "OECP"] -->
+        <b:property name="ssoTokenURLOption" value="${OESSOTokenManager.ssoTokenURLOption}" />
+
+        <!-- Initial SSO token expiration time in seconds 
+             [Default: 3600 (60 minutes)] -->
+        <b:property name="ssoTokenExpires" value="${OESSOTokenManager.ssoTokenExpires}" />
+
+        <!-- Optional class properties shown with default values -->
+
+        <!-- OAuth style SCOPE authorizations accepted (comma separated list) 
+             [Default: "" (no scope)] -->
+        <b:property name="ssoAllowScope" value="${OESSOTokenManager.ssoAllowScope}" />
+
+        <!-- OAuth style SCOPE authorizations granted (comma separated list) 
+             [Default: "" (no scope)] -->
+        <b:property name="ssoGrantScope" value="${OESSOTokenManager.ssoGrantScope}" />
+
+        <!-- Permit refreshing the SSO token after it has expired 
+             [Default: true] -->
+        <b:property name="ssoTokenRefresh" value="${OESSOTokenManager.ssoTokenRefresh}" />
+
+        <!-- When permitted, refersh a SSO token for the number of seconds 
+             [Default: 3600 (60 minutes)] -->
+        <b:property name="ssoRefreshDeltaTime" value="${OESSOTokenManager.ssoRefreshDeltaTime}" />
+
+        <!-- Prefix Spring role-name identifier for converting non-Spring
+             generated ClientPrincipals. The default Spring role prefix name is
+             "ROLE_".
+             [Default: blank] -->
+        <b:property name="springRolePrefix" value="${OESSOTokenManager.springRolePrefix}" />
+        
+    </b:bean>
+
+    <!-- OpenEdge SSO Authorization header filter defaults. 
+         The SSO Authorization filter consumes OECP SSO tokens created by this, or
+         some other OpenEdge PAS service's OESSOFilter.  The OECP SSO token will 
+         be passed by the client in the HTTP request's Authorization header. -->
+    <b:bean id="OESSOFilter"
+            class="com.progress.appserv.services.security.OECPSSOAuthFilter" >
+        <b:constructor-arg ref="${OESSOFilter.authmanager}" />
+        <b:property name="ssoTokenManager" ref="OESSOTokenManager" />
+
+        <!-- Required properties -->
+
+        <!-- Filter policy: {disabled | sufficient | required} 
+             [Default:  disabled] -->
+        <b:property name="authPolicy" value="${OESSOFilter.authPolicy}" />
+
+        <b:property name="authScheme" value="${OESSOFilter.authScheme}" /> 
+
+        <!-- Optional base class properties shown with default values -->
+
+        <!-- Client-type header check using Java reg-ex 
+             [Default:  *  (any client type)] -->
+        <b:property name="authClientType" value="${OESSOFilter.authClientType}" />
+
+        <!-- Error response detail: 0 = safe; 1 = terse; 2 = debug 
+             [Default: 0] -->
+        <b:property name="authErrorDetail" value="${OESSOFilter.authErrorDetail}" />
+
+        <!-- Require HTTPS 
+             [Default: true] -->
+        <b:property name="authSecurity" value="${OESSOFilter.authSecurity}" />
+
+    </b:bean>
+
+    <!-- OE SSO token refresh filter defaults.
+         The OE SSO token refresh filter accepts Refresh Tokens, issued by
+         the initial HTTP FORM direct-login to the web application.  If the
+         original client login session still exists AND refresh token
+         operations were enabled, this filter will validate the refresh token and
+         if valid reissue the SSO access token with a new expiration.
+     -->
+    <b:bean id="OESSORefreshFilter"
+            class="com.progress.appserv.services.security.OECPRefreshFilter" >
+        <b:constructor-arg ref="OESSOTokenManager" />
+        <!-- Required properties --> 
+
+        <!-- URI called by the client to initiate a SSO Token refresh operation 
+             [Default: "/static/auth/token" ] -->
+        <b:property name="refreshURL" value="${OESSORefreshFilter.refreshURL}" />
+
+        <!-- URL option name holding the 'token' operation to perform.  All
+             token refresh option names accept a value of "true" or "false".
+             example:   ?refresh=yes  
+             [Default: "refresh" ] -->
+        <b:property name="refreshURLOption" value="${OESSORefreshFilter.refreshURLOption}" />
+
+        <!-- Optional properties shown with default values -->
+
+        <!-- Client-type header check using Java reg-ex 
+             [Default:  *  (any client type)] -->
+        <b:property name="refreshClientType" value="${OESSORefreshFilter.refreshClientType}" />
+
+        <!-- Error response detail: 0 = safe; 1 = terse; 2 = debug 
+             [Default: 0 ] -->
+        <b:property name="refreshErrorDetail" value="${OESSORefreshFilter.refreshErrorDetail}" />
+
+        <!-- Require HTTPS 
+             [Default: true] -->
+        <b:property name="refreshSecure" value="${OESSORefreshFilter.refreshSecure}" />
+        
+    </b:bean>
+
+    <!--  START :: Bean configuration for pre authentication filter , OE client principle filter and CORS filter    -->
+    
+    <!-- The Pre-auth security filter for  Rollbase SSO  
+         It's job is to intercept a HTTP request's X-CLIENT-CONTEXT-ID header,
+         extact the sealed Client-Principal representing the Rollbase user login
+         session, validate the seal, and enter it into the security process for 
+         evaluation by the URL access controls (<intercept-url>) -->
+    <b:bean id="OEPreauthfilter" 
+             class="com.progress.appserv.services.security.OERequestHeaderAuthenticationFilter">
+          <!-- USER-EDIT: To turn on SSO :
+               1. Set "enabled" property to true 
+               2. For single-domain supply the Domain Access Code as the value for "key" property 
+               3. For multi-domain supply the absolute path of a 'registryFile' generated using OpenEdge's  
+                  $DLC/bin/gendomreg.bat utility as "registryFile" property -->
+           <b:property name="enabled" value="${OEPreauthfilter.enabled}"/> 
+           <b:property name="key" value="${OEPreauthfilter.key}"/>     
+           <b:property name="registryFile" value= "${OEPreauthfilter.registryFile}" />
+           <b:property name="encoding" value="OECP"/> 
+           <b:property name="headername" value="X-OE-CLIENT-CONTEXT-ID"/>  
+           <b:property name="authenticationManager" ref="preauthAuthenticationManager" />
+    </b:bean>
+    
+    <authentication-manager alias="preauthAuthenticationManager">
+        <authentication-provider ref="preauthAuthProvider" />
+    </authentication-manager>
+    
+    <b:bean id="preauthAuthProvider" 
+             class="com.progress.appserv.services.security.OEPreAuthenticatedAuthenticationProvider">  
+                <b:property name="rolePrefix" value="${preauthAuthProvider.rolePrefix}" />
+                <b:property name="enabledAttrName" value="${preauthAuthProvider.enabledAttrName}" />
+                <b:property name="lockedAttrName" value="${preauthAuthProvider.lockedAttrName}" />
+                <b:property name="expiredAttrName" value="${preauthAuthProvider.expiredAttrName}" /> 
+    </b:bean>
+
+    <!-- The security filter that turns a Spring token into an OpenEdge
+         ClientPrincipal object. The filter is thus responsible for:
+         1. Creating a ClientPrincipal if one was not created in a previous authentication process step
+         2. If the previous authentication process produced a Spring token - copy that information into the ClientPrincipal
+         3. If the ClientPrincipal is not already sealed - seal it using this filter's domain and registry configuration
+         4. If enablecp is true, then send the ClientPrincipal to the ABL business logic -->
+    <b:bean id="OEClientPrincipalFilter"
+             class="com.progress.appserv.services.security.OEClientPrincipalFilter" >
+             <b:property name="enablecp" value="${OEClientPrincipalFilter.enabled}" />
+             <b:property name="key" value="${OEClientPrincipalFilter.key}" />
+             <b:property name="registryFile" value="${OEClientPrincipalFilter.registryFile}" />
+             <b:property name="domain" value="${OEClientPrincipalFilter.domain}" />
+             <b:property name="roles" value="${OEClientPrincipalFilter.roles}" />
+             <b:property name="authz" value="${OEClientPrincipalFilter.authz}" />
+             <b:property name="expires" value="${OEClientPrincipalFilter.expires}" />
+             <b:property name="accntinfo" value="${OEClientPrincipalFilter.accntinfo}" />
+             <b:property name="domainRoleFilter" value="${OEClientPrincipalFilter.domainRoleFilter}" />
+             <b:property name="properties" >
+                <b:map>
+                     <b:entry key="${OEClientPrincipalFilter.properties.1.key}" 
+                              value="${OEClientPrincipalFilter.properties.1.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.2.key}" 
+                              value="${OEClientPrincipalFilter.properties.2.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.3.key}" 
+                              value="${OEClientPrincipalFilter.properties.3.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.4.key}" 
+                              value="${OEClientPrincipalFilter.properties.4.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.5.key}" 
+                              value="${OEClientPrincipalFilter.properties.5.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.6.key}" 
+                              value="${OEClientPrincipalFilter.properties.6.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.7.key}" 
+                              value="${OEClientPrincipalFilter.properties.7.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.8.key}" 
+                              value="${OEClientPrincipalFilter.properties.8.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.9.key}" 
+                              value="${OEClientPrincipalFilter.properties.9.value}"/>
+                     <b:entry key="${OEClientPrincipalFilter.properties.10.key}" 
+                              value="${OEClientPrincipalFilter.properties.10.value}"/>
+                </b:map>
+             </b:property>
+             <b:property name="ccid" value="${OEClientPrincipalFilter.ccid}" />
+             <b:property name="anonymous" value="${OEClientPrincipalFilter.anonymous}" />
+             <b:property name="appName" value="${OEClientPrincipalFilter.appName}" />
+    </b:bean>
+
+    <!-- The security filter that implements the CORS standard for controlling
+         cross site resource access by http clients. -->
+    <b:bean id="OECORSFilter"
+             class="com.progress.appserv.services.security.OECORSFilter" >
+             <b:property name="responseHeaders" value="${OECORSFilter.responseHeaders}" />
+             <b:property name="allowAll" value="${OECORSFilter.allowAll}" />
+             <b:property name="allowDomains" value="${OECORSFilter.allowDomains}" />
+             <b:property name="allowSubdomains" value="${OECORSFilter.allowSubdomains}" />
+             <b:property name="allowMethods" value="${OECORSFilter.allowMethods}" />
+             <b:property name="messageHeaders" value="${OECORSFilter.messageHeaders}" />
+             <b:property name="supportCredentials" value="${OECORSFilter.supportCredentials}" />
+             <b:property name="maxAge" value="${OECORSFilter.maxAge}" />
+    </b:bean>                
+        
+    <!--  END :: Bean configuration for pre authentication filter , OE client principle filter and CORS filter    -->                    
+    <!-- Evaluates HTTP request URL path and tests the authenticated user's Role list to the intercept-url
+         Spring access expression -->
+    <b:bean id="DefaultWebExpressionHandler"
+            class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" >
+            <b:property name="defaultRolePrefix" value="ROLE_" />
+    </b:bean>
+
+    <!-- The AccessDecisionManager used by the default URL <http pattern="/**" space.
+         Executes the 'voter' beans that decide whether the client request is allowed.
+         Referenced by the defaultFilterSecurityInterceptor bean below. -->
+    <b:bean id="defaultAccessDecisionManager" 
+            class="org.springframework.security.access.vote.AffirmativeBased">
+        <b:constructor-arg>
+            <util:list>
+                <b:bean id="defaultWebVoter" 
+                        class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                    <b:property name="expressionHandler" ref="DefaultWebExpressionHandler" />
+                </b:bean>
+                <!-- non-expression access voters 
+                <b:bean id="RoleVoter" class="org.springframework.security.access.vote.RoleVoter">
+                    <b:property name="RolePrefix" value="ROLE_" />
+                </b:bean>
+                <b:bean id="AuthVoter" class="org.springframework.security.access.vote.AuthenticatedVoter">
+                </b:bean>
+                -->
+            </util:list>
+        </b:constructor-arg>
+    </b:bean>
+
+    <!-- The AccessDecisionManager used by the 'rest' transport's URL <http pattern="/rest/**" 
+         space. Executes the 'voter' beans that decide whether the client request is allowed.
+         Referenced by the restFilterSecurityInterceptor bean below. -->
+    <b:bean id="restAccessDecisionManager" 
+            class="org.springframework.security.access.vote.AffirmativeBased">
+        <b:constructor-arg>
+            <util:list>
+                <b:bean id="restWebVoter" 
+                        class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                    <b:property name="expressionHandler" ref="DefaultWebExpressionHandler" />
+                </b:bean>
+                <!-- Default non-Expression voters
+                <b:bean id="restRoleVoter" class="org.springframework.security.access.vote.RoleVoter">
+                    <b:property name="RolePrefix" value="ROLE_" />
+                </b:bean>
+                <b:bean id="restAuthVoter" class="org.springframework.security.access.vote.AuthenticatedVoter">
+                </b:bean>
+                -->
+            </util:list>
+        </b:constructor-arg>
+    </b:bean>
+
+    <!-- The AccessDecisionManager used by the 'apsv' transport's URL <http pattern="/apsv/**" 
+         space. Executes the 'voter' beans that decide whether the client request is allowed.
+         Referenced by the restFilterSecurityInterceptor bean below. -->
+    <b:bean id="apsvAccessDecisionManager" 
+            class="org.springframework.security.access.vote.AffirmativeBased">
+        <b:constructor-arg>
+            <util:list>
+                <b:bean id="apsvWebVoter" 
+                        class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                    <b:property name="expressionHandler" ref="DefaultWebExpressionHandler" />
+                </b:bean>
+                <!-- Default non-Expression voters
+                <b:bean id="restRoleVoter" class="org.springframework.security.access.vote.RoleVoter">
+                    <b:property name="RolePrefix" value="ROLE_" />
+                </b:bean>
+                <b:bean id="restAuthVoter" class="org.springframework.security.access.vote.AuthenticatedVoter">
+                </b:bean>
+                -->
+            </util:list>
+        </b:constructor-arg>
+    </b:bean>
+
+    <!-- The AccessDecisionManager used by the 'soap' transport's URL <http pattern="/soap/**" 
+         space. Executes the 'voter' beans that decide whether the client request is allowed.
+         Referenced by the restFilterSecurityInterceptor bean below. -->
+    <b:bean id="soapAccessDecisionManager" 
+            class="org.springframework.security.access.vote.AffirmativeBased">
+        <b:constructor-arg>
+            <util:list>
+                <b:bean id="soapWebVoter" 
+                        class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                    <b:property name="expressionHandler" ref="DefaultWebExpressionHandler" />
+                </b:bean>
+                <!-- Default non-Expression voters
+                <b:bean id="restRoleVoter" class="org.springframework.security.access.vote.RoleVoter">
+                    <b:property name="RolePrefix" value="ROLE_" />
+                </b:bean>
+                <b:bean id="restAuthVoter" class="org.springframework.security.access.vote.AuthenticatedVoter">
+                </b:bean>
+                -->
+            </util:list>
+        </b:constructor-arg>
+    </b:bean>
+
+    <!-- The AccessDecisionManager used by the 'web' transport's URL <http pattern="/web/**" 
+         space. Executes 'voter' beans that decide whether the client request is allowed.
+         Referenced by the webFilterSecurityInterceptor bean below. -->
+    <b:bean id="webAccessDecisionManager" 
+            class="org.springframework.security.access.vote.AffirmativeBased">
+        <b:constructor-arg>
+            <util:list>
+                <b:bean id="webWebVoter" 
+                        class="org.springframework.security.web.access.expression.WebExpressionVoter">
+                    <b:property name="expressionHandler" ref="DefaultWebExpressionHandler" />
+                </b:bean>
+                <!-- Default non-Expression voters
+                <b:bean id="restRoleVoter" class="org.springframework.security.access.vote.RoleVoter">
+                    <b:property name="RolePrefix" value="ROLE_" />
+                </b:bean>
+                <b:bean id="restAuthVoter" class="org.springframework.security.access.vote.AuthenticatedVoter">
+                </b:bean>
+                -->
+            </util:list>
+        </b:constructor-arg>
+    </b:bean>
+
+    <!--    The OEMetadataSource class allows loading intercept-url data from
+            an external .CSV file instead of using static XML <intercept-url> elements
+            from inside the .xml configuration file.
+              class constructors
+                 #1 intercept-url .csv file Url filter pattern
+                    "{apsv|soap|rest|web|default|<custom-regex>}" default: "default"
+                 #2 request-matcher type 
+                    "{ant|regex|ciRegex}" default: ant
+              class properties
+                "interceptUrlFilePath" : relative path to the web application context 
+                    root of where the .CSV file holding the intercept-url entries will 
+                    be found 
+
+                "defaultURL" : the default intercept-url pattern to use if no intercept-url 
+                    entries are loaded from the .CSV file for the intercept-url constructor
+    -->
+
+    <!-- The Security Interceptor for the 'rest' <http pattern="/rest/**" URL space. -->
+    <b:bean id="restFilterSecurityInterceptor" 
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" >  
+        <b:property name="authenticationManager" ref="${http.rest.authmanager}"/>
+        <b:property name="accessDecisionManager" ref="restAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" >
+            <b:bean id="restOEMetadataSource" 
+                    name="rest"
+                    class="com.progress.appserv.services.security.OEMetadataSource" >
+                <b:constructor-arg value="rest" />
+                <b:constructor-arg value="${oemetadatasource.all.requestmatcher}" />
+                <b:property name="interceptUrlFilePath" value="${oemetadatasource.all.csvpath}" />
+                <b:property name="defaultURL" value="/rest/**" />
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <!-- The Security Interceptor for the 'web' <http pattern="/web/**" URL space. -->
+    <b:bean id="webFilterSecurityInterceptor" 
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" >  
+        <b:property name="authenticationManager" ref="${http.web.authmanager}"/>
+        <b:property name="accessDecisionManager" ref="webAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" >
+            <b:bean id="webOEMetadataSource" 
+                    name="web"
+                    class="com.progress.appserv.services.security.OEMetadataSource" >
+                <b:constructor-arg value="web" />
+                <b:constructor-arg value="${oemetadatasource.all.requestmatcher}" />
+                <b:property name="interceptUrlFilePath" value="${oemetadatasource.all.csvpath}" />
+                <b:property name="defaultURL" value="/web/**" />
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <!-- The Security Interceptor for the 'web' <http pattern="/web/**" URL space. -->
+    <b:bean id="apsvFilterSecurityInterceptor" 
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" >  
+        <b:property name="authenticationManager" ref="${http.apsv.authmanager}"/>
+        <b:property name="accessDecisionManager" ref="apsvAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" >
+            <b:bean id="apsvOEMetadataSource" 
+                    name="apsv"
+                    class="com.progress.appserv.services.security.OEMetadataSource" >
+                <b:constructor-arg value="apsv" />
+                <b:constructor-arg value="${oemetadatasource.all.requestmatcher}" />
+                <b:property name="interceptUrlFilePath" value="${oemetadatasource.all.csvpath}" />
+                <b:property name="defaultURL" value="/soap/**" />
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <!-- The Security Interceptor for the 'web' <http pattern="/web/**" URL space. -->
+    <b:bean id="soapFilterSecurityInterceptor" 
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" >  
+        <b:property name="authenticationManager" ref="${http.soap.authmanager}"/>
+        <b:property name="accessDecisionManager" ref="soapAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" >
+            <b:bean id="soapOEMetadataSource" 
+                    name="soap"
+                    class="com.progress.appserv.services.security.OEMetadataSource" >
+                <b:constructor-arg value="soap" />
+                <b:constructor-arg value="${oemetadatasource.all.requestmatcher}" />
+                <b:property name="interceptUrlFilePath" value="${oemetadatasource.all.csvpath}" />
+                <b:property name="defaultURL" value="/soap/**" />
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <!-- The Security Interceptor for the 'default' <http pattern="/**" URL space. -->
+    <b:bean id="defaultFilterSecurityInterceptor" 
+            class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor" >  
+        <b:property name="authenticationManager" ref="${http.authmanager}"/>
+        <b:property name="accessDecisionManager" ref="defaultAccessDecisionManager"/>
+        <b:property name="securityMetadataSource" >
+            <b:bean id="defaultOEMetadataSource" 
+                    name="default"
+                    class="com.progress.appserv.services.security.OEMetadataSource" >
+                <b:constructor-arg value="default" />
+                <b:constructor-arg value="${oemetadatasource.all.requestmatcher}" />
+                <b:property name="interceptUrlFilePath" value="${oemetadatasource.all.csvpath}" />
+                <b:property name="defaultURL" value="/**" />
+            </b:bean>
+        </b:property>
+    </b:bean>
+
+    <b:bean id="http403ForbiddenEntryPoint"   
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
+
+    <b:bean id="authenticationLoggerSink"   
+        class="com.progress.appserv.services.security.OEAuthenticationLogger" />
+
+    <b:bean id="authorizationLoggerSink"   
+        class="com.progress.appserv.services.security.OEAuthorizationLogger" />
+
+
+</b:beans>

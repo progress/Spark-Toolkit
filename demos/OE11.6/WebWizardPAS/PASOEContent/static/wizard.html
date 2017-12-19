@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="app" lang="en-us">
+    <head>
+        <meta charset="utf-8" />
+        <title>Screen Wizard</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/animate-css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/font.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/override.css" />
+        <!-- Core Libraries -->
+        <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/kendo.all.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/cultures/kendo.culture.en-US.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/messages/kendo.messages.en-US.min.js"></script>
+        <!-- Library Extensions -->
+        <script type="text/javascript" src="vendor/psc/lib/progress.all.js"></script>
+        <script type="text/javascript" src="vendor/spark/lib/plugins.js"></script>
+        <script type="text/javascript" src="vendor/spark/lib/spark.min.js"></script>
+        <script type="text/javascript" src="app/wizard.js"></script>
+    </head>
+    <body>
+        <section class="vbox">
+            <header class="header header-md navbar bg-primary">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h2 class="m-l m-t-sm">Screen&nbsp;Wizard</h2>
+                    </div>
+                    <div class="col-sm-3 wrapper" id="loadingMsg">
+                        <div id="progressBar"></div>
+                    </div>
+                    <div class="col-sm-6"></div>
+                </div>
+            </header>
+            <section>
+                <section id="errorContent"></section>
+                <section id="mainContent" class="hbox stretch">
+                    <aside class="aside-md bg-white b-r">
+                        <section class="vbox">
+                            <header class="bg-white header b-b">
+                                <p class="h5">Global Options</p>
+                            </header>
+                            <section class="scrollable wrapper">
+                                <form class="form" id="globalForm">
+                                    <h5 class="m-t m-b">Generated Output
+                                        <i class="fa fa-lg fa-info-circle" id="ipGenBETooltip"></i>
+                                    </h5>
+                                    <select class="form-control m-b" name="ipGenBE"
+                                            data-bind="value:params.ipGenBE"></select>
+                                    <div class="block.hide" data-bind="visible:flags.useTemplate">
+                                        <hr/>
+                                        <h5 class="m-t m-b">Template Type
+                                            <i class="fa fa-lg fa-info-circle" id="ipTemplateNameTooltip"></i>
+                                        </h5>
+                                        <select class="form-control m-b" name="ipTemplateName"
+                                                data-bind="value:params.ipTemplateName"></select>
+                                    </div>
+                                    <div class="block.hide" data-bind="visible:flags.useMetadata">
+                                        <hr/>
+                                        <h5 class="m-t m-b">Metadata File
+                                            <i class="fa fa-lg fa-info-circle" id="ipMetadataTooltip"></i>
+                                        </h5>
+                                        <select class="form-control m-b" name="ipMetadata"
+                                                data-bind="value:params.ipMetadata"></select>
+                                    </div>
+                                    <hr/>
+                                    <span class="btn btn-default" data-bind="click:resetAll">Reset Wizard</span>
+                                </form>
+                            </section>
+                        </section>
+                    </aside>
+                    <aside class="bg-white">
+                        <section class="vbox">
+                            <header class="header bg-white b-b">
+                                <p class="h5">Details</p>
+                            </header>
+                            <section class="scrollable wrapper bg-light">
+                                <span id="staticNotification"></span>
+                                <div id="appendto" class="m-b text-lg"></div>
+                                <div class="row block.hide" data-bind="visible:flags.showInstructions">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-8 text-center bg-white">
+                                        <h1>
+                                            <span class="fa-stack fa-2x icon-muted">
+                                                <i class="fa fa-file-o fa-stack-2x"></i>
+                                                <i class="fa fa-cogs fa-stack"></i>
+                                            </span>
+                                        </h1>
+                                        <h2 class="m-t-lg">Start Generating Your Application</h2>
+                                        <p class="text-lg text-muted">You can generate user interface screens, business entities, or both.
+                                        Select from the available options on the left to get started and the application will guide you via the embedded tooltips.</p>
+                                    </div>
+                                    <div class="col-sm-2"></div>
+                                </div>
+                                <form kendo-validator class="panel panel-default wrapper block.hide" id="wizardForm" data-bind="invisible:flags.showInstructions">
+                                    <div class="row block.hide" data-bind="visible:flags.useDataChoice">
+                                        <div class="col-sm-2">
+                                            <label>Data Source:</label>
+                                            <input class="m-b" name="ipDataSource"
+                                                   data-bind="value:params.ipDataSource"/>
+                                        </div>
+                                        <div class="col-sm-3 block.hide" data-bind="visible:flags.useServiceURI">
+                                            <label>Service URI (eg. /web/pdo/common):</label>
+                                            <i class="fa fa-lg fa-info-circle" id="ipServiceURITooltip"></i>
+                                            <input class="form-control m-b" name="ipServiceURI"
+                                                   data-bind="value:params.ipServiceURI"/>
+                                        </div>
+                                        <div class="col-sm-2 block.hide" data-bind="visible:flags.useDatabase">
+                                            <label>Database:</label>
+                                            <input class="m-b" name="ipDatabase"
+                                                   data-bind="value:params.ipDatabase"/>
+                                        </div>
+                                        <div class="col-sm-5 block.hide" data-bind="visible:flags.useEntityTbl">
+                                            <label>Entity Table(s):</label>
+                                            <i class="fa fa-lg fa-info-circle" id="ipEntityTableTooltip"></i>
+                                            <input class="form-control m-b" name="ipEntityTable"
+                                                   data-bind="value:params.ipEntityTable"/>
+                                        </div>
+                                    </div>
+                                    <div class="row block.hide" data-bind="visible:flags.useSchema">
+                                        <div class="col-sm-2">
+                                            <label>Schema Definition File:</label>
+                                            <input class="m-b" name="ipTTDefFileName"
+                                                   data-bind="value:params.ipTTDefFileName"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Primary ProDataset:</label>
+                                            <input class="m-b" name="ipInvokeDSName"
+                                                   data-bind="value:params.ipInvokeDSName"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Primary Temp-Table:</label>
+                                            <input class="m-b" name="ipInvokeTTName"
+                                                   data-bind="value:params.ipInvokeTTName"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Entity File Name Prefix:</label>
+                                            <input class="form-control m-b" name="ipEntityName"
+                                                   data-bind="value:params.ipEntityName"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 block.hide" data-bind="visible:flags.useCatalog">
+                                            <label>Catalog URL:</label>
+                                            <input class="form-control m-b" name="ipCatalog"
+                                                   data-bind="value:params.ipCatalog"/>
+                                        </div>
+                                        <div class="col-sm-2 block.hide" style="margin-top:26px;" data-bind="visible:flags.useCatalog">
+                                            <span class="btn btn-default btn-sm m-n" type="button"
+                                                  data-bind="click:getCatalogData">Get Catalog</span>
+                                        </div>
+                                        <div class="col-sm-3 block.hide" data-bind="visible:flags.useEntityName">
+                                            <label>Entity File Name Prefix (Optional):</label>
+                                            <input class="form-control m-b" name="ipEntityName"
+                                                   data-bind="value:params.ipEntityName"/>
+                                        </div>
+                                        <div class="col-sm-3" data-bind="invisible:flags.useEntityName"></div>
+                                        <div class="col-sm-3 block.hide" data-bind="visible:flags.useCustomCSS">
+                                            <label>CSS File:</label>
+                                            <input class="form-control m-b" name="ipCSSFile"
+                                                   data-bind="value:params.ipCSSFile"/>
+                                        </div>
+                                    </div>
+                                    <div class="row block.hide" data-bind="visible:flags.useResourceName">
+                                        <div class="col-sm-3">
+                                            <label>Master Resource:</label>
+                                            <input class="form-control m-b" name="ipResourceMaster"
+                                                   data-bind="value:params.ipResourceMaster"/>
+                                        </div>
+                                    </div>
+                                    <div class="row block.hide" data-bind="visible:flags.useMasterSel">
+                                        <div class="col-sm-3">
+                                            <label>Master Table:</label>
+                                            <input class="form-control m-b" name="ipMasterTable"
+                                                   data-bind="value:params.ipMasterTable"/>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <label>Selected Master Field(s):</label>
+                                            <input class="form-control m-b" name="ipMasterFields"
+                                                   data-bind="value:params.ipMasterFields"/>
+                                        </div>
+                                        <div class="col-sm-2 m-t-sm">
+                                            <span class="btn btn-default btn-sm m-t-md" type="button"
+                                                  data-bind="click:selectAllMaster">Select All</span>
+                                            &nbsp;
+                                            <span class="btn btn-default btn-sm m-t-md" type="button"
+                                                  data-bind="click:resetAllMaster">Reset</span>
+                                        </div>
+                                    </div>
+                                    <div class="row block.hide" data-bind="visible:flags.useDetailSel">
+                                        <div class="col-sm-3">
+                                            <label>Detail Resource:</label>
+                                            <input class="form-control m-b" name="ipResourceDetail"
+                                                   data-bind="value:params.ipResourceDetail"/>
+                                        </div>
+                                    </div>
+                                    <div class="row block.hide" data-bind="visible:flags.useDetailSel">
+                                        <div class="col-sm-3">
+                                            <label>Detail Table:</label>
+                                            <input class="form-control m-b" name="ipDetailTable"
+                                                   data-bind="value:params.ipDetailTable"/>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <label>Selected Detail Field(s):</label>
+                                            <input class="form-control m-b" name="ipDetailFields"
+                                                   data-bind="value:params.ipDetailFields"/>
+                                        </div>
+                                        <div class="col-sm-2 m-t-sm">
+                                            <span class="btn btn-default btn-sm m-t-md" type="button"
+                                                  data-bind="click:selectAllDetail">Select All</span>
+                                            &nbsp;
+                                            <span class="btn btn-default btn-sm m-t-md" type="button"
+                                                  data-bind="click:resetAllDetail">Reset</span>
+                                        </div>
+                                    </div>
+                                    <div class="row" data-bind="invisible:flags.useInvokeOpt">
+                                        <div class="col-sm-4 block.hide" data-bind="visible:flags.useSearchFld">
+                                            <label>Search Field:</label>
+                                            <input class="form-control m-b" name="ipSearchField"
+                                                   data-bind="value:params.ipSearchField"/>
+                                        </div>
+                                        <div class="col-sm-4 block.hide" data-bind="visible:flags.useKeySelect">
+                                            <label>Master Key:</label>
+                                            <input class="form-control m-b" name="ipMasterKey"
+                                                   data-bind="value:params.ipMasterKey"/>
+                                        </div>
+                                        <div class="col-sm-4 block.hide" data-bind="visible:flags.useKeySelect">
+                                            <label>Detail Key:</label>
+                                            <input class="form-control m-b" name="ipDetailKey"
+                                                   data-bind="value:params.ipDetailKey"/>
+                                        </div>
+                                    </div>
+                                    <div class="row block.hide" data-bind="visible:flags.useInvokeOpt">
+                                        <div class="col-sm-6">
+                                            <label>Schema Definition File:</label>
+                                            <input class="form-control m-b" name="ipTTDefFileName"
+                                                   data-bind="value:params.ipTTDefFileName"/>
+                                            <label>Primary Temp-Table Name:</label>
+                                            <input class="form-control m-b" name="ipInvokeTTName"
+                                                   data-bind="value:params.ipInvokeTTName"/>
+                                            <label>Entity File Name Prefix:</label>
+                                            <input class="form-control m-b" name="ipEntityName"
+                                                   data-bind="value:params.ipEntityName"/>
+                                        </div>
+                                        <div class="col-sm-6" data-bind="visible:flags.useSearchFld">
+                                            <label>Search Field 1:</label>
+                                            <input class="form-control m-b" name="ipSearchField1"
+                                                   data-bind="value:params.ipSearchField1"/>
+                                            <label>Search Field 2:</label>
+                                            <input class="form-control m-b" name="ipSearchField2"
+                                                   data-bind="value:params.ipSearchField2"/>
+                                            <label>Search Field 3:</label>
+                                            <input class="form-control m-b" name="ipSearchField3"
+                                                   data-bind="value:params.ipSearchField3"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <span class="btn btn-primary" data-bind="click:generateCode,enabled:flags.canGenerate">Generate</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </section>
+                        </section>
+                    </aside>
+                </section>
+            </section>
+        </section>
+    </body>
+</html>

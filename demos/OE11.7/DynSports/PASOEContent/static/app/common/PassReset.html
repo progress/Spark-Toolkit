@@ -1,0 +1,106 @@
+<!-- Change Password Modal -->
+<div id="ModalPassReset" class="modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#10005;</span></button>
+                <h4 class="modal-title font-bold">Request Reset Password</h4>
+            </div>
+            <div class="modal-body">
+                <form id="resetForm" role="form" data-role="validator" novalidate="novalidate">
+                    <div class="row m-b-sm">
+                        <div class="col-xs-12">
+                            Please provide either your username or email address below, and press Submit to begin the reset process.
+                            You will be sent a special code to reset your password. Return here with the code to complete the process.
+                        </div>
+                    </div>
+                    <div class="row m-b-sm">
+                        <div class="col-xs-5">
+                            <input type="text" name="Username" placeholder="Username"
+                                   class="form-control text-md" autocomplete="off"
+                                   data-bind="value:params.username"/>
+                        </div>
+                        <div class="col-xs-1">
+                            <b class="m-t-lg">or</b>
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="text" name="Email" placeholder="Email"
+                                   class="form-control text-md" autocomplete="off"
+                                   data-bind="value:params.emailAddr"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary pull-left" data-bind="click:doSubmit">Submit</button>
+                <button class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var modalPassResetCtrl = (function(){
+        "use strict";
+
+        var modalVM = kendo.observable({
+            params: {
+                username: "",
+                emailAddr: ""
+            },
+            doReset: function(){
+                this.set("params", {
+                    username: "",
+                    emailAddr: ""
+                });
+            },
+            doSubmit: function(){
+                var params = this.toJSON().params;
+                var validatorOptions = {
+                    rules: {
+                        noInput: function(input){
+                            var username = modalVM.get("params.username");
+                            var emailAddr = modalVM.get("params.emailAddr");
+                            if ((username || "") === "" && (emailAddr || "") === "") {
+                                return false;
+                            }
+                            return true;
+                        }
+                    },
+                    messages: {
+                        noInput: "Please enter a username or email address."
+                    }
+                };
+                if (spark.form.validate("#resetForm", validatorOptions)) {
+                    var userJSDO = spark.createJSDO("user");
+                    userJSDO.invoke("sendResetCode", params)
+                        .then(function(jsdo, result, request){
+                            var response = request.response || {};
+                            if (response.opSuccess) {
+                                // Registration complete, hide modal and show message.
+                                $("#ModalPassReset").modal("hide");
+                                app.showMessage(response.opMessage, "success");
+                                modalVM.trigger("modalDataReady", {data: params});
+                            } else {
+                                // Potential error returned, show warning.
+                                app.showMessage(response.opMessage, "warning");
+                            }
+                    });
+                }
+            }
+        });
+
+        var _initialized = false;
+        function init(){
+            if (!_initialized) {
+                // Bind the observable to the view.
+                kendo.bind($("#ModalPassReset"), modalVM);
+            }
+        }
+
+        return {
+            init: init,
+            vm: modalVM
+        };
+    })();
+</script>
+<!-- End Modal -->

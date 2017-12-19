@@ -1,0 +1,46 @@
+The following options may be useful for development within PDSOE. At the very least,
+these would maintain style consistency across your development with the PMFO codebase.
+
+Window -> Preferences
+    General
+        Show heap status: checked
+        Editors
+            Text Editors
+                Insert spaces for tabs: checked
+                Tab Width: 4
+                Show line numbers: checked
+        Search
+            Reuse editors: unchecked
+        Workspace
+            Refresh using native hooks or polling: checked
+            Refresh on access: checked
+            Workspace name: "Your Workspace Name Here"
+            LocalHistory
+                Maximum entries per file: 1
+    Progress OpenEdge
+        Editor
+            Build
+                Automatically syntax check: checked
+        Server
+            Remove all files and folders when cleaning server publish directory: checked
+            Update properties from server before starting/launching: checked
+
+Project Explorer -> View Menu -> Customize View
+    Select the filters to apply (matching items will be hidden)
+        Unselect *.pl to view Procedure Library files.s
+
+%DLC%/oeide/eclipse/plugins/com.openedge.pdt.text_<version>/templates/
+    class.cjet - OpenEdge Standard Class
+    interface.ijet - OpenEdge Interface Class
+
+OpenEdge -> Tools -> Customization Editor
+
+%DLC%/oeide/eclipse/eclipse.ini
+    -vmargs
+    -Xms256m
+    -Xmx1024m
+    -XX:PermSize=256m
+    -XX:MaxPermSize=512m
+    -Xverify:none
+    -Dhttps.protocols=TLSv1.2
+    -Duser.name="<email or name+title>"

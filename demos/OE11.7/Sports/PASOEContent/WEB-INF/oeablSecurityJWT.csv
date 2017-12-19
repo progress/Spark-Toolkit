@@ -1,0 +1,47 @@
+
+############## Intercept-url definitions for the REST transport URIs ###############
+"/rest/**","*","#oauth2.hasAnyScope('PSCUser')"
+
+############## Intercept-url definitions for the WEB transport  URIs ###############
+"/web/**","*","#oauth2.hasAnyScope('PSCUser')"
+
+############## Intercept-url definitions for the default URI space #################
+"/static/home.html","GET","#oauth2.hasScope('PSCUser')"
+
+"/static/ServerStatus.html","GET","#oauth2.hasAnyScope('PSCUser','PSCAdmin','PSCDebug')"
+
+"/server/**","GET","#oauth2.hasAnyScope('PSCAdmin','PSCDebug')"
+
+"/*","GET","permitAll()"
+
+"/static/*","GET","permitAll()" 
+
+"/static/error/*","GET","permitAll()"
+
+"/static/images/*","GET","permitAll()" 
+
+"/static/auth/*","GET","permitAll()" 
+
+"/static/**","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.htm*","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.gif","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.jpg","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.css","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.js","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.json","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.asp","GET","#oauth2.hasAnyScope('PSCUser')"
+
+"/**/*.inc","GET","#oauth2.hasAnyScope('PSCUser')"
+
+# Best practice - deny anything not explicitly granted
+"/**","*","denyAll()"
+
+
+

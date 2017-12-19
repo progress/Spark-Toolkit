@@ -1,0 +1,33 @@
+##########################################################################
+##                                                                      ##
+##        Copyright (c) 1998-2016 by Progress Software Corporation      ##
+##                                                                      ##
+## All rights reserved.  No part of this program or document may be     ##
+## reproduced in any form or by any means without permission in writing ##
+## from Progress Software Corporation.                                  ##
+##                                                                      ##
+##########################################################################
+ 
+---------------------- oeablSecurity.properties.README -------------------------
+The oeablSecurity.properties file found in an oeabl web application's WEB-INF/
+directory holds configuration property values that are specific to the web
+application.  Properties not defined in this web application's 
+oeablSecurity.properties file are inherited from the full version found in
+the PAS for OE instance's conf/ directory.
+
+The PAS for OE instance's conf/oeablSecurity.properties file holds a full set 
+of properties and their default values.  In the same conf/ directory is the
+oeablSecurity.properties.README that describes the full set of properties 
+supported by the instance.
+
+You are free to copy property definitions from the conf/ directory's
+oeablSecurity.properties file into this web application's version to explicitly
+define the property.  You may also remove a property from the web application's
+oeablSecurity.properties file to begin using the default value found in the
+conf/ directory's version.
+
+To avoid this file's becoming out of date with the PAS for OE instance,
+please refer to the the oeablSecurity.properties.README file found in the 
+conf/ directory.  
+
+---------------------------------------------------------------------------

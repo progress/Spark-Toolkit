@@ -1,0 +1,65 @@
+<!-- Import this file is oeablSecurity-basic-*.xml to enable security for SOAP transport -->
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+
+    <http pattern="/soap/**"
+        auto-config="true" 
+        use-expressions="true" 
+        create-session="stateless" 
+        disable-url-rewriting="true" 
+        authentication-manager-ref="${http.soap.authmanager}" 
+        realm="${http.soap.realm}" >
+
+        <!-- Spring access expression handler for
+             URL authorization evaluation -->
+        <expression-handler ref="DefaultWebExpressionHandler" />
+
+         <!-- OpenEdge SSO Authorization header Filter -->
+        <custom-filter before="BASIC_AUTH_FILTER"
+                       ref="OESSOFilter" />
+
+        <!-- Custom Authorization header Filter -->
+        <custom-filter after="BASIC_AUTH_FILTER"
+                       ref="customAuthorizationFilter" />
+
+        <!-- This HTTP security space represents the public SOAP URI space and controls
+             the authentication/authorization process to its dynamic content.
+             ALTER THIS SECTION TO MEET YOUR PRODUCTION DEPLOYMENT REQUIREMENTS
+         -->
+        <!-- OpenEdge ClientPrincipal SSO Filter -->
+        <custom-filter position="SWITCH_USER_FILTER" 
+                       ref="OEClientPrincipalFilter" />
+
+        <!-- URL access controls 
+             NOTE: this filter MUST occur BEFORE the
+                   default security-interceptor inserted by the
+                   <http auto-config> attribute -->
+        <custom-filter ref="apsvFilterSecurityInterceptor"
+                       before="FILTER_SECURITY_INTERCEPTOR" />
+        
+        <!-- NOTE:  all XML <intercept-url> elements have been
+             replaced by the 'soapFilterSecurityInterceptor' and
+             oeablSecurity.csv configuration file. 
+
+            <intercept-url pattern="/soap/wsdl/**" method="GET"
+                           access="hasAnyRole('ROLE_PSCUser')"/>
+            <intercept-url pattern="/soap/**" method="POST"
+                           access="hasAnyRole('ROLE_PSCUser')"/>
+        -->
+
+
+        <!-- Generates 401 response without body when authentication fails --> 
+        <http-basic entry-point-ref="OEAuthenticationSOAPEntryPoint" />
+
+	<!-- Disable org.springframework.security.web.csrf.CsrfFilter -->
+	<csrf disabled="true"/>
+
+
+    </http>
+
+</b:beans>

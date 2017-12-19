@@ -1,0 +1,111 @@
+<section class="hbox stretch bg-white" id="SecurityRulesView">
+    <section class="vbox">
+        <header class="header bg-white b-b b-light">
+            <p class="h5">Security Rules</p>
+        </header>
+        <section>
+            <div class="row wrapper">
+            </div>
+            <div class="row wrapper">
+	            <div class="col-xs-12">
+	                <select name="rules" style="height:400px;width:800px;"></select>
+	            </div>
+            </div>
+            <form class="none" name="editForm">
+                <div class="row wrapper">
+	                <div class="col-xs-1">
+	                    <label class="control-label" for="transportName" help="TransportNameHelp">Type</label>
+	                    <input type="text" class="input-s-sm" name="transportName"
+	                           data-bind="value:rule.transportName"
+	                           data-required-msg="Selection Required" required/>
+	                </div>
+	                <div class="col-xs-3">
+	                    <label class="control-label" for="interceptURI" help="InterceptURIHelp">Intercept URI</label>
+		                <input type="text" class="form-control" name="interceptURI"
+		                       data-bind="value:rule.interceptURI" placeholder="Intercept URI"
+		                       data-required-msg="Intercept URI is required" required/>
+	                </div>
+	                <div class="col-xs-1">
+		                <label class="control-label" for="httpMethod" help="HttpMethodHelp">Method</label>
+		                <input type="text" class="input-s-sm" name="httpMethod"
+		                       data-bind="value:rule.httpMethod"
+		                       data-required-msg="Selection Required" required/>
+	                </div>
+	                <div class="col-xs-5">
+	                    <label class="control-label" for="accessRule" help="AccessRuleHelp">Access Rule</label>
+		                <input type="text" class="form-control" name="accessRule"
+		                       data-bind="value:rule.accessRule" placeholder="Access Rule"
+		                       data-required-msg="Access Rule is required" required/>
+	                </div>
+	                <div class="col-xs-1">
+	                    <button class="btn btn-primary m-t-md" type="button" data-bind="click:saveRule">Save Rule</button>
+	                </div>
+	                <div class="col-xs-1">
+	                    <button class="btn btn-link m-t-md" type="button" data-bind="click:cancelEdit">Cancel</button>
+	                </div>
+                </div>
+                <div class="row wrapper">
+                    <div class="col-xs-12">
+	                    Typical options for Access Rules, per section 15 the <a href="https://docs.spring.io/spring-security/site/docs/3.0.x/reference/el-access.html" target="_blank">"Expression-Based Access Control"</a> of the Spring documentation:
+	                    <br/><br/>
+		                <table style="border:none;">
+		                    <thead>
+		                        <tr>
+		                            <th style="border-right:0.5pt solid;border-bottom:0.5pt solid;">Expression</th>
+		                            <th style="border-bottom:0.5pt solid;">Description</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr>
+	                                <td style="border-right:0.5pt solid;border-bottom:0.5pt solid;">
+	                                    <code class="literal">hasRole(['role'])</code>
+	                                </td>
+	                                <td style="border-bottom:0.5pt solid;">
+	                                    Returns <code class="literal">true</code> if the current principal has the specified role.
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td style="border-right:0.5pt solid;border-bottom:0.5pt solid;">
+	                                    <code class="literal">hasAnyRole(['role1','role2'])</code></td><td style="border-bottom:0.5pt solid;">Returns <code class="literal">true</code> if the current principal has any of the supplied roles (given as a comma-separated list of strings)
+	                                </td>
+		                        </tr>
+		                        <tr>
+		                            <td style="border-right:0.5pt solid;border-bottom:0.5pt solid;">
+		                                <code class="literal">permitAll</code>
+	                                </td>
+	                                <td style="border-bottom:0.5pt solid;">
+	                                    Always evaluates to <code class="literal">true</code>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td style="border-right:0.5pt solid;border-bottom:0.5pt solid;">
+	                                    <code class="literal">denyAll</code>
+	                                </td>
+	                                <td style="border-bottom:0.5pt solid;">
+	                                    Always evaluates to <code class="literal">false</code>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td style="border-right:0.5pt solid;border-bottom:0.5pt solid;">
+	                                    <code class="literal">isAnonymous()</code>
+	                                </td>
+	                                <td style="border-bottom:0.5pt solid;">
+	                                    Returns <code class="literal">true</code> if the current principal is an anonymous user
+	                                </td>
+		                        </tr>
+	                        </tbody>
+	                    </table>
+	                </div>
+                </div>
+            </form>
+            <div class="row wrapper">
+                <div class="col-xs-12">
+                   <button class="btn btn-info" type="button" data-bind="click:addRule">New Rule</button>
+                   <button class="btn btn-info" type="button" data-bind="click:editRule">Edit Selected</button>
+                    &nbsp;&nbsp;
+                   <button class="btn btn-primary" type="button" data-bind="click:setRules">Update Rules</button>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>

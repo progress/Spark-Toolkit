@@ -1,0 +1,402 @@
+{"services": {"wizard": {
+    "version": "1.0.0",
+    "operations": {
+        "\/": {"GET": {
+            "contentType": "application\/json",
+            "statusCode": 200,
+            "file": "$CATALINA_BASE\/webapps\/$oepas-webapp\/static\/wizard.json"
+        }},
+        "\/wizard": {},
+        "\/wizard\/css": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetCSS",
+                "arg": [{
+                    "ablName": "cssList",
+                    "ablType": "CHARACTER",
+                    "ioMode": "OUTPUT",
+                    "msgElem": {
+                        "type": "field",
+                        "name": "cssList"
+                    }
+                }]
+            }
+        }},
+        "\/wizard\/fields": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetFields",
+                "arg": [
+                    {
+                        "ablName": "databaseName",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "databaseName"
+                        }
+                    },
+                    {
+                        "ablName": "tableName",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "tableName"
+                        }
+                    },
+                    {
+                        "ablName": "ttSchema",
+                        "ablType": "TABLE",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "ttSchema"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/wizard\/parse": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "ParseInclude",
+                "arg": [
+                    {
+                        "ablName": "includePath",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "includePath"
+                        }
+                    },
+                    {
+                        "ablName": "includeData",
+                        "ablType": "CHARACTER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "includeData"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/wizard\/databases": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetDatabases",
+                "arg": [{
+                    "ablName": "databaseList",
+                    "ablType": "CHARACTER",
+                    "ioMode": "OUTPUT",
+                    "msgElem": {
+                        "type": "field",
+                        "name": "databaseList"
+                    }
+                }]
+            }
+        }},
+        "\/wizard\/includes": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetIncludes",
+                "arg": [{
+                    "ablName": "includeList",
+                    "ablType": "CHARACTER",
+                    "ioMode": "OUTPUT",
+                    "msgElem": {
+                        "type": "field",
+                        "name": "includeList"
+                    }
+                }]
+            }
+        }},
+        "\/wizard\/templates": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetTemplates",
+                "arg": [
+                    {
+                        "ablName": "DefaultCatalog",
+                        "ablType": "CHARACTER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "DefaultCatalog"
+                        }
+                    },
+                    {
+                        "ablName": "Template",
+                        "ablType": "TABLE",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "Template"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/wizard\/metadata": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetMetadata",
+                "arg": [{
+                    "ablName": "metadataList",
+                    "ablType": "CHARACTER",
+                    "ioMode": "OUTPUT",
+                    "msgElem": {
+                        "type": "field",
+                        "name": "metadataList"
+                    }
+                }]
+            }
+        }},
+        "\/wizard\/tooltips": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetTooltips",
+                "arg": [{
+                    "ablName": "tooltipData",
+                    "ablType": "CHARACTER",
+                    "ioMode": "OUTPUT",
+                    "msgElem": {
+                        "type": "field",
+                        "name": "tooltipData"
+                    }
+                }]
+            }
+        }},
+        "\/wizard\/generate": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "Generate",
+                "arg": [
+                    {
+                        "ablName": "paramObject",
+                        "ablType": "LONGCHAR",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "paramObject"
+                        }
+                    },
+                    {
+                        "ablName": "forceCreate",
+                        "ablType": "LOGICAL",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "forceCreate"
+                        }
+                    },
+                    {
+                        "ablName": "resultMessage",
+                        "ablType": "CHARACTER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "resultMessage"
+                        }
+                    },
+                    {
+                        "ablName": "resultCode",
+                        "ablType": "INTEGER",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "resultCode"
+                        }
+                    }
+                ]
+            }
+        }},
+        "\/wizard\/tables": {"PUT": {
+            "contentType": "application\/json",
+            "options": {
+                "writeBI": false,
+                "requestEnvelope": true,
+                "responseEnvelope": true
+            },
+            "entity": {
+                "name": "Generator.Business.Wizard",
+                "function": "GetTables",
+                "arg": [
+                    {
+                        "ablName": "databaseName",
+                        "ablType": "CHARACTER",
+                        "ioMode": "INPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "databaseName"
+                        }
+                    },
+                    {
+                        "ablName": "ttSchema",
+                        "ablType": "TABLE",
+                        "ioMode": "OUTPUT",
+                        "msgElem": {
+                            "type": "field",
+                            "name": "ttSchema"
+                        }
+                    }
+                ]
+            }
+        }}
+    },
+    "schemas": {"dsCodeGen": {
+        "ttParam": {
+            "trackChanges": true,
+            "indexes": {"IdxMain": {
+                "primary": false,
+                "unique": false,
+                "word": false,
+                "fields": ["ttName:asc"]
+            }},
+            "fields": [
+                {
+                    "name": "ttName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "ttValue",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                }
+            ]
+        },
+        "ttSchema": {
+            "trackChanges": true,
+            "indexes": {"idxSeq": {
+                "primary": true,
+                "unique": false,
+                "word": false,
+                "fields": [
+                    "schemaType:asc",
+                    "schemaSeq:asc",
+                    "tableName:asc",
+                    "fieldName:asc"
+                ]
+            }},
+            "fields": [
+                {
+                    "name": "schemaType",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "schemaSeq",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "tableName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "fieldName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "logicalName",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "fieldLabel",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "fieldExtent",
+                    "ablType": "INTEGER",
+                    "extent": null
+                },
+                {
+                    "name": "dataType",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "fieldDefault",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "fieldFormat",
+                    "ablType": "CHARACTER",
+                    "extent": null
+                },
+                {
+                    "name": "fieldWidth",
+                    "ablType": "DECIMAL",
+                    "extent": null
+                },
+                {
+                    "name": "isIndexed",
+                    "ablType": "LOGICAL",
+                    "extent": null
+                }
+            ]
+        }
+    }}
+}}}

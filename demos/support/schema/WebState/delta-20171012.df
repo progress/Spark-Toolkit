@@ -1,0 +1,152 @@
+UPDATE FIELD "FirstName" OF "WebProfile"
+  ORDER 60
+
+UPDATE FIELD "LastName" OF "WebProfile"
+  ORDER 70
+
+UPDATE FIELD "IsActive" OF "WebProfile"
+  ORDER 80
+
+UPDATE FIELD "Email" OF "WebProfile"
+  ORDER 140
+
+UPDATE FIELD "IsLocked" OF "WebProfile"
+  ORDER 90
+
+UPDATE FIELD "LoginCount" OF "WebProfile"
+  ORDER 330
+
+UPDATE FIELD "HomePhone" OF "WebProfile"
+  ORDER 170
+
+UPDATE FIELD "SecurityAnswer" OF "WebProfile"
+  ORDER 220
+
+UPDATE FIELD "PasswordExpires" OF "WebProfile"
+  ORDER 230
+
+UPDATE FIELD "TaskAdjust" OF "WebProfile"
+  ORDER 290
+
+UPDATE FIELD "add_userid" OF "WebProfile"
+  ORDER 360
+
+UPDATE FIELD "chg_dt" OF "WebProfile"
+  ORDER 370
+
+UPDATE FIELD "chg_time" OF "WebProfile"
+  ORDER 380
+
+UPDATE FIELD "chg_userid" OF "WebProfile"
+  ORDER 390
+
+UPDATE FIELD "OldPassword" OF "WebProfile"
+  ORDER 240
+
+UPDATE FIELD "add_dt" OF "WebProfile"
+  ORDER 340
+
+UPDATE FIELD "add_time" OF "WebProfile"
+  ORDER 350
+
+UPDATE FIELD "LockOutDate" OF "WebProfile"
+  ORDER 260
+
+UPDATE FIELD "LockOutTime" OF "WebProfile"
+  ORDER 270
+
+UPDATE FIELD "SecurityRole" OF "WebProfile"
+  DESCRIPTION "Default role(s); use WebRoleProfile for dynamic control"
+  ORDER 280
+
+UPDATE FIELD "LastLogin" OF "WebProfile"
+  ORDER 320
+
+UPDATE FIELD "ForcePWChange" OF "WebProfile"
+  ORDER 250
+
+UPDATE FIELD "Comments" OF "WebProfile"
+  ORDER 300
+
+UPDATE FIELD "FirstLogin" OF "WebProfile"
+  ORDER 310
+
+UPDATE FIELD "CompanyName" OF "WebProfile"
+  ORDER 150
+
+UPDATE FIELD "JobTitle" OF "WebProfile"
+  ORDER 160
+
+UPDATE FIELD "WorkPhone" OF "WebProfile"
+  ORDER 180
+
+UPDATE FIELD "SecurityQuestion" OF "WebProfile"
+  ORDER 210
+
+ADD FIELD "ResetCode" OF "WebProfile" AS character
+  DESCRIPTION "Temporary code for password reset"
+  FORMAT "X(20)"
+  POSITION 34
+  INITIAL ""
+  LABEL "Reset Code"
+  ORDER 50
+  MAX-WIDTH 40
+
+ADD FIELD "MobilePhone" OF "WebProfile" AS character
+  FORMAT "X(10)"
+  POSITION 35
+  INITIAL ""
+  LABEL "Mobile Phone"
+  ORDER 190
+  MAX-WIDTH 20
+
+ADD FIELD "MobileCarrier" OF "WebProfile" AS character
+  DESCRIPTION "For SMS purposes, name of mobile service provider"
+  FORMAT "X(10)"
+  POSITION 36
+  INITIAL ""
+  LABEL "Mobile Carrier"
+  ORDER 200
+  MAX-WIDTH 20
+
+ADD FIELD "UseTFA" OF "WebProfile" AS logical
+  DESCRIPTION "Utilize Two-Factor Authentication"
+  FORMAT "yes/no"
+  POSITION 37
+  INITIAL "no"
+  LABEL "Use TFA"
+  ORDER 100
+  MAX-WIDTH 1
+
+ADD FIELD "TFAMethod" OF "WebProfile" AS character
+  DESCRIPTION "Method for TFA implementation: Email, SMS, or Device"
+  FORMAT "X(10)"
+  POSITION 38
+  INITIAL ""
+  LABEL "TFA Method"
+  ORDER 110
+  MAX-WIDTH 20
+
+ADD FIELD "TFAToken" OF "WebProfile" AS character
+  DESCRIPTION "Temporary TFA token to be used for comparision (typically for email or SMS usage)"
+  FORMAT "X(40)"
+  POSITION 39
+  INITIAL ""
+  LABEL "TFA Token"
+  ORDER 120
+  MAX-WIDTH 40
+
+ADD FIELD "TFASecret" OF "WebProfile" AS character
+  DESCRIPTION "Secret (private) key used for TFA device"
+  FORMAT "X(40)"
+  POSITION 40
+  INITIAL ""
+  LABEL "TFA Secret"
+  ORDER 130
+  MAX-WIDTH 40
+
+.
+PSC
+cpstream=UTF-8
+.
+0000003152

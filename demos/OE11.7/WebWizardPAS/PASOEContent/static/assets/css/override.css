@@ -1,0 +1,74 @@
+.label-white {
+    color: white;
+}
+
+.numbers {
+    text-align: right;
+}
+
+.spark-action,
+.spark-action * {
+    width: 100%;
+    height: 100%;
+}
+
+.spark-disabled,
+.spark-disabled:hover {
+    cursor: default;
+    background-color: DimGray;
+    color: Gainsboro;
+}
+
+.spark-grid-overlay {
+    position: absolute;
+    top: 0px;
+    z-index: 999;
+    height: 100%;
+    width: 100%;
+}
+
+.spark-main-menu * img {
+    max-height: 50px;
+}
+
+.datepicker {
+    z-index: 1151 !important;
+}
+
+.dropdown-user {
+    background-color: #fff;
+    border-left: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    color: black;
+    list-style-type: none;
+    padding: 20px;
+    z-index: 1100;
+}
+
+ul.dropdown li a {
+    color: #3c4144 !important;
+}
+
+/* KENDO GRID OVERRIDE */
+
+.k-grid-header { padding: 0 !important; }
+.k-header { background-color: #fff;}
+.k-grid-content { overflow-y: visible; }
+
+.k-header, .k-grid-header-wrap, .k-grid .k-grouping-header, .k-grid-header, .k-pager-wrap, .k-pager-wrap .k-textbox, .k-pager-wrap .k-link, .k-grouping-header .k-group-indicator, .k-gantt-toolbar .k-state-default, .k-widget, .k-grid tr td { border-color: #eaeef1;}
+
+.k-grid-header th.k-header>.k-link, .k-grid td { padding: 8px 8px; }
+
+.k-grid-header .k-link:link, .k-grid-header .k-link:visited, .k-grid-header .k-nav-current.k-state-hover .k-link, .k-grouping-header .k-link { color: #788288; font-weight: bold;}
+
+.k-block, .k-widget, .k-popup, .k-content, .k-toolbar, .k-dropdown .k-input { color: #788288; }
+
+a.panel-toggle:hover, a.panel-toggle:focus {
+    background-color: transparent!important;
+}
+
+/* Kendo Slider */
+
+.k-slider-selection {
+    background-color: #f4f6f9;
+}

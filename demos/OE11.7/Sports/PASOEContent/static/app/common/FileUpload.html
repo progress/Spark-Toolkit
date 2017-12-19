@@ -1,0 +1,116 @@
+<!-- start modal -->
+<div id="UploadModal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#10005;</span></button>
+                <h4 class="modal-title font-bold" name="title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input type="file" name="files" id="files"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" name="content"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" name="close"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="fileTemplate" type="text/x-kendo-template">
+    <span class="k-progress"></span>
+    <div style="height:90px;">
+        <h4 class="file-heading file-name-heading" title="#=name#">#=name#</h4>
+        <h4 class="file-heading file-name-heading">Size: #=size# bytes</h4>
+        <button type="button" class="k-upload-action"></button>
+    </div>
+</script>
+<script type="text/javascript">
+    var modalUploadCtrl = (function(){
+        "use strict";
+
+        var modalVM = kendo.observable({
+            uploadStatus: "",
+            doReset: function(){
+                // Reset by removing any previously selected files for upload.
+                var uploader = $("#UploadModal input[name=files]").getKendoUpload();
+                if (uploader) {
+                    $(".k-upload-files, .k-upload-status-total, .k-upload-selected", uploader.wrapper).remove();
+                    $("#UploadModal button.k-button.k-clear-selected").remove();
+                }
+                this.set("uploadStatus", "");
+            }
+        });
+
+        function createWidgets(){
+            // Create the file uploader widget.
+            var uploadOptions = {
+                autoUpload: false,
+                batchUpload: false,
+                enableUpload: true,
+                multiUpload: true,
+                saveField: "document", // Identifier for filegroup/response.
+                saveUrl: "../web/upload", // Server endpoint for uploads.
+                showFileList: true,
+                template: kendo.template($("#fileTemplate").html()),
+                onSelect: function(ev){
+                    // Obtain information about the selected file.
+                    var file = (ev.files || [])[0] || {};
+                    var ext = file.extension.replace(".", "").toLowerCase();
+                    //console.log(file.size, ext);
+                    setTimeout(function(){
+                        // Translate and style buttons as necessary.
+                        $("#UploadModal button.k-button.k-clear-selected").text(app.getText("Clear"));
+                        $("#UploadModal button.k-button.k-upload-selected").text(app.getText("Upload File")).addClass("btn-primary");
+                    }, 200);
+                },
+                onUpload: function(ev){
+                    // Reset values on each upload attempt.
+                    modalVM.set("uploadStatus", "");
+                },
+                onSuccess: function(ev){
+                    // Update values on success.
+                    var response = ev.response || {};
+                    modalVM.set("uploadStatus", "Uploaded file to " + response["1"]);
+
+                    // Trigger callback on modal requestor.
+                    modalVM.trigger("modalDataReady", {data: modalVM.get("uploadStatus")});
+                },
+                onError: function(ev){
+                    console.log(ev);
+                }
+            };
+            var uploader = $("#UploadModal input[name=files]").getKendoUpload();
+            if (!uploader) {
+                spark.io.createUpload("#UploadModal input[name=files]", uploadOptions);
+            }
+
+            // Change text for static elements on the screen.
+            $("#UploadModal h4[name=title").html(app.getText("Import File"));
+            $("#UploadModal button[name=close").html(app.getText("Close"));
+            $("#UploadModal div.k-button.k-upload-button").find("span").text(app.getText("Choose File"));
+        }
+
+        var _initialized = false;
+        function init(){
+            if (!_initialized) {
+                // Bind the observable to the view.
+                kendo.bind($("#UploadModal"), modalVM);
+
+                // Convert HTML to Kendo widgets.
+                createWidgets();
+            }
+        }
+
+        return {
+            init: init,
+            vm: modalVM
+        };
+    })();
+</script>
+<!-- end modal -->

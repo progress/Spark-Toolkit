@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Application context containing http authentication control
+  -->
+
+<b:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:b="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+    
+ 
+    <!-- *********************************************************************
+         WARNING: EDITS TO THIS FILE MAY BE OVERWRITTEN BY OPENEDGE OEABL
+         WEB APPLICATION UPDATE/PATCH PROCESS. CUSTOM EDITS MUST BE MANUALLY
+         BACKED UP PRIOR TO ANY UPDATE/PATCH PROCESS EXECUTION.
+
+         MAKE ALL CONFIGURATION EDITS IN THE oeablSecurity.properties FILE.
+         ********************************************************************* -->
+
+     <!-- The oeablSecurity.xml Spring Security configuration is the single
+          entry point for all configurations.  At run-time this Spring
+          Security configuration file will dynamically load the login model
+          configuration configured in oeablSecurity.properties file's
+          'client.login.model'.  The login model configuration will then
+          dynamically load the security model to use for the APSV, SOAP, 
+          REST, WEB, and static-file transports based on the configuration
+          found in oeablSecurity.properties.  
+
+          Custom Spring Security configurations may be copying one of the 
+          existing 'xxxxLoginModel.xml' login model configurations, and then 
+          configuring 'client.login.model' to use it. Anyone creating custom
+          Spring Security configuations must have a very good understanding of
+          the framework, Java beans, and injection models. -->
+
+     <!-- Define any OpenEdge defined local properties and values that will 
+         override those loaded by the 'properties-loader.xml' configuration. 
+         DO NOT EDIT THIS WITH WEB APPLICATION PROPERTIES -->
+	<b:bean id="localProperties"
+            class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <b:property name="properties" >
+            <b:props>
+                <b:prop key="spring.config.file">oeablSecurity.xml</b:prop>
+            </b:props>
+        </b:property>
+    </b:bean>
+
+    <!-- Load the external properties and values used by the oeablSecurity-basic*.xml
+         and oeablSecurity-form*.xml configuration files. External properties may
+         be tailored, edited, or managed using external utilities by OpenEdge or
+         ABL developers.
+
+         External properties will be located and loaded in
+         this order:
+            1)  webapps/<web-app-name>/WEB-INF/oeablSecurity.properties
+            2)  ablapps/<abl-app-name>/oeablSecurity.properties
+            3)  conf/oeablSecurity.properties
+
+         Properties are resolved according to the load order, with the
+         value used from the first occurance of the property.
+     -->
+     <b:import resource="spring/properties-loader.xml"/>
+
+    <!-- Load the Spring Security XML file holding the Spring securiy
+         process configuration, process beans, and all of the 
+         AuthenticationManager declarations for the supported 
+         user account sources. -->
+    <b:import resource="spring/${client.login.model}LoginModel.xml"/> 
+
+</b:beans>

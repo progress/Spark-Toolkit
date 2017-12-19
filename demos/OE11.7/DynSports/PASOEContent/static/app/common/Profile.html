@@ -1,0 +1,191 @@
+<!-- Change Password Modal -->
+<div id="ModalProfile" class="modal">
+    <div class="modal-dialog modal-g" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#10005;</span></button>
+                <h4 class="modal-title font-bold">Edit Profile</h4>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm" role="form" data-role="validator" novalidate="novalidate">
+                    <div class="row m-b-sm">
+                        <div class="col-xs-6">
+                            <input type="text" name="FirstName" placeholder="First Name"
+                                   class="form-control text-md" autocomplete="off"
+                                   data-bind="value:params.FirstName" required/>
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="text" name="LastName" placeholder="Last Name"
+                                   class="form-control text-md" autocomplete="off"
+                                   data-bind="value:params.LastName" required/>
+                        </div>
+                    </div>
+                    <div class="row m-b-sm">
+                        <div class="col-xs-12">
+                            <input type="text" name="Email" placeholder="Email Address"
+                                   class="form-control text-md" autocomplete="off"
+                                   data-bind="value:params.Email" required/>
+                        </div>
+                    </div>
+                    <div class="row m-b-sm">
+                        <div class="col-xs-6">
+                            <input type="text" name="MobilePhone" placeholder="Mobile Phone"
+                                   class="form-control text-md" autocomplete="off"
+                                   data-bind="value:params.MobilePhone"/>
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="text" name="MobileCarrier"
+                                   data-bind="value:params.MobileCarrier"/>
+                        </div>
+                    </div>
+                    <div class="row m-b-sm">
+                        <div class="col-xs-6 padder-v">
+                            <label class="m-t-sm" for="UseTFA">Use 2-Factor Authentication:</label>
+                            <input type="checkbox" name="UseTFA"
+                                   data-bind="checked:params.UseTFA"/>
+                            <div data-bind="visible:params.UseTFA">
+	                            <label class="m-t-md" for="UseTFA">Obtain Code Via:</label><br/>
+	                            <input type="text" name="TFAMethod"
+	                                   data-bind="value:params.TFAMethod"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 padder-v">
+                            <div data-bind="visible:params.UseTFA">
+                                <span name="qr"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary pull-left" data-bind="click:doSubmit">Submit</button>
+                <button class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var modalProfileCtrl = (function(){
+        "use strict";
+
+        var modalVM = kendo.observable({
+            params: {
+                FirstName: "",
+                LastName: "",
+                Email: "",
+                MobilePhone: "",
+                MobileCarrier: "",
+                UseTFA: false,
+                TFAMethod: ""
+            },
+            getProfile: function(){
+                var userJSDO = spark.createJSDO("user");
+                userJSDO.invoke("getProfile", {})
+                    .done(function(jsdo, success, request){
+                        // Update screen with latest response data.
+                        var response = request.response || {};
+                        modalVM.set("params", {
+                            FirstName: response.FirstName || "",
+                            LastName: response.LastName || "",
+                            Email: response.Email || "",
+                            MobilePhone: response.MobilePhone || "",
+                            MobileCarrier: response.MobileCarrier || "",
+                            UseTFA: response.UseTFA || false,
+                            TFAMethod: response.TFAMethod || ""
+                        });
+
+                        // Remove and re-create (if necessary) the QR code for TFA.
+                        kendo.destroy($("#profileForm span[name=qr]").children());
+                        $("#profileForm span[name=qr]").empty();
+                        if (response.UseTFA && response.TFAMethod === "Device" && response.QR !== "") {
+	                        $("#profileForm span[name=qr]").kendoQRCode({
+	                            value: response.QR
+	                        });
+                        }
+                    })
+                    .fail(function(){
+                        app.showMessage("Unable to obtain profile information.", "warning");
+                    });
+            },
+            doReset: function(){
+                // First, clear any previous values.
+                this.set("params", {
+	                FirstName: "",
+	                LastName: "",
+	                Email: "",
+	                MobilePhone: "",
+	                MobileCarrier: "",
+	                UseTFA: false,
+	                TFAMethod: "",
+                    QR: ""
+                });
+
+                // Next, obtain current profile data.
+                this.getProfile();
+            },
+            doSubmit: function(){
+                var params = this.toJSON().params;
+                var validatorOptions = {};
+                if (spark.form.validate("#profileForm", validatorOptions)) {
+                    var userJSDO = spark.createJSDO("user");
+                    userJSDO.invoke("setProfile", params)
+                        .then(function(jsdo, result, request){
+                            var response = request.response || {};
+                            if (response.updateSuccess) {
+                                // Re-fetch the current profile data.
+                                app.showMessage("Profile information updated.", "info");                                
+                                modalVM.getProfile();
+                            } else {
+                                // Potential error returned, show warning.
+                                app.showMessage("Unable to update profile information.", "warning");
+                            }
+                    });
+                }
+            }
+        });
+
+        var _initialized = false;
+        function init(){
+            if (!_initialized) {
+                // Bind the observable to the view.
+                kendo.bind($("#ModalProfile"), modalVM);
+		
+		        var mobileCarrier = spark.field.createSingleLookup("#profileForm input[name=MobileCarrier]", {
+		            dataSource: [{
+		                name: "AT&T",
+		                value: "txt.att.net"
+		            }, {
+		                name: "MetroPCS",
+		                value: "mymetropcs.com"
+		            }, {
+		                name: "Sprint",
+		                value: "messaging.sprintpcs.com"
+		            }, {
+		                name: "T-Mobile",
+		                value: "tmomail.net"
+		            }, {
+		                name: "Verizon",
+		                value: "vtext.com"
+		            }, {
+		                name: "Virgin",
+		                value: "vmobl.com"
+		            }],
+		            dataTextField: "name",
+		            dataValueField: "value",
+		            optionLabel: "- Mobile Carrier -"
+		        });
+
+                var tfaMethod = spark.field.createSimpleLookup("#profileForm input[name=TFAMethod]", {
+                    dataSource: ["Email", "SMS", "Device"],
+                    optionLabel: "- 2FA Method -"
+                });
+            }
+        }
+
+        return {
+            init: init,
+            vm: modalVM
+        };
+    })();
+</script>
+<!-- End Modal -->

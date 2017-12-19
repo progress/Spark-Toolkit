@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html class="app" lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <title><Spark_MasterTable> Form</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.common.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/kendo/styles/kendo.default.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="vendor/animate-css/animate.min.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/font.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/<Spark_CSSFile>" />
+        <link rel="stylesheet" type="text/css" href="assets/css/override.css" />
+        <!-- Core Libraries -->
+        <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+        <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/kendo.all.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/cultures/kendo.culture.en-US.min.js"></script>
+        <script type="text/javascript" src="vendor/kendo/js/messages/kendo.messages.en-US.min.js"></script>
+        <script type="text/javascript" src="vendor/jszip/dist/jszip.min.js"></script>
+        <!-- Library Extensions -->
+        <script type="text/javascript" src="vendor/psc/lib/progress.all.js"></script>
+        <script type="text/javascript" src="vendor/spark/lib/plugins.js"></script>
+        <script type="text/javascript" src="vendor/spark/lib/spark.js"></script>
+    </head>
+    <body>
+        <section class="vbox">
+            <header class="header header-md navbar bg-primary">
+                <div class="navbar-header aside-sm">
+                    <h2 class="m-l m-t-sm">Demo&nbsp;Application</h2>
+                </div>
+            </header>
+            <section>
+                <section class="hbox stretch" id="<Spark_TemplateName>View">
+                    <aside class="bg-white">
+                        <section class="vbox">
+                            <header class="header bg-white b-b b-light">
+                                <p class="h5">Maintain <Spark_MasterTable></p>
+                            </header>
+                            <section class="scrollable wrapper bg-light">
+                                <form class="form-group" data-role="validator" name="searchForm" novalidate="novalidate">
+                                    <div class="input-group m-t-sm" style="margin: 0 auto;">
+                                        <input class="form-control input-s" name="<Spark_SearchField1Title>" placeholder="Search By <Spark_SearchField1Title>"
+                                               data-bind="value:params.searchValue" style="width:300px"/>
+                                        <span class="btn btn-default btn-sm" data-bind="click:doSearch">Search</span>
+                                    </div>
+                                </form>
+                                <br/>
+                                <form class="panel panel-default wrapper" name="editForm">
+                                    <input type="hidden" name="id" data-bind="value:selectedRow.id"/>
+                                    <div class="row m-b">
+                                        <Spark_FormFields>
+                                    </div>
+                                    <span class="btn btn-primary" data-bind="click:saveRecord">Save</span>
+                                    <span class="btn btn-default" data-bind="click:createNew">New</span>
+                                    <span class="btn btn-default" data-bind="click:deleteRecord">Delete</span>
+                                    <span class="btn btn-default" data-bind="click:cancelEdit">Cancel</span>
+                                </form>
+                            </section>
+                        </section>
+                    </aside>
+                </section>
+            </section>
+        </section>
+    </body>
+    <script type="text/javascript">
+        var resourceName = "<Spark_ResourceName>";
+        var searchField1 = "<Spark_SearchField1>";
+        var searchTitle = "<Spark_SearchField1Title>";
+        var datasetName = "ds<Spark_MasterTable>";
+        var tableName = "tt<Spark_MasterTable>";
+        var viewName = "#<Spark_TemplateName>View";
+
+        var primaryVM = kendo.observable({
+            mode: null,
+            params: {
+                searchValue: ""
+            },
+            selectedRow: {},
+            doSearch: function(ev){
+                if (spark.form.validate(viewName + " form[name=searchForm]")) {
+                    var self = this;
+                    var params = this.toJSON().params || {};
+                    if ((params.searchValue || "") !== "") {
+                        var options = $.extend({}, spark.optionDefaults);
+                        var jsdo = getDataSource().options.transport.jsdo;
+                        options.filterQuery = "where " + searchField1 + " eq '" + params.searchValue + "'";
+                        spark.jsdo_read(jsdo, options)
+                            .done(function(jsdo, success, request){
+                                var record = (jsdo.getData() || [])[0] || null;
+                                if (record) {
+                                    self.set("mode", null);
+                                    self.set("selectedRow", record);
+                                } else {
+                                    self.set("mode", null);
+                                    self.set("selectedRow", {});
+                                }
+                            });
+                    }
+                }
+            },
+            cancelEdit: function(ev){
+                ev.preventDefault();
+                this.set("mode", null);
+                $(viewName + " form[name=editForm]").get(0).reset();
+            },
+            createNew: function(ev){
+                ev.preventDefault();
+                this.set("mode", "new");
+                this.set("selectedRow", {});
+                $(viewName + " form[name=editForm]").get(0).reset();
+            },
+            deleteRecord: function(ev){
+                ev.preventDefault();
+                if (confirm("Confirm - You want to Delete This Record")) {
+                    var options = $.extend({}, spark.optionDefaults);
+                    var jsdo = getDataSource().options.transport.jsdo;
+                    var data = this.toJSON();
+                    options.id = data.selectedRow._id || jsdo.getId();
+                    spark.jsdo_delete(jsdo, options)
+                        .done(function(jsdo, success, request){
+                            $(viewName + " form[name=editForm]").get(0).reset();
+                            alert("Record successfully deleted.");
+                        });
+                }
+            },
+            saveRecord: function(ev){
+                ev.preventDefault();
+                var self = this;
+                var data = this.toJSON();
+                var options = $.extend({}, spark.optionDefaults);
+                var jsdo = getDataSource().options.transport.jsdo;
+                if (data.mode === "new") {
+                    options.data = data.selectedRow;
+                    spark.jsdo_create(jsdo, options)
+                        .done(function(jsdo, success, request){
+                            alert("Record successfully created.");
+                        });
+                } else {
+                    options.id = data.selectedRow._id || "";
+                    options.data = data.selectedRow || {};
+                    spark.jsdo_update(jsdo, options)
+                        .done(function(jsdo, success, request){
+                            alert("Record successfully updated.");
+                            self.doSearch(); // Refresh data.
+                        });
+                }
+                this.set("mode", null);
+            }
+        });
+
+        var _primaryDS = null;
+        function getDataSource(primaryJSDO, useServerOpts){
+            if (!_primaryDS) {
+                // Create the primary datasource.
+                _primaryDS = new kendo.data.DataSource({
+                    pageSize: 100,
+                    serverFiltering: true,
+                    serverPaging: useServerOpts,
+                    serverSorting: useServerOpts,
+                    sort: {field: searchField1, dir: "asc"},
+                    transport: {
+                        jsdo: primaryJSDO,
+                        tableRef: tableName
+                    },
+                    type: "jsdo",
+                    error: function(e){
+                        console.log("Error: ", e);
+                        var error = "";
+                        if (e.errorThrown) {
+                            error = "\n" + e.errorThrown.message;
+                        }
+                        var response = (e.xhr || {}).response || "";
+                        if (response !== "") {
+                            var errobj = "";
+                            try {
+                                var errobj = JSON.parse(response);
+                            }
+                            catch(e) {
+                                error = "Error while parsing response: " + response;
+                            }
+
+                            if (errobj) {
+                                var dsErrors = (errobj[datasetName] ? errobj[datasetName]["prods:errors"] : null);
+                                var i = null;
+                                if (errobj._retVal) {
+                                    error += "\n" + errobj._retVal;
+                                } else if (errobj._errors instanceof Array && errobj._errors.length > 0) {
+                                    for (i = 0; i < errobj._errors.length; i += 1) {
+                                        error += "\n" + (errobj._errors[i]._errorNum || "")
+                                              + " " + (errobj._errors[i]._errorMsg || "UNKNOWN");
+                                    }
+                                } else if (dsErrors && dsErrors[tableName] instanceof Array) {
+                                    for (i = 0; i < errobj.dsErrors[tableName].length; i += 1) {
+                                        error += "\n" + dsErrors[tableName][i]["prods:error"];
+                                    }
+                                }
+                            }
+                        }
+                        alert("Error returned from server: " + error);
+                        e.preventDefault();
+                    }
+                });
+            }
+            return _primaryDS;
+        }
+
+        $(document).ready(function(){
+            // Create session, perform login, create JSDO, and init screen.
+            var serviceURI = "<Spark_ServiceURI>";
+            var catalogURI = "<Spark_CatalogURI>";
+            spark.createSession(serviceURI, catalogURI)
+                .then(function(){
+                    var jsdo = spark.createJSDO(resourceName);
+                    var jsdoProps = jsdo.getMethodProperties("read");
+                    var useServerOpts = false;
+                    if (jsdoProps && jsdoProps.mappingType) {
+                        useServerOpts = (jsdoProps.mappingType !== "");
+                    }
+                    initScreen(jsdo, useServerOpts); // Proceed with default JSDO.
+                }, function(){
+                    alert("Failed to initialize session.");
+                });
+        });
+
+        // Primary screen initialization.
+        function initScreen(primaryJSDO, useServerOpts){
+            getDataSource(primaryJSDO, useServerOpts);
+
+            // Bind the observable to the view.
+            kendo.bind($(viewName), primaryVM);
+
+            primaryVM.set("params.searchValue", spark.getQueryStringValue(searchField1) || "");
+            primaryVM.doSearch(); // Perform an initial search to populate the form.
+
+            $(viewName + " form[name=searchForm]")
+                .on("submit", function(ev){
+                    primaryVM.doSearch(ev);
+                    ev.preventDefault();
+                });
+
+            $(viewName + " form[name=editForm]")
+                .on("submit", function(ev){
+                    ev.preventDefault();
+                });
+        }
+    </script>
+</html>

@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Dashboard",
+    "spriteCssClass": "fa fa-home",
+    "url": "#\/"
+  },
+  {
+    "text": "Browse",
+    "items": [
+    ]
+  },
+  {
+    "text": "Maintenance",
+    "items": [
+    ]
+  },
+  {
+    "text": "Transaction",
+    "items": [
+    ]
+  }
+]

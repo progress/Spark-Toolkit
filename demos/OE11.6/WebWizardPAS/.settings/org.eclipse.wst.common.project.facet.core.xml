@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faceted-project>
+  <fixed facet="openedge.project"/>
+  <installed facet="caf.adapters" version="1.0"/>
+  <installed facet="openedge.project" version="11"/>
+  <installed facet="pasoe.appserver" version="11.6"/>
+  <installed facet="openedge.ablservice" version="11.6"/>
+  <installed facet="openedge.ablservice.rest" version="11.6"/>
+  <installed facet="openedge.ablservice.dataobject" version="11.6"/>
+</faceted-project>

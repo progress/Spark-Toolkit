@@ -1,0 +1,15 @@
+{
+    "Config": {
+        "Connection": [{
+            "Name": "Session",
+            "Type": "AppServer",
+            "Param": "session:handle",
+            "LifeCycle": "Session"
+        }, {
+            "Name": "RemoteSports",
+            "Type": "AppServer",
+            "Param": "-URL https://apsvuser:secret@localhost:8831/apsv -sessionModel Session-managed",
+            "LifeCycle": "Session"
+        }]
+    }
+}

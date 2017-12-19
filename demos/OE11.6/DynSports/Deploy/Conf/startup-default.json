@@ -1,0 +1,35 @@
+{
+    "Config": {
+        "ManagerMapping": [{
+            "Manager": "Spark.Core.Manager.IServiceManager",
+            "Implementation": "Spark.Core.Manager.ServiceManager"
+        }, {
+            "Manager": "Spark.Core.Manager.ISessionManager",
+            "Implementation": "Spark.Core.Manager.SessionManager"
+        }, {
+            "Manager": "Spark.Core.Manager.ISchemaManager",
+            "Implementation": "Spark.Core.Manager.SchemaManager"
+        }, {
+            "Manager": "Spark.Core.Manager.ICatalogManager",
+            "Implementation": "Spark.Core.Manager.CatalogManager"
+        }, {
+            "Manager": "Spark.Core.Manager.IMessageManager",
+            "Implementation": "Spark.Core.Manager.MessageManager"
+        }, {
+            "Manager": "Spark.Core.Manager.IRouteManager",
+            "Implementation": "Spark.Core.Manager.RouteManager"
+        }, {
+            "Manager": "Spark.Core.Manager.IConnectionManager",
+            "Implementation": "Spark.Core.Manager.ConnectionManager"
+        }, {
+            "Manager": "Spark.Core.Manager.ITranslationManager",
+            "Implementation": "Spark.Core.Manager.TranslationManager"
+        }, {
+            "Manager": "Spark.Core.Manager.IStateManager",
+            "Implementation": "Spark.Core.Manager.StateManager"
+        }, {
+            "Manager": "Spark.Core.Manager.IStatsManager",
+            "Implementation": "Spark.Core.Manager.StatsManager"
+        }]
+    }
+}

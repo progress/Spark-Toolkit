@@ -1,0 +1,26 @@
+<section class="hbox stretch" id="OrderUpdGridSPAView">
+    <aside class="bg-white">
+        <section class="vbox">
+            <header class="header bg-white b-b b-light">
+                <p class="h5">Order Grid</p>
+            </header>
+            <section class="scrollable wrapper bg-light w-f">
+                <form class="form-group m-b-md" data-role="validator" name="searchForm" novalidate="novalidate">
+                    <div class="row m-t-sm">
+                        <div class="col-sm-12">
+                            <input class="input-s" name="Ordered" placeholder="Search By Date Ordered"
+                                   data-bind="value:params.searchValue"/>
+                            <select class="input-s" name="SalesRep" placeholder="Search By Sales Rep"
+                                    data-bind="value:params.searchValue2"></select>
+                            <span class="btn btn-primary btn-sm" data-bind="click:doSearch">Search</span>
+                        </div>
+                    </div>
+                </form>
+                <div name="MasterGrid"></div>
+            </section>
+            <footer class="footer bg-white b-t">
+                <div name="MasterGridPager" class="m-t-xs"></div>
+            </footer>
+        </section>
+    </aside>
+</section>
