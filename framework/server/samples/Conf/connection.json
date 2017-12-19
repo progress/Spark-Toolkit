@@ -1,0 +1,10 @@
+{
+    "Config": {
+        "Connection": [{
+            "Name": "Session",
+            "Type": "AppServer",
+            "Param": "session:handle",
+            "LifeCycle": "Session"
+        }]
+    }
+}

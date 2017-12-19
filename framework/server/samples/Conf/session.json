@@ -1,0 +1,12 @@
+{
+    "Config": {
+        "SessionParam": [{
+            "ResetClientPrincipal": "SparkReset.cp"
+        }],
+        "Domains": [{
+            "domain": "",
+            "accessCode": "",
+            "description": ""
+        }]
+    }
+}

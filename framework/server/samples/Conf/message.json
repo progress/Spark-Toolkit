@@ -1,0 +1,14 @@
+{
+    "Config": {
+        "MessageMapping": [{
+            "Message": "Spark.Core.Message.IConfigMessage",
+            "Implementation": "Spark.Core.Message.ConfigMessage"
+        }, {
+            "Message": "Spark.Core.Message.IRequest",
+            "Implementation": "Spark.Core.Message.Request"
+        }, {
+            "Message": "Spark.Core.Message.IResponse",
+            "Implementation": "Spark.Core.Message.Response"
+        }]
+    }
+}
