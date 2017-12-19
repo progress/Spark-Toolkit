@@ -2,7 +2,7 @@
     File        : createDomain.p
     Purpose     : Create or update a single domain for securing API requests.
     Syntax      : Execute procedure while connected to application databases.
-    Description : 
+    Description :
     Author(s)   : Dustin Grau
     Created     : Mon Dec 19 15:06:27 EST 2016
     Notes       : Adds domain to database(s), and produces a PMFO config file.
@@ -17,14 +17,13 @@ using OpenEdge.DataAdmin.Lang.Collections.* from propath.
 
 block-level on error undo, throw.
 
+/* NOTICE: Do not use the "@" symbol in any passcodes! */
 &global-define DLC C:\Progress\OpenEdge
+&global-define DomainName spark
 &global-define DomainType _extsso
+&global-define PassCode spark01
 &global-define PassCodePrefix oech1::
 &global-define ResetName "SparkReset.cp"
-
-define variable domainName        as character no-undo.
-define variable domainAccessCode  as character no-undo.
-define variable domainDescription as character no-undo.
 
 define variable oService as DataAdminService no-undo.
 define variable oDomain  as IDomain          no-undo.
@@ -42,20 +41,6 @@ define variable oDomains as Progress.Json.ObjectModel.JsonArray  no-undo.
 
 /* ***************************  Main Block  *************************** */
 
-define frame domain-info
-    domainName format "X(15)" label "{&DomainType} Domain Name" colon 20
-    skip(1)
-    domainAccessCode format "X(15)" label "Domain Access Code" colon 20
-    skip(1)
-    domainDescription format "X(25)" label "Domain Description" colon 20
-    with centered width 75 side-labels row 4.
-
-update
-    domainName
-    domainAccessCode
-    domainDescription
-    with frame domain-info.
-
 /* Apply changes to all connected databases. */
 do iDB = 1 to num-dbs:
     /* Used for PMFO config file. */
@@ -72,24 +57,24 @@ do iDB = 1 to num-dbs:
     if valid-object(oService) then do:
         message substitute("Modifying '&1'.", ldbname(iDB)) view-as alert-box.
 
-        assign oDomain = oService:GetDomain(domainName).
+        assign oDomain = oService:GetDomain("{&DomainName}").
         if valid-object(oDomain) then do:
             /* Update Existing Domain */
-            message substitute("Updating Domain &1", domainName) view-as alert-box.
+            message substitute("Updating Domain &1", "{&DomainName}") view-as alert-box.
             assign
-                oDomain:AccessCode = domainAccessCode
-                oDomain:Description = domainDescription
+                oDomain:AccessCode = "{&PassCode}"
+                oDomain:Description = "External Realm Domain"
                 .
             oService:UpdateDomain(oDomain).
         end. /* valid-object(oDomain) */
         else do:
             /* Create New Domain */
-            message substitute("Creating Domain &1", domainName) view-as alert-box.
+            message substitute("Creating Domain &1", "{&DomainName}") view-as alert-box.
             assign
-                oDomain = oService:NewDomain(domainName)
+                oDomain = oService:NewDomain("{&DomainName}")
                 oDomain:AuthenticationSystem = oService:GetAuthenticationSystem("{&DomainType}")
-                oDomain:AccessCode = domainAccessCode
-                oDomain:Description = domainDescription
+                oDomain:AccessCode = "{&PassCode}"
+                oDomain:Description = "External Realm Domain"
                 oDomain:IsEnabled = true
                 .
             oService:CreateDomain(oDomain).
@@ -97,8 +82,8 @@ do iDB = 1 to num-dbs:
 
         /* Add info to necessary metadata objects. */
         assign oEntry = new Progress.Json.ObjectModel.JsonObject().
-        oEntry:Add("domain", domainName).
-        oEntry:Add("accessCode", substitute("{&PassCodePrefix}&1", audit-policy:encrypt-audit-mac-key(domainAccessCode))).
+        oEntry:Add("domain", "{&DomainName}").
+        oEntry:Add("accessCode", substitute("{&PassCodePrefix}&1", audit-policy:encrypt-audit-mac-key("{&PassCode}"))).
         oEntry:Add("description", oDomain:Description).
         oDomains:Add(oEntry).
 
@@ -112,9 +97,13 @@ do iDB = 1 to num-dbs:
 end. /* iDB */
 
 /* Generate reset CP for "Default" domain. */
+define variable cDLC as character no-undo.
+assign cDLC = os-getenv("DLC").
+if (cDLC gt "") ne true then assign cDLC = "{&DLC}".
 message "Generating reset CP token..." view-as alert-box.
-os-command silent value(substitute("{&DLC}\bin\genspacp -password &1 -user sparkRest -role NoAccess -domain &2 -file SparkReset.cp",
-                                   domainAccessCode + "Realm", domainName)).
+os-command silent value(substitute("&1~/bin~/genspacp -password &2 -user sparkRest -role NoAccess -domain &3 -file SparkReset.cp",
+                                   cDLC, "{&PassCode}", "{&DomainName}")).
+message substitute("Check for output in '&1'", session:temp-directory) view-as alert-box.
 
 catch e as Error:
     define variable errorHandler as DataAdminErrorHandler no-undo.
