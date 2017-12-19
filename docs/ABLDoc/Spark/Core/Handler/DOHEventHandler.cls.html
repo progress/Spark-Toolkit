@@ -94,42 +94,56 @@
 									<tr>
 						<td class="table_data">
 				<div  class="cell_data">
+					<a	href="DOHEventHandler.cls.html#DiscoverServiceHandler_Method"
+						title="DiscoverServiceHandler">DiscoverServiceHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.ServiceDiscoveryEventArgs)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
 					<a	href="DOHEventHandler.cls.html#GetStatusReason_Method"
 						title="GetStatusReason">GetStatusReason(INPUT:integer):CHARACTER</a>
 				</div>
 			</td> 
-														<td class="table_data">
+								</tr>
+										<tr>
+						<td class="table_data">
 				<div  class="cell_data">
 					<a	href="DOHEventHandler.cls.html#InvokedHandler_Method"
 						title="InvokedHandler">InvokedHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.OperationInvocationEventArgs)</a>
 				</div>
 			</td> 
-								</tr>
-										<tr>
-						<td class="table_data">
+														<td class="table_data">
 				<div  class="cell_data">
 					<a	href="DOHEventHandler.cls.html#InvokingHandler_Method"
 						title="InvokingHandler">InvokingHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.OperationInvocationEventArgs)</a>
 				</div>
 			</td> 
-														<td class="table_data">
+								</tr>
+										<tr>
+						<td class="table_data">
 				<div  class="cell_data">
 					<a	href="DOHEventHandler.cls.html#LoadEntityHandler_Method"
 						title="LoadEntityHandler">LoadEntityHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.HandlerLoadEntityEventArgs)</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="DOHEventHandler.cls.html#OperationErrorHandler_Method"
+						title="OperationErrorHandler">OperationErrorHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.HandlerErrorEventArgs)</a>
 				</div>
 			</td> 
 								</tr>
 										<tr>
 						<td class="table_data">
 				<div  class="cell_data">
-					<a	href="DOHEventHandler.cls.html#OperationErrorHandler_Method"
-						title="OperationErrorHandler">OperationErrorHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.HandlerErrorEventArgs)</a>
+					<a	href="DOHEventHandler.cls.html#SessionCleanup_Method"
+						title="SessionCleanup">SessionCleanup()</a>
 				</div>
 			</td> 
 														<td class="table_data">
 				<div  class="cell_data">
-					<a	href="DOHEventHandler.cls.html#SessionCleanup_Method"
-						title="SessionCleanup">SessionCleanup()</a>
+					<a	href="DOHEventHandler.cls.html#UnloadEntityHandler_Method"
+						title="UnloadEntityHandler">UnloadEntityHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.HandlerLoadEntityEventArgs)</a>
 				</div>
 			</td> 
 								</tr>
@@ -251,6 +265,49 @@
 		Method Detail<br>
 	</div>
 	 
+		<hr/>
+	<a name="DiscoverServiceHandler_Method"></a>
+	<div class="section">DiscoverServiceHandler method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">DiscoverServiceHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.ServiceDiscoveryEventArgs)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poSender</span>&nbsp;
+										Progress.Lang.Object			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">poEventArgs</span>&nbsp;
+										OpenEdge.Web.DataObject.ServiceDiscoveryEventArgs			
+					</div>
+								
 		<hr/>
 	<a name="GetStatusReason_Method"></a>
 	<div class="section">GetStatusReason method</div>
@@ -494,6 +551,49 @@
 	</table>
 	
 			
+		<hr/>
+	<a name="UnloadEntityHandler_Method"></a>
+	<div class="section">UnloadEntityHandler method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				VOID			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">UnloadEntityHandler(INPUT:Progress.Lang.Object,INPUT:OpenEdge.Web.DataObject.HandlerLoadEntityEventArgs)</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">poSender</span>&nbsp;
+										Progress.Lang.Object			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">poEventArgs</span>&nbsp;
+										OpenEdge.Web.DataObject.HandlerLoadEntityEventArgs			
+					</div>
+								
 			
 	<!-- ============ END METHOD DETAIL ========== --> 
 	<!-- ============ EVENT DETAIL ========== -->

@@ -1,0 +1,470 @@
+<!DOCTYPE html >
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>Base32.cls</title>
+
+<link rel="StyleSheet" href="../../../css/stylesheet.css"
+	type="text/css" media="all">
+
+</head>
+<body>
+
+	<!-- package name  and class name-->
+	<div class="pkg_class_name">
+		 <a href="package.html">Spark.Core.Util</a>: Base32 CLASS 
+	</div>
+	<br>
+	<!--Class Name -->
+	<div  class="title_name">
+	Base32 
+	
+		CLASS</div>
+
+	<!-- class comment should go here -->
+	<div class="paragraph">
+	<span class="detail_field_title" width="50px">Purpose</span>:
+	  										Implement encode/decode for Base32 standard (RFC 4648)
+						<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  										https://en.wikipedia.org/wiki/Base32
+						<br>
+	  <span class="detail_field_title" width="50px">Author(s)</span>:
+	  										Dustin Grau
+						<br>
+	  <span class="detail_field_title" width="50px">Notes</span>:
+	  										
+						<br>
+	  <span class="detail_field_title" width="50px">Created</span>:
+	  										Mon Oct 16 10:02:54 EDT 2017
+						<br>
+	</div>
+	
+				
+		
+		<div class="paragraph">
+	<span class="detail_field_title" style="font-size: 13px;" width="50px">USE-WIDGET-POOL</span>:
+	  true<br>
+	</div>
+		
+	<!-- extends section-->
+				<div  class="section">Super Class</div>
+		<div  class="paragraph">
+		<span class="code">
+						Progress.Lang.Object			
+			</span>
+	</div>
+	
+	<!-- inherits section-->
+		
+
+	<!-- CONSTRUCTOR SUMMARY SECTION -->
+		
+	<div class="title_name">
+		Constructors<br>
+	</div>
+		
+		<table class="table_summary" cellspacing="0" summary="">
+			
+				 
+																	<tr>
+										<td class="table_data">
+						<div class="cell_data">
+							 <a
+								href="Base32.cls.html#Base32_Constructor"
+								title="Base32">Base32()</a>
+						</div>
+					</td> 
+																						</tr>
+						</table>
+
+		<!-- CONSTRUCTOR SUMMARY SECTION END -->
+
+	<!-- methods summary section -->
+		<div class="title_name">
+		Methods<br>
+	</div>
+	
+	
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Base32.cls.html#ConvertToHex_Method"
+						title="ConvertToHex">ConvertToHex(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Base32.cls.html#DecodeData_Method"
+						title="DecodeData">DecodeData(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Base32.cls.html#DecodeToBinary_Method"
+						title="DecodeToBinary">DecodeToBinary(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Base32.cls.html#EncodeData_Method"
+						title="EncodeData">EncodeData(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+								</tr>
+								</table>
+	
+		<!-- method summary section end -->
+
+
+	<!-- EVENT SUMMARY SECTION -->
+		<!-- EVENT SUMMARY SECTION END -->
+
+	<!-- PROPERTY SUMMARY SECTION -->
+		<!-- PROPERTY SUMMARY SECTION END -->
+
+	
+<!-- VARIABLE SUMMARY SECTION -->
+<div class="section">
+	Variables<br>
+</div>
+
+
+
+	<table class="table_summary" cellspacing="0" summary="">
+
+		 
+									<tr>
+						<td class="table_data"><div class="cell_data">
+					<a	href="Base32.cls.html#cPad_Variable"
+						title="cPad">cPad</a>
+				</div></td> 
+														<td class="table_data"><div class="cell_data">
+					<a	href="Base32.cls.html#oDecodeMap_Variable"
+						title="oDecodeMap">oDecodeMap</a>
+				</div></td> 
+														<td class="table_data"><div class="cell_data">
+					<a	href="Base32.cls.html#oEncodeMap_Variable"
+						title="oEncodeMap">oEncodeMap</a>
+				</div></td> 
+								</tr>
+								</table>
+
+<!-- VARIABLE SUMMARY SECTION END -->
+
+
+<!-- BUFFER SUMMARY SECTION -->
+<!-- BUFFER SUMMARY SECTION END -->
+
+<!-- DATASET SUMMARY SECTION -->
+<!-- DATASET SUMMARY SECTION END -->
+
+
+<!-- DATA-SOURCE SUMMARY SECTION -->
+<!-- DATA-SOURCE SUMMARY SECTION END -->
+
+<!-- QUERY SUMMARY SECTION -->
+<!-- QUERY SUMMARY SECTION END -->
+
+<!-- TEMP-TABLE SUMMARY SECTION -->
+<!-- TEMP-TABLE SUMMARY SECTION END -->
+	
+	<!-- ============ CONSTRUCTOR DETAIL ========== --> 
+		<div class="title_name">Constructor Detail<br></div>
+	
+		<hr/> 
+	<a name="Base32_Constructor"></a>
+	<div class="section">Base32 constructor</div>
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+									PUBLIC &nbsp
+																	STATIC &nbsp
+						</div>
+	
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">Base32() </span>
+			</td>
+		</tr>
+	</table>
+	
+			
+	
+	
+			
+	<!-- ============ END CONSTRUCTOR DETAIL ========== --> 
+	<!-- ============ METHOD DETAIL ========== -->
+	
+		
+	<div class="title_name">
+		Method Detail<br>
+	</div>
+	 
+		<hr/>
+	<a name="ConvertToHex_Method"></a>
+	<div class="section">ConvertToHex method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">ConvertToHex(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="DecodeData_Method"></a>
+	<div class="section">DecodeData method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">DecodeData(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="DecodeToBinary_Method"></a>
+	<div class="section">DecodeToBinary method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PRIVATE &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">DecodeToBinary(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="EncodeData_Method"></a>
+	<div class="section">EncodeData method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">EncodeData(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+			
+	<!-- ============ END METHOD DETAIL ========== --> 
+	<!-- ============ EVENT DETAIL ========== -->
+		<!-- ============ END EVENT DETAIL ========== -->
+	<!-- ============ PROPERTY DETAIL ========== -->
+		<!-- ============ END PROPERTY DETAIL ========== -->
+
+	<!-- ============ VARIABLE DETAIL ========== -->
+<br>
+	<div class="title_name">
+		Variable Detail<br>
+	</div>
+	
+		<hr/> 
+	<a name="cPad_Variable"></a>
+	
+	<div class="section">cPad variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+						CHARACTER			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PRIVATE &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="oDecodeMap_Variable"></a>
+	
+	<div class="section">oDecodeMap variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+						OpenEdge.Core.Collections.StringKeyedMap			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PRIVATE &nbsp
+					STATIC &nbsp
+			</div>
+	
+		<hr/> 
+	<a name="oEncodeMap_Variable"></a>
+	
+	<div class="section">oEncodeMap variable</div>
+	<div class="paragraph">
+												
+							</div>
+		<div class="detail_field">
+		<span class="detail_field_title" width="50px">Data type</span>:&nbsp;
+						OpenEdge.Core.Collections.StringStringMap			
+		</div>
+			<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:
+					PRIVATE &nbsp
+					STATIC &nbsp
+			</div>
+	
+							 
+				
+<br>
+<!-- ============ END VARIABLE DETAIL ========== -->
+
+<!-- ============ BUFFER DETAIL ========== -->
+<!-- ============ END BUFFER DETAIL ========== -->
+
+<!-- ============ DATASET DETAIL ========== -->
+<!-- ============ END DATASET DETAIL ========== -->
+<!-- ============ DATA-SOURCE DETAIL ========== -->
+<!-- ============ END DATA-SOURCE DETAIL ========== -->
+<!-- ============ QUERY DETAIL ========== -->
+<!-- ============ END QUERY DETAIL ========== -->
+<!-- ============ TEMP-TABLE DETAIL ========== -->
+<!-- ============ END TEMP-TABLE DETAIL ========== -->
+	<!-- copyright content placed here will be shown in all the output pages -->
+<footer>
+		<br>
+		<div class="copyright_style">
+			<p><!-- put your copyright here --></p>
+		</div>
+</footer></body>
+</html>

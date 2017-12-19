@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>PMFO (v4.1.1)</TITLE>
+        <TITLE>PMFO (v4.2.0)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -101,7 +101,7 @@
                     </table>
                 	<br>
                 	<span class="unit_comment">
-                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>DOHEventHandler </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Provide event listeners for the OpenEdge DOH class </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Peter Judge (pjudge) and Dustin Grau (dgrau) </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Thu Jul 21 16:06:27 EDT 2016 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>Create new instance in startup.p </td></tr></tbody></table>
+                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>DOHEventHandler </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Provide event listeners for the OpenEdge DOH class </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Peter Judge (pjudge) and Dustin Grau (dgrau) </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Thu Jul 21 16:06:27 EDT 2016 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>Create new instance in startup.p </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Can only be used with 11.6.3 or later. </td></tr></tbody></table>
                 	</span>
                 	<br>
                 </div>
@@ -135,6 +135,28 @@
                 <th align="left">Purpose</th>
             </tr>
             <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font></font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010tzqagUFplAc4K+g+KZr8uA=='> DiscoverServiceHandler (Object, ServiceDiscoveryEventArgs)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Event published to invoke/load a piece of business logic (aka Business Entity).
+* If none exists, we try a simple DYNAMIC-NEW.
+* @param Progress.Lang.Object The handler publishing the event
+* @param ServiceDiscoveryEventArgs Event args for this event
+*/ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
@@ -253,6 +275,27 @@
   <td class="cell">
      
 /***** Helper Methods *****/ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font></font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010TIyTAwRZjtAQLdvWlTLsWw=='> UnloadEntityHandler (Object, HandlerLoadEntityEventArgs)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Event published to unload a piece of business logic (aka Business Entity).
+* @param Progress.Lang.Object The handler publishing the event
+* @param HandlerLoadEntityEventArgs Event args for this event
+*/ <br> <i>  </i>
   </td>
 </tr>
     
@@ -377,6 +420,84 @@
     <table border="0" class="table_content table_content_details method_detail">
         <tbody>
             <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010tzqagUFplAc4K+g+KZr8uA==" href="#Top">Top</a>
+                <a name="  <a href='#020010tzqagUFplAc4K+g+KZr8uA=='> DiscoverServiceHandler (Object, ServiceDiscoveryEventArgs)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">  <a href='#020010tzqagUFplAc4K+g+KZr8uA=='> DiscoverServiceHandler (Object, ServiceDiscoveryEventArgs)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Event published to invoke/load a piece of business logic (aka Business Entity). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poSender</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>poEventArgs</i>
+    </td>
+    <td>
+       OpenEdge.Web.DataObject.ServiceDiscoveryEventArgs
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
@@ -812,6 +933,84 @@
         </dl>
       </div>
     </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010TIyTAwRZjtAQLdvWlTLsWw==" href="#Top">Top</a>
+                <a name="  <a href='#020010TIyTAwRZjtAQLdvWlTLsWw=='> UnloadEntityHandler (Object, HandlerLoadEntityEventArgs)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">  <a href='#020010TIyTAwRZjtAQLdvWlTLsWw=='> UnloadEntityHandler (Object, HandlerLoadEntityEventArgs)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Event published to unload a piece of business logic (aka Business Entity). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poSender</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>poEventArgs</i>
+    </td>
+    <td>
+       OpenEdge.Web.DataObject.HandlerLoadEntityEventArgs
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
 </tr>
         </tbody>
     </table>
@@ -980,6 +1179,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">10.09.2017 15:57:02</font>
+    <font class="footer_timestamp">12.19.2017 10:49:32</font>
     </BODY>
 </HTML>

@@ -19,7 +19,6 @@
 	<div  class="title_name">
 	Strings 
 	
-			FINAL
 		CLASS</div>
 
 	<!-- class comment should go here -->
@@ -36,13 +35,12 @@
 	  				<br>
 	</div>
 	
-					<!-- Abstract modifier  -->
-	<div class="paragraph">
-	<span class="detail_field_title" style="font-size: 15px" width="50px">Modifiers</span>:&nbsp 
-		FINAL
+				
+		
+		<div class="paragraph">
+	<span class="detail_field_title" style="font-size: 13px;" width="50px">USE-WIDGET-POOL</span>:
+	  true<br>
 	</div>
-		
-		
 		
 	<!-- extends section-->
 				<div  class="section">Super Class</div>
@@ -127,74 +125,96 @@
 										<tr>
 						<td class="table_data">
 				<div  class="cell_data">
+					<a	href="Strings.cls.html#leftPad_Method"
+						title="leftPad">leftPad(INPUT:character,INPUT:character,INPUT:integer):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
 					<a	href="Strings.cls.html#maskString_Method"
 						title="maskString">maskString(INPUT:character,INPUT:integer,INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
-														<td class="table_data">
+								</tr>
+										<tr>
+						<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#mergeProperties_Method"
 						title="mergeProperties">mergeProperties(INPUT:JsonObject,INPUT:JsonObject):JsonObject</a>
 				</div>
 			</td> 
-								</tr>
-										<tr>
-						<td class="table_data">
+														<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#properWords_Method"
 						title="properWords">properWords(INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Strings.cls.html#reverse_Method"
+						title="reverse">reverse(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
 														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Strings.cls.html#rightPad_Method"
+						title="rightPad">rightPad(INPUT:character,INPUT:character,INPUT:integer):CHARACTER</a>
+				</div>
+			</td> 
+								</tr>
+										<tr>
+						<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#sortArray_Method"
 						title="sortArray">sortArray(INPUT:JsonArray):JsonArray</a>
 				</div>
 			</td> 
-								</tr>
-										<tr>
-						<td class="table_data">
+														<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#stripBadChars_Method"
 						title="stripBadChars">stripBadChars(INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
-														<td class="table_data">
+								</tr>
+										<tr>
+						<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#stripBadLabel_Method"
 						title="stripBadLabel">stripBadLabel(INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
-								</tr>
-										<tr>
-						<td class="table_data">
+														<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#stripKeywords_Method"
 						title="stripKeywords">stripKeywords(INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
-														<td class="table_data">
+								</tr>
+										<tr>
+						<td class="table_data">
 				<div  class="cell_data">
 					<a	href="Strings.cls.html#stripOperators_Method"
 						title="stripOperators">stripOperators(INPUT:character):CHARACTER</a>
+				</div>
+			</td> 
+														<td class="table_data">
+				<div  class="cell_data">
+					<a	href="Strings.cls.html#stripPunctuation_Method"
+						title="stripPunctuation">stripPunctuation(INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
 								</tr>
 										<tr>
 						<td class="table_data">
 				<div  class="cell_data">
-					<a	href="Strings.cls.html#stripPunctuation_Method"
-						title="stripPunctuation">stripPunctuation(INPUT:character):CHARACTER</a>
-				</div>
-			</td> 
-														<td class="table_data">
-				<div  class="cell_data">
 					<a	href="Strings.cls.html#unixSafe_Method"
 						title="unixSafe">unixSafe(INPUT:character):CHARACTER</a>
 				</div>
 			</td> 
-								</tr>
-								</table>
+												</tr>
+			</table>
 	
 		<!-- method summary section end -->
 
@@ -588,6 +608,54 @@
 					</div>
 								
 		<hr/>
+	<a name="leftPad_Method"></a>
+	<div class="section">leftPad method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">leftPad(INPUT:character,INPUT:character,INPUT:integer):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcPad</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piLength</span>&nbsp;
+										INTEGER			
+					</div>
+								
+		<hr/>
 	<a name="maskString_Method"></a>
 	<div class="section">maskString method</div>
 	
@@ -717,6 +785,94 @@
 														<div class="parameter">
 					<span class="parameter_code">pcString</span>&nbsp;
 										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="reverse_Method"></a>
+	<div class="section">reverse method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">reverse(INPUT:character):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+								
+		<hr/>
+	<a name="rightPad_Method"></a>
+	<div class="section">rightPad method</div>
+	
+	<div class="paragraph">
+		<!-- tags should go here -->
+			<span class="detail_field_title" width="50px">Purpose</span>:
+	  				<br>
+	  <span class="detail_field_title" width="50px">Description</span>:
+	  				<br>
+
+	</div>
+	<div class="detail_field">
+		<span class="detail_field_title" width="50px">Return type</span>:&nbsp;				CHARACTER			
+	&nbsp;					</div>
+	<div class="detail_field">
+		<span class="detail_field_title" >Modifiers </span>:&nbsp;
+					PUBLIC &nbsp
+					STATIC &nbsp
+			</div>
+	
+	<table class="table_syntax" cellspacing="0" summary="">
+		<caption class="syntax-title">
+				<span>Syntax</span>&nbsp;
+		</caption>
+		<tr>
+			<td class="element_detail">
+				<span class="element_detail_code">rightPad(INPUT:character,INPUT:character,INPUT:integer):CHARACTER</span>
+			</td>
+		</tr>
+	</table>
+	
+			<div class="syntax-title">
+		<span>Parameters</span>&nbsp;
+	</div>
+														<div class="parameter">
+					<span class="parameter_code">pcString</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">pcPad</span>&nbsp;
+										CHARACTER			
+					</div>
+															<div class="parameter">
+					<span class="parameter_code">piLength</span>&nbsp;
+										INTEGER			
 					</div>
 								
 		<hr/>
