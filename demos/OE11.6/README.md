@@ -2,7 +2,7 @@
 
 
 ## PASOE Projects (Type: ABL Web App)
-====================
+------
 
 **DynSports** - Utilizes the new WebHandlers in PASOE-WebSpeed to dynamically route Web transport requests to static Business Entity classes on disk. This project can execute code in 2 ways: either directly (using BE classes in the same project) or remotely (using an APSV connection to a remote server). When using the direct mode, code is dynamically located, reflected, and registered in the MSAgent's session memory, and can then be invoked automatically when requested. When using the remote mode, the ConnectionManager will establish a connection to a remote APSV server, and pass through all requests to that server, executing the necessary code there and returning the appropriate data for the web response.
 
@@ -12,7 +12,7 @@
 
 
 ## Other Projects
-====================
+------
 
 **NodeJS** - Utilizes Node.js and Socket.io, along with the REST-OUT feature of ABL to illustrate push notifications.
 
