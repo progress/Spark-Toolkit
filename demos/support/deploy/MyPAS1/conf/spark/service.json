@@ -1,9 +1,0 @@
-{
-    "Config": {
-        "ServiceMapping": [{
-            "Service": "Spark.Core.Manager.IClientContext",
-            "Implementation": "Spark.Core.Manager.ClientContext"
-        }],
-        "ServiceLifeCycle": []
-    }
-}
