@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<lm:eCafModel xmlns:lm="http://www.progress.com/tools/caf/core/internal/logicalStructure/schema/v1.0" version="1.0">
-  <lm:propertyDetails>
-    <lm:propertyFileLocation>Minimus.properties</lm:propertyFileLocation>
-  </lm:propertyDetails>
-</lm:eCafModel>

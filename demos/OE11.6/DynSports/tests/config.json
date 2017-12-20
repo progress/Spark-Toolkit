@@ -1,6 +1,0 @@
-{
-    "Databases": {
-        "webstate": "-H localhost -S 8500",
-        "sports2000": "-H localhost -S 8600"
-    }
-}
