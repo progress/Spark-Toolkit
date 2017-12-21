@@ -1,0 +1,20 @@
+{
+  "name": "PMFO",
+  "homepage": "https://github.com/progress/PMFO",
+  "authors": [
+    "DustinGrau-PSC <dugrau@progress.com>"
+  ],
+  "description": "Progress Modernization Framework for OpenEdge",
+  "main": "build/PMFO.pl",
+  "license": "Apache2",
+  "private": true,
+  "ignore": [
+	".git",
+	".gitignore",
+	"demos",
+	"docs",
+	"src",
+    "support",
+	"README.md"
+  ]
+}
