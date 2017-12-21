@@ -1,0 +1,1 @@
+Placeholder directory for storing generated signatures from the dynamic discovery options of the CatalogManager.
