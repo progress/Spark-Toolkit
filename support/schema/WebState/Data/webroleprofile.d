@@ -1,5 +1,3 @@
-"BatchAdmin" "admin" 12/31/69 ? "dev" 12/31/69 ? "dev"
-"BatchAdmin" "dev" 12/31/69 ? "dev" 12/31/69 ? "dev"
 "CustAdmin" "client" 01/27/11 59381 "dev" 01/27/11 59381 "dev"
 "CustAdmin" "dev" 03/29/10 59381 "dev" 03/29/10 59381 "dev"
 "Developer" "dev" 03/29/10 53728 "dev" 03/29/10 53728 "dev"
@@ -12,12 +10,12 @@
 .
 PSC
 filename=WebRoleProfile
-records=0000000000011
-ldbname=WebState
-timestamp=2014/12/02-14:19:30
+records=0000000000009
+ldbname=webstate
+timestamp=2018/01/08-13:37:27
 numformat=44,46
 dateformat=mdy-1950
 map=NO-MAP
 cpstream=UTF-8
 .
-0000000663
+0000000973

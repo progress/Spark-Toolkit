@@ -1,7 +1,3 @@
-"BatchAdmin" "BatchJobs" 12/31/69 ? "dev" 12/31/69 ? "dev"
-"BatchAdmin" "BatchStartAgent" 12/31/69 ? "dev" 12/31/69 ? "dev"
-"BatchAdmin" "ttWebAgentControl:read" 12/31/69 ? "dev" 12/31/69 ? "dev"
-"BatchAdmin" "ttWebAgentControl:write" 12/31/69 ? "dev" 12/31/69 ? "dev"
 "CustAdmin" "CanView:CreditCard" 12/31/69 36800 "dev" 12/31/69 36800 "dev"
 "CustAdmin" "CustOrderMaint:read" 12/31/69 ? "dev" 12/31/69 ? "dev"
 "CustAdmin" "CustOrderMaint:write" 12/31/69 ? "dev" 12/31/69 ? "dev"
@@ -43,9 +39,9 @@
 .
 PSC
 filename=WebRoleTask
-records=0000000000042
-ldbname=WebState
-timestamp=2014/12/02-14:19:30
+records=0000000000038
+ldbname=webstate
+timestamp=2018/01/08-13:37:27
 numformat=44,46
 dateformat=mdy-1950
 map=NO-MAP

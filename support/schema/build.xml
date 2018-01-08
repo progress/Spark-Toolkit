@@ -40,7 +40,7 @@
     </target>
 
     <target name="create" depends="init_env,init_unix,init_windows">
-		<taskdef resource="PCT.properties" classpath="../../framework/server/tools/PCT.jar"/>
+		<taskdef resource="PCT.properties" classpath="../../src/server/tools/PCT.jar"/>
         <PCTVersion/>
 
         <!-- Prepare defaults for any properties that are not set. -->
