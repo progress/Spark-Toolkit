@@ -3,7 +3,7 @@
     <target name="usage">
         <echo message="Usage Instructions:"/>
         <echo message="ant create - Create new Sports2000 and WebState DB's"/>
-        <echo message="    -Dpath=[PATH] = location for databases (Default: C:\Databases)"/>
+        <echo message="    -Dpath=[PATH] = location for databases (Default: C:\Databases or /usr/databases)"/>
     </target>
 
     <target name="init_env">
@@ -42,7 +42,7 @@
     </target>
 
     <target name="create" depends="init_env,init_unix,init_windows">
-		<taskdef resource="PCT.properties" classpath="../../src/server/tools/PCT.jar"/>
+		<taskdef resource="PCT.properties" classpath="${basedir}/PCT.jar"/>
         <PCTVersion/>
 
 		<mkdir dir="${path}"/>
