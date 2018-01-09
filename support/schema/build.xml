@@ -54,7 +54,7 @@
                 <include name="*.st"/>
             </fileset>
         </copy>
-		
+
 		<copy toDir="${path}/WebState">
             <fileset dir="${basedir}/WebState">
                 <include name="*.st"/>
