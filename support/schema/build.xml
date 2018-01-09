@@ -50,6 +50,18 @@
 		<mkdir dir="${path}/Sports2000"/>
 		<mkdir dir="${path}/WebState"/>
 
+		<copy toDir="${path}/Sports2000">
+            <fileset dir="${basedir}/Sports2000">
+                <include name="*.st"/>
+            </fileset>
+        </copy>
+		
+		<copy toDir="${path}/WebState">
+            <fileset dir="${basedir}/WebState">
+                <include name="*.st"/>
+            </fileset>
+        </copy>
+
 		<PCTCreateBase dbName="Sports2000" destDir="${path}/Sports2000" dlcHome="${dlcHome}"
 		               blockSize="4" cpInternal="utf=8" largeFiles="true"
 					   structFile="${basedir}/Sports2000/Sports2000.st" schemaFile="${basedir}/Sports2000/Sports2000.df">
