@@ -33,18 +33,17 @@
 
     <target name="init_unix" if="isUnix">
         <property name="scriptSuffix" value="sh"/>
+		<property name="path" value="/usr/databases"/>
     </target>
 
     <target name="init_windows" if="isWin64">
         <property name="scriptSuffix" value="bat"/>
+		<property name="path" value="C:\Databases"/>
     </target>
 
     <target name="create" depends="init_env,init_unix,init_windows">
 		<taskdef resource="PCT.properties" classpath="../../src/server/tools/PCT.jar"/>
         <PCTVersion/>
-
-        <!-- Prepare defaults for any properties that are not set. -->
-        <property name="path" value="C:\Databases"/>
 
 		<mkdir dir="${path}"/>
 		<mkdir dir="${path}/Sports2000"/>
