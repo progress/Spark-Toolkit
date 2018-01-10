@@ -4,4 +4,5 @@
 -cpstream UTF-8
 -mmax 8192
 -D 1000
+-lkwtmo 10
 -errorstack
