@@ -1,6 +1,6 @@
 <project name="ServerCreation" basedir="." default="usage">
 
-    <target name="usage" description="Usage Instructions">
+    <target name="usage" description="Usage Instructions" depends="_init_env,_init_unix,_init_windows">
         <echo message="Usage Instructions:"/>
         <echo message="ant create - Build a new PAS instance with PMFO"/>
         <echo message="    -Dhttp=[HTTP_PORT] = port for HTTP connections (Default: 8830)"/>
@@ -8,11 +8,11 @@
         <echo message="    -Dajp=[AJP13_PORT] = port for AJP13 connections (Default: 8832)"/>
         <echo message="    -Dshut=[SHUTDOWN_PORT] = Tomcat shutdown port (Default: 8833)"/>
         <echo message="    -Dalias=[INSTANCE_NAME] = new instance name (Default: SportsDemo)"/>
-        <echo message="    -Dpath=[INSTANCE_PATH] = new instance path (Default: C:/PASOE)"/>
+        <echo message="    -Dpath=[INSTANCE_PATH] = new instance path (Default: ${path})"/>
         <echo message="    -Dablapp=[INSTANCE_NAME] = default ABL App name (Default: {alias})"/>
         <echo message="ant upgrade - Upgrade a PAS isntance with PMFO"/>
         <echo message="    -Dalias=[INSTANCE_NAME] = new instance name (Default: SportsDemo)"/>
-        <echo message="    -Dpath=[INSTANCE_PATH] = new instance path (Default: C:/PASOE)"/>
+        <echo message="    -Dpath=[INSTANCE_PATH] = new instance path (Default: ${path})"/>
         <echo message="ant enable_oerealm - Enable use of OERealm by copying config files"/>
         <echo message="    -Dalias=[INSTANCE_NAME] = new instance name (Default: SportsDemo)"/>
     </target>
@@ -61,10 +61,6 @@
 
         <!-- Define standard variables for this environment. -->
         <property name="alias" value="SportsDemo"/>
-        <property name="path" value="C:/PASOE"/>
-        <property name="pas.root" value="${path}"/>
-        <property name="pas.path" value="${pas.root}/${alias}"/>
-        <property name="pas.bin" value="${pas.path}/bin"/>
         <property name="pas.conf.pmfo" value="spark"/>
         <property name="ablapp" value="${alias}"/>
         <property name="deploy" value="${basedir}/../Deploy/Conf"/>
@@ -81,15 +77,24 @@
 
     <target name="_init_unix" if="isUnix">
         <property name="scriptSuffix" value=".sh"/>
+		<property name="path" value="/usr/pas"/>
+		<property name="pas.root" value="${path}"/>
+		<property name="pas.path" value="${pas.root}/${alias}"/>
+        <property name="pas.bin" value="${pas.path}/bin"/>
     </target>
 
     <target name="_init_windows" if="isWin64">
         <property name="scriptSuffix" value=".bat"/>
+		<property name="path" value="C:/PASOE"/>
+		<property name="pas.root" value="${path}"/>
+		<property name="pas.path" value="${pas.root}/${alias}"/>
+        <property name="pas.bin" value="${pas.path}/bin"/>
     </target>
 
     <target name="_create_instance">
         <!-- Create the PAS instance using the values (or defaults) provided. -->
         <echo message="Creating PAS instance '${alias}' at ${pas.path} with ports ${http}/${https}/${ajp}/${shut}..."/>
+		<mkdir dir="${path}"/>
         <exec dir="${dlc.bin}" executable="pasman${scriptSuffix}" output="create_${alias}.txt" failonerror="true">
             <arg value="create"/>
             <arg value="-v"/>

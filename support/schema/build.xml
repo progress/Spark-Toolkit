@@ -1,12 +1,12 @@
 <project name="DatabaseCreation" basedir="." default="usage">
 
-    <target name="usage" depends="init_env,init_unix,init_windows">
+    <target name="usage" description="Usage Instructions" depends="_init_env,_init_unix,_init_windows">
         <echo message="Usage Instructions:"/>
         <echo message="ant create - Create new Sports2000 and WebState DB's"/>
         <echo message="    -Dpath=[PATH] = location for databases (Default: ${path})"/>
     </target>
 
-    <target name="init_env">
+    <target name="_init_env">
         <property environment="env"/>
 
         <!-- Check if DLC is set as an environment variable. -->
@@ -31,17 +31,17 @@
         </condition>
     </target>
 
-    <target name="init_unix" if="isUnix">
+    <target name="_init_unix" if="isUnix">
         <property name="scriptSuffix" value="sh"/>
 		<property name="path" value="/usr/databases"/>
     </target>
 
-    <target name="init_windows" if="isWin64">
+    <target name="_init_windows" if="isWin64">
         <property name="scriptSuffix" value="bat"/>
 		<property name="path" value="C:\Databases"/>
     </target>
 
-    <target name="create" depends="init_env,init_unix,init_windows">
+    <target name="create" depends="_init_env,_init_unix,_init_windows">
 		<taskdef resource="PCT.properties" classpath="${basedir}/PCT.jar"/>
         <PCTVersion/>
 
