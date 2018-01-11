@@ -77,25 +77,27 @@
 
     <target name="_init_unix" if="isUnix">
         <property name="scriptSuffix" value=".sh"/>
-		<property name="path" value="/usr/pas"/>
-		<property name="pas.root" value="${path}"/>
-		<property name="pas.path" value="${pas.root}/${alias}"/>
+        <property name="path" value="/usr/pas"/>
+        <property name="pas.root" value="${path}"/>
+        <property name="pas.path" value="${pas.root}/${alias}"/>
         <property name="pas.bin" value="${pas.path}/bin"/>
+        <property name="pas.exec" value="pasman"/>
     </target>
 
     <target name="_init_windows" if="isWin64">
         <property name="scriptSuffix" value=".bat"/>
-		<property name="path" value="C:/PASOE"/>
-		<property name="pas.root" value="${path}"/>
-		<property name="pas.path" value="${pas.root}/${alias}"/>
+        <property name="path" value="C:/PASOE"/>
+        <property name="pas.root" value="${path}"/>
+        <property name="pas.path" value="${pas.root}/${alias}"/>
         <property name="pas.bin" value="${pas.path}/bin"/>
+        <property name="pas.exec" value="pasman.bat"/>
     </target>
 
     <target name="_create_instance">
         <!-- Create the PAS instance using the values (or defaults) provided. -->
         <echo message="Creating PAS instance '${alias}' at ${pas.path} with ports ${http}/${https}/${ajp}/${shut}..."/>
-		<mkdir dir="${path}"/>
-        <exec dir="${dlc.bin}" executable="pasman${scriptSuffix}" output="create_${alias}.txt" failonerror="true">
+        <mkdir dir="${path}"/>
+        <exec dir="${dlc.bin}" executable="${pas.exec}" output="create_${alias}.txt" failonerror="true">
             <arg value="create"/>
             <arg value="-v"/>
             <arg value="-f"/>
