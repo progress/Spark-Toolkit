@@ -17,7 +17,7 @@ Use of the Progress Application Server (PAS) is the intended server for deployme
 
 ## Installation / Setup
 
-Include the PMFO.pl from within the "/build/" directory to your project's AppServer directory, and add this procedure library to the PROPATH of your project. At deployment, ensure the .PL file is copied into the CATALINA_BASE/openedge folder of your PAS instance, and likewise added to the PROPATH of your server instance. If using 11.7.1 or earlier, include the "/build/Ccs.pl" library as well using the same process as stated for the PMFO.pl file. As of 11.7.2 the CCS classes are included within the core OpenEdge language.
+Include the PMFO.pl from within the "/dist/" directory to your project's AppServer directory, and add this procedure library to the PROPATH of your project. At deployment, ensure the .PL file is copied into the CATALINA_BASE/openedge folder of your PAS instance, and likewise added to the PROPATH of your server instance. If using 11.7.1 or earlier, include the "/dist/Ccs.pl" library as well using the same process as stated for the PMFO.pl file. As of 11.7.2 the CCS classes are included within the core OpenEdge language.
 
 
 ## Contributions / Changes
