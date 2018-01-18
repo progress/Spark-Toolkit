@@ -1,4 +1,4 @@
-# Progress Modernization Framework for OpenEdge
+# Spark Server Library
 
 Server-side library to aid in creating an application providing RESTful API's for microservices.
 
