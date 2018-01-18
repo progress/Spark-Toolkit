@@ -1,8 +1,0 @@
-{
-    "ipGenBE": "UI from Catalog: Generates only the HTML/JS screen files.<br/>BE Class File: Generates only a Business Entity class file from some form of schema.",
-    "ipTemplateName": "Standard template options. Select to view any configuration details.",
-    "ipMetadata": "Existing configuration files for previously-generated BE or UI elements.",
-    "ipUserTemplateFile": "Custom templates must be placed in the 'templates/custom' directory.",
-    "ipServiceURI": "Use of this field allows you to alter the final location of your generated BE class. Leaving the field blank will default it to the original output directory.",
-    "ipEntityTable": "Selecting multiple tables (or leaving blank) will result in multiple BE classes being created."
-}

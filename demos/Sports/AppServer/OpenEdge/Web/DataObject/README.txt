@@ -1,1 +1,0 @@
-Hotfix for issue PSC00362421: Adjust URL output to utilize the name of a webapp when reporting the service URL.

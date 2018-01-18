@@ -1,43 +1,0 @@
-<section class="hbox stretch" id="OrderGridFormSPAView">
-    <aside class="aside-md bg-white b-r">
-        <section class="vbox">
-            <header class="header b-b">
-                <form class="form-group" data-role="validator" name="searchForm" novalidate="novalidate">
-                    <div class="input-group m-t-sm">
-                        <input class="form-control input-s" name="Order Num" placeholder="Search By Order #"
-                               data-bind="value:params.searchValue"/>
-                        <span class="input-group-btn">
-                            <span class="btn btn-default btn-sm" data-bind="click:doSearch">Search</span>
-                        </span>
-                    </div>
-                </form>
-            </header>
-            <section class="bg-light dker w-f">
-                <div name="SearchGrid"></div>
-            </section>
-            <footer class="footer bg-white b-t no-padder text-center">
-                <span class="btn bg-empty btn-sm no-border text-md" data-bind="click:createNew"><i class="fa fa-plus m-r-xs"></i> New Record</span>
-            </footer>
-        </section>
-    </aside>
-    <aside class="bg-white">
-        <section class="vbox">
-            <header class="header bg-white b-b b-light">
-                <p class="h5">Order Maintenance</p>
-            </header>
-            <section class="scrollable wrapper bg-light">
-                <form class="panel panel-default wrapper" name="editForm">
-                    <input type="hidden" name="id" data-bind="value:selectedRow.id"/>
-                    <div class="row m-b">
-                        <!-- Begin generated field output. -->        <div class="col-xs-6">            <fieldset>                <legend class="text-lg">Column 1</legend>                <label for="OrderNum">Order #</label>                <input type="text" class="form-control m-b" name="OrderNum" placeholder="Order Num" data-bind="value:selectedRow.OrderNum" required/>                <label for="CustNum">Customer</label>                <input type="text" class="form-control m-b" name="CustNum" placeholder="Cust Num" data-bind="value:selectedRow.CustNum" required/>                <label for="OrderDate">Order Date</label>                <input type="text" class="form-control m-b dateitem" name="OrderDate" placeholder="Ordered" data-bind="value:selectedRow.OrderDate"/>                <label for="ShipDate">Ship Date</label>                <input type="text" class="form-control m-b dateitem" name="ShipDate" placeholder="Shipped" data-bind="value:selectedRow.ShipDate"/>                <label for="PromiseDate">Promise Date</label>                <input type="text" class="form-control m-b dateitem" name="PromiseDate" placeholder="Promised" data-bind="value:selectedRow.PromiseDate"/>                <label for="Carrier">Carrier</label>                <input type="text" class="form-control m-b" name="Carrier" placeholder="Carrier" data-bind="value:selectedRow.Carrier"/>                <label for="PO">PO</label>                <input type="text" class="form-control m-b" name="PO" placeholder="PO" data-bind="value:selectedRow.PO"/>
-                <label for="Instructions">Instructions</label>
-                <input type="text" class="form-control m-b" name="Instructions" placeholder="Instructions" data-bind="value:selectedRow.Instructions"/>            </fieldset>        </div>        <div class="col-xs-6">            <fieldset>                <legend class="text-lg">Column 2</legend>                <label for="Terms">Terms</label>                <input type="text" class="form-control m-b" name="Terms" placeholder="Terms" data-bind="value:selectedRow.Terms"/>                <label for="SalesRep" help="SalesRepHelp">Sales Rep</label>                <input type="text" class="form-control m-b" name="SalesRep" placeholder="Sales Rep" data-bind="value:selectedRow.SalesRep"/>                <label for="BillToID">Bill To</label>                <input type="text" class="form-control m-b" name="BillToID" placeholder="Bill To ID" data-bind="value:selectedRow.BillToID"/>                <label for="ShipToID">Ship To</label>                <input type="text" class="form-control m-b" name="ShipToID" placeholder="Ship To ID" data-bind="value:selectedRow.ShipToID"/>                <label for="OrderStatus">Order Status</label>                <input type="text" class="form-control m-b" name="OrderStatus" placeholder="Order Status" data-bind="value:selectedRow.OrderStatus"/>                <label for="WarehouseNum">Warehouse #</label>                <input type="text" class="form-control m-b" name="WarehouseNum" placeholder="Warehouse Num" data-bind="value:selectedRow.WarehouseNum"/>                <label for="Creditcard">Credit Card Type</label>                <input type="text" class="form-control m-b" name="Creditcard" placeholder="Credit Card" data-bind="value:selectedRow.Creditcard"/>            </fieldset>        </div>        <!-- End generated field content. -->
-                    </div>
-                    <span class="btn btn-primary" data-bind="click:saveRecord">Save</span>&nbsp;
-                    <span class="btn btn-default" data-bind="click:deleteRecord">Delete</span>
-                    <span class="btn btn-default" data-bind="click:cancelEdit">Cancel</span>
-                </form>
-            </section>
-        </section>
-    </aside>
-</section>
