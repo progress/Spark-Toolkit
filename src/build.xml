@@ -1,0 +1,315 @@
+<project name="FrameworkTools" basedir="." default="usage">
+
+    <target name="usage">
+        <echo message="Usage Instructions:"/>
+        <echo message="ant build_ablduck - Generate ABLDuck output for CCS/PMFO"/>
+        <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
+        <echo message="ant build_pctdoc - Generate PCTDoc output for CCS/PMFO"/>
+        <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
+        <echo message="ant build_ccs_pl - Create PL archive for CCS classes"/>
+        <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
+        <echo message="ant build_pmfo_pl - Create PL archive for PMFO classes"/>
+        <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
+    </target>
+
+    <target name="init_env">
+        <property environment="env"/>
+
+        <fail message="Version was not provided">
+            <condition>
+                <not><isset property="version"/></not>
+            </condition>
+        </fail>
+
+        <!-- Prepare info about this release/build. -->
+        <property name="release.version" value="${version}"/>
+        <tstamp>
+            <format property="release.date" pattern="yyyy.MM.dd.hhmmss"/>
+        </tstamp>
+        <echo message="Build: v${release.version} (${release.date})"/>
+
+        <!-- Set a property if environment is Windows. -->
+        <condition property="isWin32">
+            <os family="windows"/>
+        </condition>
+
+        <!-- Set a property if environment is Unix. -->
+        <condition property="isUnix">
+            <os family="unix"/>
+        </condition>
+
+        <!-- Set a property if environment is 32bit. -->
+        <condition property="is32bit">
+            <or>
+                <os arch="x86"/>
+                <os arch="i386"/>
+            </or>
+        </condition>
+
+        <!-- Set a property if environment is 64bit. -->
+        <condition property="is64bit">
+            <not>
+                <or>
+                    <os arch="x86"/>
+                    <os arch="i386"/>
+                </or>
+            </not>
+        </condition>
+        <echo message="OS Arch: ${os.arch}"/>
+    </target>
+
+    <target name="init_oe" depends="init_env">
+        <property name="src.dir" value="${basedir}"/>
+        <taskdef resource="PCT.properties" classpath="${src.dir}/tools/PCT.jar"/>
+        <PCTVersion/>
+
+        <!-- Check if DLC is set as an environment variable. -->
+        <fail message="$DLC path is not set">
+            <condition>
+                <and>
+                    <not><isset property="dlcHome"/></not>
+                    <not><isset property="env.DLC"/></not>
+                </and>
+            </condition>
+        </fail>
+        <property name="dlcHome" value="${env.DLC}"/>
+        <echo message="DLC Home: ${dlcHome}"/>
+
+        <!-- Locate the OE version file, and read into a property. -->
+        <ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" arch="oeArch" fullVersion="full"/>
+        <property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
+        <echo message="OpenEdge Version: ${oe.version}"/>
+
+		<!-- Other special directories -->
+		<property name="build.out" value="${basedir}/../dist"/>
+		<property name="build.tmp" value="${src.dir}/build"/>
+        <property name="doc.out" value="${src.dir}/../docs"/>
+		<property name="doc.tmp" value="${src.dir}/doctemp"/>
+		<property name="preprocess" value="${src.dir}/preprocess"/>
+    </target>
+
+    <target name="compile_ccs" depends="init_oe">
+        <delete dir="${preprocess}/Ccs" quiet="true"/>
+
+        <!-- Code compiles without need for extra libraries or a database. -->
+        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}/Ccs" dlcHome="${dlcHome}">
+            <fileset dir="${src.dir}/Ccs">
+                <include name="**/*.cls"/>
+            </fileset>
+        </PCTCompile>
+    </target>
+
+    <target name="compile_pmfo" depends="init_oe">
+        <delete dir="${preprocess}/Spark" quiet="true"/>
+
+        <!-- Write the current release version to a specific file, for inclusion in the compiled code. -->
+        <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE PMFO_VERSION ${release.version}"/>
+
+        <!-- Code compiles without need for a database, but uses Ccs and extra libs. -->
+        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}/Spark" dlcHome="${dlcHome}">
+            <propath>
+                <pathelement path="${src.dir}/Ccs"/>
+                <pathelement path="${src.dir}/Spark"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+            </propath>
+            <fileset dir="${src.dir}/Spark">
+                <include name="Core/**/*.cls"/>
+                <include name="**/*.p"/>
+            </fileset>
+        </PCTCompile>
+    </target>
+
+    <target name="build_abldoc" depends="init_oe">
+        <property name="abldoc.home" value="${dlcHome}/oeide/eclipse/plugins/com.progress.openedge.pdt.abldoc.core_${oe.version}.00"/>
+        <property name="abldoc.lib" value="${abldoc.home}/lib"/>
+        <property name="artifacts" value="${abldoc.home}/abldoc-artifacts"/>
+        <property name="abldocs.output" value="${basedir}/docs/ABLDoc"/>
+        <property name="abldocs.title" value="PMFO v${release.version}"/>
+
+        <delete dir="${abldocs.output}" quiet="true"/>
+        <mkdir dir="${abldocs.output}"/>
+
+        <!-- Load the JAR's from the Eclipse plugin for this release of OpenEdge. -->
+        <taskdef name="abldoc" classpath="${dlcHome}/java/ant-abldoc.jar" classname="com.progress.openedge.ant.abldoc.ABLDocTask">
+            <classpath>
+                <fileset dir="${abldoc.lib}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </taskdef>
+
+        <!-- Generate using standard parser/templates from ABLDoc. -->
+        <abldoc dlc="${dlcHome}" artifactLoc="${artifacts}" verbose="true"
+                includePrivate="true" includeProtected="true"
+                doctitle="${abldocs.title}" destdir="${abldocs.output}">
+            <abldocproject name="Ccs">
+                <sourcepath>
+                    <pathelement location="Ccs"/>
+                </sourcepath>
+            </abldocproject>
+            <abldocproject name="Spark">
+                <sourcepath>
+                    <pathelement location="Spark/Core"/>
+                    <fileset dir="${src.dir}/Spark">
+                        <include name="*.p"/>
+                    </fileset>
+                </sourcepath>
+            </abldocproject>
+        </abldoc>
+    </target>
+
+    <target name="build_ablduck" depends="init_oe">
+        <!-- Required for PCT for ABLDuck task. -->
+        <typedef resource="types.properties" classpath="tools/PCT.jar"/>
+        <taskdef resource="extras115.properties" classpath="tools/PCT.jar"/>
+
+        <property name="ablduck.output" value="${doc.out}/ABLDuck"/>
+
+        <delete dir="${build.tmp}" quiet="true"/>
+        <delete dir="${doc.tmp}" quiet="true"/>
+        <delete dir="${preprocess}" quiet="true"/>
+        <delete dir="${ablduck.output}" quiet="true"/>
+
+        <mkdir dir="${doc.tmp}"/>
+        <mkdir dir="${preprocess}"/>
+        <mkdir dir="${ablduck.output}"/>
+
+        <!-- Compile all code. -->
+        <antcall target="compile_ccs"/>
+        <antcall target="compile_pmfo"/>
+
+        <ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="PMFO (v${release.version})">
+            <fileset dir="${preprocess}">
+                <include name="**/*.cls"/>
+				<include name="**/*.p"/>
+            </fileset>
+            <propath>
+                <pathelement path="${src.dir}/Ccs"/>
+                <pathelement path="${src.dir}/Spark"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+            </propath>
+        </ABLDuck>
+    </target>
+
+    <target name="build_pctdoc" depends="init_oe">
+        <!-- Required for PCT for ClassDocumentation task. -->
+        <typedef resource="types.properties" classpath="tools/PCT.jar"/>
+        <taskdef resource="extras115.properties" classpath="tools/PCT.jar"/>
+
+        <property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
+
+        <delete dir="${build.tmp}" quiet="true"/>
+        <delete dir="${doc.tmp}" quiet="true"/>
+        <delete dir="${preprocess}" quiet="true"/>
+        <delete dir="${pctdocs.output}" quiet="true"/>
+
+        <mkdir dir="${doc.tmp}"/>
+        <mkdir dir="${preprocess}"/>
+        <mkdir dir="${pctdocs.output}"/>
+
+        <!-- Compile all code. -->
+        <antcall target="compile_ccs"/>
+        <antcall target="compile_pmfo"/>
+
+        <!-- Document ONLY class files, ENUM's are not supported (yet). -->
+        <ClassDocumentation destDir="${doc.tmp}" dlcHome="${dlcHome}">
+            <fileset dir="${preprocess}">
+                <exclude name="**/*Enum.cls"/>
+                <include name="**/*.cls"/>
+            </fileset>
+            <propath>
+                <pathelement path="${src.dir}/Ccs"/>
+                <pathelement path="${src.dir}/Spark"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+            </propath>
+        </ClassDocumentation>
+        <ClassDocumentation destDir="${doc.tmp}" dlcHome="${dlcHome}">
+            <fileset dir="${preprocess}/Spark/Core">
+                <exclude name="**/*Enum.cls"/>
+                <include name="**/*.cls"/>
+            </fileset>
+            <propath>
+                <pathelement path="${src.dir}/Ccs"/>
+                <pathelement path="${src.dir}/Spark"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+            </propath>
+        </ClassDocumentation>
+
+        <!-- Convert the above output (XML) into HTML documents. -->
+        <HTMLDocumentation sourceDir="${doc.tmp}" destDir="${pctdocs.output}" dlcHome="${dlcHome}"
+                           treeViewOverview="true" title="PMFO (v${release.version})">
+		    <propath>
+                <pathelement path="${src.dir}/Ccs"/>
+                <pathelement path="${src.dir}/Spark"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+            </propath>
+        </HTMLDocumentation>
+    </target>
+
+    <target name="build_ccs_pl" depends="init_oe">
+        <delete dir="${build.tmp}" quiet="true"/>
+        <delete file="${build.out}/Ccs.pl" quiet="true"/>
+
+        <antcall target="compile_ccs"/>
+
+        <delete dir="${build.tmp}/.pct" quiet="true"/>
+        <delete dir="${build.tmp}/BusinessLogic" quiet="true"/>
+        <delete dir="${build.tmp}/Common" quiet="true"/>
+        <delete dir="${build.tmp}/ServiceManager" quiet="true"/>
+
+        <!-- Build PL file with source and R-code. -->
+        <PCTLibrary destfile="${build.out}/Ccs.pl" dlcHome="${dlcHome}">
+            <fileset dir="${build.tmp}">
+                <include name="Ccs/**/*.r"/>
+            </fileset>
+        </PCTLibrary>
+        <PCTLibrary destfile="${build.out}/Ccs.pl" dlcHome="${dlcHome}">
+            <fileset dir="${src.dir}">
+                <include name="Ccs/**/*.cls"/>
+            </fileset>
+        </PCTLibrary>
+    </target>
+
+    <target name="build_pmfo_pl" depends="init_oe">
+        <delete dir="${build.tmp}" quiet="true"/>
+        <delete file="${build.out}/PMFO.pl" quiet="true"/>
+
+        <antcall target="compile_pmfo"/>
+
+        <delete dir="${build.tmp}/.pct" quiet="true"/>
+        <delete dir="${build.tmp}/Ccs" quiet="true"/>
+        <delete dir="${build.tmp}/Core" quiet="true"/>
+        <delete dir="${build.tmp}/UI" quiet="true"/>
+
+        <move todir="${build.tmp}/Spark">
+            <fileset dir="${build.tmp}">
+                <include name="*.r"/>
+            </fileset>
+        </move>
+
+        <!-- Build PL file with source and R-code. -->
+        <PCTLibrary destfile="${build.out}/PMFO.pl" dlcHome="${dlcHome}">
+            <fileset dir="${build.tmp}">
+                <include name="Spark/**/*.r"/>
+            </fileset>
+        </PCTLibrary>
+        <PCTLibrary destfile="${build.out}/PMFO.pl" dlcHome="${dlcHome}">
+            <fileset dir="${src.dir}">
+                <include name="Spark/Core/**/*.cls"/>
+                <include name="Spark/Core/Lib/*.i"/>
+                <include name="Spark/*.p"/>
+            </fileset>
+        </PCTLibrary>
+    </target>
+
+</project>
