@@ -109,7 +109,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
                                       ConfigDB.DebugSchema).
 
             catch err as Progress.Lang.Error:
-                oLoggingManager:logError("Error while registering database", err, "SPARK-ERR", 0).
+                message substitute("Error while registering database: &1", err:GetMessage(1)).
                 undo, throw err.
             end catch.
         end.
@@ -281,7 +281,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
                 release ConfigField.
 
                 catch err as Progress.Lang.Error:
-                    oLoggingManager:logError("Error while registering table fields", err, "SPARK-ERR", 0).
+                    message substitute("Error while registering table fields: &1", err:GetMessage(1)).
                     undo, throw err.
                 end catch.
             end. /* FIELDBLK */
@@ -316,7 +316,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
                                             "").
 
                 catch err as Progress.Lang.Error:
-                    oLoggingManager:logError("Error while registering extra fields", err, "SPARK-ERR", 0).
+                    message substitute("Error while registering extra fields: &1", err:GetMessage(1)).
                     undo, throw err.
                 end catch.
             end. /* extraFieldblk */
@@ -336,21 +336,19 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
                 end. /* if keys */
 
                 catch err as Progress.Lang.Error:
-                    oLoggingManager:logError(substitute("Error while registering index for &1", cTableName), err, "SPARK-ERR", 0).
+                    message substitute("Error while registering index for &1: &2", cTableName, err:GetMessage(1)).
                     undo, throw err.
                 end catch.
             end. /* INDEXBLK */
 
             /* Create and register the "clean" temp-table with the schema manager. */
             tempTable:temp-table-prepare(ConfigTable.AltTableName).
-            registerTempTable(input tempTable).
-
-            oLoggingManager:logMessage(substitute("Registered &1.&2 as '&3'", pcDatabaseName, cTableName, ConfigTable.AltTableName), "SPARK-LOAD", 3).
+            this-object:registerTempTable(input tempTable).
 
             release ConfigTable.
 
             catch err as Progress.Lang.Error:
-                oLoggingManager:logError(substitute("Error while registering table &1", cTableName), err, "SPARK-ERR", 0).
+                message substitute("Error while registering table &1: &2", cTableName, err:GetMessage(1)).
                 undo, throw err.
             end catch.
 
@@ -361,7 +359,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         end. /* TABLEBLK */
 
         catch err as Progress.Lang.Error:
-            oLoggingManager:logError("Table preparation error", err, "SPARK-ERR", 0).
+            message substitute("Table preparation error: &1", err:GetMessage(1)).
             undo, throw err.
         end catch.
         finally:
@@ -598,8 +596,6 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         if error-status:error then
             undo, throw new AppError(substitute("Error registering dataset '&1'", phDatasetHandle:name), -1).
 
-        oLoggingManager:logMessage(substitute("Registering schema for dataset '&1'", phDatasetHandle:name), "SPARK-LOAD", 3).
-
         find first SchemaObject exclusive-lock
              where SchemaObject.ObjectParent eq ""
                and SchemaObject.ObjectName eq phDatasetHandle:name no-error.
@@ -623,16 +619,16 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         /* Register each temp-table of the dataset separately. */
         do iCount = 1 to phDatasetHandle:num-buffers:
             hTableHandle = phDatasetHandle:get-buffer-handle(iCount):table-handle.
-            registerTempTable( input phDatasetHandle:name,
-                               input hTableHandle ).
+            this-object:registerTempTable( input phDatasetHandle:name,
+                                           input hTableHandle ).
             delete object hTableHandle no-error.
         end.
     end method. /* registerDataset */
 
 
     method public void registerTempTable ( input phTableHandle as handle ):
-        registerTempTable ( input "",
-                            input phTableHandle ).
+        this-object:registerTempTable ( input "",
+                                        input phTableHandle ).
     end method. /* registerTempTable */
 
 
@@ -645,8 +641,6 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         phTableHandle:write-xmlschema("longchar", cObjectSchema) no-error.
         if error-status:error then
             undo, throw new AppError(substitute("Error registering table '&1'", phTableHandle:name), -1).
-
-        oLoggingManager:logMessage(substitute("Registering schema for t-table '&1'", phTableHandle:name), "SPARK-LOAD", 3).
 
         find first SchemaObject exclusive-lock
              where SchemaObject.ObjectParent eq pcParentObject

@@ -18,8 +18,7 @@ method {&ClassProtected} void logMessage
 &else
 function logMessage returns logical {&FunctionPrivate}
 &endif
-    ( pcMessage as character, pcSubSystem as character, piLogLevel as integer):
-
+    ( pcMessage as character, pcSubSystem as character, piLogLevel as integer ):
     /* 0 (None), 1 (Errors), 2 (Basic), 3 (Verbose), 4 (Extended) */
     if piLogLevel eq ? then assign piLogLevel = 2.
 
@@ -36,8 +35,7 @@ method {&ClassProtected} void logError
 &else
 function logError returns logical {&FunctionPrivate}
 &endif
-    ( input pcContextMessage as character, input poErr as Progress.Lang.Error, input pcSubSystem as character, input piLogLevel as integer):
-
+    ( input pcContextMessage as character, input poErr as Progress.Lang.Error, input pcSubSystem as character, input piLogLevel as integer ):
     define variable iLoop      as integer                      no-undo.
     define variable cMessage   as character                    no-undo.
     define variable oAppError  as Progress.Lang.AppError       no-undo.

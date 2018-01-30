@@ -363,7 +363,7 @@ class Spark.Core.Interface.ServiceInterface use-widget-pool abstract:
             end.  /* InterfaceBlock */
 
             /* Prepare output via the WebResponse object, returning necessary properties to fulfill the service request. */
-            prepareResponse(lResult, output piResponseCode, output pcJsonHeaders, output pcJsonResponse).
+            this-object:prepareResponse(lResult, output piResponseCode, output pcJsonHeaders, output pcJsonResponse).
             assign pfElapsedTime = oMessageManager:ElapsedTime.
 
             /* Catch any errors thrown from inside MainBlock. */

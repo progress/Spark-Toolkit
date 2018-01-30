@@ -203,7 +203,7 @@ class Spark.Core.Handler.SparkHandler inherits OpenEdge.Web.WebHandler implement
         end. /* Valid File */
 
         /* Prepare response object to be written to the webstream. */
-        writeResponse(oResponse).
+        this-object:writeResponse(oResponse).
 
         return 0.
 
@@ -303,7 +303,7 @@ class Spark.Core.Handler.SparkHandler inherits OpenEdge.Web.WebHandler implement
         setCustomHeaders(input oResponse).
 
         /* Prepare response object to be written to the webstream. */
-        writeResponse(oResponse).
+        this-object:writeResponse(oResponse).
 
         return 0.
 
@@ -349,7 +349,6 @@ class Spark.Core.Handler.SparkHandler inherits OpenEdge.Web.WebHandler implement
                     otherwise
                         undo, throw new AppError(substitute("Unknown type of WebResponse Entity object [&1]",
                                                             poResponse:Entity:GetClass():TypeName), 0).
-
                 end case.
 
                 oWriter:Close().
