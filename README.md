@@ -10,21 +10,31 @@ OpenEge 11.7.2 or later (compatible back to 11.6.3)
 Apache Ant 1.9.x+ (now included with OE 11.7.0)
 
 
-## Assumptions
+## Project Inclusion
 
-Use of the Progress Application Server (PAS) is the intended server for deployment of applications utilizing the PMFO library. In other words, projects utilizing the framework are expected to be of type "ABL Web App" and deployed to a PAS instance with exposed Data Services.
+While the Spark library *may* be used in **Classic AppServer** situations, use of the **Progress Application Server** (PAS) is the intended server for deployment of applications utilizing the included library. In other words, projects utilizing the framework are expected to be of type "ABL Web App" and deployed to a PAS instance with exposed Data Services.
 
 
-## Installation / Setup
+1. Copy the file "`/dist/PMFO.pl`" to your project's AppServer directory.
+2. Add the procedure library to the PROPATH of your project.
+3. At deployment, copy the PL into the `CATALINA_BASE/openedge` folder of your PAS instance.
+4. Add the procedure library to the PROPATH of your server instance.
 
-Include the PMFO.pl from within the "/dist/" directory to your project's AppServer directory, and add this procedure library to the PROPATH of your project. At deployment, ensure the .PL file is copied into the CATALINA_BASE/openedge folder of your PAS instance, and likewise added to the PROPATH of your server instance. If using 11.7.1 or earlier, include the "/dist/Ccs.pl" library as well using the same process as stated for the PMFO.pl file. As of 11.7.2 the CCS classes are included within the core OpenEdge language.
+**Note:** If using 11.7.1 or earlier, include the "`/dist/Ccs.pl`" library as well. Use the same process as stated for the PMFO.pl file. As of 11.7.2 the CCS classes are included within the core OpenEdge language.
 
 
 ## Contributions / Changes
 
-This repository should be ready to use as-is, and at present only source may be retrieved (no contribution model or related guidelines have been established as of yet).
+This repository should be ready to use as-is within **Progress Developer Studio** by importing as an existing project from the "`/src/`" directory. At this time no contribution model or related guidelines have been established, so pull requests will NOT be honored until proper code review and standards have been put into place.
+
+
+## Builds
+
+To create an updated distribution of the PL libraries, utilize the "`ant`" program from within the "`/src/`" directory. Running "`ant`" without options will display basic usage instructions. For example, to build the `PMFO.pl` file you would use the target "`build_pmfo_pl`" which requires a variable "`version`" to be set. The following command would produce a new version of the PL in the "`/dist/`" folder, reflecting the version "4.2.0":
+
+    ant build_pmfo_pl -Dversion=4.2.0
 
 
 ## Documentation
 
-Please view the "docs" folder to view various forms of documentation for the available code (JavaScript and ABL).
+Please view the "docs" folder to view various forms of documentation for the available code (ABLDuck and PCTDoc). These can be re-generated using the same "ant" script as noted above for builds.
