@@ -97,6 +97,7 @@ class Spark.Core.Manager.RouteManager inherits Spark.Core.Manager.Manager implem
 
         if num-entries(cInputs) gt 0 then
         do iCount = 1 to num-entries(cInputs):
+            /* Loop through input parameters, and obtain each named item from request object. */
             assign
                 cParamName = entry(iCount, cInputs)
                 lFound     = false /* Reset for parameter. */
@@ -491,7 +492,7 @@ class Spark.Core.Manager.RouteManager inherits Spark.Core.Manager.Manager implem
         /* If invoke operation contains only a single top-level object "request"
          * then the response object must be output within a "response" as well.
          */
-        if oCatalogManager:UseRequestObj or (oRequest:getParamCount() eq 1 and oRequest:hasParam("request")) then do:
+        if (oCatalogManager:UseRequestObj or (oRequest:getParamCount() eq 1) and oRequest:hasParam("request")) then do:
             assign lWrapOutput = true.
             oRequest:promoteObject("request").
         end.

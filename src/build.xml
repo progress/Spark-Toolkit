@@ -8,7 +8,7 @@
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
         <echo message="ant build_ccs_pl - Create PL archive for CCS classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
-        <echo message="ant build_pmfo_pl - Create PL archive for PMFO classes"/>
+        <echo message="ant build_pmfo_pl - Create PL archive for Spark classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
     </target>
 

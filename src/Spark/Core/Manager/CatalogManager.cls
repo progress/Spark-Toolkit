@@ -767,8 +767,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             if num-entries(cParam, " ") eq 3 then do {&THROW}:
                 oParamObj:Add("mode", lc(replace(entry(1, cParam, " "), "-", ""))).
 
-                if entry(2, cParam, " ") begins "table" or
-                   entry(2, cParam, " ") begins "dataset" then do:
+                if entry(2, cParam, " ") eq "table" or entry(2, cParam, " ") eq "table-handle" or
+                   entry(2, cParam, " ") eq "dataset" or entry(2, cParam, " ") eq "dataset-handle" then do:
                     oParamObj:Add("name", entry(3, cParam, " ")).
                     oParamObj:Add("type", lc(replace(entry(2, cParam, " "), "-", ""))).
                 end. /* dataset/table */

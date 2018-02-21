@@ -443,7 +443,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
     end method.
 
 
-    method public void getObject ( input  pcParentname    as character,
+    method public void getObject ( input  pcParentName    as character,
                                    input  pcObjectName    as character,
                                    output pcObjectAltName as character,
                                    output pcObjectType    as character,

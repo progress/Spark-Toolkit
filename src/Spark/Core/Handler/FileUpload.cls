@@ -198,12 +198,12 @@ class Spark.Core.Handler.FileUpload inherits OpenEdge.Web.WebHandler use-widget-
                 assign cOutFile = substitute("&1/&2", cUploadDir, cFileName).
 
                 /* Send all of the data to the output file. */
-                assign oMemptr = cast(oPart:Body, Openedge.Core.ByteBucket):GetBytes().
+                assign oMemptr = cast(oPart:Body, OpenEdge.Core.ByteBucket):GetBytes().
                 copy-lob from oMemptr:Value to file cOutFile no-convert no-error.
 
                 /* Log reciept of this uploaded file by this user. */
                 oLoggingManager:logMessage(substitute("&1 bytes as &2 to &3",
-                                                      cast(oPart:Body, Openedge.Core.ByteBucket):Size,
+                                                      cast(oPart:Body, OpenEdge.Core.ByteBucket):Size,
                                                       cFileType, cOutFile), "UPLOAD", {&MIN_LOGGING_LEVEL}).
 
                 oUploadLog:Add(string(iPart), cOutFile). /* Add each uploaded file to response. */

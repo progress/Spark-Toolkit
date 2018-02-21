@@ -9,7 +9,7 @@
   ----------------------------------------------------------------------*/
 
 &GLOBAL-DEFINE MIN_LOGGING_LEVEL 3
-&GLOBAL-DEFINE CAN_USE_UNLOAD (lookup(substring(proversion(1), 1, 6), "11.6.3,11.6.4,11.6.5,11.7.0,11.7.1") = 0)
+&GLOBAL-DEFINE MIN_VERSION_11_7_2 (lookup(substring(proversion(1), 1, 6), "11.6.3,11.6.4,11.6.5,11.7.0,11.7.1") = 0)
 
 block-level on error undo, throw.
 
@@ -52,7 +52,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         OpenEdge.Web.DataObject.DataObjectHandler:Invoking:Subscribe(this-object:InvokingHandler).
         OpenEdge.Web.DataObject.DataObjectHandler:Invoked:Subscribe(this-object:InvokedHandler).
         OpenEdge.Web.DataObject.DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
-        &IF {&CAN_USE_UNLOAD} &THEN
+        &IF {&MIN_VERSION_11_7_2} &THEN
         /* Only available for 11.7.2 and later. */
         OpenEdge.Web.DataObject.DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
         OpenEdge.Web.DataObject.DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
@@ -64,14 +64,16 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         OpenEdge.Web.DataObject.DataObjectHandler:Invoking:Unsubscribe(this-object:InvokingHandler).
         OpenEdge.Web.DataObject.DataObjectHandler:Invoked:Unsubscribe(this-object:InvokedHandler).
         OpenEdge.Web.DataObject.DataObjectHandler:OperationError:Unsubscribe(this-object:OperationErrorHandler).
-        &IF {&CAN_USE_UNLOAD} &THEN
+        &IF {&MIN_VERSION_11_7_2} &THEN
         /* Only available for 11.7.2 and later. */
         OpenEdge.Web.DataObject.DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
         OpenEdge.Web.DataObject.DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
         &ENDIF
     end destructor.
 
+
     /***** Helper Methods *****/
+
 
     method private void SessionCleanup ( ):
         /* Always end this session for the current user (apply "reset" CP token). */
@@ -98,15 +100,27 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         return cReason.
     end method. /* GetStatusReason */
 
+
     /***** Event Methods *****/
 
-    /* Event published to invoke/load a piece of business logic (aka Business Entity).
-     * If none exists, we try a simple DYNAMIC-NEW.
+
+    /* Event published to discover information about an available service.
+     * eg. Determine the API version based on URL or header information.
      * @param Progress.Lang.Object The handler publishing the event
      * @param ServiceDiscoveryEventArgs Event args for this event
      */
     method private void DiscoverServiceHandler ( input poSender    as Progress.Lang.Object,
                                                  input poEventArgs as OpenEdge.Web.DataObject.ServiceDiscoveryEventArgs):
+        /* Existing pattern uses the URL path to determine the name and URI of the current service being requested,
+         * essentially the part after the /pdo/ segment of our request. Once the name and URI of the service has been
+         * isolated, use either poEventArgs:Registry or ServiceRegistry object instance is consulted via HasService()
+         * and GetService() by poEventArgs:Name and poEventArgs:Version and assigned to poEventArgs:Service.
+         * The default pattern is /pdo/{version}/{service} but could be adjusted to meet your needs.
+         */
+        oLoggingManager:logMessage(substitute("&1 &2 : &3 v&4",
+                                              poEventArgs:Request:WebAppPath, poEventArgs:Request:PathInfo,
+                                              poEventArgs:Name, poEventArgs:Version), "DISCOVER", {&MIN_LOGGING_LEVEL}).
+
         catch err as Progress.Lang.Error:
             oLoggingManager:logError(string(poEventArgs:ServiceURI), err, "DISCOVER", 0).
         end catch.

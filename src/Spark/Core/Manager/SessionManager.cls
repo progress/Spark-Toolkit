@@ -102,7 +102,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
                     /* Note: this will return true if no DB's connected. */
                     assign lValid = set-db-client(hResetClientPrincipal, ttDatabase.LogicalName) no-error.
                     if not lValid then
-                        undo, throw new AppError(substitute("Invalid Reset Client Principal; Reason(s): &1", GenTools:getAblError()), 0).
+                        undo, throw new AppError(substitute("Invalid Reset Client-Principal on &1; Reason(s): &2", ttDatabase.LogicalName, GenTools:getAblError()), 0).
                 end. /* for each ttDatabase */
             end. /* ttConfig.ResetClientPrincipal */
         end. /* available(ttConfig) */
@@ -143,13 +143,14 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         if num-dbs eq 0 then do:
             assign lValid = security-policy:set-client(hResetClientPrincipal) no-error.
             if not lValid then
-                undo, throw new AppError(substitute("Invalid Reset Client Principal [&1](1)", GenTools:getAblError()), 0).
+                undo, throw new AppError(substitute("Invalid Reset Client-Principal; Reason(s): &1", GenTools:getAblError()), 0).
         end.
         else
-            for each ttDatabase no-lock:
+            for each ttDatabase no-lock
+               where not ttDatabase.UseAppRegistry:
                 assign lValid = set-db-client(hResetClientPrincipal, ttDatabase.LogicalName) no-error.
                 if not lValid then
-                    undo, throw new AppError(substitute("Invalid Reset Client Principal [&1](2)", GenTools:getAblError()), 0).
+                    undo, throw new AppError(substitute("Invalid Reset Client-Principal on &1; Reason(s): &2", ttDatabase.LogicalName, GenTools:getAblError()), 0).
             end. /* for each ttDatabase */
 
     end method.
