@@ -17,8 +17,8 @@ block-level on error undo, throw.
 
 class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Spark.Core.Web.IWebRequest use-widget-pool:
 
-    define private variable lIsCatalog as logical   no-undo initial false.
     define private variable cSvcPrefix as character no-undo initial "pdo".
+
 
     define protected property ReadFilter as character no-undo
         get():
@@ -37,7 +37,7 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
     define public property SparkPathArray as JsonArray no-undo
         get():
             if not valid-object(SparkPathArray) then
-                SparkPathArray = getParsedPathInfo().
+                SparkPathArray = this-object:getParsedPathInfo().
             return SparkPathArray.
         end get.
         protected set.
@@ -46,63 +46,31 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
     define public property SparkQueryData as JsonObject no-undo
         get():
             if not valid-object(SparkQueryData) then
-                SparkQueryData = getParsedQueryString().
+                SparkQueryData = this-object:getParsedQueryString().
             return SparkQueryData.
         end get.
         protected set.
 
 
-    define public property SparkApiVersion as decimal no-undo initial ?
-        get():
-            if SparkApiVersion eq ? then do:
-                SparkApiVersion = decimal(GetPathParameter("version")) no-error.
-                if error-status:error then SparkApiVersion = ?.
-            end.
-            return SparkApiVersion.
-        end get.
-        protected set.
+    define public property SparkApiVersion as decimal no-undo initial ? get. protected set.
 
 
-    define public property SparkServiceName as character no-undo initial ?
-        get():
-            if SparkServiceName eq ? then
-                SparkServiceName = GetPathParameter("service").
-            return SparkServiceName.
-        end get.
-        protected set.
+    define public property SparkServiceName as character no-undo get. protected set.
 
 
-    define public property SparkServiceURI as character no-undo initial ?
-        get():
-            if SparkServiceURI eq ? then
-                SparkServiceURI = getServiceURI().
-            return SparkServiceURI.
-        end get.
-        protected set.
+    define public property SparkServiceURI as character no-undo get. protected set.
 
 
-    define public property SparkResourceName as character no-undo initial ?
-        get():
-            if SparkResourceName eq ? then
-                SparkResourceName = GetPathParameter("resource").
-            return SparkResourceName.
-        end get.
-        protected set.
+    define public property SparkResourceName as character no-undo get. protected set.
 
 
-    define public property SparkMethodName as character no-undo initial ?
-        get():
-            if SparkMethodName eq ? then
-                SparkMethodName = getJSDOMethod().
-            return SparkMethodName.
-        end get.
-        protected set.
+    define public property SparkMethodName as character no-undo get. protected set.
 
 
     define public property SparkMetadata as character no-undo initial ?
         get():
             if SparkMetadata eq ? then
-                SparkMetadata = getMetadata().
+                SparkMetadata = this-object:getMetadata().
             return SparkMetadata.
         end get.
         protected set.
@@ -111,9 +79,9 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
     define public property SparkBody as longchar no-undo
         get():
             if this-object:Method eq "GET" then
-                return getJSDOFilter().
+                return this-object:getJSDOFilter().
             else
-                return getJsonBody().
+                return this-object:getJsonBody().
         end get.
         private set.
 
@@ -133,6 +101,8 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
 
     constructor SparkRequest ( ):
         super().
+
+        this-object:parseRequestPath(). /* Determine service, version, resource, and method. */
     end constructor.
 
 
@@ -142,13 +112,15 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
         /* Retain given prefix value if passed. */
         if (pcServicePrefix gt "") eq true then
             assign cSvcPrefix = pcServicePrefix.
+
+        this-object:parseRequestPath(). /* Determine service, version, resource, and method. */
     end constructor.
 
 
     destructor SparkRequest ( ):
         assign
-            SparkPathArray = ?
-            SparkQueryData = ?
+            this-object:SparkPathArray = ?
+            this-object:SparkQueryData = ?
             .
     end destructor.
 
@@ -156,97 +128,131 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
     /** Protected Methods **/
 
 
-    method protected character getServiceURI ( ):
-        define variable cServiceURI as character no-undo.
-        define variable iStart      as integer   no-undo.
-        define variable iX          as integer   no-undo.
+    method protected void setMethodName ( input pcMethodName as character ):
+        if pcMethodName gt "" then
+            this-object:SparkMethodName = pcMethodName.
 
-        /* If full service object is specified in header, use that instead. */
-        if HasHeader("X-SERVICE-OBJECT") then
-            assign cServiceURI = GetHeader("X-SERVICE-OBJECT"):toString().
-        else do:
-            /* Start with the transport path for this URI. */
-            assign cServiceURI = this-object:TransportPath.
+        /**
+         * If resource is present but method is still blank or just the catalog request,
+         * then obtain a default method name from the current HTTP verb.
+         */
+        if this-object:SparkServiceName gt "" and this-object:SparkResourceName gt "" and 
+          (this-object:SparkMethodName eq "" or this-object:SparkMethodName eq "{&CATALOG_METHOD}") then
+            case this-object:Method:
+                when "GET" then
+                    this-object:SparkMethodName = "read".
+                when "POST" then
+                    this-object:SparkMethodName = "create".
+                when "PUT" then
+                    this-object:SparkMethodName = "update".
+                when "DELETE" then
+                    this-object:SparkMethodName = "delete".
+            end case.
 
-            /* Start counting from element containing service prefix. */
-            do iX = 1 to SparkPathArray:Length:
-                if SparkPathArray:GetCharacter(iX) eq cSvcPrefix then
-                    assign iStart = iX.
-            end.
+        /* If resource and method names are blank, assume use of the catalog method. */
+        if this-object:SparkResourceName eq "" and this-object:SparkMethodName eq "" then
+            this-object:SparkMethodName = "{&CATALOG_METHOD}".
+    end method. /* setMethodName */
 
-            /* If start point matches service prefix position, return a full catalog. */
-            if SparkPathArray:Length eq iStart then
-                assign
-                    lIsCatalog  = true
-                    cServiceURI = "" /* Return for all services. */
-                    .
-            else if SparkPathArray:Length eq (iStart + 1) and
-                 SparkPathArray:GetCharacter(iStart + 1) eq SparkServiceName then
-                 assign /* Path has only 1 extra item, and matches the service name. */
-                    lIsCatalog  = true
-                    cServiceURI = substitute("&1/&2/&3", cServiceURI, SparkPathArray:GetCharacter(iStart), SparkServiceName)
-                    .
-            else /* Obtain the full path up to the last entry. */
-            do iX = iStart to SparkPathArray:Length:
-                /* Stop when we encounter the item that matches our resource name. */
-                if SparkPathArray:GetCharacter(iX) eq SparkResourceName then leave.
 
-                /* Otherwise append the next path entry to the service URI. */
-                assign cServiceURI = substitute("&1/&2", cServiceURI, SparkPathArray:GetCharacter(iX)).
-            end. /* iStart to Length */
-        end. /* No Service-Object */
+    method protected void parseRequestPath ( ):
+        define variable cEntry as character no-undo.
+        define variable iEntry as decimal   no-undo.
+        define variable iStart as integer   no-undo.
+        define variable iX     as integer   no-undo.
 
-        return cServiceURI.
-    end method. /* getServiceURI */
+        /**
+         * A request path should begin with a transport plus a distinct service prefix.
+         * By default the prefix traditionally used is "pdo" for Progress Data Object.
+         * This can be altered for purposes of the Spark DOH implementation, though the
+         * overall URL schema should remain the same to maintain consistency with the
+         * JSDO on the front-end. There is an optional version number which may now
+         * preceed the service name (supported also in the standard DOH class).
+         * Pattern: /web/<service_prefix>/[version/][service/][resource/][method/]
+         */
+
+        /* Start with the transport path for this URI. */
+        this-object:SparkServiceURI = this-object:TransportPath.
+
+        /* Start counting from element containing service prefix. */
+        do iX = 1 to this-object:SparkPathArray:Length:
+            if this-object:SparkPathArray:GetCharacter(iX) eq cSvcPrefix then
+                assign iStart = iX.
+        end.
+
+        /* If only a single item in the path, return a full catalog. */
+        if this-object:SparkPathArray:Length eq iStart then do:
+            this-object:SparkServiceURI = "". /* Return all services for this prefix. */
+            this-object:SparkServiceName = "". /* Return all services for this prefix. */
+            this-object:SparkResourceName = "". /* Return all resources for all services. */
+            this-object:SparkMethodName = "{&CATALOG_METHOD}". /* Treat as catalog request. */
+        end. /* single-item path */
+        else /* Decipher the full path up through the last entry. */
+        do iX = iStart to this-object:SparkPathArray:Length:
+            if iX eq iStart then /* Start by appending the service prefix to the transport. */
+                this-object:SparkServiceURI = substitute("&1/&2", SparkServiceURI, cSvcPrefix).
+
+            /* Parse the current string value in the path (should be a character). */
+            assign cEntry = this-object:SparkPathArray:GetCharacter(iX).
+
+            if cEntry eq cSvcPrefix then next. /* Ignore the service prefix portion. */
+
+            /* Check if the path entry begins with a number (indicating a service version). */
+            if can-do("0,1,2,3,4,5,6,7,8,9", substring(cEntry, 1, 1)) then
+                this-object:SparkApiVersion = decimal(cEntry) no-error.
+            else do:
+                /* Take elements of the path based on whether a version exists or not. */
+                if this-object:SparkApiVersion eq ? then
+                    case iX:
+                        when 2 then do:
+                            /* If we stopped here, assume a request for a catalog. */
+                            this-object:SparkServiceName = cEntry.
+                            this-object:SparkServiceURI = substitute("&1/&2", SparkServiceURI, cEntry).
+                            this-object:SparkResourceName = "". /* Reset the resource name. */
+                            this-object:SparkMethodName = "{&CATALOG_METHOD}". /* Assume catalog. */
+                        end.
+                        when 3 then do:
+                            /* When resource is present, the method must be valid. */
+                            this-object:SparkResourceName = cEntry.
+                            this-object:setMethodName("").
+                        end.
+                        when 4 then
+                            /* Confirm that a proper method is set. */
+                            this-object:setMethodName(cEntry).
+                    end case.
+                else
+                    case iX:
+                        when 3 then do:
+                            /* If we stopped here, assume a request for a catalog. */
+                            this-object:SparkServiceName = cEntry.
+                            this-object:SparkServiceURI = substitute("&1/&2", SparkServiceURI, cEntry).
+                            this-object:SparkResourceName = "". /* Reset the resource name. */
+                            this-object:SparkMethodName = "{&CATALOG_METHOD}". /* Assume catalog. */
+                        end.
+                        when 4 then do:
+                            /* When resource is present, the method must be valid. */
+                            this-object:SparkResourceName = cEntry.
+                            this-object:setMethodName("").
+                        end.
+                        when 5 then
+                            /* Confirm that a proper method is set. */
+                            this-object:setMethodName(cEntry).
+                    end case.
+            end. /* character entry */
+        end. /* iStart to Length */
+    end method. /* parseRequestPath */
 
 
     method protected longchar getJSDOFilter ( ):
         /* If working with the "read" method, which includes a specific "filter" query parameter,
          * attempt to extract only the ReadFilter property from the URL query data (as JSON object).
          */
-        if SparkMethodName eq "read" and SparkQueryData:Has(ReadFilter) and SparkQueryData:GetType(ReadFilter) eq JsonDataType:object then
-            return SparkQueryData:GetJsonObject(ReadFilter):GetJsonText(). /* Return filter object. */
+        if this-object:SparkMethodName eq "read" and this-object:SparkQueryData:Has(ReadFilter) and
+           this-object:SparkQueryData:GetType(ReadFilter) eq JsonDataType:object then
+            return this-object:SparkQueryData:GetJsonObject(ReadFilter):GetJsonText(). /* Return filter object. */
         else
-            return SparkQueryData:GetJsonText(). /* Otherwise return entire query string object. */
+            return this-object:SparkQueryData:GetJsonText(). /* Otherwise return entire query string object. */
     end method. /* getJSDOFilter */
-
-
-    method protected character getJSDOMethod ( ):
-        /* Since the service can have a bearing on the resulting method,
-         * we must first determine if we are making a catalog request.
-         */
-        if SparkServiceURI eq ? then
-            SparkServiceURI = getServiceURI(). /* Get service URI if property is still unset. */
-        if lIsCatalog then
-            assign SparkMethodName = "{&CATALOG_METHOD}". /* Treat as special catalog method. */
-        else
-            SparkMethodName = GetPathParameter("method"). /* Obtain given method name from URL. */
-
-        /* If no service and no resource, then default to the catalog method. */
-        if SparkServiceURI begins this-object:TransportPath and
-           SparkServiceURI matches substitute("*/&1/*", cSvcPrefix) and
-           (SparkResourceName gt "") ne true then
-            assign SparkMethodName = "{&CATALOG_METHOD}". /* Set to special catalog method. */
-        else if (SparkResourceName gt "") eq true and (SparkMethodName gt "") ne true then
-            /* If resource is present but method is still blank,
-             * then obtain a default method name from HTTP verb.
-             */
-            case this-object:Method:
-                when "GET" then
-                    assign SparkMethodName = "read".
-                when "POST" then
-                    assign SparkMethodName = "create".
-                when "PUT" then
-                    assign SparkMethodName = "update".
-                when "DELETE" then
-                    assign SparkMethodName = "delete".
-            end case.
-
-        /* If method name is still unknown, then set property to blank. */
-        if SparkMethodName eq ? then assign SparkMethodName = "".
-
-        return SparkMethodName.
-    end method. /* getJSDOMethod */
 
 
     method protected character getMetadata ( ):
