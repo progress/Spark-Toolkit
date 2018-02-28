@@ -10,13 +10,14 @@ To generate a serialized Client Principal file that will be passed from the REST
 
 1. Use the genspacp utility from the $DLC/bin directory as follows:
 
-proenv>genspacp -password sparkRealm -user sparkRest -file SparkRealm.cp
+genspacp -password sp4rkR3alm -user sparkRest -file SparkRealm.cp
+
 genspacp 1.0
 Generated sealed Client Principal...
     User: sparkRest@OESPA
-    Id: cBP0vyKnRuePMEl7bPOkUg
+    Id: 6EeGh6ptSrWBp9Ekrp0kRw
     Role: SPAClient
-    Encoded Password: oech1::23222e35391736323c3f
+    Encoded Password: oech1::23227b35391760323c3f
     File: SparkRealm.cp
     State: SSO from external authentication system
     Seal is valid

@@ -6,13 +6,14 @@
             "IdProperty": "id",
             "PreLoader": "",
             "ReadFilter": "filter",
+            "ServicePrefix": "pdo",
             "EnableDebugs": false
         }],
         "ServiceSource": [{
             "ServiceName": "Common",
             "ServiceURI": "/web/pdo/common",
             "ClassPath": "Business",
-            "UseRequest": true
+            "UseRequest": false
         }]
     }
 }

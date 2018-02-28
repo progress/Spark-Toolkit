@@ -7,6 +7,9 @@
             "Manager": "Spark.Core.Manager.ISessionManager",
             "Implementation": "Spark.Core.Manager.SessionManager"
         }, {
+            "Manager": "Spark.Core.Manager.ILoggingManager",
+            "Implementation": "Spark.Core.Manager.LoggingManager"
+        }, {
             "Manager": "Spark.Core.Manager.ISchemaManager",
             "Implementation": "Spark.Core.Manager.SchemaManager"
         }, {

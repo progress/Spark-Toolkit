@@ -17,6 +17,11 @@ block-level on error undo, throw.
 
 class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Spark.Core.Web.IWebRequest use-widget-pool:
 
+    /**
+     * The default for the OE.W.DO.DOH pattern is "pdo" which will be used here to maintain consistency.
+     * However, if intending to use both the Spark and DOH service patterns in the same application, this
+     * should be overriden by use if the catalog.json file's general "ServicePrefix" property.
+     */
     define private variable cSvcPrefix as character no-undo initial "pdo".
 
 
@@ -136,7 +141,7 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
          * If resource is present but method is still blank or just the catalog request,
          * then obtain a default method name from the current HTTP verb.
          */
-        if this-object:SparkServiceName gt "" and this-object:SparkResourceName gt "" and 
+        if this-object:SparkServiceName gt "" and this-object:SparkResourceName gt "" and
           (this-object:SparkMethodName eq "" or this-object:SparkMethodName eq "{&CATALOG_METHOD}") then
             case this-object:Method:
                 when "GET" then
@@ -168,7 +173,7 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
          * overall URL schema should remain the same to maintain consistency with the
          * JSDO on the front-end. There is an optional version number which may now
          * preceed the service name (supported also in the standard DOH class).
-         * Pattern: /web/<service_prefix>/[version/][service/][resource/][method/]
+         * Pattern: /web/<service_prefix>[[/version][/service[/resource][/method]]]
          */
 
         /* Start with the transport path for this URI. */

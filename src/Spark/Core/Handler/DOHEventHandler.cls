@@ -112,10 +112,10 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     method private void DiscoverServiceHandler ( input poSender    as Progress.Lang.Object,
                                                  input poEventArgs as OpenEdge.Web.DataObject.ServiceDiscoveryEventArgs):
         /* Existing pattern uses the URL path to determine the name and URI of the current service being requested,
-         * essentially the part after the /pdo/ segment of our request. Once the name and URI of the service has been
-         * isolated, use either poEventArgs:Registry or ServiceRegistry object instance is consulted via HasService()
-         * and GetService() by poEventArgs:Name and poEventArgs:Version and assigned to poEventArgs:Service.
-         * The default pattern is /pdo/{version}/{service} but could be adjusted to meet your needs.
+         * essentially the part after the /web/<prefix>/ segment of our request. Once the name and URI of the service
+         * has been isolated, use either poEventArgs:Registry or ServiceRegistry object instance is consulted via
+         * HasService() and GetService() by poEventArgs:Name and poEventArgs:Version and assigned to poEventArgs:Service.
+         * The default pattern is /pdo[[/{version}]/{service}] but could be adjusted to meet your needs.
          */
         oLoggingManager:logMessage(substitute("&1 &2 : &3 v&4",
                                               poEventArgs:Request:WebAppPath, poEventArgs:Request:PathInfo,
