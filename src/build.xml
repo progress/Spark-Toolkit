@@ -2,13 +2,13 @@
 
     <target name="usage">
         <echo message="Usage Instructions:"/>
-        <echo message="ant build_ablduck - Generate ABLDuck output for CCS/PMFO"/>
+        <echo message="ant build_ablduck - Generate ABLDuck output for CCS/Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
-        <echo message="ant build_pctdoc - Generate PCTDoc output for CCS/PMFO"/>
+        <echo message="ant build_pctdoc - Generate PCTDoc output for CCS/Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
         <echo message="ant build_ccs_pl - Create PL archive for CCS classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
-        <echo message="ant build_pmfo_pl - Create PL archive for Spark classes"/>
+        <echo message="ant build_spark_pl - Create PL archive for Spark classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
     </target>
 
@@ -99,11 +99,11 @@
         </PCTCompile>
     </target>
 
-    <target name="compile_pmfo" depends="init_oe">
+    <target name="compile_spark" depends="init_oe">
         <delete dir="${preprocess}/Spark" quiet="true"/>
 
         <!-- Write the current release version to a specific file, for inclusion in the compiled code. -->
-        <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE PMFO_VERSION ${release.version}"/>
+        <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION ${release.version}"/>
 
         <!-- Code compiles without need for a database, but uses Ccs and extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}/Spark" dlcHome="${dlcHome}">
@@ -126,7 +126,7 @@
         <property name="abldoc.lib" value="${abldoc.home}/lib"/>
         <property name="artifacts" value="${abldoc.home}/abldoc-artifacts"/>
         <property name="abldocs.output" value="${basedir}/docs/ABLDoc"/>
-        <property name="abldocs.title" value="PMFO v${release.version}"/>
+        <property name="abldocs.title" value="Spark v${release.version}"/>
 
         <delete dir="${abldocs.output}" quiet="true"/>
         <mkdir dir="${abldocs.output}"/>
@@ -178,9 +178,9 @@
 
         <!-- Compile all code. -->
         <antcall target="compile_ccs"/>
-        <antcall target="compile_pmfo"/>
+        <antcall target="compile_spark"/>
 
-        <ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="PMFO (v${release.version})">
+        <ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="Spark (v${release.version})">
             <fileset dir="${preprocess}">
                 <include name="**/*.cls"/>
 				<include name="**/*.p"/>
@@ -213,7 +213,7 @@
 
         <!-- Compile all code. -->
         <antcall target="compile_ccs"/>
-        <antcall target="compile_pmfo"/>
+        <antcall target="compile_spark"/>
 
         <!-- Document ONLY class files, ENUM's are not supported (yet). -->
         <ClassDocumentation destDir="${doc.tmp}" dlcHome="${dlcHome}">
@@ -245,7 +245,7 @@
 
         <!-- Convert the above output (XML) into HTML documents. -->
         <HTMLDocumentation sourceDir="${doc.tmp}" destDir="${pctdocs.output}" dlcHome="${dlcHome}"
-                           treeViewOverview="true" title="PMFO (v${release.version})">
+                           treeViewOverview="true" title="Spark (v${release.version})">
 		    <propath>
                 <pathelement path="${src.dir}/Ccs"/>
                 <pathelement path="${src.dir}/Spark"/>
@@ -280,11 +280,11 @@
         </PCTLibrary>
     </target>
 
-    <target name="build_pmfo_pl" depends="init_oe">
+    <target name="build_spark_pl" depends="init_oe">
         <delete dir="${build.tmp}" quiet="true"/>
-        <delete file="${build.out}/PMFO.pl" quiet="true"/>
+        <delete file="${build.out}/Spark.pl" quiet="true"/>
 
-        <antcall target="compile_pmfo"/>
+        <antcall target="compile_spark"/>
 
         <delete dir="${build.tmp}/.pct" quiet="true"/>
         <delete dir="${build.tmp}/Ccs" quiet="true"/>
@@ -298,12 +298,12 @@
         </move>
 
         <!-- Build PL file with source and R-code. -->
-        <PCTLibrary destfile="${build.out}/PMFO.pl" dlcHome="${dlcHome}">
+        <PCTLibrary destfile="${build.out}/Spark.pl" dlcHome="${dlcHome}">
             <fileset dir="${build.tmp}">
                 <include name="Spark/**/*.r"/>
             </fileset>
         </PCTLibrary>
-        <PCTLibrary destfile="${build.out}/PMFO.pl" dlcHome="${dlcHome}">
+        <PCTLibrary destfile="${build.out}/Spark.pl" dlcHome="${dlcHome}">
             <fileset dir="${src.dir}">
                 <include name="Spark/Core/**/*.cls"/>
                 <include name="Spark/Core/Lib/*.i"/>
