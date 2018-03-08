@@ -32,7 +32,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     /* Contains the current Client-Principal token for this request. */
     define private variable oPrincipal as OpenEdge.Security.Principal no-undo.
 
-    /* Access the standard logging manager for PMFO. */
+    /* Access the standard logging manager for Spark. */
     define protected property oLoggingManager as Spark.Core.Manager.ILoggingManager no-undo
         get:
             if not valid-object(oLoggingManager) then do:

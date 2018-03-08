@@ -62,7 +62,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         field SeqProperty   as character /* Name of property to use for result sequence purposes.   */
         field PreLoader     as character /* Special procedure to run prior to loading resources.    */
         field ReadFilter    as character /* Name of URL parameter that will hold any filters.       */
-        field ServicePrefix as character /* URI prefix for services exposed by PMFO (eg. pdo, api). */
+        field ServicePrefix as character /* URI prefix for services exposed by Spark (eg. pdo, api). */
         index idxEntity    is primary unique BusinessRoot
         .
 

@@ -19,7 +19,7 @@ using Spark.Core.Web.IWebResponse from propath.
  */
 interface Spark.Core.Manager.IMessageManager inherits IManager:
 
-    /* PMFO Messages */
+    /* Spark Messages */
     define public property RequestMessage  as IAbstractMessage no-undo get.
     define public property ResponseMessage as IAbstractMessage no-undo get.
 
