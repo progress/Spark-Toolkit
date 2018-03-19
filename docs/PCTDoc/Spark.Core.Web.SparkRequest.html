@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>PMFO (v4.2.0)</TITLE>
+        <TITLE>Spark (v4.2.1)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -149,25 +149,7 @@
   </td>
   <td class="cell">
      
-/* getServiceURI */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         CHARACTER <a href='#020010stZu5ECdBzfxZYqbmxOGrQ=='> getJSDOMethod ()</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getJSDOFilter */ <br> <i>  </i>
+/* parseRequestPath */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -203,7 +185,7 @@
   </td>
   <td class="cell">
      
-/* getJSDOMethod */ <br> <i>  </i>
+/* getJSDOFilter */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -270,7 +252,25 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010xJGeL2+ezNtWbZ57zjD2SA=='> getServiceURI ()</a>
+          <a href='#02001018KpLErsxqa2Q+23+ylpsw=='> parseRequestPath ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* setMethodName */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010hDs04CfSRtSGwNUSctpBJg=='> setMethodName (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -615,7 +615,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getServiceURI </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* parseRequestPath </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -631,68 +631,6 @@
     </td>
     <td>
       LONGCHAR 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010stZu5ECdBzfxZYqbmxOGrQ==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010stZu5ECdBzfxZYqbmxOGrQ=='> getJSDOMethod ()</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010stZu5ECdBzfxZYqbmxOGrQ=='> getJSDOMethod ()</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getJSDOFilter </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  <!--
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  -->
-                  <tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      CHARACTER 
     </td>
     <td>
     </td>
@@ -801,7 +739,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getJSDOMethod </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getJSDOFilter </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1024,11 +962,57 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010xJGeL2+ezNtWbZ57zjD2SA==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010xJGeL2+ezNtWbZ57zjD2SA=='> getServiceURI ()</a>"></a>
+                <a name="02001018KpLErsxqa2Q+23+ylpsw==" href="#Top">Top</a>
+                <a name="  <a href='#02001018KpLErsxqa2Q+23+ylpsw=='> parseRequestPath ()</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010xJGeL2+ezNtWbZ57zjD2SA=='> getServiceURI ()</a></h3>
+        <h3 class="Signature_Font">PUBLIC  <a href='#02001018KpLErsxqa2Q+23+ylpsw=='> parseRequestPath ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* setMethodName </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010hDs04CfSRtSGwNUSctpBJg==" href="#Top">Top</a>
+                <a name="  <a href='#020010hDs04CfSRtSGwNUSctpBJg=='> setMethodName (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010hDs04CfSRtSGwNUSctpBJg=='> setMethodName (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1052,19 +1036,19 @@
             <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Protected Methods </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
-                  <!--
+                  
                   <tr>
                     <td colspan="2">
                       <b>Parameters:</b>           
                     </td>
                   </tr>
-                  -->
+                  
                   <tr>
     <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
+        <i>pcMethodName</i>
     </td>
     <td>
-      CHARACTER 
+       CHARACTER
     </td>
     <td>
     </td>
@@ -1932,6 +1916,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">01.18.2018 14:03:31</font>
+    <font class="footer_timestamp">03.19.2018 15:32:25</font>
     </BODY>
 </HTML>
