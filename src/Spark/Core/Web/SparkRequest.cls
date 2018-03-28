@@ -185,6 +185,9 @@ class Spark.Core.Web.SparkRequest inherits OpenEdge.Web.WebRequest implements Sp
                 assign iStart = iX.
         end.
 
+        if iStart eq 0 then /* Cannot proceed if the service prefix does not exist in the requested URL! */
+            undo, throw new AppError(substitute("Unable to locate expected service prefix '&1'.", cSvcPrefix), 0).
+
         /* If only a single item in the path, return a full catalog. */
         if this-object:SparkPathArray:Length eq iStart then do:
             this-object:SparkServiceURI = "". /* Return all services for this prefix. */
