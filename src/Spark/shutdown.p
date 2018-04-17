@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------
     File        : Spark/shutdown
-    Purpose     : Recommended to check for anydynamic objects left behind
+    Purpose     : Recommended to check for any dynamic objects left behind
     Description : Assigned as sessionShutdownProc in openedge.properties
     Author(s)   : Dustin Grau (dugrau@progress.com)
     Created     : Tue Apr 28 15:03:17 EDT 2016

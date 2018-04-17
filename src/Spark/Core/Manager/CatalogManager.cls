@@ -1927,7 +1927,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define variable catalogObj as JsonObject no-undo.
 
         assign catalogObj = new JsonObject().
-        catalogObj:Add("version", 1.4).
+        catalogObj:Add("version", 1.5).
         catalogObj:Add("lastModified", now).
         catalogObj:Add("services", getServices(pcServiceURI, pcResourceName)).
 
