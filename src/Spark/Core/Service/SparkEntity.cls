@@ -434,6 +434,12 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
     end method. /* initialize */
 
     method public void dispose ( ):
+        define variable ix as integer no-undo.
+        do ix = 1 to extent(DataSourceArray):
+            delete object DataSourceArray[ix] no-error.
+        end.
+
+        delete object ProDataSet no-error.
     end method. /* dispose */
 
     method public void postRowFill ( input dataset-handle phDataset ):
@@ -478,7 +484,7 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
 
         validateData(input "Create", input-output dataset-handle phDataSet by-reference).
         preCommitLogic(input "Create", input-output dataset-handle phDataSet by-reference).
-        super:CreateData(input-output dataset-handle phDataSet).
+        super:CreateData(input-output dataset-handle phDataSet by-reference).
         postCommitLogic(input "Create", input-output dataset-handle phDataSet by-reference).
 
         finally:
@@ -492,7 +498,7 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
 
         validateData(input "Update", input-output dataset-handle phDataSet by-reference).
         preCommitLogic(input "Update", input-output dataset-handle phDataSet by-reference).
-        super:UpdateData(input-output dataset-handle phDataSet).
+        super:UpdateData(input-output dataset-handle phDataSet by-reference).
         postCommitLogic(input "Update", input-output dataset-handle phDataSet by-reference).
 
         finally:
@@ -506,7 +512,7 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
 
         validateData(input "Delete", input-output dataset-handle phDataSet by-reference).
         preCommitLogic(input "Delete", input-output dataset-handle phDataSet by-reference).
-        super:DeleteData(input-output dataset-handle phDataSet).
+        super:DeleteData(input-output dataset-handle phDataSet by-reference).
         postCommitLogic(input "Delete", input-output dataset-handle phDataSet by-reference).
 
         finally:
@@ -525,7 +531,7 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
                 assign ProDataSet = phDataSet. /* Ensure proper handle is set. */
 
             preCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
-            super:Submit(input-output dataset-handle phDataSet).
+            super:Submit(input-output dataset-handle phDataSet by-reference).
             postCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
         end.
 

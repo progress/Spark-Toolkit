@@ -1,3 +1,4 @@
 /src/build
 /src/preprocess
 /src/doctemp
+*.r
