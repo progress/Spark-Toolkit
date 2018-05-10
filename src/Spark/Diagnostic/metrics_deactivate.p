@@ -9,20 +9,36 @@
 
 /* ***************************  Definitions  ************************** */
 
+using progress.lang.* from propath.
+
 block-level on error undo, throw.
 
 /* ***************************  Main Block  *************************** */
 
-do on error undo, leave:
+/* Obtain the current request information. */
+define variable oRequest as OERequestInfo no-undo.
+assign oRequest = cast(session:current-request-info, OERequestInfo).
 
-    /* Output the current ABLObjects report for this agent/session. */
-    Spark.Diagnostic.Util.OEMetrics:Instance:PrepareABLObjectReport().
+/* Only run if the request being run is NOT part of the metrics logic. */
+if not oRequest:ProcedureName begins "Spark/Diagnostic/Interface/" then
+do on error undo, throw:
+    define variable iStart as integer no-undo.
+    assign iStart = mtime.
 
     /* Stop the profiler for this request, if enabled. */
     Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler().
 
-    catch err as Progress.Lang.Error:
-        /* Catch and Release */
-        message substitute("Error in Metrics Deactivate: &1", err:GetMessage(1)).
-    end catch.
-end.
+    /* Output the current ABLObjects report for this agent/session. */
+    Spark.Diagnostic.Util.OEMetrics:Instance:PrepareSessionReports().
+
+    if log-manager:logging-level ge 3 then
+        message substitute("Elapsed: &1ms", (mtime - iStart)).
+end. /* not metrics interface */
+
+catch err as Progress.Lang.Error:
+    /* Catch and Release */
+    message substitute("Metrics Deactivate Error: &1", err:GetMessage(1)).
+end catch.
+finally:
+    delete object oRequest no-error.
+end finally.
