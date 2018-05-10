@@ -138,11 +138,12 @@
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
             </propath>
             <fileset dir="${src.dir}">
-                <include name="Spark/Diagnostic/**/*.cls"/>
-                <include name="Spark/Diagnostic/*.p"/>
+                <include name="Spark/Diagnostic/Util/*.cls"/>
+				<include name="Spark/Diagnostic/Interfaces/*.p"/>
+				<include name="Spark/Diagnostic/*.p"/>
             </fileset>
         </PCTCompile>
-    </target>
+	</target>
 
     <target name="build_abldoc" depends="init_oe">
         <property name="abldoc.home" value="${dlcHome}/oeide/eclipse/plugins/com.progress.openedge.pdt.abldoc.core_${oe.version}.00"/>

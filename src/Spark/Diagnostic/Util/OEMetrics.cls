@@ -69,7 +69,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         os-create-dir value(substitute("&1/metrics/ProfilerData", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/SessionData", this-object:TemporaryDir)).
 
-        assign oConfig = new OEMetricsConfig(oLogger). /* Configuration options. */
+        /* Single object for all configuration options. */
+        assign oConfig = new OEMetricsConfig(oLogger).
+        if not valid-object(oConfig) then
+            oLogger:Error("Unable to create OEMetricsConfig instance.").
 
         create server hServer. /* For potential use with APSV requests. */
     end constructor.
