@@ -282,13 +282,13 @@ class Spark.Core.Manager.ServiceManager inherits Spark.Core.Manager.Manager impl
         define buffer lbServices for ttServices.
 
         if poService:IsInterface() then do:
-            case poService:TypeName:
-                when "OpenEdge.Web.DataObject.IServiceRegistry" then do:
+            case true:
+                when poService:TypeName eq "OpenEdge.Web.DataObject.IServiceRegistry" then do:
                     /* Assume use of standard implementation if none specified. */
                     assign pcAlias = "OpenEdge.Web.DataObject.ServiceRegistryImpl" when pcAlias eq "".
                 end. /* IServiceRegistry */
 
-                when "Progress.Web.IWebHandler" then do:
+                when poService:TypeName eq "Progress.Web.IWebHandler" then do:
                     /* Assume use of the local handler if none is specified by alias. */
                     if pcAlias eq "" then /* If blank, assume the OE standard class. */
                         assign pcAlias = "OpenEdge.Web.DataObject.DataObjectHandler".
@@ -351,6 +351,12 @@ class Spark.Core.Manager.ServiceManager inherits Spark.Core.Manager.Manager impl
         if not valid-object(poService) then return ?. /* Cannot start what we do not have. */
         if poService:IsAbstract() then return ?. /* Cannot start an abstract class. */
         if poService:IsInterface() then return ?. /* Cannot start an interface class. */
+
+        oLoggingManager:logMessage(substitute("Starting service of type &1 (&2)",
+                                              poService:TypeName, pcAlias), "START-SVC", 4).
+
+        /* Cannot start a service of such a simple type; likely indicates misconfiguration. */
+        if poService:TypeName eq "Progress.Lang.Object" then return ?.
 
         oService = poService:New().
 

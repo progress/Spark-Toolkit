@@ -129,7 +129,7 @@ class Spark.Core.Util.OSTools:
      * Will return with "/" as the directory separator
      * Directories are returned with a trailing "/"
      */
-    method public static character getFullPathname (input pcFile as character):
+    method public static character getFullPathname ( input pcFile as character ):
         define variable cReturn as character no-undo.
 
         file-info:filename = pcFile.
@@ -181,17 +181,17 @@ class Spark.Core.Util.OSTools:
 
     end method.
 
-    method public static JsonArray recurseDir( input pcFrom as character, input plOmitDirs as logical ):
+    method public static JsonArray recurseDir ( input pcFrom as character, input plOmitDirs as logical ):
 
         define variable hTable as handle     no-undo.
         define variable oTable as JsonObject no-undo.
 
         empty temp-table ttDirStruct.
-        drillDir(pcFrom).
+        drillDir(right-trim(replace(pcFrom,"~\","/"),"/")).
 
         if plOmitDirs then
             for each ttDirStruct
-                where ttDirStruct.isDir:
+               where ttDirStruct.isDir:
                 delete ttDirStruct.
             end.
 
@@ -222,13 +222,14 @@ class Spark.Core.Util.OSTools:
                 ttDirStruct.FullPath  = getFullPathname(cFullName)
                 ttDirStruct.isDir     = (index(cCodes, "D":U) ne 0)
                 .
+            release ttDirStruct no-error.
         end.
         input close.
 
         for each ttDirStruct
-            where ttDirStruct.ParentDir eq pcFrom
-            and ttDirStruct.isDir:
-            drillDir(ttDirStruct.ParentDir + "/" + ttDirStruct.FileName + "/").
+           where ttDirStruct.ParentDir eq pcFrom
+             and ttDirStruct.isDir:
+            drillDir(substitute("&1/&2", ttDirStruct.ParentDir, ttDirStruct.FileName)).
         end.
 
     end method.
@@ -257,7 +258,7 @@ class Spark.Core.Util.OSTools:
 
     end method.
 
-    method public static void osCopyFile(input pcFrom as character, input pcTo as character):
+    method public static void osCopyFile ( input pcFrom as character, input pcTo as character ):
 
         define variable iOsError as integer no-undo.
 
@@ -268,7 +269,7 @@ class Spark.Core.Util.OSTools:
 
     end method.
 
-    method public static character osCreateDirTree( input pcDir as character):
+    method public static character osCreateDirTree ( input pcDir as character ):
 
         define variable iOsError as integer no-undo.
         define variable iLoop as integer no-undo.
@@ -306,7 +307,7 @@ class Spark.Core.Util.OSTools:
 
     end method.
 
-    method public static character osErrorMsg(input piOsError as integer):
+    method public static character osErrorMsg ( input piOsError as integer ):
 
         if piOsError ne 0 then
             case piOsError:

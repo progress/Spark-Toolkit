@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------
     File        : OSPath
     Purpose     : Helper properties for creating standard OS paths
-    Description : 
+    Description :
     Author(s)   : Dustin Grau
     Created     : Mon May 07 17:25:15 EDT 2018
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.* from propath.
@@ -43,7 +43,7 @@ class Spark.Diagnostic.Util.OSPath abstract:
 
         /* Assemble base path for output and create any needed directories. */
         assign cBasePath = substitute("&1/metrics/SessionData/&2", this-object:TemporaryDir, piAgentID).
-        os-create-dir value(cBasePath) no-error.
+        os-create-dir value(cBasePath).
 
         return substitute("&1/&2.&3_A&4.json",
                           cBasePath,
@@ -58,7 +58,7 @@ class Spark.Diagnostic.Util.OSPath abstract:
 
         /* Assemble base path for output and create any needed directories. */
         assign cBasePath = substitute("&1/metrics/ABLObjectsReport/&2", this-object:TemporaryDir, piAgentID).
-        os-create-dir value(cBasePath) no-error.
+        os-create-dir value(cBasePath).
 
         return substitute("&1/&2.&3_A&4_S&5.json",
                           cBasePath,

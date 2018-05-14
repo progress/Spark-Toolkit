@@ -226,7 +226,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if this-object:InMatchList(cProcedure, pcFilter) then do:
             /* Create base path for output and create any needed directories. */
             assign cBasePath = substitute("&1/metrics/ProfilerData/&2", this-object:TemporaryDir, this-object:GetAgentID()).
-            os-create-dir value(cBasePath) no-error.
+            os-create-dir value(cBasePath).
 
             /* Determine correct output location for this profiler log. */
             assign cOutPath = substitute("&1/&2.&3_R&4_A&5_S&6.prof",
@@ -687,7 +687,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                     if error-status:error then
                         oLogger:Error(substitute("Error creating async handle: &1", error-status:get-message(1))).
                 end. /* Has Connection */
-    
+
                 catch err as Progress.Lang.Error:
                     oLogger:Error(substitute("Error in APSV request: &1", err:GetMessage(1))).
                 end catch.
