@@ -245,6 +245,8 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method public logical AreObjectsEnabled ( input pcMethodName as character ):
+        this-object:RefreshConfig(). /* Update configuration options. */
+
         if not this-object:ObjectsEnabled then do:
             oLogger:Debug(substitute("Objects disabled, leaving &1", pcMethodName)).
             return false.
@@ -255,6 +257,8 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method public logical IsProfilerEnabled ( input pcMethodName as character ):
+        this-object:RefreshConfig(). /* Update configuration options. */
+
         if not this-object:ProfilerEnabled then do:
             oLogger:Debug(substitute("Profiler disabled, leaving &1", pcMethodName)).
             return false.
