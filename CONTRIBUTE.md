@@ -35,8 +35,8 @@ If you want to implement a new feature yourself, consider submitting it to the <
 
 Before you submit a Pull Request, consider the following guidelines.
 
-* By submitting a pull request, you represent that you have the right to license your contribution to Progress and the community, and agree by submitting the patch that your contributions are licensed under the progress/Spark-Server license <https://github.com/progress/Spark-Server/blob/master/LICENSE>.
-* Notwithstanding the above, we reserve the right to ask you to sign a Contributor License Agreement (CLA) for larger changes.
+* By submitting a pull request, you represent that you have the right to license your contribution to Progress and the community, and agree by submitting the patch that your contributions are licensed under the <https://github.com/progress/Spark-Server/blob/master/LICENSE>progress/Spark-Server license</a>.
+	* Notwithstanding the above, we reserve the right to ask you to sign a Contributor License Agreement (CLA) for larger changes.
 * Search <a href="https://github.com/progress/Spark-Server/pulls">GitHub</a> for an open or closed Pull Request that relates to your submission.
 * Clone the repository.
 
@@ -62,7 +62,6 @@ bash git commit -a
 bash git push origin my-fix-branch
 ```
 * In GitHub, send a Pull Request to Spark-Server:master
-* :master.
 * If we suggest changes, you can modify your branch, rebase, and force a new push to your GitHub repository to update the Pull Request.
 ```
 bash git rebase master -i git push -f
