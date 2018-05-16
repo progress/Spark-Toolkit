@@ -34,7 +34,7 @@ If you want to implement a new feature yourself, consider submitting it to the <
 ===
 
 Before you submit a Pull Request, consider the following guidelines.
-* Read and sign the <a href="https://docs.google.com/">Spark Toolkit Contributor License Agreement</a>.
+* Read and sign the Spark Toolkit Contributor License Agreement (link yet to be published).
 * Search <a href="https://github.com/progress/Spark-Server/pulls">GitHub</a> for an open or closed Pull Request that relates to your submission.
 * Clone the repository.
 ```
