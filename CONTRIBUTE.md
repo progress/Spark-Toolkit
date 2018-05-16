@@ -35,7 +35,7 @@ If you want to implement a new feature yourself, consider submitting it to the <
 
 Before you submit a Pull Request, consider the following guidelines.
 
-* By submitting a pull request, you represent that you have the right to license your contribution to Progress and the community, and agree by submitting the patch that your contributions are licensed under the <https://github.com/progress/Spark-Server/blob/master/LICENSE>progress/Spark-Server license</a>.
+* By submitting a pull request, you represent that you have the right to license your contribution to Progress and the community, and agree by submitting the patch that your contributions are licensed under the <a href="https://github.com/progress/Spark-Server/blob/master/LICENSE">progress/Spark-Server license</a>.
 	* Notwithstanding the above, we reserve the right to ask you to sign a Contributor License Agreement (CLA) for larger changes.
 * Search <a href="https://github.com/progress/Spark-Server/pulls">GitHub</a> for an open or closed Pull Request that relates to your submission.
 * Clone the repository.
