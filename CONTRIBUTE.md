@@ -1,7 +1,7 @@
 Contribute to the Spark Toolkit
 ===
 
-*Help us improve the Spark Toolkit* 
+*Help us improve the Spark Toolkit*
 
 * [Report an Issue](#bug "Learn how to report an issue")
 * [Request a Feature](#request "Learn how to submit a feature or improvement request")
@@ -34,9 +34,12 @@ If you want to implement a new feature yourself, consider submitting it to the <
 ===
 
 Before you submit a Pull Request, consider the following guidelines.
-* Read and sign the Spark Toolkit Contributor License Agreement (link yet to be published).
+
+* By submitting a pull request, you represent that you have the right to license your contribution to Progress and the community, and agree by submitting the patch that your contributions are licensed under the progress/Spark-Server license <https://github.com/progress/Spark-Server/blob/master/LICENSE>.
+* Notwithstanding the above, we reserve the right to ask you to sign a Contributor License Agreement (CLA) for larger changes.
 * Search <a href="https://github.com/progress/Spark-Server/pulls">GitHub</a> for an open or closed Pull Request that relates to your submission.
 * Clone the repository.
+
 ```
 bash git clone git@github.com:progress/Spark-Server.git
 ```
@@ -58,7 +61,7 @@ bash git commit -a
 ```
 bash git push origin my-fix-branch
 ```
-* In GitHub, send a Pull Request to Spark-Server
+* In GitHub, send a Pull Request to Spark-Server:master
 * :master.
 * If we suggest changes, you can modify your branch, rebase, and force a new push to your GitHub repository to update the Pull Request.
 ```
