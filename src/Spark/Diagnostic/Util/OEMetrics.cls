@@ -12,8 +12,6 @@ using Progress.Json.ObjectModel.* from propath.
 using OpenEdge.Core.Assert from propath.
 using OpenEdge.Logging.* from propath.
 using Spark.Diagnostic.Util.ABLObjectsReport from propath.
-using Spark.Diagnostic.Util.OEMetricsConfig from propath.
-using Spark.Diagnostic.Util.OEMetrics from propath.
 
 block-level on error undo, throw.
 
@@ -44,7 +42,15 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     define private property RequestStart as datetime-tz no-undo initial ? get. set.
 
-    define private property oConfig as OEMetricsConfig no-undo get. set.
+    define private property oConfig as Spark.Diagnostic.Util.OEMetricsConfig no-undo
+        get():
+            if oConfig eq ? or not valid-object(oConfig) then
+                assign oConfig = new Spark.Diagnostic.Util.OEMetricsConfig(oLogger).
+            if not valid-object(oConfig) then
+                oLogger:Error("Unable to create OEMetricsConfig instance.").
+            return oConfig.
+        end get.
+        set.
 
     define private property oABLObjectsReport as ABLObjectsReport no-undo
         get():
@@ -69,11 +75,6 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         os-create-dir value(substitute("&1/metrics/ABLObjects", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/ProfilerData", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/SessionData", this-object:TemporaryDir)).
-
-        /* Single object for all configuration options. */
-        assign oConfig = new OEMetricsConfig(oLogger).
-        if not valid-object(oConfig) then
-            oLogger:Error("Unable to create OEMetricsConfig instance.").
 
         create server hServer. /* For potential use with APSV requests. */
     end constructor.
@@ -201,7 +202,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
 
     method private logical GetConnection ( ):
-        if not valid-handle(hServer) then return false.
+        if not valid-handle(hServer) or not valid-object(oConfig) then return false.
 
         if oConfig:ObjectsUseAPSV and not hServer:connected() then do:
             define variable cServerConn as character no-undo initial "".
