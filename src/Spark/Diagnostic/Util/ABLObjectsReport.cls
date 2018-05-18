@@ -441,7 +441,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? then do:
+            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -508,7 +508,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? then do:
+            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -581,7 +581,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? then do:
+            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -657,7 +657,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? then do:
+            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -738,7 +738,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? then do:
+            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -855,7 +855,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? then do:
+            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 

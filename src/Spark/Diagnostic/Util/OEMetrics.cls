@@ -736,7 +736,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 this-object:PrepareSessionReports(this-object:GetAgentID(), this-object:GetSessionID()).
         end. /* Do Output */
         else
-            oLogger:Debug(substitute("Time Until Next Report: &1s",
+            oLogger:Debug(substitute("Time Until Next Report Interval: &1s",
                                      interval(dNextObjectOutput, now, "seconds"))).
     end method. /* PrepareSessionReports */
 
@@ -755,7 +755,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Run the following reports for the given agent/session. */
         this-object:OutputTime = now. /* Synchronize output time. */
-        this-object:GetSessionABLObjects(piAgentID, piSessionID).
+        oLogger:Info(substitute("Running reports for Agent '&1', Session '&2' at &3",
+                                piAgentID, piSessionID, this-object:OutputTime)).
+        this-object:GetSessionABLObjects(piAgentID, piSessionID). /* ABLObjects */
         if oConfig:ObjectsTrackMem then
             this-object:GetSessionMetrics(piAgentID). /* Memory, etc. */
         this-object:OutputTime = ?. /* Reset timestamp. */
