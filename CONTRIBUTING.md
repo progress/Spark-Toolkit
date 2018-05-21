@@ -40,30 +40,30 @@ Before you submit a Pull Request, consider the following guidelines.
 * Clone the repository.
 
 ```
-bash git clone git@github.com:progress/Spark-Server.git
+git clone git@github.com:progress/Spark-Server.git
 ```
 * Initialize the submodule.
 ```
-bash git submodule init
+git submodule init
 ```
 * Fetch data from the submodule.
 ```
-bash git submodule update
+git submodule update
 ```
 * Make your changes in a new `git` branch. We use the <a href="http://nvie.com/posts/a-successful-git-branching-model/">Gitflow branching model</a> so you will have to branch from our develop branch.
 
 * Commit your changes and create a descriptive commit message (the commit message is used to generate release notes).
 ```
-bash git commit -a
+git commit -a
 ```
 * Push your branch to GitHub.
 ```
-bash git push origin my-fix-branch
+git push origin my-fix-branch
 ```
 * In GitHub, send a Pull Request to Spark-Server:master
 * If we suggest changes, you can modify your branch, rebase, and force a new push to your GitHub repository to update the Pull Request.
 ```
-bash git rebase master -i git push -f
+git rebase master -i git push -f
 ```
 
 That's it! Thank you for your contribution!
@@ -72,11 +72,11 @@ When the patch is reviewed and merged, you can safely delete your branch and pul
 
 * Delete the remote branch on GitHub.
 ```
-bash git push origin --delete my-fix-branch
+git push origin --delete my-fix-branch
 ```
 * Check out the develop branch.
 ```
-bash git checkout master -f
+git checkout master -f
 ```
 * Delete the local branch.
 ```bash  git branch -D my-fix-branch
