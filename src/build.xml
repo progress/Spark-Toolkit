@@ -183,6 +183,7 @@
 
     <target name="build_ablduck" depends="init_oe">
         <!-- Required for PCT for ABLDuck task. -->
+		<!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
         <typedef resource="types.properties" classpath="tools/PCT.jar"/>
         <taskdef resource="extras115.properties" classpath="tools/PCT.jar"/>
 
@@ -218,6 +219,7 @@
 
     <target name="build_pctdoc" depends="init_oe">
         <!-- Required for PCT for ClassDocumentation task. -->
+		<!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
         <typedef resource="types.properties" classpath="tools/PCT.jar"/>
         <taskdef resource="extras115.properties" classpath="tools/PCT.jar"/>
 
