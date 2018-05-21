@@ -22,7 +22,7 @@ While the Spark library *may* be used in **Classic AppServer** situations, use o
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.
 6. If intending to utilize OERealm security, copy the `/cfg/Realm/SparkRealm.json` file to `CATALINA_BASE/conf/spark/` and `/cfg/Realm/SparkRealm.cp` to `CATALINA_BASE/common/lib/`.
 
-**Note:** If using 11.7.2 or later, the CCS classes are now included in the core OpenEdge language. However, the available build did not have both source and r-code present. In addition, there was a typo that prevented one Spark class from compiling correct in PMFO but will be fixed in 11.7.3.
+**Note:** If using 11.7.2 or later, the CCS classes are now included in the OpenEdge product. However, the released SP2 build contained a typo which prevented one Spark class from compiling correctly in PMFO, and has since been fixed in 11.7.3. The provided CCS r-code is located in the DLC/gui/OpenEdge.BusinessLogic.pl library. Note that source code is not included within the product-bundled PL file, but does exist within the Ccs.pl provided within the Spark-Server repository (located in /dist/).
 
 
 ## Contributions / Changes
