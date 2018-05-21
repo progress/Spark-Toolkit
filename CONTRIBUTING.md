@@ -79,8 +79,10 @@ git push origin --delete my-fix-branch
 git checkout master -f
 ```
 * Delete the local branch.
-```bash  git branch -D my-fix-branch
+```
+git branch -D my-fix-branch
 ```
 * Update your develop branch with the latest upstream version.
-``` git pull --ff upstream master
+```
+git pull --ff upstream master
 ```
