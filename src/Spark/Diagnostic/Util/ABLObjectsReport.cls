@@ -441,7 +441,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return.
+                end.
+
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -508,7 +513,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return. /* No data to return. */
+                end.
+
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -581,7 +591,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return false.
+                end.
+
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -657,7 +672,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return false.
+                end.
+
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -738,7 +758,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return false.
+                end.
+
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 
@@ -855,7 +880,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
-            if file-info:full-pathname ne ? and file-info:file-size gt 0 then do:
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return false.
+                end.
+
                 assign oParser = new ObjectModelParser().
                 assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
 

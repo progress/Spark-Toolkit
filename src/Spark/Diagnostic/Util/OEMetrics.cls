@@ -346,8 +346,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             if piExecThreshold eq ? or piExecThreshold lt 0 then assign piExecThreshold = 0.
             if iExecTime gt piExecThreshold then do:
                 /* Execution time threshold met, output the profiler data. */
-                oLogger:Info(substitute("&1 | &2ms | &3",
-                                        this-object:GetProcedureName(), iExecTime, profiler:file-name)).
+                oLogger:Info(substitute("&1 | &2ms | R&3 | A&4 | S&5",
+                                        this-object:GetProcedureName(), iExecTime, this-object:RequestCount,
+                                        this-object:GetAgentID(), this-object:GetSessionID())).
                 profiler:write-data().
             end. /* iExecTime gt piExecThreshold */
             else
@@ -678,7 +679,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oABLObjectsReport:GetSessions(input piAgentID, output oSessions).
 
         /* Output the report to a known location on disk for review/archival. */
-        oSessions:WriteFile(this-object:GetSessionPath(piAgentID), true).
+        if valid-object(oSessions) and oSessions:Length gt 0 then
+            oSessions:WriteFile(this-object:GetSessionPath(piAgentID), true).
     end method. /* GetSessionMetrics */
 
 
