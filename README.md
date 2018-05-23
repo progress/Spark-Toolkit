@@ -1,11 +1,11 @@
 # Progress Spark Toolkit
 
-Primarily a server-side tookit to aid in creating an application providing RESTful API's for microservices.
+Primarily a server-side toolkit to aid in creating an application providing RESTful API's for microservices.
 
 
 ## Requirements
 
-OpenEge 11.7.2 or later (compatible back to 11.6.3)
+OpenEdge 11.7.2 or later (compatible back to 11.6.3)
 
 Apache Ant 1.9.x+ (now included with OE 11.7.0)
 
@@ -15,7 +15,7 @@ Apache Ant 1.9.x+ (now included with OE 11.7.0)
 While the Progress Spark Toolkit library *may* be used in **Classic AppServer** situations, use of the **Progress Application Server** (PAS) is the intended server for deployment of applications utilizing the included library. In other words, projects utilizing the framework are expected to be of type "ABL Web App" and deployed to a PAS instance with exposed Data Services.
 
 
-1. Copy the files `/dist/PMFO.pl` and `/dist/Ccs.pl` to your project's AppServer directory.
+1. Copy the files `/dist/Spark.pl` and `/dist/Ccs.pl` to your project's AppServer directory.
 2. Add the procedure libraries to the PROPATH of your project.
 3. At deployment, copy the PL's into the `CATALINA_BASE/openedge` folder of your PAS instance.
 4. Add the procedure libraries to the PROPATH of your server instance.
