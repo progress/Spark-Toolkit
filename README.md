@@ -1,6 +1,6 @@
-# Spark Server Library
+# Progress Spark Toolkit
 
-Server-side library to aid in creating an application providing RESTful API's for microservices.
+Primarily a server-side tookit to aid in creating an application providing RESTful API's for microservices.
 
 
 ## Requirements
@@ -12,7 +12,7 @@ Apache Ant 1.9.x+ (now included with OE 11.7.0)
 
 ## Project Usage
 
-While the Spark library *may* be used in **Classic AppServer** situations, use of the **Progress Application Server** (PAS) is the intended server for deployment of applications utilizing the included library. In other words, projects utilizing the framework are expected to be of type "ABL Web App" and deployed to a PAS instance with exposed Data Services.
+While the Progress Spark Toolkit library *may* be used in **Classic AppServer** situations, use of the **Progress Application Server** (PAS) is the intended server for deployment of applications utilizing the included library. In other words, projects utilizing the framework are expected to be of type "ABL Web App" and deployed to a PAS instance with exposed Data Services.
 
 
 1. Copy the files `/dist/PMFO.pl` and `/dist/Ccs.pl` to your project's AppServer directory.
@@ -22,7 +22,7 @@ While the Spark library *may* be used in **Classic AppServer** situations, use o
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.
 6. If intending to utilize OERealm security, copy the `/cfg/Realm/SparkRealm.json` file to `CATALINA_BASE/conf/spark/` and `/cfg/Realm/SparkRealm.cp` to `CATALINA_BASE/common/lib/`.
 
-**Note:** If using 11.7.2 or later, the CCS classes are now included in the OpenEdge product. However, the released SP2 build contained a typo which prevented one Spark class from compiling correctly in PMFO, and has since been fixed in 11.7.3. The provided CCS r-code is located in the DLC/gui/OpenEdge.BusinessLogic.pl library. Note that source code is not included within the product-bundled PL file, but does exist within the Ccs.pl provided within the Spark-Server repository (located in /dist/).
+**Note:** If using 11.7.2 or later, the CCS classes are now included in the OpenEdge product. However, the released SP2 build contained a typo which prevented one Spark class from compiling correctly in PMFO, and has since been fixed in 11.7.3. The provided CCS r-code is located in the DLC/gui/OpenEdge.BusinessLogic.pl library. Note that source code is not included within the product-bundled PL file, but does exist within the Ccs.pl provided within the Spark-Toolkit repository (located in /dist/).
 
 
 ## Contributions / Changes
