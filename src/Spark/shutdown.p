@@ -89,10 +89,11 @@ catch err as Progress.Lang.Error:
 end catch.
 
 procedure logObjects private:
-    define variable hTemp  as handle               no-undo.
-    define variable oTemp  as Progress.Lang.Object no-undo.
-    define variable iCount as integer              no-undo.
-    define variable cFile  as character            no-undo.
+    define variable hTemp    as handle                      no-undo.
+    define variable oTemp    as Progress.Lang.Object        no-undo.
+    define variable iCount   as integer                     no-undo.
+    define variable cFile    as character                   no-undo.
+    define variable oRequest as Progress.Lang.OERequestInfo no-undo.
 
     empty temp-table ttServerObjects.
 
@@ -176,7 +177,13 @@ procedure logObjects private:
         oTemp = oTemp:next-sibling.
     end.
 
-    cFile = session:temp-directory + "agentSessionDump-" + guid(generate-uuid) + ".txt".
+    /* Create output file using current Agent PID and Session ID. */
+    assign oRequest = cast(session:current-request-info, Progress.Lang.OERequestInfo).
+    assign cFile = substitute("&1/MemDump_A&2_S&3.txt",
+                              right-trim(replace(session:temp-directory, "~\", "~/"), "~/"),
+                              oRequest:AgentId, oRequest:SessionId).
+    delete object oRequest no-error.
+
     output to value(cFile).
     for each ttServerObjects no-lock:
         iCount = iCount + 1.
