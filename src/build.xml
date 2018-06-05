@@ -136,7 +136,7 @@
             </propath>
             <fileset dir="${src.dir}">
                 <include name="Spark/Diagnostic/Util/*.cls"/>
-				<include name="Spark/Diagnostic/Interfaces/*.p"/>
+				<include name="Spark/Diagnostic/Interface/*.p"/>
 				<include name="Spark/Diagnostic/*.p"/>
             </fileset>
         </PCTCompile>
@@ -347,7 +347,7 @@
         <PCTLibrary destfile="${build.out}/Diagnostic.pl" dlcHome="${dlcHome}">
             <fileset dir="${src.dir}">
                 <include name="Spark/Diagnostic/**/*.cls"/>
-				<include name="Spark/Diagnostic/*.p"/>
+				<include name="Spark/Diagnostic/**/*.p"/>
             </fileset>
         </PCTLibrary>
     </target>
