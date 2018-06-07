@@ -260,7 +260,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         this-object:RefreshConfig(). /* Update configuration options. */
 
         if not this-object:ProfilerEnabled then do:
-            oLogger:Debug(substitute("Profiler disabled, leaving &1", pcMethodName)).
+            oLogger:Trace(substitute("Profiler disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
 

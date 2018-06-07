@@ -762,8 +762,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /**
          * Send the request to obtain the report by either local (JMX/OEM)
          * or remote (apsv) means. If using remote, the same code will be
-         * utilized though hopefully in an asynchronous way.
+         * utilized via APSV, ideally in an asynchronous way.
          */
+        oLogger:Debug(substitute("Preparing reports for Agent '&1', Session '&2'",
+                                 piAgentID, piSessionID)).
 
         /* Check if object reporting is allowed, based on flags and scheduled time. */
         if not oConfig:AreObjectsEnabled("PrepareSessionABLObjectReport") then return.
