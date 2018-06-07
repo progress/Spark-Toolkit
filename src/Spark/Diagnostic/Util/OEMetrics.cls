@@ -346,13 +346,13 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             if piExecThreshold eq ? or piExecThreshold lt 0 then assign piExecThreshold = 0.
             if iExecTime gt piExecThreshold then do:
                 /* Execution time threshold met, output the profiler data. */
-                oLogger:Info(substitute("&1 | &2ms | R&3 | A&4 | S&5",
-                                        this-object:GetProcedureName(), iExecTime, this-object:RequestCount,
-                                        this-object:GetAgentID(), this-object:GetSessionID())).
+                oLogger:Debug(substitute("&1 | &2ms | R&3 | A&4 | S&5",
+                                         this-object:GetProcedureName(), iExecTime, this-object:RequestCount,
+                                         this-object:GetAgentID(), this-object:GetSessionID())).
                 profiler:write-data().
             end. /* iExecTime gt piExecThreshold */
             else
-                oLogger:Debug(substitute("&1 | &2ms | -Threshold Not Met; No Profiler Output-",
+                oLogger:Trace(substitute("&1 | &2ms | -Threshold Not Met; No Profiler Output-",
                                          this-object:GetProcedureName(), iExecTime)).
 
             return true.
@@ -700,19 +700,20 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         define variable dNextObjectOutput as datetime no-undo initial ?.
         if oConfig:ObjectsOutputInterval gt 0 then do:
+            /* Check when reports were last output. */
             if dLastReportOutput eq ? then do:
                 assign
                     dLastReportOutput = now /* Begin the next reporting interval as of right now. */
                     dNextObjectOutput = add-interval(now, oConfig:ObjectsOutputInterval, "milliseconds")
                     .
-            end.
+            end. /* No Previous Interval Recorded */
             else
                 assign dNextObjectOutput = add-interval(dLastReportOutput,
                                                         oConfig:ObjectsOutputInterval,
                                                         "milliseconds").
         end. /* oConfig:ObjectsOutputInterval gt 0 */
         else
-            assign dNextObjectOutput = now.
+            assign dNextObjectOutput = now. /* Prepare reports immediately. */
 
         /* Request report output if current time is equal/greater than the next expected interval. */
         if now ge dNextObjectOutput then do:
@@ -722,6 +723,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             /* Run the report request via APSV call or locally. */
             if oConfig:ObjectsUseAPSV then
             do on error undo, throw:
+                oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2' via APSV.",
+                                         this-object:GetAgentID(), this-object:GetSessionID())).
                 if this-object:GetConnection() then do:
                     run "Spark/Diagnostic/Interface/PrepareSessionReports.p" on server hServer
                         asynchronous set hAsync (this-object:GetAgentID(),
@@ -733,14 +736,24 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
                 catch err as Progress.Lang.Error:
                     oLogger:Error(substitute("Error in APSV request: &1", err:GetMessage(1))).
+                    undo, throw err.
                 end catch.
             end. /* Use APSV */
-            else
+            else do:
+                oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2' directly.",
+                                         this-object:GetAgentID(), this-object:GetSessionID())).
                 this-object:PrepareSessionReports(this-object:GetAgentID(), this-object:GetSessionID()).
+            end.
         end. /* Do Output */
         else
             oLogger:Debug(substitute("Time Until Next Report Interval: &1s",
                                      interval(dNextObjectOutput, now, "seconds"))).
+
+        catch err as Progress.Lang.Error:
+            oLogger:Error(substitute("Unable to check last report output for Agent '&1', Session '&2': &3",
+                                     this-object:GetAgentID(), this-object:GetSessionID(), err:GetMessage(1))).
+            undo, throw err.
+        end catch.
     end method. /* PrepareSessionReports */
 
 
@@ -763,7 +776,13 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         this-object:GetSessionABLObjects(piAgentID, piSessionID). /* ABLObjects */
         if oConfig:ObjectsTrackMem then
             this-object:GetSessionMetrics(piAgentID). /* Memory, etc. */
-        this-object:OutputTime = ?. /* Reset timestamp. */
+        this-object:OutputTime = ?. /* Reset output timestamp. */
+
+        catch err as Progress.Lang.Error:
+            oLogger:Error(substitute("Unable to prepare reports for Agent '&1', Session '&2': &3",
+                                     piAgentID, piSessionID, err:GetMessage(1))).
+            undo, throw err.
+        end catch.
     end method. /* PrepareSessionReports */
 
 end class.

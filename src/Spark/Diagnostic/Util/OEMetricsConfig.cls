@@ -269,12 +269,13 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method public logical OnValidSchedule ():
+        /* Determine if polling is controled by start/stop datetime values. */
         if this-object:PollingStartTime ne ? and this-object:PollingStopTime ne ? then do:
             /* Do not allow polling outside of scheduled start/stop times. */
             if now lt this-object:PollingStartTime then return false. /* Before Start */
             if now gt this-object:PollingStopTime then return false. /* After Stop */
         end. /* has polling schedule */
 
-        return true.
+        return true. /* Assuming polling active if no specific timestamps present. */
     end method. /* CheckSchedule */
 end class.
