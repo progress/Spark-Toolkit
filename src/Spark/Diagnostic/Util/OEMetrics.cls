@@ -417,6 +417,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:AreObjectsEnabled("StartTrackingObjects") then return false.
         if not oConfig:OnValidSchedule() then return false.
 
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+
         define variable lIsTracking as logical   no-undo initial false.
         define variable cTrackFlag  as character no-undo.
 
@@ -463,6 +466,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         if not oConfig:AreObjectsEnabled("StopTrackingObjects") then return false.
 
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+
         /* Remove the agent flag when tracking is stopped. */
         define variable cTrackFlag as character no-undo.
         assign cTrackFlag = oConfig:GetTrackingFlag(piAgentID).
@@ -483,6 +489,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Check if object reporting is allowed, based on flags and scheduled time. */
         if not oConfig:AreObjectsEnabled("GetABLObjects") then return false.
         if not oConfig:OnValidSchedule() then return false.
+
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
 
         define variable iAgentID   as integer    no-undo.
         define variable iCount     as integer    no-undo.
@@ -532,6 +541,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          * are many agents configured per PAS instance.
          */
 
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+
         define variable oAgent   as JsonObject no-undo.
         define variable cAgentID as character  no-undo.
         define variable iCount   as integer    no-undo.
@@ -573,6 +585,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Check if object reporting is allowed, based on flags and scheduled time. */
         if not oConfig:AreObjectsEnabled("GetAllABLObjectsReport") then return false.
         if not oConfig:OnValidSchedule() then return false.
+
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
 
         /* Get the agents if object is not present. */
         if not valid-object(ABLObjectsReport:AgentList) then oABLObjectsReport:GetAgents().
@@ -632,6 +647,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:AreObjectsEnabled("GetAllABLObjectsReport") then return false.
         if not oConfig:OnValidSchedule() then return false.
 
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+
         assign cProcedure = this-object:GetProcedureName().
         if (oConfig:PollingIgnoreList gt "") eq true then do:
             /* Do not proceed if current request procedure is on the ignore list. */
@@ -674,6 +692,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Check if object reporting is allowed, based on flags and scheduled time. */
         if not oConfig:AreObjectsEnabled("GetSessionMetrics") then return.
         if not oConfig:OnValidSchedule() then return.
+
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
 
         /* Obtain the current list of sessions for this agent. */
         oABLObjectsReport:GetSessions(input piAgentID, output oSessions).

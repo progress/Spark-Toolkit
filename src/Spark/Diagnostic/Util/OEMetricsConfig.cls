@@ -57,6 +57,10 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     /*** Public Properties ***/
 
+    define private property OEManagerUser as character no-undo initial "" get. set.
+
+    define private property OEManagerPass as character no-undo initial "" get. set.
+
     define public property PollingIgnoreList as character no-undo initial "" get. private set.
 
     define public property PollingStartTime as datetime no-undo initial ? get. private set.
@@ -158,6 +162,12 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                             if oSubObj:Has("exclude") and oSubObj:GetType("exclude") eq JsonDataType:String then
                                 assign this-object:ObjectsExcluded = oSubObj:GetCharacter("exclude").
 
+                            if oSubObj:Has("oemUser") and oSubObj:GetType("oemUser") eq JsonDataType:String then
+                                assign this-object:OEManagerUser = oSubObj:GetCharacter("oemUser").
+
+                            if oSubObj:Has("oemPass") and oSubObj:GetType("oemPass") eq JsonDataType:String then
+                                assign this-object:OEManagerPass = oSubObj:GetCharacter("oemPass").
+
                             if oSubObj:Has("outputInterval") and oSubObj:GetType("outputInterval") eq JsonDataType:Number then
                                 assign this-object:ObjectsOutputInterval = oSubObj:GetInteger("outputInterval").
 
@@ -235,6 +245,16 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
             end. /* File Changed */
         end. /* File Exists */
     end method. /* CheckConfig */
+
+
+    method public void UpdateCredentialsOEM ( input poABLObjectsReport as Spark.Diagnostic.Util.ABLObjectsReport ):
+        if can-do("oem,oemanager", this-object:ObjectsSource) then do:
+            if (this-object:OEManagerUser gt "") eq true then
+                assign poABLObjectsReport:ManagerUsername = this-object:OEManagerUser.
+            if (this-object:OEManagerPass gt "") eq true then
+                assign poABLObjectsReport:ManagerPassword = this-object:OEManagerPass.
+        end. /* Using OEM */
+    end method. /* UpdateCredentialsOEM */
 
 
     method public character GetTrackingFlag ( input piAgentID as integer ):

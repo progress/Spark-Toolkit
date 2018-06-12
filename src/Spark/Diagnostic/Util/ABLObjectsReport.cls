@@ -77,25 +77,25 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
     define private property GetAgentSessionURI as character no-undo
         initial "/applications/&1/agents/&2/sessions" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/trackABLObjects/true */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/trackABLObjects/true */
     define private property TrackObjectsOn as character no-undo
         initial "/trackABLObjects/true" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/trackABLObjects/false */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/trackABLObjects/false */
     define private property TrackObjectsOff as character no-undo
         initial "/trackABLObjects/false" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/trackingABLObjects */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/trackingABLObjects */
     define private property TrackingObjects as character no-undo
         initial "/trackingABLObjects" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/getABLObjectsReport */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/getABLObjectsReport */
     define private property GetObjectsReport as character no-undo
         initial "/getABLObjectsReport" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/getABLObjectsReport/sessions/<sess_id> */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/getABLObjectsReport/sessions/<sess_id> */
     define private property GetSessionObjectsReport as character no-undo
-        initial "/getABLObjectsReport/sessions/&1" get. set.
+        initial "/getABLObjectsReport/sessions/&3" get. set.
 
     /*** OEJMX Properties ***/
 
@@ -547,7 +547,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
                                             this-object:GetAgentSessionURI).
 
             /* Set request with PAS instance name. */
-            assign cRequestURI = substitute(cRequestURI, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
@@ -919,7 +919,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
                                             this-object:GetAgentURI, this-object:GetSessionObjectsReport).
 
             /* Replace PAS instance name and specific Agent ID. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID, piSessionID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
