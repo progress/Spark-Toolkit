@@ -1,10 +1,19 @@
 /*------------------------------------------------------------------------
     File        : OEMetrics
     Purpose     : Gather and report OE metrics for the current PAS instance
-    Description :
+    Description : Utilizes JMX or OEManager queries to get PAS metrics
     Author(s)   : Dustin Grau (dugrau@progress.com)
     Created     : Wed Apr 25 13:58:59 EDT 2018
-    Notes       : Provides front-end methods to enable/disable features
+    Notes       : Provides front-end methods to enable/disable features for
+                  tracking metrics in a PASOE environment. For ABLObjects
+                  the report must be requested at an application boundary,
+                  meaning a point at the end of a request where all normal
+                  cleanup has been performed and before the session is made
+                  available for the next request. Depends on a configuration
+                  file at CATALINA_BASE/bin/metrics_config.json to run the
+                  necessary features. The name of this file is set in the
+                  related metrics_setenv.[bat|sh] files which must also be
+                  placed in the CATALINA_BASE/bin directory.
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.* from propath.
@@ -18,10 +27,6 @@ block-level on error undo, throw.
 class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-widget-pool final:
 
     define private variable dLastReportOutput as datetime no-undo initial ?.
-
-    define private variable hServer as handle no-undo.
-
-    define private variable hAsync as handle no-undo.
 
     /*** Static Instance ***/
 
@@ -75,18 +80,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         os-create-dir value(substitute("&1/metrics/ABLObjects", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/ProfilerData", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/SessionData", this-object:TemporaryDir)).
-
-        create server hServer. /* For potential use with APSV requests. */
     end constructor.
 
 
     destructor OEMetrics ( ):
-        if valid-handle(hServer) and hServer:connected() then do:
-            delete object hAsync no-error.
-            hServer:disconnect().
-            delete object hServer no-error.
-        end. /* hServer */
-
         delete object oConfig no-error.
         delete object oLogger no-error.
         delete object oABLObjectsReport no-error.
@@ -199,21 +196,6 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             delete object oRequestInfo no-error.
         end finally.
     end method. /* GetSessionID */
-
-
-    method private logical GetConnection ( ):
-        if not valid-handle(hServer) or not valid-object(oConfig) then return false.
-
-        if oConfig:ObjectsUseAPSV and not hServer:connected() then do:
-            define variable cServerConn as character no-undo initial "".
-
-            assign cServerConn = substitute("-URL &1 -sessionModel Session-managed", oConfig:ObjectsApsvURI).
-
-            hServer:connect(cServerConn).
-        end. /* ObjectsUseAPSV */
-
-        return hServer:connected().
-    end method. /* GetConnection */
 
 
     /***** Public Methods *****/
@@ -373,33 +355,14 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     method public logical StartTrackingObjects ( ):
         /**
-         * Send the request to obtain the report by either local (JMX/OEM)
-         * or remote (apsv) means. If using remote, the same code will be
-         * utilized though hopefully in an asynchronous way.
+         * Send the request to obtain the report by either local (JMX/OEM).
          */
 
         /* Check if object reporting is allowed, based on flags and scheduled time. */
         if not oConfig:AreObjectsEnabled("StartTrackingObjects") then return false.
         if not oConfig:OnValidSchedule() then return false.
 
-        if oConfig:ObjectsUseAPSV then
-        do on error undo, throw:
-            if this-object:GetConnection() then do:
-                run "Spark/Diagnostic/Interface/StartTrackingObjects.p" on server hServer
-                    asynchronous set hAsync (this-object:GetAgentID(), this-object:GetProcedureName()) no-error.
-                if error-status:error then
-                    oLogger:Error(substitute("Error creating async handle: &1", error-status:get-message(1))).
-
-                return true.
-            end. /* Has Connection */
-
-            catch err as Progress.Lang.Error:
-                oLogger:Error(substitute("Error in APSV request: &1", err:GetMessage(1))).
-                return false.
-            end catch.
-        end. /* Use APSV */
-        else /* When no parameters passed, use the current agent ID. */
-            return this-object:StartTrackingObjects(this-object:GetAgentID(), this-object:GetProcedureName()).
+        return this-object:StartTrackingObjects(this-object:GetAgentID(), this-object:GetProcedureName()).
     end method. /* StartTrackingObjects */
 
 
@@ -679,9 +642,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     method public void GetSessionMetrics ( input piAgentID as integer ):
         /**
-         * Send the request to obtain session metrics by either local (JMX/OEM)
-         * or remote (apsv) means. If using remote, the same code will be
-         * utilized though hopefully in an asynchronous way.
+         * Send the request to obtain session metrics by either local (JMX/OEM).
          */
 
         define variable oSessions as JsonArray.
@@ -741,30 +702,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             /* Immediately update the timestamp to avoid this session requesting the report again. */
             assign dLastReportOutput = now.
 
-            /* Run the report request via APSV call or locally. */
-            if oConfig:ObjectsUseAPSV then
-            do on error undo, throw:
-                oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2' via APSV.",
-                                         this-object:GetAgentID(), this-object:GetSessionID())).
-                if this-object:GetConnection() then do:
-                    run "Spark/Diagnostic/Interface/PrepareSessionReports.p" on server hServer
-                        asynchronous set hAsync (this-object:GetAgentID(),
-                                                 this-object:GetSessionID()) no-error.
-                    if error-status:error then
-                        oLogger:Error(substitute("Error creating async handle: &1",
-                                                 error-status:get-message(1))).
-                end. /* Has Connection */
-
-                catch err as Progress.Lang.Error:
-                    oLogger:Error(substitute("Error in APSV request: &1", err:GetMessage(1))).
-                    undo, throw err.
-                end catch.
-            end. /* Use APSV */
-            else do:
-                oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2' directly.",
-                                         this-object:GetAgentID(), this-object:GetSessionID())).
-                this-object:PrepareSessionReports(this-object:GetAgentID(), this-object:GetSessionID()).
-            end.
+            oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2' directly.",
+                                     this-object:GetAgentID(), this-object:GetSessionID())).
+            this-object:PrepareSessionReports(this-object:GetAgentID(), this-object:GetSessionID()).
         end. /* Do Output */
         else
             oLogger:Debug(substitute("Time Until Next Report Interval: &1s",
@@ -781,9 +721,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     method public void PrepareSessionReports ( input piAgentID   as integer,
                                                input piSessionID as integer ):
         /**
-         * Send the request to obtain the report by either local (JMX/OEM)
-         * or remote (apsv) means. If using remote, the same code will be
-         * utilized via APSV, ideally in an asynchronous way.
+         * Send the request to obtain the report by either local (JMX/OEM).
          */
         oLogger:Debug(substitute("Preparing reports for Agent '&1', Session '&2'",
                                  piAgentID, piSessionID)).

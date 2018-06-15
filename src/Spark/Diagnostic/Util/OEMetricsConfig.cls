@@ -73,8 +73,6 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     define public property ProfilerThreshold as integer no-undo initial 0 get. private set.
 
-    define public property ObjectsApsvURI as character no-undo initial "" get. private set.
-
     define public property ObjectsEnabled as logical no-undo initial false get. private set.
 
     define public property ObjectsExcluded as character no-undo initial "" get. private set.
@@ -84,8 +82,6 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
     define public property ObjectsSource as character no-undo initial "oejmx" get. private set.
 
     define public property ObjectsTrackMem as logical no-undo initial false get. private set.
-
-    define public property ObjectsUseAPSV as logical no-undo initial false get. private set.
 
 
     /***** Constructor/Destructor *****/
@@ -153,9 +149,6 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                         if oConfig:Has("objects") and oConfig:GetType("objects") eq JsonDataType:Object then do:
                             assign oSubObj = oConfig:GetJsonObject("objects").
 
-                            if oSubObj:Has("apsvURI") and oSubObj:GetType("apsvURI") eq JsonDataType:String then
-                                assign this-object:ObjectsApsvURI = oSubObj:GetCharacter("apsvURI").
-
                             if oSubObj:Has("enabled") and oSubObj:GetType("enabled") eq JsonDataType:Boolean then
                                 assign this-object:ObjectsEnabled = oSubObj:GetLogical("enabled").
 
@@ -174,15 +167,8 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                             if oSubObj:Has("source") and oSubObj:GetType("source") eq JsonDataType:String then
                                 assign this-object:ObjectsSource = oSubObj:GetCharacter("source").
 
-                            if oSubObj:Has("useAPSV") and oSubObj:GetType("useAPSV") eq JsonDataType:Boolean then
-                                assign this-object:ObjectsUseAPSV = oSubObj:GetLogical("useAPSV").
-
                             if oSubObj:Has("trackMemory") and oSubObj:GetType("trackMemory") eq JsonDataType:Boolean then
                                 assign this-object:ObjectsTrackMem = oSubObj:GetLogical("trackMemory").
-
-                            /* Cannot use APSV if no URI has been provided. */
-                            if (this-object:ObjectsApsvURI gt "") ne true then
-                                assign this-object:ObjectsUseAPSV = false.
 
                             delete object oSubObj no-error.
                         end. /* has sub-object */
