@@ -20,7 +20,7 @@ using Progress.Lang.* from propath.
 using Progress.Json.ObjectModel.* from propath.
 using OpenEdge.Core.Assert from propath.
 using OpenEdge.Logging.* from propath.
-using Spark.Diagnostic.Util.ABLObjectsReport from propath.
+using Spark.Diagnostic.Util.RemoteMetrics from propath.
 
 block-level on error undo, throw.
 
@@ -57,11 +57,11 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         end get.
         set.
 
-    define private property oABLObjectsReport as ABLObjectsReport no-undo
+    define private property oRemoteMetrics as RemoteMetrics no-undo
         get():
-            if oABLObjectsReport eq ? or not valid-object(oABLObjectsReport) then
-                assign oABLObjectsReport = new ABLObjectsReport(oConfig:ObjectsSource).
-            return oABLObjectsReport.
+            if oRemoteMetrics eq ? or not valid-object(oRemoteMetrics) then
+                assign oRemoteMetrics = new RemoteMetrics(oConfig:RemoteSource).
+            return oRemoteMetrics.
         end get.
         set.
 
@@ -79,6 +79,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Make sure any necessary subdirectories are created. */
         os-create-dir value(substitute("&1/metrics/ABLObjects", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/ProfilerData", this-object:TemporaryDir)).
+        os-create-dir value(substitute("&1/metrics/Requests", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics/SessionData", this-object:TemporaryDir)).
     end constructor.
 
@@ -86,12 +87,32 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     destructor OEMetrics ( ):
         delete object oConfig no-error.
         delete object oLogger no-error.
-        delete object oABLObjectsReport no-error.
+        delete object oRemoteMetrics no-error.
         delete object Instance no-error.
     end destructor.
 
 
     /***** Private Methods *****/
+
+
+    method private character GetRequestPath ( input piAgentID as integer ):
+        define variable cBasePath as character no-undo.
+
+        /* Assemble base path for output and create any needed directories. */
+        assign cBasePath = substitute("&1/metrics/Requests/&2", this-object:TemporaryDir, piAgentID).
+        os-create-dir value(cBasePath).
+
+        if this-object:OutputTime ne ? then
+            return substitute("&1/&2.&3_A&4.json",
+                              cBasePath,
+                              iso-date(date(this-object:OutputTime)),
+                              mtime(this-object:OutputTime), piAgentID).
+        else
+            return substitute("&1/&2.&3_A&4.json",
+                              cBasePath,
+                              iso-date(now),
+                              mtime(now), piAgentID).
+    end method. /* GetRequestPath */
 
 
     method private character GetSessionPath ( input piAgentID as integer ):
@@ -381,7 +402,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:OnValidSchedule() then return false.
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         define variable lIsTracking as logical   no-undo initial false.
         define variable cTrackFlag  as character no-undo.
@@ -402,8 +423,14 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             oLogger:Debug(substitute("Tracking Agent #&1: &2", piAgentID, lIsTracking)).
         end. /* file exists */
 
-        if not lIsTracking then /* Turn on tracking if not already, and get latest result. */
-            assign lIsTracking = oABLObjectsReport:TrackABLObjects(piAgentID, true).
+        if not lIsTracking then do:
+            /* Turn on tracking if not already enabled, and record the latest result. */
+            assign lIsTracking = oRemoteMetrics:TrackABLObjects(piAgentID, true).
+            
+            /* Also begin tracking requests by making an initial call to this endpoint. */
+            if oConfig:AreRequestsEnabled("StartTrackingObjects") then
+                this-object:GetRequestMetrics(piAgentID).
+        end. /* not lIsTracking */
 
         /* Remember whether objects are being tracked for this agent. */
         if lIsTracking then do:
@@ -430,7 +457,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:AreObjectsEnabled("StopTrackingObjects") then return false.
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         /* Remove the agent flag when tracking is stopped. */
         define variable cTrackFlag as character no-undo.
@@ -440,7 +467,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             os-delete value(file-info:full-pathname).
 
         /* Just immediately disable the object tracking for this agent. */
-        return oABLObjectsReport:TrackABLObjects(this-object:GetAgentID(), false).
+        return oRemoteMetrics:TrackABLObjects(this-object:GetAgentID(), false).
     end method. /* StopTrackingObjects */
 
 
@@ -454,7 +481,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:OnValidSchedule() then return false.
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         define variable iAgentID   as integer    no-undo.
         define variable iCount     as integer    no-undo.
@@ -475,9 +502,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         assign iAgentID = this-object:GetAgentID(). /* Obtain the current AgentID. */
 
         /* Request the current ABLObjects report for this agent. */
-        if oABLObjectsReport:FilterABLObjectReport(input  iAgentID,
-                                                   input  oConfig:ObjectsExcluded,
-                                                   output oObjReport) then do:
+        if oRemoteMetrics:FilterABLObjectReport(input  iAgentID,
+                                                input  oConfig:ClassesExcluded,
+                                                output oObjReport) then do:
             /* Output a file for each session in the report. */
             assign cSessionID = oObjReport:GetNames().
             do iCount = 1 to extent(cSessionID):
@@ -505,7 +532,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          */
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         define variable oAgent   as JsonObject no-undo.
         define variable cAgentID as character  no-undo.
@@ -513,16 +540,16 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         define variable lSuccess as logical    no-undo initial false.
 
         /* Get the agents if object is not present. */
-        if not valid-object(ABLObjectsReport:AgentList) then oABLObjectsReport:GetAgents().
+        if not valid-object(RemoteMetrics:AgentList) then oRemoteMetrics:GetAgents().
 
         /* Make request to all agents of this ABLApp. */
-        do iCount = 1 to ABLObjectsReport:AgentList:Length:
+        do iCount = 1 to RemoteMetrics:AgentList:Length:
             /* Set request with PAS instance name and specific Agent ID. */
-            assign oAgent = ABLObjectsReport:AgentList:GetJsonObject(iCount).
+            assign oAgent = RemoteMetrics:AgentList:GetJsonObject(iCount).
             if valid-object(oAgent) and oAgent:Has("pid") then do:
                 /* Set the tracking option for this agent. */
                 assign cAgentID = oAgent:GetCharacter("pid").
-                if oABLObjectsReport:TrackABLObjects(integer(cAgentID), plEnable) then
+                if oRemoteMetrics:TrackABLObjects(integer(cAgentID), plEnable) then
                     assign lSuccess = true.
             end. /* has agentId */
         end. /* do iCount */
@@ -550,24 +577,24 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:OnValidSchedule() then return false.
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         /* Get the agents if object is not present. */
-        if not valid-object(ABLObjectsReport:AgentList) then oABLObjectsReport:GetAgents().
+        if not valid-object(RemoteMetrics:AgentList) then oRemoteMetrics:GetAgents().
 
         /* Make request to all agents of this ABLApp. */
-        do iCount = 1 to ABLObjectsReport:AgentList:Length:
+        do iCount = 1 to RemoteMetrics:AgentList:Length:
             /* Set request with PAS instance name and specific Agent ID. */
-            assign oAgent = ABLObjectsReport:AgentList:GetJsonObject(iCount).
+            assign oAgent = RemoteMetrics:AgentList:GetJsonObject(iCount).
             if oAgent:Has("pid") then
             do on error undo, throw:
                 /* Extract the current agent for examination. */
                 assign cAgentID = oAgent:GetCharacter("pid").
 
                 /* Request the ABL objects for this specific agent. */
-                if oABLObjectsReport:FilterABLObjectReport(input  integer(cAgentID),
-                                                           input  oConfig:ObjectsExcluded,
-                                                           output oObjReport) then do:
+                if oRemoteMetrics:FilterABLObjectReport(input  integer(cAgentID),
+                                                        input  oConfig:ClassesExcluded,
+                                                        output oObjReport) then do:
                     /* Output a file for each session in the report. */
                     assign cSessionID = oObjReport:GetNames().
                     do iCount = 1 to extent(cSessionID):
@@ -611,7 +638,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if not oConfig:OnValidSchedule() then return false.
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         assign cProcedure = this-object:GetProcedureName().
         if (oConfig:PollingIgnoreList gt "") eq true then do:
@@ -624,10 +651,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         if piAgentID gt 0 and piSessionID gt 0 then do:
             /* Request the ABL objects for this specific agent and session. */
-            if oABLObjectsReport:FilterSessionABLObjectReport(input  piAgentID,
-                                                              input  piSessionID,
-                                                              input  oConfig:ObjectsExcluded,
-                                                              output oObjReport) then
+            if oRemoteMetrics:FilterSessionABLObjectReport(input  piAgentID,
+                                                           input  piSessionID,
+                                                           input  oConfig:ClassesExcluded,
+                                                           output oObjReport) then
                 /* Output the report to a known location on disk for review/archival. */
                 assign lReturn = oObjReport:WriteFile(this-object:GetObjectsPath(piAgentID, piSessionID), true).
         end. /* Has Agent/Session */
@@ -640,6 +667,33 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     end method. /* GetSessionABLObjects */
 
 
+    method public void GetRequestMetrics ( input piAgentID as integer ):
+        /**
+         * Send the request to obtain request metrics by either local (JMX/OEM).
+         */
+
+        define variable oRequests as JsonArray.
+
+        /* Check if general reporting is allowed, based on flags and scheduled time. */
+        if not oConfig:AreRequestsEnabled("GetRequestMetrics") then return.
+        if not oConfig:OnValidSchedule() then return.
+
+        /* Update username/password for OEM, if enabled. */
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
+
+        /* Obtain the current list of sessions for this agent. */
+        oRemoteMetrics:GetRequestMetrics(input piAgentID, output oRequests).
+
+        /* Output the report to a known location on disk for review/archival. */
+        if valid-object(oRequests) and oRequests:Length gt 0 then
+            oRequests:WriteFile(this-object:GetRequestPath(piAgentID), true).
+
+        finally:
+            delete object oRequests no-error.
+        end finally.
+    end method. /* GetRequestMetrics */
+
+
     method public void GetSessionMetrics ( input piAgentID as integer ):
         /**
          * Send the request to obtain session metrics by either local (JMX/OEM).
@@ -647,22 +701,23 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         define variable oSessions as JsonArray.
 
-        /* Check special flag for session metrics (eg. memory). */
-        if not oConfig:ObjectsTrackMem then return.
-
-        /* Check if object reporting is allowed, based on flags and scheduled time. */
-        if not oConfig:AreObjectsEnabled("GetSessionMetrics") then return.
+        /* Check if session metrics are allowed, based on flags and scheduled time. */
+        if not oConfig:IsMemoryEnabled("GetSessionMetrics") then return.
         if not oConfig:OnValidSchedule() then return.
 
         /* Update username/password for OEM, if enabled. */
-        oConfig:UpdateCredentialsOEM(oABLObjectsReport).
+        oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         /* Obtain the current list of sessions for this agent. */
-        oABLObjectsReport:GetSessions(input piAgentID, output oSessions).
+        oRemoteMetrics:GetSessions(input piAgentID, output oSessions).
 
         /* Output the report to a known location on disk for review/archival. */
         if valid-object(oSessions) and oSessions:Length gt 0 then
             oSessions:WriteFile(this-object:GetSessionPath(piAgentID), true).
+
+        finally:
+            delete object oSessions no-error.
+        end finally.
     end method. /* GetSessionMetrics */
 
 
@@ -676,39 +731,38 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          * when we last output data, and whether it is time to do so again.
          */
 
-        /* Check if object reporting is allowed, based on flags and scheduled time. */
-        if not oConfig:AreObjectsEnabled("PrepareSessionABLObjectReport") then return.
+        /* Check if general reporting is allowed, based on scheduled time. */
         if not oConfig:OnValidSchedule() then return.
 
-        define variable dNextObjectOutput as datetime no-undo initial ?.
-        if oConfig:ObjectsOutputInterval gt 0 then do:
+        define variable dNextReportOutput as datetime no-undo initial ?.
+        if oConfig:OutputInterval gt 0 then do:
             /* Check when reports were last output. */
             if dLastReportOutput eq ? then do:
                 assign
                     dLastReportOutput = now /* Begin the next reporting interval as of right now. */
-                    dNextObjectOutput = add-interval(now, oConfig:ObjectsOutputInterval, "milliseconds")
+                    dNextReportOutput = add-interval(now, oConfig:OutputInterval, "milliseconds")
                     .
             end. /* No Previous Interval Recorded */
             else
-                assign dNextObjectOutput = add-interval(dLastReportOutput,
-                                                        oConfig:ObjectsOutputInterval,
+                assign dNextReportOutput = add-interval(dLastReportOutput,
+                                                        oConfig:OutputInterval,
                                                         "milliseconds").
-        end. /* oConfig:ObjectsOutputInterval gt 0 */
+        end. /* oConfig:OutputInterval gt 0 */
         else
-            assign dNextObjectOutput = now. /* Prepare reports immediately. */
+            assign dNextReportOutput = now. /* Prepare reports immediately. */
 
         /* Request report output if current time is equal/greater than the next expected interval. */
-        if now ge dNextObjectOutput then do:
+        if now ge dNextReportOutput then do:
             /* Immediately update the timestamp to avoid this session requesting the report again. */
             assign dLastReportOutput = now.
 
-            oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2' directly.",
+            oLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2'.",
                                      this-object:GetAgentID(), this-object:GetSessionID())).
             this-object:PrepareSessionReports(this-object:GetAgentID(), this-object:GetSessionID()).
         end. /* Do Output */
         else
             oLogger:Debug(substitute("Time Until Next Report Interval: &1s",
-                                     interval(dNextObjectOutput, now, "seconds"))).
+                                     interval(dNextReportOutput, now, "seconds"))).
 
         catch err as Progress.Lang.Error:
             oLogger:Error(substitute("Unable to check last report output for Agent '&1', Session '&2': &3",
@@ -726,17 +780,23 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oLogger:Debug(substitute("Preparing reports for Agent '&1', Session '&2'",
                                  piAgentID, piSessionID)).
 
-        /* Check if object reporting is allowed, based on flags and scheduled time. */
-        if not oConfig:AreObjectsEnabled("PrepareSessionABLObjectReport") then return.
+        /* Check if reporting is allowed, based scheduled time. */
         if not oConfig:OnValidSchedule() then return.
 
         /* Run the following reports for the given agent/session. */
         this-object:OutputTime = now. /* Synchronize output time. */
         oLogger:Info(substitute("Running reports for Agent '&1', Session '&2' at &3",
                                 piAgentID, piSessionID, this-object:OutputTime)).
-        this-object:GetSessionABLObjects(piAgentID, piSessionID). /* ABLObjects */
-        if oConfig:ObjectsTrackMem then
-            this-object:GetSessionMetrics(piAgentID). /* Memory, etc. */
+
+        if oConfig:AreObjectsEnabled("PrepareSessionABLObjectReport") then
+            this-object:GetSessionABLObjects(piAgentID, piSessionID). /* ABLObjects Report */
+
+        if oConfig:IsMemoryEnabled("PrepareSessionABLObjectReport") then
+            this-object:GetSessionMetrics(piAgentID). /* Session Metrics, eg. Memory */
+
+        if oConfig:AreRequestsEnabled("PrepareSessionABLObjectReport") then
+            this-object:GetRequestMetrics(piAgentID). /* Last 1000 Requests */
+
         this-object:OutputTime = ?. /* Reset output timestamp. */
 
         catch err as Progress.Lang.Error:

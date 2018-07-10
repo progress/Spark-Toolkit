@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
-   File        : ABLObjectsReport
+   File        : RemoteMetrics
    Purpose     : Utilize the OEManager or JMX tools to gather info on
-                 objects which remain in memory after code execution
+                 metrics for the current PASOE instance (agent/session)
    Description :
    Author(s)   : Irfan Syed (isyed@progress.com), Dustin Grau (dugrau@progress.com)
    Created     : Tue Nov 28 14:07:12 EST 2017
@@ -20,7 +20,7 @@ using OpenEdge.Net.HTTP.IAuthenticatedRequest from propath.
 
 block-level on error undo, throw.
 
-class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logger use-widget-pool final:
+class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger use-widget-pool final:
 
     /*** Static Properties ***/
 
@@ -73,6 +73,10 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
     define private property GetAgentURI as character no-undo
         initial "/applications/&1/agents/&2" get. set.
 
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id> */
+    define private property GetRequestsURI as character no-undo
+        initial "/applications/&1/agents/&2/requests" get. set.
+
     /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/sessions */
     define private property GetAgentSessionURI as character no-undo
         initial "/applications/&1/agents/&2/sessions" get. set.
@@ -119,6 +123,11 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
         get. set.
 
     /* Replace with Agent ID (PID) in query. */
+    define private property RequestsQuery as character no-undo
+        initial '~{"O":"PASOE:type=OEManager,name=AgentManager","M":["getRequestMetrics","&1"]~}'
+        get. set.
+
+    /* Replace with Agent ID (PID) in query. */
     define private property TrackOnQuery as character no-undo
         initial '~{"O":"PASOE:type=OEManager,name=AgentManager","M":["trackABLObjects","&1",true]~}'
         get. set.
@@ -147,14 +156,12 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
     /***** Constructor/Destructor *****/
 
 
-    constructor public ABLObjectsReport ( input pcSource as character ):
+    constructor public RemoteMetrics ( input pcSource as character ):
         super().
 
         /* Make sure we have a consistent path for temporary files. */
         os-create-dir value(substitute("&1", this-object:TemporaryDir)).
         os-create-dir value(substitute("&1/metrics", this-object:TemporaryDir)).
-
-        /* Make sure any necessary subdirectories are created. */
         os-create-dir value(substitute("&1/metrics/ABLObjects", this-object:TemporaryDir)).
 
         /* Set the means of obtaining metrics, or a sane default. */
@@ -174,7 +181,7 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
     end constructor.
 
 
-    destructor public ABLObjectsReport ( ):
+    destructor public RemoteMetrics ( ):
         delete object oLogger no-error.
     end destructor.
 
@@ -320,6 +327,8 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
                 assign cQueryString = substitute(this-object:TrackOffQuery, piAgentID).
             when "tracking" then
                 assign cQueryString = substitute(this-object:TrackingQuery, piAgentID).
+            when "requests" then
+                assign cQueryString = substitute(this-object:RequestsQuery, piAgentID).
             when "ablobjects" then
                 assign cQueryString = substitute(this-object:ABLObjectsQuery, piAgentID).
             when "ablsessionobjects" then
@@ -728,6 +737,85 @@ class Spark.Diagnostic.Util.ABLObjectsReport inherits Spark.Diagnostic.Util.Logg
             delete object oRequest no-error.
         end finally.
     end method. /* TrackABLObjects */
+
+
+    method public logical GetRequestMetrics ( input  piAgentID  as integer,
+                                              output poRequests as JsonArray ):
+        define variable oResult as JsonObject no-undo.
+
+        Assert:NonZero(piAgentID).
+
+        if this-object:MetricSource eq "oejmx" then
+        do on error undo, throw:
+            define variable cOutPath as character         no-undo.
+            define variable oParser  as ObjectModelParser no-undo.
+            define variable oResults as JsonObject        no-undo.
+
+            /* Create the query for tracking objects, and invoke the JMX command. */
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("requests", piAgentID)).
+
+            /* Confirm output file exists, and parse the JSON payload. */
+            file-info:file-name = cOutPath.
+            if file-info:full-pathname ne ? then do:
+                if file-info:file-size eq 0 then do:
+                    oLogger:Error(substitute("Encountered Empty File: &1", cOutPath)).
+                    return false.
+                end.
+
+                assign oParser = new ObjectModelParser().
+                assign oResults = cast(oParser:ParseFile(cOutPath), JsonObject).
+
+                if valid-object(oResults) and oResults:Has("getRequestMetrics") then do:
+                    /* Return only a true/false value based on value available. */
+                    assign oResult = oResults:GetJsonObject("getRequestMetrics").
+                end. /* Has Result */
+            end. /* File Exists */
+
+            finally:
+                os-delete value(cOutPath).
+                delete object oParser no-error.
+                delete object oResults no-error.
+            end finally.
+        end. /* oejmx */
+        else if this-object:MetricSource eq "oemanager" then do:
+            define variable cRequestURI as character  no-undo.
+            define variable oRequest    as JsonObject no-undo.
+
+            Assert:NotNullOrEmpty(this-object:InstanceURI).
+
+            /* Build the initial URL, to obtain the tracking flag. */
+            assign cRequestURI = substitute("&1&2&3",
+                                            this-object:InstanceURI, this-object:ManagerURI, this-object:GetRequestsURI).
+
+            /* Replace PAS instance name and specific Agent ID. */
+            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+
+            /* Make the request to the endpoint and parse results. */
+            assign oRequest = this-object:InvokeAPI(cRequestURI).
+            if valid-object(oRequest) and oRequest:Has("result") and
+               oRequest:GetType("result") eq JsonDataType:Object then do:
+                /* Return only a true/false value based on value available. */
+                assign oResult = oRequest:GetJsonObject("result").
+            end. /* Has Result */
+        end. /* oemanager */
+
+        /* Extract requests from the results object. */
+        if valid-object(oResult) and oResult:Has("AgentRequest") and
+           oResult:GetType("AgentRequest") eq JsonDataType:Array then
+            assign poRequests = cast(oResult:GetJsonArray("AgentRequest"):Clone(), JsonArray).
+
+        return valid-object(poRequests).
+
+        catch err as Progress.Lang.Error:
+            oLogger:Error(substitute("Error in GetRequestMetrics: &1", err:GetMessage(1))).
+            undo, throw err.
+        end catch.
+        finally:
+            delete object oRequest no-error.
+            delete object oResults no-error.
+            delete object oResult no-error.
+        end finally.
+    end method. /* GetRequestMetrics */
 
 
     method public logical FilterABLObjectReport ( input  piAgentID as integer,
