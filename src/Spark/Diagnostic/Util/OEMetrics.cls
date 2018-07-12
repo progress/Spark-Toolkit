@@ -376,7 +376,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     method public logical StartTrackingObjects ( ):
         /**
-         * Send the request to obtain the report by either local (JMX/OEM).
+         * Send the request to obtain the report by JMX/OEM.
          */
 
         /* Check if object reporting is allowed, based on flags and scheduled time. */
@@ -425,19 +425,19 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         if not lIsTracking then do:
             /* Turn on tracking if not already enabled, and record the latest result. */
-            assign lIsTracking = oRemoteMetrics:TrackABLObjects(piAgentID, true).
-            
+            assign lIsTracking = oRemoteMetrics:TrackABLObjects(piAgentID, true).            
+
+            /* Remember whether objects are being tracked for this agent. */
+            if lIsTracking then do:
+                output to value(cTrackFlag).
+                /* No output, just touch file. */
+                output close.
+            end. /* Tracking */
+
             /* Also begin tracking requests by making an initial call to this endpoint. */
             if oConfig:AreRequestsEnabled("StartTrackingObjects") then
                 this-object:GetRequestMetrics(piAgentID).
         end. /* not lIsTracking */
-
-        /* Remember whether objects are being tracked for this agent. */
-        if lIsTracking then do:
-            output to value(cTrackFlag).
-            /* No output, just touch file. */
-            output close.
-        end. /* Tracking */
 
         return lIsTracking.
     end method. /* StartTrackingObjects */
@@ -669,7 +669,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     method public void GetRequestMetrics ( input piAgentID as integer ):
         /**
-         * Send the request to obtain request metrics by either local (JMX/OEM).
+         * Send the request to obtain request metrics by JMX/OEM.
          */
 
         define variable oRequests as JsonArray.
@@ -696,7 +696,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     method public void GetSessionMetrics ( input piAgentID as integer ):
         /**
-         * Send the request to obtain session metrics by either local (JMX/OEM).
+         * Send the request to obtain session metrics by JMX/OEM.
          */
 
         define variable oSessions as JsonArray.
@@ -775,7 +775,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     method public void PrepareSessionReports ( input piAgentID   as integer,
                                                input piSessionID as integer ):
         /**
-         * Send the request to obtain the report by either local (JMX/OEM).
+         * Send the request to obtain the report by JMX/OEM.
          */
         oLogger:Debug(substitute("Preparing reports for Agent '&1', Session '&2'",
                                  piAgentID, piSessionID)).
