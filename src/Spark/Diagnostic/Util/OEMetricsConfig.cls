@@ -57,6 +57,10 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     /*** Public Properties ***/
 
+    define private property OEManagerUser as character no-undo initial "" get. set.
+
+    define private property OEManagerPass as character no-undo initial "" get. set.
+
     define public property PollingIgnoreList as character no-undo initial "" get. private set.
 
     define public property PollingStartTime as datetime no-undo initial ? get. private set.
@@ -69,19 +73,17 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     define public property ProfilerThreshold as integer no-undo initial 0 get. private set.
 
-    define public property ObjectsApsvURI as character no-undo initial "" get. private set.
+    define public property ClassesExcluded as character no-undo initial "" get. private set.
 
-    define public property ObjectsEnabled as logical no-undo initial false get. private set.
+    define public property OutputInterval as integer no-undo initial 0 get. private set.
 
-    define public property ObjectsExcluded as character no-undo initial "" get. private set.
+    define public property RemoteSource as character no-undo initial "oejmx" get. private set.
 
-    define public property ObjectsOutputInterval as integer no-undo initial 0 get. private set.
+    define public property TrackMemory as logical no-undo initial false get. private set.
 
-    define public property ObjectsSource as character no-undo initial "oejmx" get. private set.
+    define public property TrackObjects as logical no-undo initial false get. private set.
 
-    define public property ObjectsTrackMem as logical no-undo initial false get. private set.
-
-    define public property ObjectsUseAPSV as logical no-undo initial false get. private set.
+    define public property TrackRequests as logical no-undo initial false get. private set.
 
 
     /***** Constructor/Destructor *****/
@@ -145,34 +147,33 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                         end. /* has sub-object */
                     end. /* general */
 
-                    when "objects" then do:
-                        if oConfig:Has("objects") and oConfig:GetType("objects") eq JsonDataType:Object then do:
-                            assign oSubObj = oConfig:GetJsonObject("objects").
-
-                            if oSubObj:Has("apsvURI") and oSubObj:GetType("apsvURI") eq JsonDataType:String then
-                                assign this-object:ObjectsApsvURI = oSubObj:GetCharacter("apsvURI").
-
-                            if oSubObj:Has("enabled") and oSubObj:GetType("enabled") eq JsonDataType:Boolean then
-                                assign this-object:ObjectsEnabled = oSubObj:GetLogical("enabled").
+                    when "remote" then do:
+                        if oConfig:Has("remote") and oConfig:GetType("remote") eq JsonDataType:Object then do:
+                            assign oSubObj = oConfig:GetJsonObject("remote").
 
                             if oSubObj:Has("exclude") and oSubObj:GetType("exclude") eq JsonDataType:String then
-                                assign this-object:ObjectsExcluded = oSubObj:GetCharacter("exclude").
+                                assign this-object:ClassesExcluded = oSubObj:GetCharacter("exclude").
+
+                            if oSubObj:Has("oemUser") and oSubObj:GetType("oemUser") eq JsonDataType:String then
+                                assign this-object:OEManagerUser = oSubObj:GetCharacter("oemUser").
+
+                            if oSubObj:Has("oemPass") and oSubObj:GetType("oemPass") eq JsonDataType:String then
+                                assign this-object:OEManagerPass = oSubObj:GetCharacter("oemPass").
 
                             if oSubObj:Has("outputInterval") and oSubObj:GetType("outputInterval") eq JsonDataType:Number then
-                                assign this-object:ObjectsOutputInterval = oSubObj:GetInteger("outputInterval").
+                                assign this-object:OutputInterval = oSubObj:GetInteger("outputInterval").
 
                             if oSubObj:Has("source") and oSubObj:GetType("source") eq JsonDataType:String then
-                                assign this-object:ObjectsSource = oSubObj:GetCharacter("source").
-
-                            if oSubObj:Has("useAPSV") and oSubObj:GetType("useAPSV") eq JsonDataType:Boolean then
-                                assign this-object:ObjectsUseAPSV = oSubObj:GetLogical("useAPSV").
+                                assign this-object:RemoteSource = oSubObj:GetCharacter("source").
 
                             if oSubObj:Has("trackMemory") and oSubObj:GetType("trackMemory") eq JsonDataType:Boolean then
-                                assign this-object:ObjectsTrackMem = oSubObj:GetLogical("trackMemory").
+                                assign this-object:TrackMemory = oSubObj:GetLogical("trackMemory").
 
-                            /* Cannot use APSV if no URI has been provided. */
-                            if (this-object:ObjectsApsvURI gt "") ne true then
-                                assign this-object:ObjectsUseAPSV = false.
+                            if oSubObj:Has("trackObjects") and oSubObj:GetType("trackObjects") eq JsonDataType:Boolean then
+                                assign this-object:TrackObjects = oSubObj:GetLogical("trackObjects").
+
+                            if oSubObj:Has("trackRequests") and oSubObj:GetType("trackRequests") eq JsonDataType:Boolean then
+                                assign this-object:TrackRequests = oSubObj:GetLogical("trackRequests").
 
                             delete object oSubObj no-error.
                         end. /* has sub-object */
@@ -237,6 +238,16 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
     end method. /* CheckConfig */
 
 
+    method public void UpdateCredentialsOEM ( input poRemoteMetrics as Spark.Diagnostic.Util.RemoteMetrics ):
+        if can-do("oem,oemanager", this-object:RemoteSource) then do:
+            if (this-object:OEManagerUser gt "") eq true then
+                assign poRemoteMetrics:ManagerUsername = this-object:OEManagerUser.
+            if (this-object:OEManagerPass gt "") eq true then
+                assign poRemoteMetrics:ManagerPassword = this-object:OEManagerPass.
+        end. /* Using OEM */
+    end method. /* UpdateCredentialsOEM */
+
+
     method public character GetTrackingFlag ( input piAgentID as integer ):
         os-create-dir value(substitute("&1/metrics/TrackingAgents", this-object:TemporaryDir)).
 
@@ -247,7 +258,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
     method public logical AreObjectsEnabled ( input pcMethodName as character ):
         this-object:RefreshConfig(). /* Update configuration options. */
 
-        if not this-object:ObjectsEnabled then do:
+        if not this-object:TrackObjects then do:
             oLogger:Debug(substitute("Objects disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
@@ -256,11 +267,35 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
     end method. /* AreObjectsEnabled */
 
 
+    method public logical IsMemoryEnabled ( input pcMethodName as character ):
+        this-object:RefreshConfig(). /* Update configuration options. */
+
+        if not this-object:TrackMemory then do:
+            oLogger:Debug(substitute("Sessions disabled, leaving &1", pcMethodName)).
+            return false.
+        end. /* not enabled */
+
+        return true.
+    end method. /* IsMemoryEnabled */
+
+
+    method public logical AreRequestsEnabled ( input pcMethodName as character ):
+        this-object:RefreshConfig(). /* Update configuration options. */
+
+        if not this-object:TrackRequests then do:
+            oLogger:Debug(substitute("Requests disabled, leaving &1", pcMethodName)).
+            return false.
+        end. /* not enabled */
+
+        return true.
+    end method. /* AreRequestsEnabled */
+
+
     method public logical IsProfilerEnabled ( input pcMethodName as character ):
         this-object:RefreshConfig(). /* Update configuration options. */
 
         if not this-object:ProfilerEnabled then do:
-            oLogger:Debug(substitute("Profiler disabled, leaving &1", pcMethodName)).
+            oLogger:Trace(substitute("Profiler disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
 
@@ -269,12 +304,13 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method public logical OnValidSchedule ():
+        /* Determine if polling is controled by start/stop datetime values. */
         if this-object:PollingStartTime ne ? and this-object:PollingStopTime ne ? then do:
             /* Do not allow polling outside of scheduled start/stop times. */
             if now lt this-object:PollingStartTime then return false. /* Before Start */
             if now gt this-object:PollingStopTime then return false. /* After Stop */
         end. /* has polling schedule */
 
-        return true.
+        return true. /* Assuming polling active if no specific timestamps present. */
     end method. /* CheckSchedule */
 end class.

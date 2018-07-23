@@ -5,7 +5,8 @@ Primarily a server-side toolkit to aid in creating an application providing REST
 
 ## Requirements
 
-OpenEdge 11.7.2 or later (compatible back to 11.6.3)
+OpenEdge 11.7.2 or later, as current release is compiled on 11.7.3 and thus highly recommended as the installed version.
+Note: Compatible back to 11.6.3, but must be compiled on that version due to changes in library dependencies in OpenEdge.
 
 Apache Ant 1.9.x+ (now included with OE 11.7.0)
 
@@ -22,7 +23,7 @@ While the Progress Spark Toolkit library *may* be used in **Classic AppServer** 
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.
 6. If intending to utilize OERealm security, copy the `/cfg/Realm/SparkRealm.json` file to `CATALINA_BASE/conf/spark/` and `/cfg/Realm/SparkRealm.cp` to `CATALINA_BASE/common/lib/`.
 
-**Note:** If using 11.7.2 or later, the CCS classes are now included in the OpenEdge product. However, the released SP2 build contained a typo which prevented one Spark class from compiling correctly in PMFO, and has since been fixed in 11.7.3. The provided CCS r-code is located in the DLC/gui/OpenEdge.BusinessLogic.pl library. Note that source code is not included within the product-bundled PL file, but does exist within the Ccs.pl provided within the Spark-Toolkit repository (located in /dist/).
+**Note:** If using 11.7.2 or later, the CCS classes are now included in the OpenEdge product. However, the released SP2 build contained a typo which prevented one Spark class from compiling correctly, and has since been fixed in 11.7.3. The product-provided CCS r-code is located in the DLC/gui/OpenEdge.BusinessLogic.pl library. Source code is not included within the product-bundled PL file, but does exist within the Ccs.pl within the Spark-Toolkit repository (located in /dist/) and the /src/Ccs directory.
 
 
 ## Contributions / Changes
@@ -32,9 +33,9 @@ This repository should be ready to use as-is within **Progress Developer Studio*
 
 ## Builds / Distribution
 
-To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `PMFO.pl` file you would use the target `build_pmfo_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the version "4.2.0":
+To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `Spark.pl` file you would use the target `build_spark_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the version "4.2.2":
 
-    ant build_pmfo_pl -Dversion=4.2.0
+    ant build_spark_pl -Dversion=4.2.2
 
 
 ## Documentation
