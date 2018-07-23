@@ -18,32 +18,42 @@
   (90) days following Licensor's release thereof.
 
   Contributors:
-    Robin Smith, Progress Software Corp [2016]
+    Peter Judge, Progress Software Corp [2017]
   ----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
     File        : IClientContext
-    Purpose     : Base CCS Client Context definition 
-    Author(s)   : rosmith@progress.com
-    Created     : 2016-11-02 
-    Notes       : 
+    Purpose     : Session Management Client Context interface
+    Author(s)   : pjudge@progress.com
+    Created     : 2017-03-02 
+    Notes       : * The Client Context object represents the client context data for the client making the request.  
+                    The current Client Context object is instantiated and made available by the Session Manager.
+                    The Session Manager must allow for the application to supply the implementation of the Ccs.Common.IClientContext interface
   ----------------------------------------------------------------------*/
-interface Ccs.Common.IClientContext:  
+USING Ccs.Common.IService.
 
-    /* A unique ID for the Client Context object */
-    define public property contextID as character no-undo get.
+INTERFACE Ccs.Common.IClientContext:
 
+    /* A unique ID for the Client Context object. */
+    DEFINE PUBLIC PROPERTY contextID AS CHARACTER NO-UNDO GET.
+    
     /* The handle to the client's Client Principal object */
-    define public property clientPrincipal as handle no-undo get.
+    DEFINE PUBLIC PROPERTY clientPrincipal AS HANDLE NO-UNDO GET.
+  
+    /* Initialize the context data for the Client Context object 
+       
+       @param handle The handle to the Client Principal object for the client request
+       @throws Progress.Lang.SysError, Progress.Lang.AppError */
+    METHOD PUBLIC VOID initializeContext( INPUT phClientPrincipal AS HANDLE ).
 
     /* Initialize the context data for the Client Context object 
-       @param handle The Client Principal object for the client request */
-    method public void initializeContext( input phClientPrincipal as handle ).
+       
+       @param character The known Session ID for the client request
+       @throws Progress.Lang.SysError, Progress.Lang.AppError */
+    METHOD PUBLIC VOID initializeContext( INPUT pcSessionID AS CHARACTER ).
 
-    /* Initialize the context data for the Client Context object 
-       @param character The known Session ID for the client request */
-    method public void initializeContext( input pcSessionID as character ).
+    /* Save the context data to a persistent store 
+       
+       @throws Progress.Lang.SysError, Progress.Lang.AppError */
+    METHOD PUBLIC VOID saveContext( ).
 
-    /* Save the context data to a persistent store */
-    method public void saveContext( ).
-
-end interface.
+END INTERFACE.

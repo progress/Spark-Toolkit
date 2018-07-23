@@ -35,25 +35,25 @@
 INTERFACE Ccs.BusinessLogic.IGetDataTableResponse:
 
     /*------------------------------------------------------------------------------
-        Purpose: Returns the batching context to be passed back to the business
-                 entity when requesting the next batch
-        Notes:   Used for Batching. This value typically consists of record identifiers
+        Purpose: Returns the paging context to be passed back to the business
+                 entity when requesting the next set
+        Notes:   Used for Paging. This value typically consists of record identifiers
                  (e.g. DATA-SOURCE ROWID retrieved by the RESTART-ROWID function
                  or other data required by the Business Entity to build the next
-                 batch of data in a follow up call).
+                 set of data in a follow up call).
     ------------------------------------------------------------------------------*/
-    DEFINE PUBLIC PROPERTY NextBatchingContext AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY NextPagingContext AS CHARACTER NO-UNDO
     GET.
 
     /*------------------------------------------------------------------------------
-        Purpose: Returns the batching context to be passed back to the business
-                 entity when requesting the previous batch
-        Notes:   Used for Batching. This value typically consists of record identifiers
+        Purpose: Returns the paging context to be passed back to the business
+                 entity when requesting the previous set
+        Notes:   Used for Paging. This value typically consists of record identifiers
                  (e.g. DATA-SOURCE ROWID retrieved by the RESTART-ROWID function
                  or other data required by the Business Entity to build the previous
-                 batch of data in a follow up call).
+                 set of data in a follow up call).
     ------------------------------------------------------------------------------*/
-    DEFINE PUBLIC PROPERTY PreviousBatchingContext AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY PreviousPagingContext AS CHARACTER NO-UNDO
     GET.
 
     /*------------------------------------------------------------------------------
