@@ -18,24 +18,28 @@
   (90) days following Licensor's release thereof.
 
   Contributors:
-    Robin Smith, Progress Software Corp [2016]
+    Peter Judge, Progress Software Corp [2016]
   ----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
     File        : IStartupManager
-    Purpose     : Base CCS Startup Manager definition 
-    Author(s)   : rosmith@progress.com
-    Created     : 2016-11-02 
+    Purpose     : Startup Manager interface
+    Author(s)   : pjudge@progress.com
+    Created     : 2017-03-13 
     Notes       : 
   ----------------------------------------------------------------------*/
-interface Ccs.Common.IStartupManager inherits Ccs.Common.IService:  
+USING Ccs.Common.IManager FROM PROPATH.
+USING Ccs.Common.IServiceManager FROM PROPATH.
+USING Ccs.Common.ISessionManager FROM PROPATH.
 
-    /*------------------------------------------------------------------------------
-        Purpose: Retrieve an instance of the specified IManager object.
-        Notes: If a manager is not configured, no error should be raised, but if it is
-               configured and fails to load, an exception must be raised. 
-        @param pServiceType The Progress.Lang.Class repersenting the required service.
-        @return IManager implementation of the requested type, or ? if its not configured.
-        ------------------------------------------------------------------------------*/
-    method public Ccs.Common.IManager getManager ( pServiceType as Progress.Lang.Class ).
-      
-end interface.
+INTERFACE Ccs.Common.IStartupManager INHERITS IManager:
+  
+  /*------------------------------------------------------------------------------
+  Purpose: Retrieve an instance of the specified IManager object.
+  Notes: If a manager is not configured, no error should be raised, but if it is
+         configured and fails to load, an exception must be raised. 
+  @param pServiceType The Progress.Lang.Class repersenting the required service.
+  @return IManager implementation of the requested type, or ? if its not configured.
+  ------------------------------------------------------------------------------*/
+  METHOD PUBLIC IManager getManager ( pServiceType AS Progress.Lang.Class ).
+
+END INTERFACE.

@@ -18,55 +18,55 @@
   (90) days following Licensor's release thereof.
 
   Contributors:
-    Robin Smith, Progress Software Corp [2016]
+    Peter Judge, Progress Software Corp [2016]
   ----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
-    File        : Application
-    Purpose     : Provides a well-known point to find references to specific CCS Manager components 
-    Author(s)   : rosmith@progress.com
-    Created     : 2016-11-02 
+    File        : Ccs.Common.Application
+    Purpose     : Provides a well-known point to find references to specific CCS Manager components.
+    Author(s)   : pjudge@progress.com
+    Created     : 2017-03-13 
     Notes       : 
   ----------------------------------------------------------------------*/
-block-level on error undo, throw.
+BLOCK-LEVEL ON ERROR UNDO, THROW.
 
-using Ccs.Common.IServiceManager from propath.
-using Ccs.Common.ISessionManager from propath.
-using Ccs.Common.IStartupManager from propath.
+USING Ccs.Common.IServiceManager FROM PROPATH.
+USING Ccs.Common.ISessionManager FROM PROPATH.
+USING Ccs.Common.IStartupManager FROM PROPATH.
 
-class Ccs.Common.Application final:
+CLASS Ccs.Common.Application FINAL:
 
-    /*------------------------------------------------------------------------------
-     Purpose: Provides access to the injected IStartupManager.
-     Notes:
-    ------------------------------------------------------------------------------*/
-    define static public property StartupManager as IStartupManager no-undo get. set.
+  /*------------------------------------------------------------------------------
+   Purpose: Provides access to the injected IStartupManager.
+   Notes:
+  ------------------------------------------------------------------------------*/
+  DEFINE STATIC PUBLIC PROPERTY StartupManager AS IStartupManager NO-UNDO GET. SET.
 
-    /*------------------------------------------------------------------------------
-     Purpose: Provides access to the injected IServiceManager.
-     Notes:
-    ------------------------------------------------------------------------------*/
-    define static public property ServiceManager as IServiceManager no-undo get. set.
+  /*------------------------------------------------------------------------------
+   Purpose: Provides access to the injected IServiceManager.
+   Notes:
+  ------------------------------------------------------------------------------*/
+  DEFINE STATIC PUBLIC PROPERTY ServiceManager AS IServiceManager NO-UNDO GET. SET.
 
-    /*------------------------------------------------------------------------------
-     Purpose: Provides access to the injected ISessionManager.
-     Notes:
-    ------------------------------------------------------------------------------*/
-    define static public property SessionManager as ISessionManager no-undo get. set.
+  /*------------------------------------------------------------------------------
+   Purpose: Provides access to the injected ISessionManager.
+   Notes:
+  ------------------------------------------------------------------------------*/
+  DEFINE STATIC PUBLIC PROPERTY SessionManager AS ISessionManager NO-UNDO GET. SET.
 
-    /*------------------------------------------------------------------------------
-     Purpose: Version of the Common Component Specification implementation.
-     Notes:
-    ------------------------------------------------------------------------------*/
-    define static public property Version as character no-undo
-        initial '1.0.0':u
-        get.
+  /*------------------------------------------------------------------------------
+   Purpose: Version of the Common Component Specification implementation.
+   Notes:
+  ------------------------------------------------------------------------------*/
+  DEFINE STATIC PUBLIC PROPERTY Version AS CHARACTER NO-UNDO
+    INITIAL '1.0.0':u
+    GET.
 
-    /*------------------------------------------------------------------------------
-     Purpose: Prevent creation of instances.
-     Notes:
-    ------------------------------------------------------------------------------*/
-    constructor private Application ():
-        super ().
-    end constructor.
+  /*------------------------------------------------------------------------------
+   Purpose: Prevent creation of instances.
+   Notes:
+  ------------------------------------------------------------------------------*/
+  CONSTRUCTOR PRIVATE Application ():
+    SUPER ().
+  END CONSTRUCTOR.
 
-end class.
+END CLASS.

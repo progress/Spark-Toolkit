@@ -37,25 +37,25 @@ USING Ccs.BusinessLogic.* FROM PROPATH .
 INTERFACE Ccs.BusinessLogic.IGetDataTableRequest:
 
     /*------------------------------------------------------------------------------
-        Purpose: Returns the batching context
-        Notes:   Used for Batching. This value typically consists of record identifiers
+        Purpose: Returns the paging context
+        Notes:   Used for Paging. This value typically consists of record identifiers
                  (e.g. DATA-SOURCE ROWID retrieved by the RESTART-ROWID function of
                  the previous call into IBusinessEntity:GetData or other data required
-                 by the Business Entity to build the next batch of data).
-                 The value passed in is the value of the NextBatchingContext property
+                 by the Business Entity to build the next set of data).
+                 The value passed in is the value of the NextPagingContext property
                  of the IGetDataTableResponse for the table
     ------------------------------------------------------------------------------*/
-    DEFINE PUBLIC PROPERTY BatchingContext AS CHARACTER NO-UNDO
+    DEFINE PUBLIC PROPERTY PagingContext AS CHARACTER NO-UNDO
     GET.
 
     /*------------------------------------------------------------------------------
         Purpose: Returns the number of records requested by the caller of the
                  Business Entity getData method
-        Notes:   Used for Batching and Paging. When the value is 0, the business
-                 entity is expected to return all (remaining) records. When the value
-                 is ? the business entity is expected to return a reasonable default
-                 number of records to the caller. Negative values indicate batching
-                 in backwards direction is requested.
+        Notes:   Used for Paging. When the value is 0, the business entity is expected
+                 to return all (remaining) records. When the value is ? the business
+                 entity is expected to return a reasonable default number of records
+                 to the caller. Negative values indicate paging in backwards direction
+                 is requested.
     ------------------------------------------------------------------------------*/
     DEFINE PUBLIC PROPERTY NumRecords AS INT64 NO-UNDO
     GET.

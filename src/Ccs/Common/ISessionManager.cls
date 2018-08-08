@@ -18,29 +18,38 @@
   (90) days following Licensor's release thereof.
 
   Contributors:
-    Robin Smith, Progress Software Corp [2016]
+    Peter Judge, Progress Software Corp [2016]
   ----------------------------------------------------------------------*/
 /*------------------------------------------------------------------------
     File        : ISessionManager
-    Purpose     : Base CCS Session Manager definition 
-    Author(s)   : rosmith@progress.com
-    Created     : 2016-11-02 
+    Purpose     : Base Session Manager interface
+    Author(s)   : pjudge@progress.com
+    Created     : 2017-03-02 
     Notes       : 
   ----------------------------------------------------------------------*/
-interface Ccs.Common.ISessionManager inherits Ccs.Common.IManager:
+USING Ccs.Common.IManager.
+USING Ccs.Common.IClientContext.
 
-    /* Returns a usable instance of the Current Client Context*/
-    define public property CurrentClientContext as Ccs.Common.IClientContext no-undo get.
-
+INTERFACE Ccs.Common.ISessionManager INHERITS IManager:
+    
+    /* Holds the reference to the current ClientContext object. This property will be unknown unless there is a valid client request. */
+    DEFINE PUBLIC PROPERTY CurrentClientContext AS IClientContext NO-UNDO GET.
+    
     /* Establish the server session runtime.
-       @param handle The Client Principal associated with the request*/
-    method public void establishRequestEnvironment( input phClientPrincipal as handle ).
-
+       
+       @param handle The handle to the Client Principal object representing the client’s session identity 
+       @throws Progress.Lang.SysError, Progress.Lang.AppError */
+    METHOD PUBLIC VOID establishRequestEnvironment( INPUT phClientPrincipal AS HANDLE ).
+    
     /* Establish the server session runtime.
-       @param character The Session ID associated with the request*/
-    method public void establishRequestEnvironment( input pcSessionID as character ).
+       
+       @param character A known string representing the client’s session identity 
+       @throws Progress.Lang.SysError, Progress.Lang.AppError */
+    METHOD PUBLIC VOID establishRequestEnvironment( INPUT pcSessionID AS CHARACTER ).
 
-    /* 'End' the server session runtime and return it to a 'safe' state.*/
-    method public void endRequestEnvironment( ).
+    /* “End” the server session runtime and return it to a “safe” state.
+        
+        @throws Progress.Lang.SysError, Progress.Lang.AppError */
+    METHOD PUBLIC VOID endRequestEnvironment( ).
 
-end interface.
+END INTERFACE.
