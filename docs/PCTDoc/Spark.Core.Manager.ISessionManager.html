@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Spark (v4.2.2)</TITLE>
+        <TITLE>Spark (v4.2.3)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -184,7 +184,9 @@
   </td>
   <td class="cell">
      
-/* 'End' the server session runtime and return it to a 'safe' state.*/ <br> <i> Inherited from <a href='Ccs.Common.ISessionManager.html'>Ccs.Common.ISessionManager</a> </i>
+/* &#8220;End&#8221; the server session runtime and return it to a &#8220;safe&#8221; state.
+
+@throws Progress.Lang.SysError, Progress.Lang.AppError */ <br> <i> Inherited from <a href='Ccs.Common.ISessionManager.html'>Ccs.Common.ISessionManager</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -220,7 +222,9 @@
   <td class="cell">
      
 /* Establish the server session runtime.
-@param character The Session ID associated with the request*/ <br> <i> Inherited from <a href='Ccs.Common.ISessionManager.html'>Ccs.Common.ISessionManager</a> </i>
+
+@param character A known string representing the client&#8217;s session identity
+@throws Progress.Lang.SysError, Progress.Lang.AppError */ <br> <i> Inherited from <a href='Ccs.Common.ISessionManager.html'>Ccs.Common.ISessionManager</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -239,7 +243,9 @@
   <td class="cell">
      
 /* Establish the server session runtime.
-@param handle The Client Principal associated with the request*/ <br> <i> Inherited from <a href='Ccs.Common.ISessionManager.html'>Ccs.Common.ISessionManager</a> </i>
+
+@param handle The handle to the Client Principal object representing the client&#8217;s session identity
+@throws Progress.Lang.SysError, Progress.Lang.AppError */ <br> <i> Inherited from <a href='Ccs.Common.ISessionManager.html'>Ccs.Common.ISessionManager</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -458,7 +464,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         Ccs.Common.IClientContext <a href='#0200104TSbiquz36ZW8FwT93qGCw=='> CurrentClientContext</a>
+         IClientContext <a href='#020010jbKgmTRIiXK/pXQVDCAWFg=='> CurrentClientContext</a>
     </font>
   </td>
   <td class="cell">
@@ -620,7 +626,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* 'End' the server session runtime and return it to a 'safe' state. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* &#8220;End&#8221; the server session runtime and return it to a &#8220;safe&#8221; state. </td></tr><td class='paramname'></td><td class='paramdesc'>@throws Progress.Lang.SysError, Progress.Lang.AppError </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -712,7 +718,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr><td class='paramname'></td><td class='paramdesc'>@throws Progress.Lang.SysError, Progress.Lang.AppError </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -774,7 +780,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr><td class='paramname'></td><td class='paramdesc'>@throws Progress.Lang.SysError, Progress.Lang.AppError </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1457,11 +1463,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200104TSbiquz36ZW8FwT93qGCw==" href="#Top">Top</a>
-                <a name=" <a href='Ccs.Common.IClientContext.html'>Ccs.Common.IClientContext</a> <a href='#0200104TSbiquz36ZW8FwT93qGCw=='> CurrentClientContext</a>"></a>
+                <a name="020010jbKgmTRIiXK/pXQVDCAWFg==" href="#Top">Top</a>
+                <a name=" IClientContext <a href='#020010jbKgmTRIiXK/pXQVDCAWFg=='> CurrentClientContext</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC <a href='Ccs.Common.IClientContext.html'>Ccs.Common.IClientContext</a> <a href='#0200104TSbiquz36ZW8FwT93qGCw=='> CurrentClientContext</a></h3>
+        <h3 class="Signature_Font">PUBLIC IClientContext <a href='#020010jbKgmTRIiXK/pXQVDCAWFg=='> CurrentClientContext</a></h3>
         <table>
             <tr>
                 <td>
@@ -1497,7 +1503,7 @@
         <i><b>Returns</b></i>
     </td>
     <td>
-      <a href='Ccs.Common.IClientContext.html'>Ccs.Common.IClientContext</a> 
+      IClientContext 
     </td>
     <td>
     </td>
@@ -1521,6 +1527,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">05.21.2018 09:06:23</font>
+    <font class="footer_timestamp">08.16.2018 12:49:05</font>
     </BODY>
 </HTML>

@@ -10,6 +10,8 @@ Note: Compatible back to 11.6.3, but must be compiled on that version due to cha
 
 Apache Ant 1.9.x+ (now included with OE 11.7.0)
 
+Progress Compile Tools, or "PCT" (now included with OE 11.7.3)
+
 
 ## Project Usage
 

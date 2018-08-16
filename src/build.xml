@@ -62,8 +62,6 @@
 
     <target name="init_oe" depends="init_env">
         <property name="src.dir" value="${basedir}"/>
-        <taskdef resource="PCT.properties" classpath="${src.dir}/tools/PCT.jar"/>
-        <PCTVersion/>
 
         <!-- Check if DLC is set as an environment variable. -->
         <fail message="$DLC path is not set">
@@ -76,6 +74,9 @@
         </fail>
         <property name="dlcHome" value="${env.DLC}"/>
         <echo message="DLC Home: ${dlcHome}"/>
+
+        <taskdef resource="PCT.properties" classpath="${dlcHome}/pct/PCT.jar"/>
+        <PCTVersion/>
 
         <!-- Locate the OE version file, and read into a property. -->
         <ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
