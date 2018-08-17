@@ -8,7 +8,9 @@ Primarily a server-side toolkit to aid in creating an application providing REST
 OpenEdge 11.7.2 or later, as current release is compiled on 11.7.3 and thus highly recommended as the installed version.
 Note: Compatible back to 11.6.3, but must be compiled on that version due to changes in library dependencies in OpenEdge.
 
-Apache Ant 1.9.x+ (now included with OE 11.7.0)
+Apache Ant 1.9.x+ (now included with OE 11.7.0 at DLC/ant)
+
+Progress Compile Tools, or "PCT" (now included with OE 11.7.3 at DLC/pct/PCT.jar)
 
 
 ## Project Usage

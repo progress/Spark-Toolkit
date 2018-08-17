@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Spark (v4.2.2)</TITLE>
+        <TITLE>Spark (v4.2.3)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -101,7 +101,7 @@
                     </table>
                 	<br>
                 	<span class="unit_comment">
-                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>ISessionManager </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Base CCS Session Manager definition </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>rosmith@progress.com </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>2016-11-02 </td></tr></tbody></table>
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>This Software is licensed by Progress Software Corporation (licensor) </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>under the Progress Software Common Component Specification Project </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Release License Agreement available at </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>https://community.progress.com/products/directions/common_component/p/releaselicenseagreement </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>The Interface definition is part of the Common Component Specification [CCSBE01]. The </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>file is considered as a Specification Implementation Condition as described </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>in section 2.1.1.1: If Licensor has made Specification Implementation </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Conditions available as of the date Licensee completes its Independent </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Implementation, then Licensee must, prior to making any claim that its </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Independent Implementation complies with the Specification, ensure that </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>the Independent Implementation satisfies all of the Specification </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Implementation Conditions. If Licensor subsequently makes available or </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>updates, from time to time, the Specification Implementation Conditions, </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>then Licensee will verify that its Independent Implementation satisfies the </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>latest version of the Specification Implementation Conditions within ninety </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>(90) days following Licensor's release thereof. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Contributors: </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Peter Judge, Progress Software Corp [2016] </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>ISessionManager </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Base Session Manager interface </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge@progress.com </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>2017-03-02 </td></tr></tbody></table>
                 	</span>
                 	<br>
                 </div>
@@ -167,7 +167,9 @@
   </td>
   <td class="cell">
      
-/* 'End' the server session runtime and return it to a 'safe' state.*/ <br> <i>  </i>
+/* &#8220;End&#8221; the server session runtime and return it to a &#8220;safe&#8221; state.
+
+@throws Progress.Lang.SysError, Progress.Lang.AppError */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -186,7 +188,9 @@
   <td class="cell">
      
 /* Establish the server session runtime.
-@param character The Session ID associated with the request*/ <br> <i>  </i>
+
+@param character A known string representing the client&#8217;s session identity
+@throws Progress.Lang.SysError, Progress.Lang.AppError */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -205,7 +209,9 @@
   <td class="cell">
      
 /* Establish the server session runtime.
-@param handle The Client Principal associated with the request*/ <br> <i>  </i>
+
+@param handle The handle to the Client Principal object representing the client&#8217;s session identity
+@throws Progress.Lang.SysError, Progress.Lang.AppError */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -405,7 +411,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* 'End' the server session runtime and return it to a 'safe' state. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* &#8220;End&#8221; the server session runtime and return it to a &#8220;safe&#8221; state. </td></tr><td class='paramname'></td><td class='paramdesc'>@throws Progress.Lang.SysError, Progress.Lang.AppError </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -451,7 +457,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr><td class='paramname'></td><td class='paramdesc'>@throws Progress.Lang.SysError, Progress.Lang.AppError </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -513,7 +519,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Establish the server session runtime. </td></tr><td class='paramname'></td><td class='paramdesc'>@throws Progress.Lang.SysError, Progress.Lang.AppError </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -714,6 +720,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">05.21.2018 09:06:16</font>
+    <font class="footer_timestamp">08.16.2018 12:48:53</font>
     </BODY>
 </HTML>
