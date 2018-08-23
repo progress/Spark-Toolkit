@@ -103,11 +103,13 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
         checkManagerIsListed(get-class(Spark.Core.Manager.IStatsManager):TypeName, get-class(Spark.Core.Manager.StatsManager):TypeName, false).
         checkManagerIsListed(get-class(Spark.Core.Manager.ITranslationManager):TypeName, get-class(Spark.Core.Manager.TranslationManager):TypeName).
         if checkManagerIsListed(get-class(Spark.Core.Manager.ICatalogManager):TypeName, get-class(Spark.Core.Manager.CatalogManager):TypeName, false) then do:
-            /* If the CatalogManager is present, then make sure the supporting Message, Route, and Schema managers are listed as well. */
-            checkManagerIsListed(get-class(Spark.Core.Manager.IMessageManager):TypeName, get-class(Spark.Core.Manager.MessageManager):TypeName).
-            checkManagerIsListed(get-class(Spark.Core.Manager.IRouteManager):TypeName, get-class(Spark.Core.Manager.RouteManager):TypeName).
+            /* If the CatalogManager is present, then make sure the supporting SchemaManager is listed as well. */
             checkManagerIsListed(get-class(Spark.Core.Manager.ISchemaManager):TypeName, get-class(Spark.Core.Manager.SchemaManager):TypeName).
-        end.
+
+            /* If the RouteManager is present, then make sure the supporting MessageManager is listed as well. */
+            if checkManagerIsListed(get-class(Spark.Core.Manager.IRouteManager):TypeName, get-class(Spark.Core.Manager.RouteManager):TypeName, false) then
+                checkManagerIsListed(get-class(Spark.Core.Manager.IMessageManager):TypeName, get-class(Spark.Core.Manager.MessageManager):TypeName).
+        end. /* CatalogManager Listed */
     end method.
 
     method private logical checkManagerIsListed ( input pcManager        as character,

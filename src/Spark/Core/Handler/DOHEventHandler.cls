@@ -65,41 +65,9 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     constructor public DOHEventHandler():
         assign oCheat = this-object.
 
-        DataObjectHandler:LoadEntity:Subscribe(this-object:LoadEntityHandler).
-        DataObjectHandler:Invoking:Subscribe(this-object:InvokingHandler).
-        DataObjectHandler:Invoked:Subscribe(this-object:InvokedHandler).
-        DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
-        &IF {&MIN_VERSION_11_7_2} &THEN
-        /* Only available for 11.7.2 and later. */
-        DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
-        DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
-        &ENDIF
+        this-object:DefineEvents(). /* Subscribe to standard DOH events. */
 
-        /* Inform the DOH of what portion of the URL is to be ignored. */
-        if valid-object(oCatalogManager) then
-            DataObjectHandler:HANDLER_PREFIX = oCatalogManager:ServicePrefix.
-
-        /* Start some of the internal registries by accessing the static properties. */
-        ArgumentValueWriterRegistry:Registry.
-        BodyWriterRegistry:Registry.
-        EntityWriterRegistry:Registry.
-        LogFilterBuilderRegistry:Registry.
-        LoggerFilterRegistry:Registry.
-        OperationHandlerRegistry:Registry.
-        ResponseElementWriterRegistry:Registry.
-        ServiceRegistry:Registry.
-
-        /* Register the ROOT service for handling the catalog. */
-        if valid-object(oCatalogManager) then
-            oCatalogManager:registerService(ServiceRegistry:Registry, ServiceRegistry:ROOT_SERVICE_NAME, SemanticVersion:Parse("")).
-
-        /* Register all known services for this application. */
-        if valid-object(oCatalogManager) then
-            oCatalogManager:registerAllServices(ServiceRegistry:Registry).
-
-        /* Create a master catalog for all services (caches output). */
-        if valid-object(oCatalogManager) then
-            oCatalogManager:getCatalog("", "").
+        this-object:InitializeRegistries(). /* Prepare the registries. */
     end constructor.
 
     destructor DOHEventHandler():
@@ -143,6 +111,48 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
 
         return cReason.
     end method. /* GetStatusReason */
+
+
+    method private void DefineEvents ( ):
+        DataObjectHandler:LoadEntity:Subscribe(this-object:LoadEntityHandler).
+        DataObjectHandler:Invoking:Subscribe(this-object:InvokingHandler).
+        DataObjectHandler:Invoked:Subscribe(this-object:InvokedHandler).
+        DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
+        &IF {&MIN_VERSION_11_7_2} &THEN
+        /* Only available for 11.7.2 and later. */
+        DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
+        DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
+        &ENDIF
+    end method. /* Define Events */
+
+
+    method private void InitializeRegistries ( ):
+        /* Inform the DOH of what portion of the URL is to be ignored. */
+        if valid-object(oCatalogManager) then
+            DataObjectHandler:HANDLER_PREFIX = oCatalogManager:ServicePrefix.
+
+        /* Start some of the internal registries by accessing the static properties. */
+        ArgumentValueWriterRegistry:Registry.
+        BodyWriterRegistry:Registry.
+        EntityWriterRegistry:Registry.
+        LogFilterBuilderRegistry:Registry.
+        LoggerFilterRegistry:Registry.
+        OperationHandlerRegistry:Registry.
+        ResponseElementWriterRegistry:Registry.
+        ServiceRegistry:Registry.
+
+        /* Register the ROOT service for handling the catalog. */
+        if valid-object(oCatalogManager) then
+            oCatalogManager:registerService(ServiceRegistry:Registry, ServiceRegistry:ROOT_SERVICE_NAME, SemanticVersion:Parse("")).
+
+        /* Register all known services for this application. */
+        if valid-object(oCatalogManager) then
+            oCatalogManager:registerAllServices(ServiceRegistry:Registry).
+
+        /* Create a master catalog for all services (caches output). */
+        if valid-object(oCatalogManager) then
+            oCatalogManager:getCatalog("", "").
+    end method. /* InitializeRegistries */
 
 
     /***** Event Methods *****/
