@@ -58,10 +58,11 @@ new Spark.Core.Handler.DOHEventHandler().
 
 /* Discover all DOH services for this webapp. */
 define variable cServiceMapPath as character no-undo.
-file-info:file-name = "ROOT.map".
+file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
 if file-info:full-pathname ne ? then
     assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
 if (cServiceMapPath gt "") eq true then do:
+    /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
     logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
     OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
 end.
