@@ -34,12 +34,13 @@ block-level on error undo, throw.
 
 class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager implements ICatalogManager use-widget-pool:
 
-    define public property ApiVersion    as decimal   no-undo get. private set.
-    define public property IdProperty    as character no-undo get. private set.
-    define public property SeqProperty   as character no-undo get. private set.
-    define public property ReadFilter    as character no-undo get. private set.
-    define public property ServicePrefix as character no-undo get. private set.
-    define public property UseRequestObj as logical   no-undo get. private set.
+    define public property ApiVersion     as decimal   no-undo get. private set.
+    define public property IdProperty     as character no-undo get. private set.
+    define public property SeqProperty    as character no-undo get. private set.
+    define public property ReadFilter     as character no-undo get. private set.
+    define public property ServicePrefix  as character no-undo get. private set.
+    define public property CatalogService as character no-undo get. private set.
+    define public property UseRequestObj  as logical   no-undo get. private set.
 
     define protected property oLoggingManager as ILoggingManager no-undo
         get:
@@ -63,15 +64,16 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     define private variable oCatRegistry as JsonObject no-undo.
 
     define private temp-table GeneralParam no-undo serialize-name "General"
-        field ApiVersion    as decimal   /* Expected version to be used with all API's.             */
-        field BusinessRoot  as character /* Starting location for reading all business entities.    */
-        field EnableDebugs  as logical   /* Display additional info as resources are loaded.        */
-        field IdProperty    as character /* Name of property to use for record ID purposes.         */
-        field SeqProperty   as character /* Name of property to use for result sequence purposes.   */
-        field PreLoader     as character /* Special procedure to run prior to loading resources.    */
-        field ReadFilter    as character /* Name of URL parameter that will hold any filters.       */
-        field ServicePrefix as character /* URI prefix for services exposed by Spark (eg. pdo, api). */
-        index idxEntity    is primary unique BusinessRoot
+        field ApiVersion     as decimal   /* Expected version to be used with all API's.              */
+        field CatalogService as character /* Service class for delivering catalog output for clients. */
+        field BusinessRoot   as character /* Starting location for reading all business entities.     */
+        field EnableDebugs   as logical   /* Display additional info as resources are loaded.         */
+        field IdProperty     as character /* Name of property to use for record ID purposes.          */
+        field SeqProperty    as character /* Name of property to use for result sequence purposes.    */
+        field PreLoader      as character /* Special procedure to run prior to loading resources.     */
+        field ReadFilter     as character /* Name of URL parameter that will hold any filters.        */
+        field ServicePrefix  as character /* URI prefix for services exposed by Spark (eg. pdo, api). */
+        index idxEntity      is primary unique BusinessRoot
         .
 
     define private temp-table ServiceList no-undo serialize-name "ServiceSource"
@@ -1544,6 +1546,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             this-object:SeqProperty = GeneralParam.SeqProperty.
             this-object:ReadFilter = GeneralParam.ReadFilter.
             this-object:ServicePrefix = GeneralParam.ServicePrefix.
+            this-object:CatalogService = GeneralParam.CatalogService.
 
             assign /* Obtain defaults for general operation. */
                 cPreLoader = GeneralParam.PreLoader /* Executes code prior to anything else. */
@@ -2337,25 +2340,27 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 /* Register the service using the name and version discovered. */
                 assign oService = poRegistry:RegisterService(pcServiceName, SemanticVersion:Parse(""), ?, ?).
 
-                /* Create a new mapped operation for this service. */
-                assign oOperation = new MappedOperation( "/",
-                                                         MethodEnum:GET,
-                                                         "application/json",
-                                                         TargetTypeEnum:Class:ToString(),
-                                                         "Spark.Core.Service.Catalog",
-                                                         "Progress.Lang.Object",
-                                                         "getCatalog",
-                                                         ?,
-                                                         integer(StatusCodeEnum:ok) ).
+                /* Create a new mapped operation for this service, which MUST implement the ICatalog interface. */
+                if Progress.Lang.Class:GetClass(this-object:CatalogService):IsA(get-class(Spark.Core.Service.ICatalog)) then do:
+                    assign oOperation = new MappedOperation( "/",
+                                                             MethodEnum:GET,
+                                                             "application/json",
+                                                             TargetTypeEnum:Class:ToString(),
+                                                             this-object:CatalogService,
+                                                             "Progress.Lang.Object",
+                                                             "getCatalog", /* Should be a known method in ICatalog. */
+                                                             ?, /* No operation options required for this endpoint. */
+                                                             integer(StatusCodeEnum:ok) ).
 
-                /* Create parameter and add to list. */
-                assign oParam = new OperationParameter( IOModeEnum:Output, "class Progress.Json.ObjectModel.JsonObject", "catalog" ).
-                extent(oParam:OutputElement) = 1.
-                assign oParam:OutputElement[1] = new MessageElement(ElementTypeEnum:Body, "catalog", IOModeEnum:Output).
-                oOperation:Parameters:Add(oParam).
+                    /* Create parameter and add to list. */
+                    assign oParam = new OperationParameter( IOModeEnum:Output, "class Progress.Json.ObjectModel.JsonObject", "catalog" ).
+                    extent(oParam:OutputElement) = 1.
+                    assign oParam:OutputElement[1] = new MessageElement(ElementTypeEnum:Body, "catalog", IOModeEnum:Output).
+                    oOperation:Parameters:Add(oParam).
 
-                /* Add a mapped operation to the current service. */
-                oService:PutOperation(oOperation).
+                    /* Add a mapped operation to the current service. */
+                    oService:PutOperation(oOperation).
+                end. /* CatalogService is ICatalog */
 
                 /* Log values to be used for mapping. */
                 assign dExecTime[2] = now.
