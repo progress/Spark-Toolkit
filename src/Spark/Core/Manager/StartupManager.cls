@@ -100,7 +100,6 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
         checkManagerIsListed(get-class(Spark.Core.Manager.IConnectionManager):TypeName, get-class(Spark.Core.Manager.ConnectionManager):TypeName).
         checkManagerIsListed(get-class(Spark.Core.Manager.ILoggingManager):TypeName, get-class(Spark.Core.Manager.LoggingManager):TypeName).
         checkManagerIsListed(get-class(Spark.Core.Manager.IStateManager):TypeName, get-class(Spark.Core.Manager.StateManager):TypeName).
-        checkManagerIsListed(get-class(Spark.Core.Manager.IStatsManager):TypeName, get-class(Spark.Core.Manager.StatsManager):TypeName, false).
         checkManagerIsListed(get-class(Spark.Core.Manager.ITranslationManager):TypeName, get-class(Spark.Core.Manager.TranslationManager):TypeName).
         if checkManagerIsListed(get-class(Spark.Core.Manager.ICatalogManager):TypeName, get-class(Spark.Core.Manager.CatalogManager):TypeName, false) then do:
             /* If the CatalogManager is present, then make sure the supporting SchemaManager is listed as well. */
@@ -227,7 +226,6 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
         stopManager(get-class(Spark.Core.Manager.IRouteManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.ISchemaManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.IStateManager):TypeName).
-        stopManager(get-class(Spark.Core.Manager.IStatsManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.ITranslationManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.ILoggingManager):TypeName).
     end method.

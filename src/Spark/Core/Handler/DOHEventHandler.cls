@@ -24,6 +24,7 @@ using OpenEdge.Web.DataObject.* from propath.
 using OpenEdge.Web.DataObject.Writer.* from propath.
 using OpenEdge.Web.SendExceptionError from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
+using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.ServiceLifeCycleEnum from propath.
 using Spark.Core.Service.ISparkEntity from propath.
 
@@ -155,6 +156,21 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     end method. /* InitializeRegistries */
 
 
+    method private void UpdateLogging ( ):
+        define variable oLoggingManager as ILoggingManager no-undo.        
+        assign oLoggingManager = cast(Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)), ILoggingManager).
+
+        /**
+         * Force the reset of the logging config object,
+         * and update to the latest logging level/types.
+         */
+        if valid-object(oLoggingManager) then do: 
+            oLoggingManager:updateLoggingLevel().
+            oLoggingManager:updateLogEntryTypes().
+        end. /* Valid Object */
+    end method. /* UpdateLogging */
+
+
     /***** Event Methods *****/
 
 
@@ -244,6 +260,8 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                                             input poEventArgs as HandlerLoadEntityEventArgs ):
         /* Leave a log message that the DOH event handler is being loaded. */
         oLogger:Debug(substitute("DOH-LOAD - Requested Entity '&1'", poEventArgs:Operation:TargetName)).
+
+        this-object:UpdateLogging(). /* Refresh logging options for Spark. */
 
         /* Attempt to load the requested service for this business entity. */
         define variable oServiceClass as Progress.Lang.Class no-undo.
