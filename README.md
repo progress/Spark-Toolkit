@@ -1,11 +1,13 @@
 # Progress Spark Toolkit
 
-Welcome! The **Progress Spark Toolkit** is primarily a server-side toolkit to aid in creating an ABL application which provides RESTful API's for microservices. It was build specifically for the **Progress Application Server for OpenEdge** to provide the back-end support for exposing ABL logic via HTTP/HTTPS.
+**Welcome!**
+
+The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/CCS) reference implementation from Progress meant to aid in creating an ABL application which provides RESTful API's for microservices. This repository primarily contains ABL artifacts and was built specifically for the **Progress Application Server for OpenEdge** to provide the back-end (server-side) support for exposing ABL logic via HTTP/HTTP.
 
 
 ## Requirements
 
-OpenEdge 11.7.3 or later is highly recommended, with the most current release compiled on this version and utilizing several product improvements available. Some features also utilize upcoming code available in the forthcoming 11.7.4 but are provided in a Procedure Library (PL) bundled for easy inclusion in your PROPATH.
+**OpenEdge 11.7.3** or later is highly recommended, with the most current release compiled on this version and utilizing several product improvements available. Some recent features in the 4.3.0 release utilize code available in the (forthcoming) 11.7.4 release, but are also provided here in a Procedure Library (PL) bundled for easy inclusion in your PROPATH.
 
 **Regression Note:** While the toolkit is *technically* compatible with OE 11.6.3, it must be re-compiled on that version due to changes in ABL library dependencies in OpenEdge. For maximum compatibility and support, use of 11.7 is still preferred if possible.
 
