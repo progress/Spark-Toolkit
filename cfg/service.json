@@ -4,6 +4,9 @@
             "Service": "Spark.Core.Manager.IClientContext",
             "Implementation": "Spark.Core.Manager.ClientContext"
         }, {
+            "Service": "Spark.Core.Service.ICatalog",
+            "Implementation": "Spark.Core.Service.Catalog"
+        }, {
             "Service": "OpenEdge.Web.DataObject.IServiceRegistry",
             "Implementation": "OpenEdge.Web.DataObject.ServiceRegistryImpl"
         }, {
@@ -11,6 +14,9 @@
             "Implementation": "OpenEdge.Web.DataObject.DataObjectHandler"
         }],
         "ServiceLifeCycle": [{
+            "ServiceMatch": "Spark.Core.Service.Catalog",
+            "LifeCycle": "Session"
+        }, {
             "ServiceMatch": "OpenEdge.Web.DataObject.ServiceRegistryImpl",
             "LifeCycle": "Session"
         }, {

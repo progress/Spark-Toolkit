@@ -113,7 +113,7 @@
             <propath>
                 <pathelement path="${src.dir}/Ccs"/>
                 <pathelement path="${src.dir}/Spark"/>
-                <pathelement path="${build.out}/OpenEdge.Net.11.7.4.pl"/>
+                <pathelement path="${build.out}/OpenEdge.Net.pl"/>
 				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>

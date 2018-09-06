@@ -1,17 +1,18 @@
 {
     "Config": {
         "General": [{
-            "ApiVersion": 4.2,
+            "ApiVersion": 4.3,
+            "CatalogService": "Spark.Core.Service.ICatalog",
             "BusinessRoot": "Business",
             "IdProperty": "id",
             "PreLoader": "",
             "ReadFilter": "filter",
-            "ServicePrefix": "pdo",
+            "ServicePrefix": "api",
             "EnableDebugs": false
         }],
         "ServiceSource": [{
             "ServiceName": "Common",
-            "ServiceURI": "/web/pdo/common",
+            "ServiceURI": "/web/api/common",
             "ClassPath": "Business",
             "UseRequest": false
         }]
