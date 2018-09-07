@@ -140,13 +140,26 @@
     </target>
 
     <target name="compile_spark_diag" depends="init_oe">
+		<delete dir="${preprocess}/OpenEdge" quiet="true"/>
         <delete dir="${preprocess}/Spark" quiet="true"/>
+
+        <!-- Code compiles without need for a database. -->
+        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+            <propath>
+				<pathelement path="${src.dir}"/>
+				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+            </propath>
+            <fileset dir="${src.dir}">
+                <include name="OpenEdge/**/*.cls"/>
+            </fileset>
+        </PCTCompile>
 
 		<!-- Code compiles without need for a database, but uses some extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
 				<pathelement path="${src.dir}/Spark"/>
-				<pathelement path="${src.dir}/OpenEdge"/>
+				<pathelement path="${build.tmp}"/>
                 <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
             </propath>
