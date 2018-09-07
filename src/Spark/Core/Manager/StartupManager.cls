@@ -105,9 +105,9 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
             /* If the CatalogManager is present, then make sure the supporting SchemaManager is listed as well. */
             checkManagerIsListed(get-class(Spark.Core.Manager.ISchemaManager):TypeName, get-class(Spark.Core.Manager.SchemaManager):TypeName).
 
-            /* If the RouteManager is present, then make sure the supporting MessageManager is listed as well. */
-            if checkManagerIsListed(get-class(Spark.Core.Manager.IRouteManager):TypeName, get-class(Spark.Core.Manager.RouteManager):TypeName, false) then
-                checkManagerIsListed(get-class(Spark.Core.Manager.IMessageManager):TypeName, get-class(Spark.Core.Manager.MessageManager):TypeName).
+            /* For the moment, create the default RouteManager and supporting MessageManager even if not listed in config. */
+            checkManagerIsListed(get-class(Spark.Core.Manager.IRouteManager):TypeName, get-class(Spark.Core.Manager.RouteManager):TypeName).
+            checkManagerIsListed(get-class(Spark.Core.Manager.IMessageManager):TypeName, get-class(Spark.Core.Manager.MessageManager):TypeName).
         end. /* CatalogManager Listed */
     end method.
 

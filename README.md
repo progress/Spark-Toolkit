@@ -9,9 +9,7 @@ The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/
 
 ## Requirements
 
-**OpenEdge 11.7.3** or later is highly recommended, with the most current toolkit release compiled on this version and utilizing several product improvements available. Some features appearing since the 4.3.0 release utilize code available in the (forthcoming) 11.7.4 release, but are also provided here in a Procedure Library (PL) bundled for easy inclusion in your PROPATH. Please observe the steps and related notes in the Project Usage section carefully.
-
-**Regression Note:** While the toolkit is *technically* compatible with OE 11.6.3, it must be re-compiled on that version due to changes in ABL library dependencies in OpenEdge. For maximum compatibility and support, use of 11.7 is still preferred if possible.
+**OpenEdge 11.7.3** or later is required, with the most current toolkit release compiled on version 11.7.3 and utilizing several product improvements available. Some features appearing since the 4.3.0 release utilize code available in the (forthcoming) 11.7.4 release, but are also provided here in a Procedure Library (PL) bundled for easy inclusion in your PROPATH. Please observe the steps and related notes in the Project Usage section carefully.
 
 ### Supporting Tools
 
@@ -23,10 +21,8 @@ The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/
 
 As previously mentioned, the Progress Spark Toolkit library is intended for use with the **Progress Application Server for OpenEdge** (PASOE) as the target for deployment of applications. As such, projects utilizing the framework are expected to be of type "ABL Web App" and deployed to a PAS instance with the exposed Data Services.
 
-**Dependency Note:** Please copy/include the `/dist/OpenEdge.Net.11.7.4.pl` library if not yet using 11.7 SP4.
-
 1. Copy the `/dist/Spark.pl` library to your project's AppServer directory.
-2. Add the procedure libraries to the PROPATH of your project.
+2. Add the procedure library to the PROPATH of your project.
 3. At deployment, copy any PL's into the `CATALINA_BASE/openedge` folder of your PAS instance.
 4. Add the procedure libraries to the PROPATH of your server instance.
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.

@@ -113,13 +113,14 @@
             <propath>
                 <pathelement path="${src.dir}/Ccs"/>
                 <pathelement path="${src.dir}/Spark"/>
-                <pathelement path="${build.out}/OpenEdge.Net.pl"/>
+				<pathelement path="${src.dir}/OpenEdge"/>
 				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
             </propath>
             <fileset dir="${src.dir}">
-                <include name="Spark/Core/**/*.cls"/>
+                <include name="OpenEdge/**/*.cls"/>
+				<include name="Spark/Core/**/*.cls"/>
                 <include name="Spark/Core/**/*.p"/>
 				<include name="Spark/*.p"/>
             </fileset>
