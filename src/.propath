@@ -2,7 +2,6 @@
 <propath version="11.7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="schema/propath.xsd">
 <propathentry env="all" excluding="/PMFO/preprocess/¦/PMFO/build/¦/PMFO/doctemp/¦/PMFO/docs/" kind="src" path="@{ROOT}" platform="All"/>
 <propathentry env="gui" kind="src" path="@{ROOT}\tests" platform="All"/>
-<propathentry env="all" kind="lib" path="..\OpenEdge.Net.11.7.4.pl" platform="All"/>
 <propathentry env="tty" kind="con" path="com.openedge.pdt.text.TTY_LIBRARIES" platform="All"/>
 <propathentry env="gui" kind="con" path="com.openedge.pdt.text.GUI_LIBRARIES" platform="All"/>
 <propathentry env="all" kind="con" path="com.openedge.pdt.text.DLC_PATHS" platform="All"/>
