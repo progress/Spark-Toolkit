@@ -711,8 +711,8 @@ class OpenEdge.Web.DataObject.ServiceRegistryLoader implements ISupportLogging:
                            propMax    = propArray:Length
                            .
                     do propLoop = 1 to propMax:
-/*                        if propArray:GetType(propLoop) eq JsonDataType:STRING then                       */
-/*                            oMappedOperation:Cookies:Add(Cookie:Parse(propArray:GetCharacter(propLoop))).*/
+                        if propArray:GetType(propLoop) eq JsonDataType:STRING then
+                            oMappedOperation:Cookies:Add(Cookie:Parse(propArray:GetCharacter(propLoop))).
                     end.
                 end.
             end.    /* VERB-LOOP: */
