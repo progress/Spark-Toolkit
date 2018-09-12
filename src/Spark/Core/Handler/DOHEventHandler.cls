@@ -157,14 +157,14 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
 
 
     method private void UpdateLogging ( ):
-        define variable oLoggingManager as ILoggingManager no-undo.        
+        define variable oLoggingManager as ILoggingManager no-undo.
         assign oLoggingManager = cast(Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)), ILoggingManager).
 
         /**
          * Force the reset of the logging config object,
          * and update to the latest logging level/types.
          */
-        if valid-object(oLoggingManager) then do: 
+        if valid-object(oLoggingManager) then do:
             oLoggingManager:updateLoggingLevel().
             oLoggingManager:updateLogEntryTypes().
         end. /* Valid Object */
@@ -483,7 +483,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         /* Stop all services with a "request" lifetime. */
         Ccs.Common.Application:ServiceManager:stopServices(ServiceLifeCycleEnum:request).
 
-        /* Leave a log message that the DOH event handler has been loaded. */        
+        /* Leave a log message that the DOH event handler has been loaded. */
         oLogger:Debug(substitute("DOH-UNLD - &1", poEventArgs:Operation:TargetName)).
     end method. /* UnloadEntityHandler */
 
