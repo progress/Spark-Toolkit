@@ -2166,7 +2166,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     cServiceURI  = (if (bMethod.PublicName gt "") eq true then substitute("&1/&2", bResource.PublicName, bMethod.PublicName) else bResource.PublicName)
                     oHttpMethod  = MethodEnum:GetEnum(bMethod.OperationVerb)
                     cTargetType  = (if bResource.IsClass then TargetTypeEnum:Class:ToString() else TargetTypeEnum:Procedure:ToString())
-                    cTargetName  = bMethod.ClassPath
+                    cTargetName  = (if bResource.IsClass then bMethod.ClassPath else bResource.SourcePath)
                     cEntityType  = (if bResource.IsClass then "Progress.Lang.Object" else ?)
                     cFuncMethod  = bMethod.MethodName
                     iStatusCode  = integer(StatusCodeEnum:ok)

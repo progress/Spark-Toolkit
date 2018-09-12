@@ -259,20 +259,46 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     method private void LoadEntityHandler ( input poSender    as Progress.Lang.Object,
                                             input poEventArgs as HandlerLoadEntityEventArgs ):
         /* Leave a log message that the DOH event handler is being loaded. */
-        oLogger:Debug(substitute("DOH-LOAD - Requested Entity '&1'", poEventArgs:Operation:TargetName)).
+        oLogger:Debug(substitute("DOH-LOAD - Requested Entity '&1' as &2", poEventArgs:Operation:TargetName, poEventArgs:Operation:TargetType)).
 
         this-object:UpdateLogging(). /* Refresh logging options for Spark. */
 
-        /* Attempt to load the requested service for this business entity. */
-        define variable oServiceClass as Progress.Lang.Class no-undo.
-        assign oServiceClass = Progress.Lang.Class:GetClass(poEventArgs:Operation:TargetName) no-error.
-        if valid-object(oServiceClass) then do:
-            /* Start and obtain a service class instance from the local CCS ServiceManager implementation. */
-            assign poEventArgs:BusinessEntity = Ccs.Common.Application:ServiceManager:getService(oServiceClass).
+        /* Determine the target type of the entity, which for this implementation should be Class or Procedure. */
+        define variable oTargetType as TargetTypeEnum no-undo.
+        assign oTargetType = TargetTypeEnum:GetEnum(poEventArgs:Operation:TargetType).
 
-            /* Leave a log message that the DOH event handler has been loaded. */
-            oLogger:Debug(substitute("DOH-LOAD - Located Entity '&1'", oServiceClass:TypeName)).
-        end. /* valid-object */
+        /* Attempt to load the requested service for this business entity. */
+        case oTargetType:
+            when TargetTypeEnum:Class then do:
+                define variable oServiceClass as Progress.Lang.Class no-undo.
+                assign oServiceClass = Progress.Lang.Class:GetClass(poEventArgs:Operation:TargetName) no-error.
+                if valid-object(oServiceClass) then do:
+                    /* Start and obtain a service class instance from the local CCS ServiceManager implementation. */
+                    assign poEventArgs:BusinessEntity = Ccs.Common.Application:ServiceManager:getService(oServiceClass).
+
+                    /* Leave a log message that the DOH event handler has been loaded. */
+                    oLogger:Debug(substitute("DOH-LOAD - Located Class Entity '&1'", oServiceClass:TypeName)).
+                end. /* valid-object */
+            end. /* class */
+
+            when TargetTypeEnum:Procedure then do:
+                define variable hProcedure as handle no-undo.
+
+                /* Start the procedure as a persistent handle and store in an OE.Core.WidgetHandle class. */
+                run value(poEventArgs:Operation:TargetName) persistent set hProcedure.
+                assign poEventArgs:BusinessEntity = new WidgetHandle(hProcedure, true). /* true = auto-destroy */
+
+                /* Leave a log message that the DOH event handler has been loaded. */
+                oLogger:Debug(substitute("DOH-LOAD - Located Procedure Entity '&1'", poEventArgs:Operation:TargetName)).
+            end. /* procedure */
+
+            otherwise
+                assign poEventArgs:BusinessEntity = ?.
+        end case. /* oTargetType */
+
+        /**
+         * If we do not have an available entity by now, the default event logic will be run within the DOH class.
+         */
     end method. /* LoadEntityHandler */
 
 
@@ -284,10 +310,21 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                                           input poEventArgs as OperationInvocationEventArgs ):
         assign dInvokeTime = now. /* Remember when we start execution. */
 
+        /* Determine the target type of the entity. */
+        define variable oTargetType as TargetTypeEnum no-undo.
+        assign oTargetType = TargetTypeEnum:GetEnum(poEventArgs:Operation:TargetType).
+
         if poEventArgs:Operation:ServiceURI eq "/" then
             oLogger:Debug(substitute("INVOKING - &1 '&2' [&3]",
                                      string(poEventArgs:Operation:Method),
                                      poEventArgs:Service:Name,
+                                     poEventArgs:Operation:TargetName)).
+        if oTargetType eq TargetTypeEnum:Procedure then
+            oLogger:Debug(substitute("INVOKING - &1 /&2 &3 -> '&4' in &5",
+                                     string(poEventArgs:Operation:Method),
+                                     poEventArgs:Service:Name,
+                                     poEventArgs:Operation:ServiceURI,
+                                     poEventArgs:Operation:TargetFunction,
                                      poEventArgs:Operation:TargetName)).
         else
             oLogger:Debug(substitute("INVOKING - &1 /&2/&3 -> &4:&5",
@@ -360,12 +397,23 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
             poEventArgs:Response:SetHeader(oHeader).
         end. /* iStart gt 0 */
 
+        /* Determine the target type of the entity. */
+        define variable oTargetType as TargetTypeEnum no-undo.
+        assign oTargetType = TargetTypeEnum:GetEnum(poEventArgs:Operation:TargetType).
+
         if poEventArgs:Operation:ServiceURI eq "/" then
             oLogger:Debug(substitute("INVOKED_ - &1 '&2' [&3] (&4ms)",
                                      string(poEventArgs:Operation:Method),
                                      poEventArgs:Service:Name,
                                      poEventArgs:Operation:TargetName,
                                      fElapsed)).
+        if oTargetType eq TargetTypeEnum:Procedure then
+            oLogger:Debug(substitute("INVOKED_ - &1 /&2 &3 -> '&4' in &5",
+                                     string(poEventArgs:Operation:Method),
+                                     poEventArgs:Service:Name,
+                                     poEventArgs:Operation:ServiceURI,
+                                     poEventArgs:Operation:TargetFunction,
+                                     poEventArgs:Operation:TargetName)).
         else
             oLogger:Debug(substitute("INVOKED_ - &1 /&2/&3 -> &4:&5 (&6ms)",
                                      string(poEventArgs:Operation:Method),
@@ -422,8 +470,20 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
      */
     method private void UnloadEntityHandler ( input poSender    as Progress.Lang.Object,
                                               input poEventArgs as HandlerLoadEntityEventArgs ):
-        /* Leave a log message that the DOH event handler has been loaded. */
+        /* Determine the target type of the entity. */
+        define variable oTargetType as TargetTypeEnum no-undo.
+        assign oTargetType = TargetTypeEnum:GetEnum(poEventArgs:Operation:TargetType).
+
+        /* Directly destroy the WidgetHandle class around any procedures (auto-destroys procedure handle). */
+        if oTargetType eq TargetTypeEnum:Procedure then do:
+            delete object poEventArgs:BusinessEntity no-error.
+            assign poEventArgs:BusinessEntity = ?.
+        end.
+
+        /* Stop all services with a "request" lifetime. */
         Ccs.Common.Application:ServiceManager:stopServices(ServiceLifeCycleEnum:request).
+
+        /* Leave a log message that the DOH event handler has been loaded. */        
         oLogger:Debug(substitute("DOH-UNLD - &1", poEventArgs:Operation:TargetName)).
     end method. /* UnloadEntityHandler */
 
