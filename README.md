@@ -4,12 +4,13 @@
 
 The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/CCS) reference implementation from Progress meant to aid in creating an ABL application which provides RESTful API's for microservices. This repository primarily contains ABL artifacts and was built specifically for the **Progress Application Server for OpenEdge** to provide the back-end (server-side) support for exposing ABL logic via HTTP/HTTP.
 
-**Latest Release:** v4.3.0 (September 2018)
+**Latest Release:** v4.3.0 (September 2018) for OE 11.7.3
 
 
 ## Requirements
 
-**OpenEdge 11.7.3** or later is required, with the most current toolkit release compiled on version 11.7.3 and utilizing several product improvements available. Some features appearing since the 4.3.0 release utilize code available in the (forthcoming) 11.7.4 release, but are also provided here in a Procedure Library (PL) bundled for easy inclusion in your PROPATH. Please observe the steps and related notes in the Project Usage section carefully.
+**OpenEdge 11.7.3** or later is required, with the current toolkit release being compiled on version 11.7.3 and utilizing several product improvements available. Some new features appearing in the 4.3.0 release utilize code available in the (forthcoming) 11.7.4 release, and are provided automatically in the Spark.pl for this release.
+
 
 ### Supporting Tools
 
@@ -28,9 +29,9 @@ As previously mentioned, the Progress Spark Toolkit library is intended for use 
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.
 6. If intending to utilize OERealm security, copy the `/cfg/Realm/SparkRealm.json` file to `CATALINA_BASE/conf/spark/` and `/cfg/Realm/SparkRealm.cp` to `CATALINA_BASE/common/lib/`.
 
-**CCS Note 1:** If using 11.7.2 or later, the CCS classes are now included in the OpenEdge product. However, the released SP2 build contained a typo which prevented one class from compiling correctly, and has since been fixed in SP3. Therefore, if using OE 11.7.0 through 11.7.2 simply include the `/dist/Ccs.pl` along side the `Spark.pl` mentioned above.
+**CCS Note 1:** If using 11.7.0-11.7.2 you will need to include the `/dist/Ccs.pl` along side the `Spark.pl` mentioned above. This is due to a minor typo in 11.7.2's initial inclusion of the CCS classes, which prevented one toolkit class from compiling correctly. This has since been corrected as of the SP3 release.
 
-**CCS Note 2:** The product-provided CCS r-code is located in the `DLC/gui/OpenEdge.BusinessLogic.pl` library. Source code is not included within the product-bundled PL file, but does exist within the `/dist/Ccs.pl` bundled within the Spark-Toolkit repository as well as the `/src/Ccs` directory.
+**CCS Note 2:** The product-provided CCS r-code is located in the `DLC/gui/OpenEdge.BusinessLogic.pl` library. Source code is not included within the product-bundled PL file, but does exist within Spark-Toolkit repository in the `/src/Ccs` directory.
 
 
 ## Contributions / Changes
@@ -47,4 +48,4 @@ To create an updated distribution of the PL libraries, utilize the "ant" program
 
 ## Documentation
 
-Please view the "docs" folder to view various forms of documentation for the available code (ABLDuck and PCTDoc). These formats can be re-generated using the same "ant" script as noted above for builds according to the usage instructions.
+Please view the "docs" folder to view various forms of documentation for the available code (ABLDuck and PCTDoc). These formats can be re-generated using the same "ant" script as noted above for builds according to the usage instructions. Supplemental guides and supporting resources may be found in this directory as well.
