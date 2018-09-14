@@ -103,22 +103,36 @@
     </target>
 
     <target name="compile_spark_core" depends="init_oe">
+		<delete dir="${preprocess}/OpenEdge" quiet="true"/>
 		<delete dir="${preprocess}/Spark" quiet="true"/>
 
         <!-- Write the current release version to a specific file, for inclusion in the compiled code. -->
         <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION ${release.version}-${release.date} (${oe.version})"/>
+
+        <!-- Code compiles without need for a database. -->
+        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+            <propath>
+				<pathelement path="${src.dir}"/>
+				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+            </propath>
+            <fileset dir="${src.dir}">
+                <include name="OpenEdge/**/*.cls"/>
+            </fileset>
+        </PCTCompile>
 
         <!-- Code compiles without need for a database, but uses Ccs and extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
                 <pathelement path="${src.dir}/Ccs"/>
                 <pathelement path="${src.dir}/Spark"/>
-                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+				<pathelement path="${build.tmp}"/>
+				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
             </propath>
             <fileset dir="${src.dir}">
-                <include name="Spark/Core/**/*.cls"/>
+				<include name="Spark/Core/**/*.cls"/>
                 <include name="Spark/Core/**/*.p"/>
 				<include name="Spark/*.p"/>
             </fileset>
@@ -126,12 +140,26 @@
     </target>
 
     <target name="compile_spark_diag" depends="init_oe">
+		<delete dir="${preprocess}/OpenEdge" quiet="true"/>
         <delete dir="${preprocess}/Spark" quiet="true"/>
+
+        <!-- Code compiles without need for a database. -->
+        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+            <propath>
+				<pathelement path="${src.dir}"/>
+				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+            </propath>
+            <fileset dir="${src.dir}">
+                <include name="OpenEdge/**/*.cls"/>
+            </fileset>
+        </PCTCompile>
 
 		<!-- Code compiles without need for a database, but uses some extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
 				<pathelement path="${src.dir}/Spark"/>
+				<pathelement path="${build.tmp}"/>
                 <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
             </propath>
@@ -291,17 +319,19 @@
         <delete dir="${build.tmp}/Common" quiet="true"/>
         <delete dir="${build.tmp}/ServiceManager" quiet="true"/>
 
-        <!-- Build PL file with both source and R-code. -->
+        <!-- Build PL file with R-code. -->
         <PCTLibrary destfile="${build.out}/Ccs.pl" dlcHome="${dlcHome}">
             <fileset dir="${build.tmp}">
                 <include name="Ccs/**/*.r"/>
             </fileset>
         </PCTLibrary>
+		<!--
         <PCTLibrary destfile="${build.out}/Ccs.pl" dlcHome="${dlcHome}">
             <fileset dir="${src.dir}">
                 <include name="Ccs/**/*.cls"/>
             </fileset>
         </PCTLibrary>
+		-->
     </target>
 
     <target name="build_spark_pl" depends="init_oe">
@@ -314,12 +344,14 @@
         <delete dir="${build.tmp}/Ccs" quiet="true"/>
         <delete dir="${build.tmp}/Core" quiet="true"/>
 
-        <!-- Build PL file with both source and R-code. -->
+        <!-- Build PL file with R-code. -->
         <PCTLibrary destfile="${build.out}/Spark.pl" dlcHome="${dlcHome}">
             <fileset dir="${build.tmp}">
                 <include name="Spark/**/*.r"/>
+				<include name="OpenEdge/**/*.r"/>
             </fileset>
         </PCTLibrary>
+		<!--
         <PCTLibrary destfile="${build.out}/Spark.pl" dlcHome="${dlcHome}">
             <fileset dir="${src.dir}">
                 <include name="Spark/Core/**/*.cls"/>
@@ -328,6 +360,7 @@
                 <include name="Spark/*.p"/>
             </fileset>
         </PCTLibrary>
+		-->
     </target>
 
     <target name="build_diag_pl" depends="init_oe">
@@ -339,18 +372,20 @@
         <delete dir="${build.tmp}/.pct" quiet="true"/>
 		<delete dir="${build.tmp}/Ccs" quiet="true"/>
 
-        <!-- Build PL file with both source and R-code. -->
+        <!-- Build PL file with R-code. -->
         <PCTLibrary destfile="${build.out}/Diagnostic.pl" dlcHome="${dlcHome}">
             <fileset dir="${build.tmp}">
                 <include name="Spark/Diagnostic/**/*.r"/>
             </fileset>
         </PCTLibrary>
+		<!--
         <PCTLibrary destfile="${build.out}/Diagnostic.pl" dlcHome="${dlcHome}">
             <fileset dir="${src.dir}">
                 <include name="Spark/Diagnostic/**/*.cls"/>
 				<include name="Spark/Diagnostic/**/*.p"/>
             </fileset>
         </PCTLibrary>
+		-->
     </target>
 
 </project>

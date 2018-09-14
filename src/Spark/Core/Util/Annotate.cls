@@ -9,13 +9,14 @@
 
 using Progress.Lang.* from propath.
 using Progress.Json.ObjectModel.* from propath.
+using OpenEdge.Net.HTTP.MethodEnum from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Util.FieldInfo from propath.
+using Spark.Core.Util.OperationEnum from propath.
 
 block-level on error undo, throw.
 
 class Spark.Core.Util.Annotate:
-
 
     method public static void addProperty ( input pcClassPath     as character,
                                             input pcOperationType as character,
@@ -121,36 +122,64 @@ class Spark.Core.Util.Annotate:
     end method. /* describeFields */
 
 
-    method public static void describeInvoke ( input pcResourceName as character,
-                                               input pcMethodName   as character ):
-        describeInvoke( pcResourceName,
-                        pcMethodName,
-                        pcMethodName,
-                        "" ).
-    end method. /* describeInvoke */
-
-
-    method public static void describeInvoke ( input pcResourceName    as character,
-                                               input pcMethodName      as character,
-                                               input pcMethodAlternate as character ):
-        describeInvoke( pcResourceName,
-                        pcMethodName,
-                        pcMethodAlternate,
-                        "put" ).
-    end method. /* describeInvoke */
-
-
-    method public static void describeInvoke ( input pcResourceName    as character,
-                                               input pcMethodName      as character,
-                                               input pcMethodAlternate as character,
-                                               input pcHttpMethod      as character ):
-        describeResource( "",
+    method public static void describeCreate ( input pcServiceURI      as character,
+                                               input pcResourceName    as character,
+                                               input pcMethodName      as character ):
+        describeResource( pcServiceURI,
                           pcResourceName,
                           pcMethodName,
-                          pcMethodAlternate,
-                          "invoke",
-                          pcHttpMethod ).
-    end method. /* describeInvoke */
+                          OperationEnum:create:toString(),
+                          OperationEnum:create:toString(),
+                          MethodEnum:post:toString() ).
+    end method. /* describeCreate */
+
+
+    method public static void describeRead ( input pcServiceURI      as character,
+                                             input pcResourceName    as character,
+                                             input pcMethodName      as character ):
+        describeResource( pcServiceURI,
+                          pcResourceName,
+                          pcMethodName,
+                          OperationEnum:read:toString(),
+                          OperationEnum:read:toString(),
+                          MethodEnum:get:toString() ).
+    end method. /* describeRead */
+
+
+    method public static void describeUpdate ( input pcServiceURI      as character,
+                                               input pcResourceName    as character,
+                                               input pcMethodName      as character ):
+        describeResource( pcServiceURI,
+                          pcResourceName,
+                          pcMethodName,
+                          OperationEnum:update:toString(),
+                          OperationEnum:update:toString(),
+                          MethodEnum:put:toString() ).
+    end method. /* describeCreate */
+
+
+    method public static void describeDelete ( input pcServiceURI      as character,
+                                               input pcResourceName    as character,
+                                               input pcMethodName      as character ):
+        describeResource( pcServiceURI,
+                          pcResourceName,
+                          pcMethodName,
+                          OperationEnum:delete:toString(),
+                          OperationEnum:delete:toString(),
+                          MethodEnum:delete:toString() ).
+    end method. /* describeDelete */
+
+
+    method public static void describeSubmit ( input pcServiceURI      as character,
+                                               input pcResourceName    as character,
+                                               input pcMethodName      as character ):
+        describeResource( pcServiceURI,
+                          pcResourceName,
+                          pcMethodName,
+                          OperationEnum:submit:toString(),
+                          OperationEnum:submit:toString(),
+                          MethodEnum:put:toString() ).
+    end method. /* describeSubmit */
 
 
     method public static void describeInvoke ( input pcServiceURI      as character,
@@ -162,37 +191,9 @@ class Spark.Core.Util.Annotate:
                           pcResourceName,
                           pcMethodName,
                           pcMethodAlternate,
-                          "invoke",
+                          OperationEnum:invoke:toString(),
                           pcHttpMethod ).
     end method. /* describeInvoke */
-
-
-    method public static void describeResource ( input pcResourceName  as character,
-                                                 input pcMethodName    as character,
-                                                 input pcOperationType as character,
-                                                 input pcOperationVerb as character ):
-        describeResource( "",
-                          pcResourceName,
-                          pcMethodName,
-                          pcMethodName,
-                          pcOperationType,
-                          pcOperationVerb ).
-    end method. /* describeResource */
-
-
-    method public static void describeResource ( input pcResourceName    as character,
-                                                 input pcMethodName      as character,
-                                                 input pcMethodAlternate as character,
-                                                 input pcOperationType   as character,
-                                                 input pcOperationVerb   as character ):
-        cast(Ccs.Common.Application:StartupManager:getManager(get-class(ICatalogManager)), ICatalogManager)
-             :describeResource( "",
-                                pcResourceName,
-                                pcMethodName,
-                                pcMethodAlternate,
-                                pcOperationType,
-                                pcOperationVerb ).
-    end method. /* describeResource */
 
 
     method public static void describeResource ( input pcServiceURI      as character,

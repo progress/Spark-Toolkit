@@ -75,12 +75,13 @@ define temp-table ttServerObjects no-undo
     field objectType     as character
     field objectFileName as character
     field objectHandle   as integer
-    index idxObjFileType as primary objectType objectFileName
+/*    index idxObjFileType as primary objectType objectFileName*/
     .
 
 if log-manager:logging-level ge {&MIN_LOG_LEVEL} then do:
+    logMessage("Session Shutdown, Dumping Memory Objects", "SPARK-SHUT", {&MIN_LOG_LEVEL}).
     run logObjects. /* Export information about objects still in memory. */
-    logMessage("Session Shutdown, Memory Dumped", "SPARK-SHUT", {&MIN_LOG_LEVEL}).
+    logMessage("Session Shutdown, Memory Objects Dumped", "SPARK-SHUT", {&MIN_LOG_LEVEL}).
 end.
 
 catch err as Progress.Lang.Error:
@@ -179,17 +180,25 @@ procedure logObjects private:
 
     /* Create output file using current Agent PID and Session ID. */
     assign oRequest = cast(session:current-request-info, Progress.Lang.OERequestInfo).
-    assign cFile = substitute("&1/MemDump_A&2_S&3.txt",
-                              right-trim(replace(session:temp-directory, "~\", "~/"), "~/"),
-                              oRequest:AgentId, oRequest:SessionId).
-    delete object oRequest no-error.
+    if oRequest:AgentId ne ? and oRequest:SessionId ne ? then
+        assign cFile = substitute("&1/MemDump_A&2_S&3.txt",
+                                  right-trim(replace(session:temp-directory, "~\", "~/"), "~/"),
+                                  oRequest:AgentId, oRequest:SessionId).
+    else
+        assign cFile = substitute("&1/MemDump_&2.txt",
+                                  right-trim(replace(session:temp-directory, "~\", "~/"), "~/"),
+                                  caps(hex-encode(generate-uuid))).
 
     output to value(cFile).
     for each ttServerObjects no-lock:
-        iCount = iCount + 1.
-        export delimiter "," ttServerObjects.
+        assign iCount = iCount + 1.
+        export delimiter "|" ttServerObjects.
     end.
     output close.
 
     logMessage(substitute("Memory dumped to &1. &2 objects still in memory", cFile, iCount), "SPARK-SHUT", 0).
+
+    finally:
+        delete object oRequest no-error.
+    end finally.
 end procedure.

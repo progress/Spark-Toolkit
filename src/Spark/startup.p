@@ -51,20 +51,28 @@ if valid-object(oManager) then do:
     logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
 end. /* valid-object */
 
-/* Create a standard handler for OpenEdge.Web.DataObject.DataObjectHandler events. */
+/**
+ * Create a persistent handler for OpenEdge.Web.DataObject.DataObjectHandler events.
+ * This defines overrides to the default DOH class events and provides integration
+ * into the current session's implementation of the Progress Spark Toolkit through
+ * use of the CCS Manager classes. Additionally, starting the class will subscribe
+ * to the necessary events and begin loading the necessary registries ahead of any
+ * requests. This greatly reduces the "time to first data" on the initial request.
+ */
 &IF {&CAN_USE_DOH} &THEN
-/* Only if using OE 11.6.3 or later. */
+/* Only relevant if using OE 11.6.3 or later. */
 new Spark.Core.Handler.DOHEventHandler().
 
-/* Discover all DOH services for this webapp. */
+/* Discover any file-based DOH services for this webapp. */
 define variable cServiceMapPath as character no-undo.
-file-info:file-name = "ROOT.map".
-if file-info:full-pathname ne ? then
+file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
+if file-info:full-pathname ne ? then /* File is present, so obtain the base path of the file. */
     assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
 if (cServiceMapPath gt "") eq true then do:
+    /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
     logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
     OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
-end.
+end. /* cServiceMapPath */
 &ENDIF
 
 catch err as Progress.Lang.Error:

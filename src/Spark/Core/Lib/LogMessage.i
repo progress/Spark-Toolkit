@@ -19,11 +19,48 @@ method {&ClassProtected} void logMessage
 function logMessage returns logical {&FunctionPrivate}
 &endif
     ( pcMessage as character, pcSubSystem as character, piLogLevel as integer ):
-    /* 0 (None), 1 (Errors), 2 (Basic), 3 (Verbose), 4 (Extended) */
-    if piLogLevel eq ? then assign piLogLevel = 2.
+    /* Obtain the current request object, which we will use to determine the logging solution. */
+    define variable oRequest as Progress.Lang.OERequestInfo no-undo.
+    assign oRequest = cast(session:current-request-info, Progress.Lang.OERequestInfo).
 
-    if valid-handle(log-manager) and log-manager:logfile-name ne ? and log-manager:logging-level ge piLogLevel then
-        log-manager:write-message(pcMessage, caps(pcSubSystem)).
+    /* Determine which logging solution to use as based on presence of a PAS Agent ID. */
+    if valid-object(oRequest) and oRequest:AgentId ne ? then do:
+        /* Prepare a logger using a custom name for the Spark Toolkit overall. */
+        define variable oLogger as OpenEdge.Logging.ILogWriter no-undo.
+        assign oLogger = OpenEdge.Logging.LoggerBuilder:GetLogger("SparkToolkit").
+
+        /**
+         * The legacy use case of the log level is to output certain messages when a certain value is met.
+         * Examples:
+         * -For messages at level 0 these should be treated as FATAL, and always output.
+         * -For messages at level 1 treat as an Error condition which must be output.
+         * -For messages at level 2 treat as Informational, level 3 as Debugging.
+         * -For all other message levels these should be treated as Trace output.
+         */
+        case piLogLevel:
+            when 0 then
+                oLogger:Fatal(pcSubSystem, pcMessage).
+            when 1 then
+                oLogger:Error(pcSubSystem, pcMessage).
+            when 2 then
+                oLogger:Info(pcSubSystem, pcMessage).
+            when 3 then
+                oLogger:Debug(pcSubSystem, pcMessage).
+            otherwise
+                oLogger:Trace(pcSubSystem, pcMessage).
+        end case.
+    end. /* Has Agent/Session */
+    else do:
+        /* 0 (None), 1 (Errors), 2 (Basic), 3 (Verbose), 4 (Extended) */
+        if piLogLevel eq ? then assign piLogLevel = 2.
+
+        if valid-handle(log-manager) and log-manager:logfile-name ne ? and log-manager:logging-level ge piLogLevel then
+            log-manager:write-message(pcMessage, caps(pcSubSystem)).
+    end. /* No Agent/Session */
+
+    finally:
+        delete object oRequest no-error.
+    end finally.
 &if ({&IsClass} eq true) &then
 end method.
 &else

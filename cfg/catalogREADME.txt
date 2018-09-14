@@ -1,4 +1,4 @@
-When utilizing the PMFO version of the "Data Object Handler" methodology for accessing business logic,
+When utilizing the Spark version of the "Data Object Handler" methodology for accessing business logic,
 the CatalogManager serves as gateway for discovery of those resources. This is driven by the catalog.json
 file and is dependent on certain configuration options to be set according to your application.
 
@@ -46,7 +46,8 @@ to be provided within the ServiceResource property. Alternatively, see the sampl
  "Config": {
   "General": [
     {
-      "ApiVersion": 4.2,
+      "ApiVersion": 4.3,
+      "CatalogService": "Spark.Core.Service.ICatalog",
       "BusinessRoot": "Business.pl",
       "EnableDebugs": false,
       "IdProperty": "id",

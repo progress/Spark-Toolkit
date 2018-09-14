@@ -1,5 +1,5 @@
 To enable the dynamic logging options, you will need the logging.json config file
-present in your PAS config directory, available to the PMFO framework. By default
+present in your PAS config directory, available to the Spark toolkit. By default
 this should be a "spark" subdirectory, but as a last resort the primary "conf"
 folder will be checked. When the file is present, it will be evaluated within the
 LoggingManager (when necessary) as provided with the project code here. Modifying

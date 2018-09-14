@@ -14,7 +14,6 @@ using Spark.Core.Interface.IServiceFacade from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.IMessageManager from propath.
-using Spark.Core.Manager.IStatsManager from propath.
 using Spark.Core.Web.SparkRequest from propath.
 using Spark.Core.Web.SparkResponse from propath.
 
@@ -66,6 +65,11 @@ class Spark.Core.Handler.DataObjectHandler inherits Spark.Core.Handler.SparkHand
         end get.
         set.
 
+    constructor public DataObjectHandler ( ):
+        message "NOTICE: The Spark.Core.Handler.DataObjectHandler is slated for deprecation in the near future. "
+              + "Please use the product-supplied OpenEdge.Web.DataObject.DataObjectHandler instead.".
+    end constructor.
+
 
     /** Protected Methods **/
 
@@ -91,32 +95,6 @@ class Spark.Core.Handler.DataObjectHandler inherits Spark.Core.Handler.SparkHand
 
         /* Use response object to write output to webstream. */
         writeResponse(oSparkResponse).
-
-        define variable oMessageManager as IMessageManager no-undo.
-        define variable oStatsManager   as IStatsManager   no-undo.
-
-        assign
-            oMessageManager = cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager)
-            oStatsManager   = cast(Ccs.Common.Application:StartupManager:getManager(get-class(IStatsManager)), IStatsManager)
-            no-error.
-
-        if valid-object(oStatsManager) and valid-object(oMessageManager) then do:
-            /* Utilize data gathered so far to prepare the statistcs on this request. */
-            oStatsManager:ServicePath = oSparkRequest:SparkServiceURI.
-            oStatsManager:ResourceName = oSparkRequest:SparkResourceName.
-            oStatsManager:MethodName = oSparkRequest:SparkMethodName.
-            oStatsManager:ContentType = oSparkResponse:ContentType.
-            oStatsManager:ApiVersion = oSparkRequest:SparkApiVersion.
-            oStatsManager:HttpMethod = oSparkRequest:Method.
-            oStatsManager:RequestTime = oMessageManager:RequestTime.
-            oStatsManager:RequestSize = length(oSparkRequest:SparkBody, "raw").
-            oStatsManager:ResponseCode = oSparkResponse:StatusCode.
-            oStatsManager:ResponseSize = oSparkResponse:ContentLength.
-            oStatsManager:SessionID = oMessageManager:SessionID.
-            oStatsManager:ElapsedTime = oMessageManager:ElapsedTime.
-            oStatsManager:saveStatistics().
-            oStatsManager:resetStatistics().
-        end.
 
         return 0.
 

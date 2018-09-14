@@ -425,7 +425,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
 
 
     method public void dumpObjects ( ):
-        temp-table SchemaObject:write-json("file", "Schema.json", true).
+        temp-table SchemaObject:write-json("file", substitute("&1/SchemaInfo.json", right-trim(replace(session:temp-directory, "~\", "~/"), "~/")), true).
 
         catch err as Progress.Lang.Error:
             /* Do not throw errors on a debug action, just message out and continue. */
