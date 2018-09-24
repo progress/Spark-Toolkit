@@ -56,10 +56,8 @@ class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
         end set.
     
     // Stateful variables for the case where Write(MappedOperation) is called independently from the Write(DataObjectService) call
-    // The current service name
-    define private variable mCurrentServiceName as character no-undo.
-    // The current service version
-    define private variable mCurrentServiceVersion as SemanticVersion no-undo.
+    // The current service 
+    define private variable mCurrentService as DataObjectService no-undo.
     
     /** Constructor.
         
@@ -142,10 +140,10 @@ class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
                 WriteDOS(cast(pData, DataObjectService)).
             
             when type-of(pData, MappedOperation) then
-                WriteOperation(mCurrentServiceName, mCurrentServiceVersion, cast(pData, MappedOperation)).
+                WriteOperation(mCurrentService, cast(pData, MappedOperation)).
             
             when type-of(pData, IHandleHolder) then
-                WriteSchema(mCurrentServiceName, mCurrentServiceVersion, cast(pData, IHandleHolder):Value).
+                WriteSchema(mCurrentService, cast(pData, IHandleHolder):Value).
             
             otherwise
                 return error new AppError(
@@ -166,24 +164,22 @@ class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
         if not valid-object(pData) then
             return.
         
-        assign mCurrentServiceName    = pData:Name
-               mCurrentServiceVersion = pData:Version
-               .
+        assign mCurrentService = pData.
         WriteService(pData).
+        
+        assign schemas = pData:GetSchemas()
+               cnt     = extent(schemas)
+               .
+        do loop     = 1 to cnt:
+            WriteSchema(pData, schemas[loop]).
+        end.
         
         // operations
         assign ops = pData:GetOperations()
                cnt = extent(ops)
                .
         do loop = 1 to cnt:
-            WriteOperation(pData:Name, pData:Version, ops[loop]).
-        end.
-        
-        assign schemas = pData:GetSchemas()
-               cnt     = extent(schemas)
-               .
-        do loop = 1 to cnt:
-            WriteSchema(pData:Name, pData:Version, schemas[loop]).
+            WriteOperation(pData, ops[loop]).
         end.
     end method.
     
@@ -194,20 +190,16 @@ class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
     
     /* Writes a single MappedOperation 
        
-       @param character The Service name
-       @param SemanticVersion the service version
+       @param DataObjectService The parent DOService 
        @param MappedOperation The service operation to write */
-    method abstract protected void WriteOperation(input pService as character, 
-                                                  input pVersion as SemanticVersion,
+    method abstract protected void WriteOperation(input pSvc as DataObjectService,
                                                   input pData as MappedOperation).
     
     /* Writes a single schema
        
-       @param character The Service name
-       @param SemanticVersion the service version
+       @param DataObjectService The parent DOService
        @param handle The service schema to write */
-    method abstract protected void WriteSchema(input pService as character, 
-                                               input pVersion as SemanticVersion,
+    method abstract protected void WriteSchema(input pSvc as DataObjectService,
                                                input pData as handle).
     
 end class.

@@ -59,13 +59,11 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         super:Open().
     end method.
     
-    /* Writes a single MappedOperation 
+    /* Writes a single MappedOperation
        
-       @param character The service name
-       @param SemanticVersion The service version
+       @param DataObjectService The current service 
        @param MappedOperation The service operation to write */
-    method override protected void WriteOperation(input pService as character, 
-                                                  input pVersion as SemanticVersion,
+    method override protected void WriteOperation(input pService as DataObjectService, 
                                                   input pOperation as MappedOperation).
         define variable svcData as JsonObject no-undo.
         define variable opMethod as JsonObject no-undo.
@@ -73,7 +71,7 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         if not valid-object(pOperation) then
             return.
         
-        assign svcData  = GetServiceJson(pService, pVersion)
+        assign svcData  = GetServiceJson(pService)
                opMethod = GetOperationJson(svcData, pOperation:ServiceURI, pOperation:Method)
                .
         
@@ -159,9 +157,8 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         
         return methodData.
     end method.
-
-    method protected JsonObject GetServiceJson(input pName as character,
-                                               input pVersion as SemanticVersion):
+    
+    method protected JsonObject GetServiceJson(input pService as DataObjectService):
         define variable svcData as JsonObject no-undo.
         define variable services as JsonObject no-undo.
         define variable namedSvc as JsonArray no-undo.
@@ -178,25 +175,25 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         }
         */
         assign services = cast(this-object:Value, JsonObject):GetJsonObject(string(ServiceMappingFileSchemaEnum:services)).
-        if not services:Has(pName) then
+        if not services:Has(pService:Name) then
         do:
             assign namedSvc = new JsonArray().
-            services:Add(pName, namedSvc). 
+            services:Add(pService:Name, namedSvc). 
         end.
         else
-        case services:GetType(pName):
+        case services:GetType(pService:Name):
             when JsonDataType:ARRAY then
-                assign namedSvc = services:GetJsonArray(pName).
+                assign namedSvc = services:GetJsonArray(pService:Name).
             when JsonDataType:OBJECT then
             do:
                 assign namedSvc = new JsonArray().
-                namedSvc:Add(services:GetJsonObject(pName)).
-                services:Set(pName, namedSvc).
+                namedSvc:Add(services:GetJsonObject(pService:Name)).
+                services:Set(pService:Name, namedSvc).
             end.
             otherwise
             do:
                 assign namedSvc = new JsonArray().
-                services:Set(pName, namedSvc).
+                services:Set(pService:Name, namedSvc).
             end.
         end case.
         
@@ -205,14 +202,14 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
             if namedSvc:GetType(loop) eq JsonDataType:OBJECT then
                 assign svcData = namedSvc:GetJsonObject(loop). 
             
-            if not svcData:GetCharacter(string(ServiceMappingFileSchemaEnum:version)) eq string(pVersion) then
+            if not svcData:GetCharacter(string(ServiceMappingFileSchemaEnum:version)) eq string(pService:Version) then
                 assign svcData = ?.
         end.
         
         if valid-object(svcData) then
         do:
             if not svcData:Has(string(ServiceMappingFileSchemaEnum:version)) then
-                svcData:Add(string(ServiceMappingFileSchemaEnum:version), string(pVersion)).
+                svcData:Add(string(ServiceMappingFileSchemaEnum:version), string(pService:Version)).
             if not svcData:Has(string(ServiceMappingFileSchemaEnum:options)) then
                 svcData:Add(string(ServiceMappingFileSchemaEnum:options), new JsonObject()).
             if not svcData:Has(string(ServiceMappingFileSchemaEnum:argumentWriters)) then
@@ -226,7 +223,7 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         do:
         
             assign svcData = new JsonObject().
-            svcData:Add(string(ServiceMappingFileSchemaEnum:version),           string(pVersion)).
+            svcData:Add(string(ServiceMappingFileSchemaEnum:version),           string(pService:Version)).
             svcData:Add(string(ServiceMappingFileSchemaEnum:options),           new JsonObject()).
             svcData:Add(string(ServiceMappingFileSchemaEnum:argumentWriters),   new JsonObject()).
             svcData:Add(string(ServiceMappingFileSchemaEnum:operations),        new JsonObject()).
@@ -246,7 +243,7 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         if not valid-object(pData) then
             return.
         
-        assign svcData = GetServiceJson(pData:name, pData:Version).
+        assign svcData = GetServiceJson(pData).
         
         // version is already set in the svcData object
         
@@ -263,11 +260,9 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
     
     /* Writes a single schema
        
-       @param character The Service name
-       @param SemanticVersion the service version
+       @param DataObjectService The current service 
        @param handle The service schema to write */
-    method override protected void WriteSchema(input pService as character, 
-                                               input pVersion as SemanticVersion,
+    method override protected void WriteSchema(input pService as DataObjectService, 
                                                input pSchema as handle):
         define variable schemaJson as JsonObject no-undo.
         define variable childJson as JsonObject no-undo.
@@ -288,7 +283,7 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         then
             return.
         
-        assign svcData    = GetServiceJson(pService, pVersion)
+        assign svcData    = GetServiceJson(pService)
                schemaJson = GetSchemaJson(svcData, pSchema:name)
                .
         if pSchema:type eq 'dataset':u then
@@ -652,10 +647,11 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
                    .
             elemArr:Add(elemObj).
             
-            elemObj:Add(string(ServiceMappingFileSchemaEnum:type),   string(msgElem:ElementType)).
+            elemObj:Add(string(ServiceMappingFileSchemaEnum:type),   caps(string(msgElem:ElementType))).
             elemObj:Add(string(ServiceMappingFileSchemaEnum:name),   msgElem:ElementName).
             elemObj:Add(string(ServiceMappingFileSchemaEnum:ioMode), string(IoModeEnum:Input)).
-            elemObj:Add(string(ServiceMappingFileSchemaEnum:ablRef), msgElem:ABLReference).
+            if not msgElem:ABLReference eq ? then
+                elemObj:Add(string(ServiceMappingFileSchemaEnum:ablRef), msgElem:ABLReference).
         end.
         
         assign cnt = extent(pParam:OutputElement).
@@ -665,10 +661,11 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
                    .
             elemArr:Add(elemObj).
             
-            elemObj:Add(string(ServiceMappingFileSchemaEnum:type),   string(msgElem:ElementType)).
+            elemObj:Add(string(ServiceMappingFileSchemaEnum:type),   caps(string(msgElem:ElementType))).
             elemObj:Add(string(ServiceMappingFileSchemaEnum:name),   msgElem:ElementName).
             elemObj:Add(string(ServiceMappingFileSchemaEnum:ioMode), string(IoModeEnum:Output)).
-            elemObj:Add(string(ServiceMappingFileSchemaEnum:ablRef), msgElem:ABLReference).
+            if not msgElem:ABLReference eq ? then
+                elemObj:Add(string(ServiceMappingFileSchemaEnum:ablRef), msgElem:ABLReference).
         end.
         
         if elemArr:Length eq 1 then
