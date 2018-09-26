@@ -2281,6 +2281,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         else
                             assign oElementType = ElementTypeEnum:Field. /* Otherwise, use field of body. */
 
+                        if cParamName eq "bodyInput" then
+                            assign oElementType = ElementTypeEnum:Body. /* Special name indicates use of body. */
+
                         extent(oParam:InputElement) = 1.
                         assign oParam:InputElement[1] = new MessageElement(oElementType, cParamName, IOModeEnum:Input).
                     end. /* input */
@@ -2291,6 +2294,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         else
                             assign oElementType = ElementTypeEnum:Field. /* Otherwise, use field of body. */
 
+                        if cParamName eq "bodyOutput" then
+                            assign oElementType = ElementTypeEnum:Body. /* Special name indicates use of body. */
+
                         extent(oParam:OutputElement) = 1.
                         assign oParam:OutputElement[1] = new MessageElement(oElementType, cParamName, IOModeEnum:Output).
                     end. /* output */
@@ -2300,6 +2306,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                             assign oElementType = ElementTypeEnum:Body. /* Output dataset/table as body. */
                         else
                             assign oElementType = ElementTypeEnum:Field. /* Otherwise, use field of body. */
+
+                        if cParamName eq "bodyInputOutput" then
+                            assign oElementType = ElementTypeEnum:Body. /* Special name indicates use of body. */
 
                         extent(oParam:InputElement) = 1.
                         extent(oParam:OutputElement) = 1.
