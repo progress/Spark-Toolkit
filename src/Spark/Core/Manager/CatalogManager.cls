@@ -2156,6 +2156,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             /* Register the service using the name and version discovered. */
             assign oService = poRegistry:RegisterService(pcServiceName, poServiceVersion, ?, ?).
 
+            /* Store the catalog data within the DOS instance. */
+            oService:Catalog = this-object:getCatalog(bService.ServiceURI, "").
+
             for each bResource no-lock
                where bResource.ServiceURI eq bService.ServiceURI,
                 each bMethod no-lock
@@ -2372,7 +2375,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                              ?, /* No operation options required for this endpoint. */
                                                              integer(StatusCodeEnum:ok) ).
 
-                    /* Create parameter and add to list. */
+                    /* Create a single "catalog" parameter as body output and add to list. */
                     assign oParam = new OperationParameter( IOModeEnum:Output, "class Progress.Json.ObjectModel.JsonObject", "catalog" ).
                     extent(oParam:OutputElement) = 1.
                     assign oParam:OutputElement[1] = new MessageElement(ElementTypeEnum:Body, "catalog", IOModeEnum:Output).

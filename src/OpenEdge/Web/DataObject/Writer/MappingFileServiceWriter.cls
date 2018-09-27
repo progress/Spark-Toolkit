@@ -3,7 +3,7 @@ Copyright (c) 2018 by Progress Software Corporation and/or one of its subsidiari
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : MappingFileServiceWriter
-    Purpose     : Serializes a DataObjectService to a mapping file JSON format
+    Purpose     : Serializes a DataObjectService to a Data Object Handler mapping file JSON format
     Author(s)   : pjudge
     Created     : 2018-08-06
     Notes       : 
@@ -12,7 +12,6 @@ block-level on error undo, throw.
 
 using OpenEdge.Core.Collections.IIterator.
 using OpenEdge.Core.IOModeEnum.
-using OpenEdge.Core.SemanticVersion.
 using OpenEdge.Core.Util.BuilderRegistry.
 using OpenEdge.Logging.Logger.
 using OpenEdge.Net.HTTP.Cookie.
@@ -164,6 +163,7 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
         define variable namedSvc as JsonArray no-undo.
         define variable loop as integer no-undo.
         define variable cnt as integer no-undo.
+        define variable svcName as character no-undo.
         
         /* the target JSON looks like 
         { "services: 
@@ -174,26 +174,30 @@ class OpenEdge.Web.DataObject.Writer.MappingFileServiceWriter inherits DataObjec
                 ]
         }
         */
+        assign svcName = pService:Name.
+        if svcName eq DataObjectService:ROOT_SERVICE_NAME then
+            assign svcName = DataObjectService:ROOT_SERVICE_URI.
+        
         assign services = cast(this-object:Value, JsonObject):GetJsonObject(string(ServiceMappingFileSchemaEnum:services)).
-        if not services:Has(pService:Name) then
+        if not services:Has(svcName) then
         do:
             assign namedSvc = new JsonArray().
-            services:Add(pService:Name, namedSvc). 
+            services:Add(svcName, namedSvc). 
         end.
         else
-        case services:GetType(pService:Name):
+        case services:GetType(svcName):
             when JsonDataType:ARRAY then
-                assign namedSvc = services:GetJsonArray(pService:Name).
+                assign namedSvc = services:GetJsonArray(svcName).
             when JsonDataType:OBJECT then
             do:
                 assign namedSvc = new JsonArray().
-                namedSvc:Add(services:GetJsonObject(pService:Name)).
-                services:Set(pService:Name, namedSvc).
+                namedSvc:Add(services:GetJsonObject(svcName)).
+                services:Set(svcName, namedSvc).
             end.
             otherwise
             do:
                 assign namedSvc = new JsonArray().
-                services:Set(pService:Name, namedSvc).
+                services:Set(svcName, namedSvc).
             end.
         end case.
         

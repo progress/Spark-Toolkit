@@ -16,6 +16,7 @@ using OpenEdge.Core.Collections.IIterator.
 using OpenEdge.Core.SemanticVersion.
 using OpenEdge.Net.HTTP.HttpHeader.
 using OpenEdge.Net.HTTP.MethodEnum.
+using OpenEdge.Net.URI.
 using OpenEdge.Web.DataObject.DataObjectService.
 using OpenEdge.Web.DataObject.ElementTypeEnum.
 using OpenEdge.Web.DataObject.MappedOperation.
@@ -27,6 +28,7 @@ using Progress.Json.ObjectModel.JsonArray.
 using Progress.Json.ObjectModel.JsonObject.
 
 class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectServiceWriter:
+    
     define static public property OPEN_API_VERSION as SemanticVersion no-undo
         get.
         private set.
@@ -117,7 +119,8 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
         
         assign varData = new JsonObject().
         childData:Add('basePath':u, varData).
-            varData:Add('default':u, '/pdo':u).        
+            varData:Add('default':u, '/pdo':u).
+        
         return servers.
     end method.
     
@@ -166,18 +169,14 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                childData = new JsonObject()
                .
         
-        svcJson:Add('openapi':u,    string(OPEN_API_VERSION)).          //REQUIRED. This string MUST be the semantic version number of the OpenAPI Specification version that the OpenAPI document uses. The openapi field SHOULD be used by tooling specifications and clients to interpret the OpenAPI document. This is not related to the API info.version string.
+        svcJson:Add('openapi':u,    string(OPEN_API_VERSION)).      //REQUIRED. This string MUST be the semantic version number of the OpenAPI Specification version that the OpenAPI document uses. The openapi field SHOULD be used by tooling specifications and clients to interpret the OpenAPI document. This is not related to the API info.version string.
         svcJson:Add('info':u,       WriteInfo()).
-        svcJson:Add('servers':u,    WriteDefaultServers()).   //An array of Server Objects, which provide connectivity information to a target server. If the servers property is not provided, or is an empty array, the default value would be a Server Object with a url value of /.
-        
-        svcJson:Add('paths':u,      new JsonObject()).   //REQUIRED. The available paths and operations for the API.
+        svcJson:Add('servers':u,    WriteDefaultServers()).         //An array of Server Objects, which provide connectivity information to a target server. If the servers property is not provided, or is an empty array, the default value would be a Server Object with a url value of /.
+        svcJson:Add('paths':u,      new JsonObject()).              //REQUIRED. The available paths and operations for the API.
         
         assign childData = new JsonObject().
-        svcJson:Add('components':u,    childData).   //An element to hold various schemas for the specification.
-            childData:Add('schemas':u, jsonData).
-                //jsonData:Add('dataServiceCatalog':u, )
-                //    Add('$ref':u, 'http://nbbedpjudge4:8830/static/openapi.json').
-                    
+        svcJson:Add('components':u,    childData).              //An element to hold various schemas for the specification.
+            childData:Add('schemas':u, WriteDefaultSchemas()). 
             childData:AddNull('securitySchemes':u).
         
         svcJson:Add('security':u,      new JsonArray()).   //A declaration of which security mechanisms can be used across the API. The list of values includes alternative security requirement objects that can be used. Only one of the security requirement objects need to be satisfied to authorize a request. Individual operations can override this definition.
@@ -185,6 +184,20 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
         svcJson:AddNull('externalDocs':u).                 //Additional external documentation.                              
         
         return svcJson.
+    end method.
+    
+    method protected JsonObject WriteDefaultSchemas():
+        define variable schemas as JsonObject no-undo.
+        define variable schemaData as JsonObject no-undo.
+        
+        assign schemas    = new JsonObject()
+               //schemaData = new JsonObject()
+               .
+        //schemas:Add('dataServiceCatalog':u, schemaData).
+            // Requires a cdo.json to be deployed 'next to' this openapi.json document
+            //schemaData:Add('$ref':u, 'cdo.json#/components/schemas/dataServiceCatalog').
+        
+        return schemas.
     end method.
     
     method protected JsonObject GetPathJson(input pService as DataObjectService,
@@ -298,28 +311,40 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
         operJson:GetJsonObject('responses':u):Add(string(pData:StatusCode, '999':u), childObj).
         childObj:Add('description':u, substitute('&1 &2 operation for service &3 v&4':u,
                                             string(pData:Method), pData:ServiceURI, pService:Name, string(pService:Version))).
-        if pData:TargetType eq string(TargetTypeEnum:File) then
+        if pData:Name eq 'dataservice.catalog' then
         do:
             childObj:Add('content':u,   jsonData).
                 jsonData:Add(pData:ContentType, contentJson).
                     contentJson:Add('schema':u, schemaJson).
-            if pData:Name eq 'dataservice.catalog' then
-                schemaJson:Add('$ref':u, 'jsdo.json#/components/schemas/dataServiceCatalog':u).                           
-                //schemaJson:Add('$ref':u, '#/components/schemas/dataServiceCatalog':u).
-            else
-                schemaJson:Add('type':u,   'object':u).
-                        //schemaJson:Add('format':u, fldFormat).
-                        schemaJson:Add('description':u, '<parameter description goes here>').
+                // Requires a cdo.json to be deployed 'next to' this openapi.json document
+                schemaJson:Add('$ref':u, 'cdo.json#/components/schemas/dataServiceCatalog').
         end.
+        else
+            schemaJson:Add('type':u,   'object':u).
         
         // if we use the return value, write that
         if valid-object(pData:ReturnValue) then 
             assign cnt = extent(pData:ReturnValue:OutputElement).
         
-        //if pData:ReturnValue:HasSchema then 
         do loop = 1 to cnt:
             assign jsonData = operJson:GetJsonObject('responses':u):GetJsonObject(string(pData:StatusCode, '999':u)).
             case pData:ReturnValue:OutputElement[loop]:ElementType:
+                when ElementTypeEnum:Field then
+                do:
+                    if not jsonData:Has('content':u) then
+                    do:
+                        assign childObj    = new JsonObject()
+                               contentJson = new JsonObject()
+                               schemaJson  = new JsonObject()
+                               .
+                        jsonData:Add('content':u,   childObj).
+                            childObj:Add(pData:ContentType, contentJson).
+                                contentJson:Add('schema':u, schemaJson).
+                                    schemaJson:Add('type':u, 'object':u).
+                                    schemaJson:Add('description':u, 'FIELD mapping').
+                    end.
+                end.
+                
                 when ElementTypeEnum:Body then
                 do:
                     assign childObj    = new JsonObject()
@@ -349,11 +374,12 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                         end case.
                     end.
                     else
-                    do:
                         assign operSchema = pService:GetSchema(pData:ReturnValue:ABLName).
-                        if valid-handle(operSchema) then
-                            schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
-                    end.
+                    
+                    if valid-handle(operSchema) then
+                        schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
+                    else
+                        schemaJson:Add('type':u, 'object':u).
                 end.
                 otherwise
                     next.
@@ -391,7 +417,26 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                             childObj:Add('schema':u, schemaJson).
                                 schemaJson:Add('type':u,   fldType).
                                 schemaJson:Add('format':u, fldFormat).
-                                schemaJson:Add('description':u, '<parameter description goes here>').
+                                schemaJson:Add('description':u, caps(string(opParam:InputElement[loop]:ElementType)) + ' mapping').
+                    end.
+                    
+                    when ElementTypeEnum:Field then
+                    do:
+                        if not operJson:Has('requestBody':u) then
+                        do:
+                            assign childObj    = new JsonObject()
+                                   jsonData    = new JsonObject()
+                                   contentJson = new JsonObject()
+                                   schemaJson  = new JsonObject()
+                                   .
+                            operJson:Add('requestBody':u, childObj).
+                                childObj:Add('description':u, opParam:ABLType).
+                                childObj:Add('content':u,   jsonData).
+                                    jsonData:Add(pData:ContentType, contentJson).
+                                        contentJson:Add('schema':u, schemaJson).
+                                            schemaJson:Add('type':u, 'object':u).
+                                            schemaJson:Add('description':u, 'FIELD mapping').
+                        end.
                     end.
                     
                     when ElementTypeEnum:Body then
@@ -412,6 +457,7 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                         do:
                             assign schemaChild = new JsonObject().
                             schemaJson:Add('type':u, 'object':u).
+                            schemaJson:Add('description':u, 'BODY mapping').
                             schemaJson:Add('additionalProperties':u, false).
                             schemaJson:Add('properties', schemaChild).
                             /*
@@ -429,12 +475,15 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                             end case.
                         end.
                         else
-                        do:
                             assign operSchema = pService:GetSchema(opParam:ABLName).
-                            WriteSchema(pService, operSchema).
-                            if valid-handle(operSchema) then
-                                schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
+                        
+                        if valid-handle(operSchema) then
+                        do:
+                            //WriteSchema(pService, operSchema).
+                            schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
                         end.
+                        else
+                            schemaJson:Add('type':u, 'object':u).
                     end.
                     
                     otherwise
@@ -447,21 +496,46 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
             do loop = 1 to cnt:  
                 assign jsonData = operJson:GetJsonObject('responses':u):GetJsonObject(string(pData:StatusCode, '999':u)).
                 case opParam:OutputElement[loop]:ElementType:
+                    when ElementTypeEnum:Field then
+                    do:
+                        if not jsonData:Has('content':u) then
+                        do:
+                            assign childObj    = new JsonObject()
+                                   contentJson = new JsonObject()
+                                   schemaJson  = new JsonObject()
+                                   .
+                            jsonData:Add('content':u,   childObj).
+                                childObj:Add(pData:ContentType, contentJson).
+                                    contentJson:Add('schema':u, schemaJson).
+                                        schemaJson:Add('type':u, 'object':u).
+                                        schemaJson:Add('description':u, 'FIELD mapping').
+                        end.
+                    end.
+                    
                     when ElementTypeEnum:Body then
                     do:
                         assign childObj    = new JsonObject()
                                contentJson = new JsonObject()
                                schemaJson  = new JsonObject()
                                .
-                        jsonData:Add('content':u,   childObj).
-                                childObj:Add(pData:ContentType, contentJson).
-                                    contentJson:Add('schema':u, schemaJson).
+                        if not jsonData:Has('content':U) then
+                        do:
+                            jsonData:Add('content':u,   childObj).
+                                    childObj:Add(pData:ContentType, contentJson).
+                                        contentJson:Add('schema':u, schemaJson).
+                        end.
+                        else
+                            assign schemaJson = jsonData:GetJsonObject('content':u)
+                                                            :GetJsonObject(pData:ContentType)
+                                                                :GetJsonObject('schema':u).
+                         
                         // for per-operation schemas, use inline; for service schemas, use a reference
                         assign operSchema = pData:GetSchema(opParam:ABLName).
                         if valid-handle(operSchema) then
                         do:
                             assign schemaChild = new JsonObject().
                             schemaJson:Add('type':u, 'object':u).
+                            schemaJson:Add('description':u, 'BODY mapping').
                             schemaJson:Add('additionalProperties':u, false).
                             schemaJson:Add('properties', schemaChild).
                             /*
@@ -479,12 +553,14 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                             end case.
                         end.
                         else
-                        do:
                             assign operSchema = pService:GetSchema(opParam:ABLName).
-                            WriteSchema(pService, operSchema).
-                            if valid-handle(operSchema) then
-                                schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
+                        if valid-handle(operSchema) then
+                        do:
+                            //WriteSchema(pService, operSchema).
+                            schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
                         end.
+                        else
+                            schemaJson:Add('type':u, 'object':u).
                     end.
                     
                     otherwise
@@ -492,16 +568,6 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                 end case.
             end.        //output
         end.
-        
-        catch e as Progress.Lang.Error :
-            message 
-            e:GetMessage(1) skip
-            pData:Method pData:ServiceURI skip
-            pService:Name skip
-            opParam:InputElement[loop]:IoMode
-            view-as alert-box.
-            undo, throw e.    
-        end catch.
     end method.
     
     method protected JsonObject WriteDataset(input pDataset as handle):
@@ -806,6 +872,24 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                  substitute('Service for &1 v&2',
                                 trim(pData:Name, '/':u), string(pData:Version)),
                  ?).
+    end method.
+    
+    /* Writes a URI to the output 
+       
+       @param URI The URI to write */
+    method override protected void WriteURI(input pData as URI):
+        define variable servers as JsonArray no-undo.
+        define variable svr as JsonObject no-undo.
+        
+        if not valid-object(pData) then
+            return.
+        
+        assign servers = cast(this-object:Value, JsonObject):GetJsonArray('servers':u)
+               svr     = new JsonObject()
+               .
+        servers:Add(svr).
+        svr:Add('url':u, pData:ToString()).
+        svr:Add('description':u, 'Server configuration':u).
     end method.
     
 end class.

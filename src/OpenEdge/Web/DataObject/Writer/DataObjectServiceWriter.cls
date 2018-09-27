@@ -13,13 +13,12 @@ block-level on error undo, throw.
 using Ccs.Common.Support.IHandleHolder.
 using OpenEdge.Core.Assert.
 using OpenEdge.Core.Assertion.AssertObject.
-using OpenEdge.Core.SemanticVersion.
 using OpenEdge.Logging.ILogWriter.
 using OpenEdge.Logging.ISupportLogging.
 using OpenEdge.Logging.LoggerBuilder.
+using OpenEdge.Net.URI.
 using OpenEdge.Web.DataObject.DataObjectService.
 using OpenEdge.Web.DataObject.MappedOperation.
-using Progress.Lang.AppError.
 using Progress.Lang.Object.
 
 class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
@@ -136,6 +135,9 @@ class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
             when not valid-object(pData) then
                 return.
             
+            when type-of(pData, URI) then
+                WriteURI(cast(pData, URI)).
+                
             when type-of(pData, DataObjectService) then
                 WriteDOS(cast(pData, DataObjectService)).
             
@@ -146,10 +148,15 @@ class OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter abstract
                 WriteSchema(mCurrentService, cast(pData, IHandleHolder):Value).
             
             otherwise
-                return error new AppError(
-                            substitute('Unsupported object type: &1', pData:GetClass():TypeName)
-                            , 0).
+                logger:Warn(substitute('Unsupported object type: &1', pData:GetClass():TypeName)).
         end case.
+    end method.
+    
+    /* Writes a URI to the output. THis is effectively a VIRTUAL method (no default behaviour 
+       but not compiler enforcement either).
+       
+       @param URI The URI to write */
+    method protected void WriteURI(input pData as URI):
     end method.
     
     /* Writes a single Data Object Service
