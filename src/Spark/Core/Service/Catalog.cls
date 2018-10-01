@@ -81,6 +81,23 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
         end finally.
     end method. /* getDataObjectServiceCatalogs */
 
+    method public void getOpenApiCatalog ( output catalog as JsonObject ):
+        define variable oServiceWriter as OpenAPI30ServiceWriter no-undo.
+        assign oServiceWriter = new OpenAPI30ServiceWriter().
+        if valid-object(oServiceWriter) then do:
+            oServiceWriter:open().
+            oServiceWriter:write(ServiceRegistry:GetServices()).
+            oServiceWriter:close().
+
+            assign catalog = cast(oServiceWriter:Value, JsonObject).
+            delete object oServiceWriter no-error.
+        end.
+
+        /* Return an empty object if catalog object is invalid. */
+        if not valid-object(catalog) then
+            assign catalog = new Progress.Json.ObjectModel.JsonObject().
+    end method. /* getOpenApiCatalog */
+
     method public void getCatalog ( output catalog as JsonObject ):
         /**
          * First attempt to return a combined catalog from any available services.
@@ -93,18 +110,8 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
          * This format is chosen as it is an open standard and can be easily
          * consumed via many available parsers in multiple languages.
          */
-        if not valid-object(catalog) then do:
-            define variable oServiceWriter as OpenAPI30ServiceWriter no-undo.
-            assign oServiceWriter = new OpenAPI30ServiceWriter().
-            if valid-object(oServiceWriter) then do:
-                oServiceWriter:open().
-                oServiceWriter:write(ServiceRegistry:GetServices()).
-                oServiceWriter:close().
-
-                assign catalog = cast(oServiceWriter:Value, JsonObject).
-                delete object oServiceWriter no-error.
-            end.
-        end. /* No Catalog */
+        if not valid-object(catalog) then
+            this-object:getOpenApiCatalog(output catalog).
 
         define variable cNames as character no-undo extent.
         if valid-object(catalog) then
