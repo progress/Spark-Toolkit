@@ -76,11 +76,11 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:Invoking:Unsubscribe(this-object:InvokingHandler).
         DataObjectHandler:Invoked:Unsubscribe(this-object:InvokedHandler).
         DataObjectHandler:OperationError:Unsubscribe(this-object:OperationErrorHandler).
-        &IF {&MIN_VERSION_11_7_2} &THEN
-        /* Only available for 11.7.2 and later. */
-        DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
-        DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
-        &ENDIF
+        if {&MIN_VERSION_11_7_2} then do:
+            /* Only available for 11.7.2 and later. */
+            DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
+            DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
+        end.
     end destructor.
 
 
@@ -119,11 +119,11 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:Invoking:Subscribe(this-object:InvokingHandler).
         DataObjectHandler:Invoked:Subscribe(this-object:InvokedHandler).
         DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
-        &IF {&MIN_VERSION_11_7_2} &THEN
-        /* Only available for 11.7.2 and later. */
-        DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
-        DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
-        &ENDIF
+        if {&MIN_VERSION_11_7_2} then do:
+            /* Only available for 11.7.2 and later. */
+            DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
+            DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
+        end.
     end method. /* Define Events */
 
 

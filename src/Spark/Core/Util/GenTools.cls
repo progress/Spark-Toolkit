@@ -102,7 +102,7 @@ class Spark.Core.Util.GenTools:
     end method.
 
     /**
-     * Get the timezone offset for a region including the daylight saveings offset
+     * Get the timezone offset for a region including the daylight savings offset
      * @param pcTZ Timezone region e.g. Australia/Sydney
      */
     method public static integer getLocalTimeZoneOffset (input pcTZ as character):

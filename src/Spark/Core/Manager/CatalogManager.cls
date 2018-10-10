@@ -29,8 +29,8 @@ using Spark.Core.Util.OSTools from propath.
 using Spark.Core.Util.Reflection from propath.
 
 block-level on error undo, throw.
+
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
-&GLOBAL-DEFINE CAN_USE_REFLECTION (lookup(substring(proversion, 1, 4), "11.0,11.1,11.2,11.3,11.4,11.5") = 0)
 
 class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager implements ICatalogManager use-widget-pool:
 
@@ -567,7 +567,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
              where bResource.ServiceURI eq pcServiceURI
                and bResource.ClassPath eq pcResClassPath no-error.
         if available(bResource) then do:
-            &if {&CAN_USE_REFLECTION} &then
             /* Generate class signature (in JSON) using reflection. */
             oClassSig = Reflection:getClassSignature(pcResClassPath).
             if lUseDebugs then do:
@@ -576,18 +575,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     os-create-dir value(substitute("&1signatures", OSTools:sparkConf)).
                 oClassSig:WriteFile(substitute("&1signatures/&2.json", OSTools:sparkConf, pcResClassPath), true).
             end.
-            &else
-            /* Class reflection not available, so attempt to read signatures from file. */
-            file-info:file-name = substitute("&1signatures/&2.json", OSTools:sparkConf, pcResClassPath).
-            if file-info:full-pathname ne ? then do:
-                /* Signature was given as a static file, load as JSON text. */
-                oClassSig = cast(oParser:parseFile(file-info:full-pathname), JsonObject).
-            end. /* JSON Sig File */
-            else do:
-                oLoggingManager:logMessage(substitute("WARNING: Signature file is not present for &1", pcResClassPath), "SPARK-WARN", 0).
-                oClassSig = new JsonObject().
-            end.
-            &endif
+
 
             /* Extract the specific class signature from the file. */
             if oClassSig:Has(pcResClassPath) then

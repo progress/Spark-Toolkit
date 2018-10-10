@@ -19,9 +19,9 @@ class Spark.Core.Util.Base32 use-widget-pool:
     define private static variable oDecodeMap as StringKeyedMap  no-undo.
     define private static variable cPad       as character       no-undo initial "=".
 
-	constructor static Base32 ( ):
-		assign oEncodeMap = new StringStringMap().
-		assign oDecodeMap = new StringKeyedMap().
+    constructor static Base32 ( ):
+        assign oEncodeMap = new StringStringMap().
+        assign oDecodeMap = new StringKeyedMap().
 
         oEncodeMap:Put("0", "A"). 
         oEncodeMap:Put("1", "B"). 
@@ -56,7 +56,7 @@ class Spark.Core.Util.Base32 use-widget-pool:
         oEncodeMap:Put("30", "6"). 
         oEncodeMap:Put("31", "7"). 
 
-		oDecodeMap:Put("A", new OpenEdge.Core.Integer(0)).
+        oDecodeMap:Put("A", new OpenEdge.Core.Integer(0)).
         oDecodeMap:Put("B", new OpenEdge.Core.Integer(1)).
         oDecodeMap:Put("C", new OpenEdge.Core.Integer(2)).
         oDecodeMap:Put("D", new OpenEdge.Core.Integer(3)).
@@ -88,7 +88,7 @@ class Spark.Core.Util.Base32 use-widget-pool:
         oDecodeMap:Put("5", new OpenEdge.Core.Integer(29)).
         oDecodeMap:Put("6", new OpenEdge.Core.Integer(30)).
         oDecodeMap:Put("7", new OpenEdge.Core.Integer(31)).
-	end constructor.
+    end constructor.
 
 
     method private static character DecodeToBinary ( input pcString as character ):
