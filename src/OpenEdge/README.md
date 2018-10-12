@@ -1,6 +1,6 @@
 #OpenEdge.Net.pl Overrides#
 
-**Updated: September 7th, 2018**
+**Updated: October 12th, 2018**
 
 This folder contains code from the forthcoming SP4 (11.7.4) and is considered pre-release code.
 However, it should be the code that is bound to ship for that release. All files contained within

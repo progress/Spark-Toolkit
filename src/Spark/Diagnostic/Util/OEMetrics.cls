@@ -110,7 +110,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         else
             return substitute("&1/&2.&3_A&4.json",
                               cBasePath,
-                              iso-date(now),
+                              iso-date(today),
                               mtime(now), piAgentID).
     end method. /* GetRequestPath */
 
@@ -130,7 +130,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         else
             return substitute("&1/&2.&3_A&4.json",
                               cBasePath,
-                              iso-date(now),
+                              iso-date(today),
                               mtime(now), piAgentID).
     end method. /* GetSessionPath */
 
@@ -151,7 +151,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         else
             return substitute("&1/&2.&3_A&4_S&5.json",
                               cBasePath,
-                              iso-date(now),
+                              iso-date(today),
                               mtime(now), piAgentID, piSessionID).
     end method. /* GetObjectsPath */
 
@@ -425,7 +425,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         if not lIsTracking then do:
             /* Turn on tracking if not already enabled, and record the latest result. */
-            assign lIsTracking = oRemoteMetrics:TrackABLObjects(piAgentID, true).            
+            assign lIsTracking = oRemoteMetrics:TrackABLObjects(piAgentID, true).
 
             /* Remember whether objects are being tracked for this agent. */
             if lIsTracking then do:

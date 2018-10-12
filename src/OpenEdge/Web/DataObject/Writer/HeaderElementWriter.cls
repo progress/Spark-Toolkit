@@ -38,14 +38,21 @@ class OpenEdge.Web.DataObject.Writer.HeaderElementWriter inherits ResponseElemen
     
     /* Writes message element data to the response
        
+       The ElemName value can be either 
+        - Header name like "X-OE-Client-Props", or
+        - A header name + a parameter name , like "Content-Disposition; filename".
+       
+       In the former case, the element value is written to the header's Value property;
+       in the latter, the element value is written to the header's 'filename' parameter value.
+       
        @param character The element name 
        @param Progress.Lang.Object The data to write */
     method override public void Write(input pElemName as character,
                                       input pElemValue as Progress.Lang.Object):
-        define variable headers as Progress.Lang.Object extent no-undo.
-        define variable loop as integer no-undo.
-        define variable cnt as integer no-undo.
+        define variable hdrName as character no-undo.
         define variable hdrValue as character no-undo.
+        define variable paramName as character no-undo.
+        define variable hdr as HttpHeader no-undo.
         
         case true:
             when not valid-object(pElemValue) then
@@ -58,12 +65,27 @@ class OpenEdge.Web.DataObject.Writer.HeaderElementWriter inherits ResponseElemen
             when type-of(pElemValue, ILongcharHolder) or
             when type-of(pElemValue, ICharacterHolder) then
             do:
-                assign hdrValue = string(dynamic-property(pElemValue, 'Value':u)).
+                assign hdrValue = string(dynamic-property(pElemValue, 'Value':u))
+                       hdrName  = entry(1, pElemName, ';':u)
+                       .
+                if num-entries(pElemName, ';':u) ge 2 then
+                    assign paramName = entry(2, pElemName, ';':u).
+                else
+                    assign paramName = ?.
                 
-                this-object:Response:SetHeader(HttpHeaderBuilder
-                                                    :Build(pElemName)
-                                                    :Value(hdrValue)
-                                                    :Header).
+                if this-object:Response:HasHeader(hdrName) then
+                    assign hdr = this-object:Response:GetHeader(hdrName).
+                
+                if not valid-object(hdr) then
+                do:
+                    assign hdr = HttpHeaderBuilder:Build(hdrName):Header.
+                    this-object:Response:SetHeader(hdr).
+                end.
+                
+                if paramName eq ? then
+                    assign hdr:Value = hdrValue.
+                else
+                    hdr:SetParameterValue(paramName, hdrValue).
             end.
         end case.
     end method.
