@@ -1,12 +1,12 @@
 using Spark.Core.Util.EnumMember from propath.
-using Spark.Core.Message.ErrorTypeEnum from propath.
+using Spark.Core.Util.ErrorTypeEnum from propath.
 
 block-level on error undo, throw.
 
 /**
  * Enumeration of Error Types
  */
-class Spark.Core.Message.ErrorTypeEnum inherits EnumMember final:
+class Spark.Core.Util.ErrorTypeEnum inherits EnumMember final:
 
     define static public property default     as ErrorTypeEnum no-undo get.
         private set.

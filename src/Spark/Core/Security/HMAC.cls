@@ -13,6 +13,8 @@
     This version will support SHA1 or SHA256 (default: SHA1).
   ----------------------------------------------------------------------*/
 
+&GLOBAL-DEFINE MIN_VERSION_11_7_4 (lookup(substring(proversion(1), 1, 6), "11.6.0,11.6.1,11.6.2,11.6.2,11.6.3,11.6.4,11.6.5,11.6.6,11.7.0,11.7.1,11.7.2,11.7.3") = 0)
+
 using Progress.Lang.* from propath.
 
 block-level on error undo, throw.
@@ -37,6 +39,22 @@ class Spark.Core.Security.HMAC use-widget-pool final:
         define variable rDecodedData   as raw       no-undo.
         define variable rRawDataSHA    as raw       no-undo.
         define variable cHMACSHA       as character no-undo.
+
+        /* If possible, return an HMAC-SHA-* digest value as available in 11.7.4+ */
+        if {&MIN_VERSION_11_7_4} then do:
+            case pcSHA:
+                when "SHA1" then
+                    return string(hex-encode(message-digest("HMAC-SHA-1", hex-decode(pcHexData), hex-decode(pcHexKey)))).
+                when "SHA-256" then
+                    return string(hex-encode(message-digest("HMAC-SHA-256", hex-decode(pcHexData), hex-decode(pcHexKey)))).
+                when "SHA-384" then
+                    return string(hex-encode(message-digest("HMAC-SHA-384", hex-decode(pcHexData), hex-decode(pcHexKey)))).
+                when "SHA-512" then
+                    return string(hex-encode(message-digest("HMAC-SHA-512", hex-decode(pcHexData), hex-decode(pcHexKey)))).
+                otherwise
+                    return string(hex-encode(message-digest("HMAC-SHA-1", hex-decode(pcHexData), hex-decode(pcHexKey)))).
+            end case.
+        end.
 
         /* Basic Formula: Hash(Key XOR opad, Hash(Key XOR ipad, text)) */
 

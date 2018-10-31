@@ -118,6 +118,9 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
             assign cNames = catalog:GetNames(). /* Check for properties of object. */
         if not valid-object(catalog) or extent(cNames) eq 0 then
             assign catalog = new Progress.Json.ObjectModel.JsonObject(). /* Otherwise, return an empty object. */
+
+        if log-manager:logging-level ge 3 then
+            catalog:WriteFile(substitute("&1/catalog.json", session:temp-directory), true).
     end method. /* getCatalog */
 
 end class.

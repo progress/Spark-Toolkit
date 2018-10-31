@@ -18,7 +18,6 @@ using OpenEdge.Web.DataObject.* from propath.
 using OpenEdge.Web.DataObject.Writer.* from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
-using Spark.Core.Manager.IMessageManager from propath.
 using Spark.Core.Manager.ISchemaManager from propath.
 using Spark.Core.Service.IDynamicEntity from propath.
 using Spark.Core.Service.IDynamicResource from propath.
@@ -2006,73 +2005,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
         return oCatRegistry:GetJsonObject(cHash).
     end method. /* getCatalog */
-
-
-    method public Progress.Lang.Object getResourceMetadata ( input  pcServiceURI   as character,
-                                                             input  pcResourceName as character,
-                                                             input  pcMethodName   as character,
-                                                             output phProcHandle   as handle,
-                                                             output pcEntityName   as character,
-                                                             output plUseTableBI   as logical ):
-        define variable cClassPath   as character no-undo.
-        define variable cClassMethod as character no-undo.
-        define variable cHttpMethod  as character no-undo.
-        define variable oParamArr    as JsonArray no-undo.
-
-        /* Check if object contains method (using action). */
-        assign cHttpMethod = cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):HttpMethod.
-
-        /* Use default service if none provided. */
-        if (pcServiceURI gt "") ne true then pcServiceURI = cDefaultURI.
-
-        /* Set any public properties with information about this service. */
-        for first ServiceList no-lock
-            where ServiceList.ServiceURI eq pcServiceURI:
-            UseRequestObj = ServiceList.UseRequest.
-        end. /* for first */
-
-        /* Obtain procedure handle and entity name (if applicable) as well as true method name. */
-        this-object:getMethod( input  pcServiceURI,
-                               input  pcResourceName,
-                               input  pcMethodName,
-                               input  cHttpMethod,
-                               output cClassMethod,
-                               output phProcHandle,
-                               output pcEntityName ).
-
-        if (cClassMethod gt "") ne true then /* If method cannot be determined, then resource cannot be invoked. */
-            undo, throw new ApplicationError(substitute("Requested method '&1:&2' (&3) not available via &4.", pcResourceName, pcMethodName, pcServiceURI, upper(cHttpMethod)), -404).
-
-        /* Make sure we have the real name (class path) of this resource. */
-        assign cClassPath = this-object:getClassPath(pcServiceURI, pcResourceName).
-
-        case cClassMethod:
-            when "readData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:read:toString()).
-            when "createData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:create:toString()).
-            when "updateData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:update:toString()).
-            when "deleteData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:delete:toString()).
-            when "submitData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:submit:toString()).
-            otherwise
-                assign plUseTableBI = false.
-        end case.
-
-        /* Obtain the method signature from this resource. */
-        assign oParamArr = this-object:getMethodSignature( pcServiceURI,
-                                                           cClassPath,
-                                                           cClassMethod ).
-
-        /* Prepare signature object with parsed values. */
-        return new Spark.Core.Util.MethodSignature(cClassPath, cClassMethod, oParamArr).
-
-        finally:
-            delete object oParamArr no-error.
-        end finally.
-    end method. /* getResourceMetadata */
 
 
     method public void stopProcedures ( ):

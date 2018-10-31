@@ -9,9 +9,6 @@
 
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
-using Spark.Core.Manager.IMessageManager from propath.
-using Spark.Core.Message.IRequest from propath.
-using Spark.Core.Message.IResponse from propath.
 
 /* Default options for class. */
 block-level on error undo, throw.
@@ -25,20 +22,6 @@ class Spark.Core.Service.DynamicResource implements Spark.Core.Service.IDynamicR
     /* Required property on instance class, denotes public name for resource. */
     define public abstract property resourceName as character no-undo
         get. protected set.
-
-    /* Direct access to the request object. */
-    define protected property oRequest as IRequest no-undo
-        get:
-            return cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):RequestMessage, IRequest).
-        end get.
-        private set.
-
-    /* Direct access to the response object. */
-    define protected property oResponse as IResponse no-undo
-        get:
-            return cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage, IResponse).
-        end get.
-        private set.
 
     /***** Protected *****/
 

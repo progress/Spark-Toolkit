@@ -1,7 +1,4 @@
-using Spark.Core.Manager.IMessageManager from propath.
 using Spark.Core.Manager.ITranslationManager from propath.
-using Spark.Core.Message.ErrorTypeEnum from propath.
-using Spark.Core.Message.IResponse from propath.
 
 block-level on error undo, throw.
 
@@ -19,7 +16,7 @@ class Spark.Core.Util.FormatTools:
      * @param pcDate The converted date
      * @return false if the string is not a valid date
      */
-    method public static logical screenToDate( input pcString as character, output pcDate as date ):
+    method public static logical screenToDate ( input pcString as character, output pcDate as date ):
 
         error-status:error = false.
         pcDate = date(pcString) no-error.
@@ -34,29 +31,9 @@ class Spark.Core.Util.FormatTools:
      *
      * @param pcString The String representation of a date
      * @param pcDate The converted date
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToDate( input pcString as character, output pcDate as date, input pcErrField as character):
-
-        if not screenToDate(pcString,output pcDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Date", pcString).
-            return.
-        end.
-
-    end method.
-
-    /**
-     * Convert a string date value into a date value
-     * Note: that the current date-format setting will be used and must be the
-     * same as when the date was converted to a string
-     *
-     * @param pcString The String representation of a date
-     * @param pcDate The converted date
      * @return false if the string is not a valid date
      */
-    method public static logical screenToDatetime( input pcString as character, output pcDate as datetime ):
+    method public static logical screenToDateTime ( input pcString as character, output pcDate as datetime ):
 
         error-status:error = false.
         pcDate = datetime(pcString) no-error.
@@ -71,54 +48,13 @@ class Spark.Core.Util.FormatTools:
      *
      * @param pcString The String representation of a date
      * @param pcDate The converted date
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToDatetime( input pcString as character, output pcDate as datetime, input pcErrField as character):
-
-        if not screenToDatetime(pcString,output pcDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Date", pcString).
-            return.
-        end.
-
-    end method.
-
-
-    /**
-     * Convert a string date value into a date value
-     * Note: that the current date-format setting will be used and must be the
-     * same as when the date was converted to a string
-     *
-     * @param pcString The String representation of a date
-     * @param pcDate The converted date
      * @return false if the string is not a valid date
      */
-    method public static logical screenToDatetimeTz( input pcString as character, output pcDate as datetime ):
+    method public static logical screenToDateTimeTz ( input pcString as character, output pcDate as datetime ):
 
         error-status:error = false.
         pcDate = datetime-tz(pcString) no-error.
         return not error-status:error.
-
-    end method.
-
-    /**
-     * Convert a string date value into a date value
-     * Note: that the current date-format setting will be used and must be the
-     * same as when the date was converted to a string
-     *
-     * @param pcString The String representation of a date
-     * @param pcDate The converted date
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToDatetimeTz( input pcString as character, output pcDate as datetime-tz, input pcErrField as character):
-
-        if not screenToDatetimeTz(pcString,output pcDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Datetime-tz", pcString).
-            return.
-        end.
 
     end method.
 
@@ -132,24 +68,14 @@ class Spark.Core.Util.FormatTools:
      * @param pcDate The converted end date
      * @param pcErrField Field name to assign any error to
      */
-    method public static void screenToDateRange( input pcToString as character, input pcFromString as character, output ptDate as date, input  pcErrField as character):
+    method public static void screenToDateRange ( input pcToString as character, input pcFromString as character, output ptDate as date ):
 
         define variable tFromDate as date no-undo.
 
-        if not screenToDate(pcToString,output ptDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Date", pcToString).
-            return.
-        end.
+        if not screenToDate(pcToString,output ptDate) then return.
         else
             if not screenToDate(pcFromString, output tFromDate) or
-                ptDate lt tFromDate then
-            do:
-                cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                    :addError(pcErrField,ErrorTypeEnum:Error, "Invalid date range").
-                return.
-            end.
+                ptDate lt tFromDate then return.
 
     end method.
 
@@ -163,7 +89,7 @@ class Spark.Core.Util.FormatTools:
     * @param pcLog The converted logical
     * @return false if the string is not a valid logical
     */
-    method public static logical screenToLog( input pcString as character, output pcLog as logical ):
+    method public static logical screenToLog ( input pcString as character, output pcLog as logical ):
 
         case pcString:
             when "True" or
@@ -196,32 +122,13 @@ class Spark.Core.Util.FormatTools:
     end method.
 
     /**
-     * Convert a string logical value into a logical value
-     * True can be True,Yes,Y,False,No,N otherwise ?
-     *
-     * @param pcString The String representation of a logical
-     * @param pcLog The converted logical
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToLog( input pcString as character, output pcLog as logical, input pcErrField as character):
-
-        if not screenToLog(pcString,output pcLog) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Logical", pcString).
-            return.
-        end.
-
-    end method.
-
-    /**
      * Convert a string integer value into an integer value
      *
      * @param pcString The String representation of a logical
      * @param pcInt The converted integer
      * @return false if the string is not a valid integer
      */
-    method public static logical screenToInt( input pcString as character, output pcInt as integer ):
+    method public static logical screenToInt ( input pcString as character, output pcInt as integer ):
 
         error-status:error = false.
         pcInt = integer(pcString) no-error.
@@ -230,53 +137,17 @@ class Spark.Core.Util.FormatTools:
     end method.
 
     /**
-     * Convert a string integer value into an integer value
-     *
-     * @param pcString The String representation of a integer
-     * @param pcInt The converted integer
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToInt( input pcString as character, output pcInt as integer, input pcErrField as character):
-
-        if not screenToInt(pcString,output pcInt) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Integer", pcString).
-            return.
-        end.
-
-    end method.
-
-    /**
      * Convert a string int64 value into an int64 value
      *
      * @param pcString The String representation of a logical
      * @param pcInt64 The converted int64
      * @return false if the string is not a valid integer
      */
-    method public static logical screenToInt64( input pcString as character, output pcInt64 as int64 ):
+    method public static logical screenToInt64 ( input pcString as character, output pcInt64 as int64 ):
 
         error-status:error = false.
         pcInt64 = int64(pcString) no-error.
         return not error-status:error.
-
-    end method.
-
-    /**
-     * Convert a string int64 value into an int64 value
-     *
-     * @param pcString The String representation of a integer
-     * @param pcInt64 The converted int64
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToInt64( input pcString as character, output pcInt64 as int64, input pcErrField as character):
-
-        if not screenToInt64(pcString,output pcInt64) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Int64", pcString).
-            return.
-        end.
 
     end method.
 
@@ -287,7 +158,7 @@ class Spark.Core.Util.FormatTools:
      * @param pcInt The converted decimal
      * @return false if the string is not a valid decimal
      */
-    method public static logical screenToDec( input pcString as character, output pcDec as decimal ):
+    method public static logical screenToDec ( input pcString as character, output pcDec as decimal ):
 
         error-status:error = false.
         pcDec = decimal(pcString) no-error.
@@ -295,25 +166,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    /**
-     * Convert a string decimal value into an decimal value
-     *
-     * @param pcString The String representation of a decimal
-     * @param pcInt The converted decimal
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void screenToDec( input pcString as character, output pcDec as decimal, input pcErrField as character):
-
-        if not screenToDec(pcString,output pcDec) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Decimal", pcString).
-            return.
-        end.
-
-    end method.
-
-    method public static logical screenToRowid( input pcString as character, output prRowid as rowid):
+    method public static logical screenToRowid ( input pcString as character, output prRowid as rowid):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -334,22 +187,11 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static void screenToRowid( input pcString as character, output prRowid as rowid, input pcErrField as character):
-
-        if not screenToRowid(pcString,output prRowid) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Rowid", pcString).
-            return.
-        end.
-
-    end method.
-
     /** Converst an ISO date string to a datetime-tz value
         @param pcString Character string representing the ISO date
         @return The datatime-tz conversion
       */
-    method public static datetime-tz iso2DateTZ(input pcString as character):
+    method public static datetime-tz iso2DateTZ ( input pcString as character ):
 
         define variable cDateFormat as character no-undo.
 
@@ -369,7 +211,7 @@ class Spark.Core.Util.FormatTools:
       * @param pcDate The converted date
       * @return True/False if there is a format error
       */
-    method public static logical iso2DateTZ( input pcString as character, output pcDate as datetime-tz ):
+    method public static logical iso2DateTZ ( input pcString as character, output pcDate as datetime-tz ):
 
         define variable cDateFormat as character no-undo.
 
@@ -386,31 +228,11 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    /**
-     * Convert a string date value into a date value
-     * Note: that the current date-format setting will be used and must be the
-     * same as when the date was converted to a string
-     *
-     * @param pcString The String representation of a date
-     * @param pcDate The converted date
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void iso2DateTZ( input pcString as character, output pcDate as datetime-tz, input pcErrField as character):
-
-        if not iso2DateTZ(pcString,output pcDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Datetime-TZ", pcString).
-            return.
-        end.
-
-    end method.
-
     /** Converst an ISO date string to a datetime value
         @param pcString Character string representing the ISO date
         @return The datatime conversion
       */
-    method public static datetime iso2DateTime(input pcString as character):
+    method public static datetime iso2DateTime ( input pcString as character ):
 
         define variable cDateFormat as character no-undo.
 
@@ -430,7 +252,7 @@ class Spark.Core.Util.FormatTools:
       * @param pcDate The converted date
       * @return True/False if there is a format error
       */
-    method public static logical iso2DateTime( input pcString as character, output pcDate as datetime ):
+    method public static logical iso2DateTime ( input pcString as character, output pcDate as datetime ):
 
         define variable cDateFormat as character no-undo.
 
@@ -447,31 +269,11 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    /**
-     * Convert a string date value into a date value
-     * Note: that the current date-format setting will be used and must be the
-     * same as when the date was converted to a string
-     *
-     * @param pcString The String representation of a date
-     * @param pcDate The converted date
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void iso2DateTime( input pcString as character, output pcDate as datetime, input pcErrField as character):
-
-        if not iso2DateTime(pcString,output pcDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Datetime", pcString).
-            return.
-        end.
-
-    end method.
-
     /** Converts an ISO date string to a date value
         @param pcString Character string representing the ISO date
         @return The date conversion
       */
-    method public static date iso2Date(input pcString as character):
+    method public static date iso2Date ( input pcString as character ):
 
         define variable cDateFormat as character no-undo.
 
@@ -491,7 +293,7 @@ class Spark.Core.Util.FormatTools:
       * @param pcDate The converted date
       * @return True/False if there is a format error
       */
-    method public static logical iso2Date( input pcString as character, output pcDate as date ):
+    method public static logical iso2Date ( input pcString as character, output pcDate as date ):
 
         define variable cDateFormat as character no-undo.
 
@@ -508,27 +310,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    /**
-     * Convert a string date value into a date value
-     * Note: that the current date-format setting will be used and must be the
-     * same as when the date was converted to a string
-     *
-     * @param pcString The String representation of a date
-     * @param pcDate The converted date
-     * @param pcErrField Field name to assign any error to
-     */
-    method public static void iso2Date( input pcString as character, output pcDate as date, input pcErrField as character):
-
-        if not iso2Date(pcString,output pcDate) then
-        do:
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField,ErrorTypeEnum:Error, "[&1] is not a valid Date", pcString).
-            return.
-        end.
-
-    end method.
-
-    method public static character stringOf( input pdValue as decimal):
+    method public static character stringOf ( input pdValue as decimal ):
 
         define variable cDec as character no-undo.
         define variable cSep as character no-undo.
@@ -545,7 +327,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static decimal decimalOf( input pcString as character):
+    method public static decimal decimalOf ( input pcString as character ):
 
         define variable cDec as character no-undo.
         define variable cSep as character no-undo.
@@ -562,7 +344,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static character stringOf( input piValue as integer):
+    method public static character stringOf ( input piValue as integer ):
 
         define variable cDec as character no-undo.
         define variable cSep as character no-undo.
@@ -579,7 +361,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static integer integerOf( input pcString as character):
+    method public static integer integerOf ( input pcString as character ):
 
         define variable cDec as character no-undo.
         define variable cSep as character no-undo.
@@ -596,7 +378,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static character stringOf( input piValue as int64):
+    method public static character stringOf ( input piValue as int64 ):
 
         define variable cDec as character no-undo.
         define variable cSep as character no-undo.
@@ -613,7 +395,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static int64 int64Of( input pcString as character):
+    method public static int64 int64Of ( input pcString as character ):
 
         define variable cDec as character no-undo.
         define variable cSep as character no-undo.
@@ -630,13 +412,13 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static character stringOf( input plValue as logical):
+    method public static character stringOf ( input plValue as logical ):
 
         return string(plValue,"Yes/No").
 
     end method.
 
-    method public static logical logicalOf( input pcString as character):
+    method public static logical logicalOf ( input pcString as character ):
 
         define variable lReturn as logical no-undo.
 
@@ -655,43 +437,43 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static character stringOf( input ptValue as date):
+    method public static character stringOf ( input ptValue as date ):
 
         return iso-date(ptValue).
 
     end method.
 
-    method public static date dateOf( input pcString as character):
+    method public static date dateOf ( input pcString as character ):
 
         return iso2Date(pcString).
 
     end method.
 
-    method public static character stringOf( input ptValue as datetime):
+    method public static character stringOf ( input ptValue as datetime ):
 
         return iso-date(ptValue).
 
     end method.
 
-    method public static datetime datetimeOf( input pcString as character):
+    method public static datetime datetimeOf ( input pcString as character ):
 
         return iso2DateTime(pcString).
 
     end method.
 
-    method public static character stringOf( input ptValue as datetime-tz):
+    method public static character stringOf ( input ptValue as datetime-tz ):
 
         return iso-date(ptValue).
 
     end method.
 
-    method public static datetime-tz datetime-tzOf( input pcString as character):
+    method public static datetime-tz datetime-tzOf ( input pcString as character ):
 
         return iso2DateTZ(pcString).
 
     end method.
 
-    method public static character stringOf( input prValue as rowid):
+    method public static character stringOf ( input prValue as rowid ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -702,7 +484,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static rowid rowidOf( input pcString as character ):
+    method public static rowid rowidOf ( input pcString as character ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -714,7 +496,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static character stringOf( input prValue as recid):
+    method public static character stringOf ( input prValue as recid ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -725,7 +507,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static recid recidOf( input pcString as character ):
+    method public static recid recidOf ( input pcString as character ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -737,7 +519,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static longchar stringOf( input prValue as raw):
+    method public static longchar stringOf ( input prValue as raw ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -748,7 +530,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static raw rawOf( input pcString as longchar ):
+    method public static raw rawOf ( input pcString as longchar ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -758,7 +540,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static longchar stringOf( input pmValue as memptr):
+    method public static longchar stringOf ( input pmValue as memptr ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -769,7 +551,7 @@ class Spark.Core.Util.FormatTools:
 
     end method.
 
-    method public static memptr memptrOf( input pcString as longchar ):
+    method public static memptr memptrOf ( input pcString as longchar ):
 
         define variable oJson as Progress.Json.ObjectModel.JsonObject no-undo.
 
@@ -787,9 +569,9 @@ class Spark.Core.Util.FormatTools:
      * @param pcWeekDayList List of week day names
      * @param pcMonthList List of month names
      */
-    method private static character formatAsLongDate (input ptDate        as date,
-        input pcWeekDayList as character,
-        input pcMonthList   as character) :
+    method private static character formatAsLongDate ( input ptDate        as date,
+                                                       input pcWeekDayList as character,
+                                                       input pcMonthList   as character ):
 
         define variable cDaySuffixList as character no-undo.
         define variable cDaySuffix     as character no-undo.
@@ -832,9 +614,9 @@ class Spark.Core.Util.FormatTools:
      * @param pcWeekDayList List of week day names
      * @param pcMonthList List of month names
      */
-    method private static character formatAsLongDatetime (input ptDate        as datetime-tz,
-                                                          input pcWeekDayList as character,
-                                                          input pcMonthList   as character) :
+    method private static character formatAsLongDatetime ( input ptDate        as datetime-tz,
+                                                           input pcWeekDayList as character,
+                                                           input pcMonthList   as character ):
 
         define variable cDaySuffixList as character no-undo.
         define variable cDaySuffix     as character no-undo.
@@ -875,7 +657,7 @@ class Spark.Core.Util.FormatTools:
      *
      * @param ptDate Date to format
      */
-    method public static character formatAsLongDate (input ptDate as date) :
+    method public static character formatAsLongDate ( input ptDate as date ):
 
         define variable cWeekDayList as character no-undo.
         define variable cMonthList   as character no-undo.
@@ -896,7 +678,7 @@ class Spark.Core.Util.FormatTools:
      *
      * @param ptDate Date to format
      */
-    method public static character formatAsAbbreviatedLongDate (input ptDate as date) :
+    method public static character formatAsAbbreviatedLongDate ( input ptDate as date ):
 
         define variable cWeekDayList as character no-undo.
         define variable cMonthList   as character no-undo.
@@ -917,7 +699,7 @@ class Spark.Core.Util.FormatTools:
      *
      * @param ptDate Date to format
      */
-    method public static character formatAsLongDatetime (input ptDate as datetime-tz) :
+    method public static character formatAsLongDatetime ( input ptDate as datetime-tz ):
 
         define variable cWeekDayList as character no-undo.
         define variable cMonthList   as character no-undo.
@@ -938,7 +720,7 @@ class Spark.Core.Util.FormatTools:
      *
      * @param ptDate Date to format
      */
-    method public static character formatAsAbbreviatedLongDatetime (input ptDate as datetime) :
+    method public static character formatAsAbbreviatedLongDatetime ( input ptDate as datetime ):
 
         define variable cWeekDayList as character no-undo.
         define variable cMonthList   as character no-undo.
@@ -957,7 +739,7 @@ class Spark.Core.Util.FormatTools:
      * Convert the codepage of a longchar value to UTF-8
      * Note: codepage-convert leaks 4 bytes in 11.6.1 hense the need for this method
      */
-    method public static longchar convertToUTF8 (input pcValue as longchar) :
+    method public static longchar convertToUTF8 ( input pcValue as longchar ):
 
         define variable cReturn as longchar no-undo.
 
@@ -976,7 +758,7 @@ class Spark.Core.Util.FormatTools:
      * Return a date value from a meta data string
      * e.g. @TODAY, @TODAY+5, @EOM
      */
-    method public static datetime-tz getDateFromMetaData(input pcMetaData as character, input pcErrField as character) :
+    method public static datetime-tz getDateFromMetaData ( input pcMetaData as character ):
 
         define variable tReturn as datetime-tz no-undo.
         define variable cMetaData as character no-undo.
@@ -1030,17 +812,9 @@ class Spark.Core.Util.FormatTools:
                     tReturn = add-interval (tReturn, iNum, "days").
 
             catch ee as Progress.Lang.Error:
-                tReturn = ?.
-                if pcErrField ne ? then
-                    cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                        :addError(pcErrField, ErrorTypeEnum:Error, "[&1] is not a valid date [&2]", pcMetaData, ee:GetMessage(1)).
-                return tReturn.
+                return ?.
             end catch.
         end.
-
-        if tReturn eq ? and pcErrField ne ? then
-            cast(cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):ResponseMessage,IResponse)
-                :addError(pcErrField, ErrorTypeEnum:error, "[&1] is not a valid date", pcMetaData).
 
         return tReturn.
 

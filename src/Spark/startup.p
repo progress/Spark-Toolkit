@@ -41,14 +41,6 @@ logMessage(substitute("Configs: &1", Spark.Core.Util.OSTools:sparkConf), "SPARK-
 Ccs.Common.Application:StartupManager = Spark.Core.Manager.StartupManager:Instance.
 logMessage("Session Startup - Application Initialized", "SPARK-STRT", 3).
 
-/* Read business entities from disk and creates method signatures for API requests. */
-define variable oManager as Ccs.Common.IManager no-undo.
-assign oManager = Ccs.Common.Application:StartupManager:getManager(get-class(Spark.Core.Manager.ICatalogManager)).
-if valid-object(oManager) then do:
-    cast(oManager, Spark.Core.Manager.ICatalogManager):loadResources().
-    logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
-end. /* valid-object */
-
 /**
  * Create a persistent handler for OpenEdge.Web.DataObject.DataObjectHandler events.
  * This defines overrides to the default DOH class events and provides integration
@@ -59,17 +51,6 @@ end. /* valid-object */
  * Only relevant if using OE 11.6.3 or later.
  */
 new Spark.Core.Handler.DOHEventHandler().
-
-/* Discover any file-based DOH services for this webapp. */
-define variable cServiceMapPath as character no-undo.
-file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
-if file-info:full-pathname ne ? then /* File is present, so obtain the base path of the file. */
-    assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
-if (cServiceMapPath gt "") eq true then do:
-    /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
-    logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
-    OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
-end. /* cServiceMapPath */
 
 catch err as Progress.Lang.Error:
     logError("Session Startup Error", err, "SPARK-STRT", 0).

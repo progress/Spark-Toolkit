@@ -1,5 +1,5 @@
 using Ccs.Common.IManager from propath.
-using Spark.Core.Message.ErrorTypeEnum from propath.
+using Spark.Core.Util.ErrorTypeEnum from propath.
 
 /**
  * Logging Manager Interface

@@ -203,10 +203,11 @@ class Spark.Core.Util.Reflection final:
                  * therefore overloaded methods are not currently supported. The reason being
                  * that for externally-exposed (public) methods, the dynamic method invocation
                  * logic must match against a single method signature (partly for performance).
+                 * Since the reflection works from the inner-most class outward, we should at
+                 * least remove the exiting method and use whatever is defined last (meaning
+                 * within the originating class) during discovery.
                  */
-                if log-manager:logging-level ge 2 then
-                    message substitute("Public method '&1:&2' already exists.", oMethodInt:DeclaringClass:TypeName, oMethodInt:name).
-                next methodblk.
+                oMethods:Remove(oMethodInt:name).
             end. /* Has Method */
 
             assign
@@ -235,6 +236,8 @@ class Spark.Core.Util.Reflection final:
             end. /* oParamExt */
 
             /* Add current method with params. */
+            oElementSig:Add("origin", oMethodInt:OriginatingClass:TypeName).
+            oElementSig:Add("defined", oMethodInt:DeclaringClass:TypeName).
             oElementSig:Add("return", cReturnType).
             oElementSig:Add("params", oParamArr).
             if oMethodInt:ReturnExtent gt 0 then

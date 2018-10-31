@@ -8,7 +8,7 @@
                   Can only be used with 11.6.3 or later.
   ----------------------------------------------------------------------*/
 
-&GLOBAL-DEFINE MIN_VERSION_11_7_2 (lookup(substring(proversion(1), 1, 6), "11.6.3,11.6.4,11.6.5,11.7.0,11.7.1") = 0)
+&GLOBAL-DEFINE MIN_VERSION_11_7_2 (lookup(substring(proversion(1), 1, 6), "11.6.0,11.6.1,11.6.2,11.6.2,11.6.3,11.6.4,11.6.5,11.6.6,11.7.0,11.7.1") = 0)
 
 block-level on error undo, throw.
 
@@ -63,8 +63,24 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         end get.
         private set.
 
+    /* Access the Spark logging manager for consistent message output. */
+    define protected property oLoggingManager as ILoggingManager no-undo
+        get():
+            if not valid-object(oLoggingManager) then do:
+                /* Manager may be optionally created, so check for existence before using. */
+                define variable oManager as Ccs.Common.IManager no-undo.
+                assign oManager = Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)).
+                if valid-object(oManager) then
+                    assign oLoggingManager = cast(oManager, ILoggingManager).
+            end.
+            return oLoggingManager.
+        end get.
+        private set.
+
     constructor public DOHEventHandler():
         assign oCheat = this-object.
+
+        this-object:UpdateLogging(). /* Refresh logging options for Spark. */
 
         this-object:DefineEvents(). /* Subscribe to standard DOH events. */
 
@@ -128,9 +144,17 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
 
 
     method private void InitializeRegistries ( ):
+        define variable dStart as datetime-tz no-undo.
+        assign dStart = now. /* Mark start time. */
+
         /* Inform the DOH of what portion of the URL is to be ignored. */
         if valid-object(oCatalogManager) then
             DataObjectHandler:HANDLER_PREFIX = oCatalogManager:ServicePrefix.
+
+        /* Read business entities from disk and creates method signatures for API requests. */
+        oLoggingManager:logMessage("Discovering resources to load...", "SPARK-STRT", 3).
+        oCatalogManager:loadResources(). /* Locates available classes/procedures. */
+        oLoggingManager:logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
 
         /* Start some of the internal registries by accessing the static properties. */
         ArgumentValueWriterRegistry:Registry.
@@ -153,13 +177,25 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         /* Create a master catalog for all services (caches output). */
         if valid-object(oCatalogManager) then
             oCatalogManager:getCatalog("", "").
+
+        /* Discover any file-based DOH services if ROOT.map exists. */
+        define variable cServiceMapPath as character no-undo.
+        file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
+        if file-info:full-pathname ne ? then /* File is present, so obtain the base path of the file. */
+            assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
+        if (cServiceMapPath gt "") eq true then do:
+            /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
+            oLoggingManager:logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
+            OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
+        end. /* cServiceMapPath */
+
+        /* Log the end of the initialization process with an elapsed time. */
+        oLoggingManager:logMessage(substitute("Finshed Loading Resource Metadata in &1ms",
+                                              interval(now, dStart, string(DateTimeAddIntervalEnum:Milliseconds))), "SPARK-STRT", 2).
     end method. /* InitializeRegistries */
 
 
     method private void UpdateLogging ( ):
-        define variable oLoggingManager as ILoggingManager no-undo.
-        assign oLoggingManager = cast(Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)), ILoggingManager).
-
         /**
          * Force the reset of the logging config object,
          * and update to the latest logging level/types.
