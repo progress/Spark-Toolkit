@@ -147,14 +147,15 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         define variable dStart as datetime-tz no-undo.
         assign dStart = now. /* Mark start time. */
 
-        /* Inform the DOH of what portion of the URL is to be ignored. */
-        if valid-object(oCatalogManager) then
+        /* Read business entities from disk and creates method signatures for API requests. */
+        if valid-object(oCatalogManager) then do:
+            /* Inform the DOH of what portion of the URL is to be ignored. */
             DataObjectHandler:HANDLER_PREFIX = oCatalogManager:ServicePrefix.
 
-        /* Read business entities from disk and creates method signatures for API requests. */
-        oLoggingManager:logMessage("Discovering resources to load...", "SPARK-STRT", 3).
-        oCatalogManager:loadResources(). /* Locates available classes/procedures. */
-        oLoggingManager:logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
+            oLoggingManager:logMessage("Discovering resources to load...", "SPARK-STRT", 3).
+            oCatalogManager:loadResources(). /* Locates available classes/procedures. */
+            oLoggingManager:logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
+        end. /* valid-object */
 
         /* Start some of the internal registries by accessing the static properties. */
         ArgumentValueWriterRegistry:Registry.
@@ -166,17 +167,16 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         ResponseElementWriterRegistry:Registry.
         ServiceRegistry:Registry.
 
-        /* Register the ROOT service for handling the catalog. */
-        if valid-object(oCatalogManager) then
+        if valid-object(oCatalogManager) then do:
+            /* Register the ROOT service for handling the catalog. */
             oCatalogManager:registerService(ServiceRegistry:Registry, ServiceRegistry:ROOT_SERVICE_NAME, SemanticVersion:Parse("")).
 
-        /* Register all known services for this application. */
-        if valid-object(oCatalogManager) then
+            /* Register all known services for this application. */
             oCatalogManager:registerAllServices(ServiceRegistry:Registry).
 
-        /* Create a master catalog for all services (caches output). */
-        if valid-object(oCatalogManager) then
+            /* Create a master catalog for all services (caches output). */
             oCatalogManager:getCatalog("", "").
+        end. /* valid-object */
 
         /* Discover any file-based DOH services if ROOT.map exists. */
         define variable cServiceMapPath as character no-undo.
