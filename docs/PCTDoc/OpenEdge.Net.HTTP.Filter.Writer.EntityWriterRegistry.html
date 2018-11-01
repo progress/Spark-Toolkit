@@ -1,0 +1,1877 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>Progress Spark Toolkit (v4.4.0)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="OpenEdge.Net.HTTP.Filter.Writer.package.html">OpenEdge.Net.HTTP.Filter.Writer<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Class&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">EntityWriterRegistry</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.Lang.Object                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:1em; height:16px' class='parentclassesitem'>                                                            <table>                                                                <tr>                                                                    <td>                                                                        <div class='parentclassnode'></div>                                                                    </td>                                                                    <td>                                                                    <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a>                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:4em; height:16px' class='parentclassesitem'>                                                            <table>                                                                <tr>                                                                    <td>                                                                        <div class='parentclassnode'></div>                                                                    </td>                                                                    <td>                                                                    <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a>                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:6em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='OpenEdge.Net.HTTP.Filter.Writer.EntityWriterRegistry.html'>OpenEdge.Net.HTTP.Filter.Writer.EntityWriterRegistry</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits"><a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a></span>
+                                </td>
+                            </tr>
+                            
+                            <!--
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"></span> 
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2015, 2018 by Progress Software Corporation. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>EntityWriterRegistry </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Contains mappings for content-types and message writers used to </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>populate a message's (request/response/part) entity </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Wed Jul 01 14:50:44 EDT 2015 </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#02001053fni4sMUihuoBE/c42EKw=='> Clear ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Clears all the entries from this registry */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Class <a href='#020010ko5Pi3GDLJCOQ/+QblbmzQ=='> Get (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns a registered type, if it exists. returns null otherwise.
+
+@param character The name of the content type to register
+@return Progress.Lang.Class A valid value if it exists. Null otherwise .*/ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Class <a href='#0200104s6XVJJslJG+oP20rT3Y4g=='> Get (Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns a registered type, if it exists. returns null otherwise.
+
+@param  Progress.Lang.Class  The name of the key
+@return Progress.Lang.Class A valid value if it exists. Null otherwise .*/ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Class <a href='#020010aut9+wYmCLWN3IR+QUzf7g=='> Get (Enum)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns a registered type, if it exists. returns null otherwise.
+
+@param  Progress.Lang.Enum The name of the key
+@return Progress.Lang.Class A valid value if it exists. Null otherwise .*/ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010RUsdL+eUB3WEWIWtQry/qg=='> GetKeys ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an array of the key names in this registry.
+
+@return character[] The key values. Indeterminate array if empty. */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#0200104nCs4M3aIsShlgBp5dDY5g=='> Has (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Indicates whether a content type is registered or not.
+
+@param character The name of the content type to register
+@return logical True if the content type is registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#0200104qGKfxqLsqzQ2Tqyi5ViMA=='> Has (Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Indicates whether a key is registered or not.
+
+@param Progress.Lang.Class The name of the key
+@return logical True if the content type is registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010931JBMyiGJAOZjzYt5p5TQ=='> Has (Enum)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Indicates whether a key is registered or not.
+
+@param Progress.Lang.Enum The name of the key
+@return logical True if the content type is registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010P+EjA06LCylbc8HWvAP9Qg=='> InitializeRegistry (BuilderRegistry)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Adds initial values into the registry
+
+@param BuilderRegistry The registry to populate */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010KBgNXAShq/peSIF9kFt0oA=='> Put (character, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Registers type for a key
+
+@param character The key of the type to register
+@param Class The type of the writer used to process that type
+@return logical True if the type was previously registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010+ShgAcMZoZXlFyrfR7Ez1A=='> Put (Class, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Registers type for a key
+
+@param Progress.Lang.Class The key of the type to register
+@param Class The type of the writer used to process that type
+@return logical True if the type was previously registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010xy/x8LSu4JrhlNBTHCHDGQ=='> Put (Enum, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Registers type for a key
+
+@param Progress.Lang.Enum The key of the type to register
+@param Class The type of the writer used to process that type
+@return logical True if the type was previously registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010D7z6M4Dame4Nj3PuA8beow=='> PutAll (BuilderRegistry)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds the contents of one registry to another. THis is an overwite
+operation (ie existing maps are overwritten; new ones added)
+
+Call Clear() to delete nefore additions.
+
+@param BuilderRegistry THe source of entries to add */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#0200104tanm8Q8zvVdekN6sxa1bA=='> Remove (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Deregisters a content type writer
+
+@param character The name of the content type to register
+@return logical True if the content type was previously registered */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.BuilderRegistry <a href='#020010HV2B9VUIux6MTgGEFODjxg=='> Registry</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INTEGER <a href='#020010Q07LFhFj4PRKUImoHIcDCQ=='> Size</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Class <a href='#0200106vpU73p8kvjVWbvSiBjD9g=='> ValueType</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="02001053fni4sMUihuoBE/c42EKw==" href="#Top">Top</a>
+                <a name="  <a href='#02001053fni4sMUihuoBE/c42EKw=='> Clear ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#02001053fni4sMUihuoBE/c42EKw=='> Clear ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Clears all the entries from this registry </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010ko5Pi3GDLJCOQ/+QblbmzQ==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Class <a href='#020010ko5Pi3GDLJCOQ/+QblbmzQ=='> Get (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Class <a href='#020010ko5Pi3GDLJCOQ/+QblbmzQ=='> Get (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns a registered type, if it exists. returns null otherwise. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcTypeKey</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Class 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Class A valid value if it exists. Null otherwise .
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200104s6XVJJslJG+oP20rT3Y4g==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Class <a href='#0200104s6XVJJslJG+oP20rT3Y4g=='> Get (Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Class <a href='#0200104s6XVJJslJG+oP20rT3Y4g=='> Get (Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns a registered type, if it exists. returns null otherwise. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTypeKey</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Class 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Class A valid value if it exists. Null otherwise .
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010aut9+wYmCLWN3IR+QUzf7g==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Class <a href='#020010aut9+wYmCLWN3IR+QUzf7g=='> Get (Enum)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Class <a href='#020010aut9+wYmCLWN3IR+QUzf7g=='> Get (Enum)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns a registered type, if it exists. returns null otherwise. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTypeKey</i>
+    </td>
+    <td>
+       Progress.Lang.Enum
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Class 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Class A valid value if it exists. Null otherwise .
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010RUsdL+eUB3WEWIWtQry/qg==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010RUsdL+eUB3WEWIWtQry/qg=='> GetKeys ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010RUsdL+eUB3WEWIWtQry/qg=='> GetKeys ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an array of the key names in this registry. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        character[] The key values. Indeterminate array if empty.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200104nCs4M3aIsShlgBp5dDY5g==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200104nCs4M3aIsShlgBp5dDY5g=='> Has (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200104nCs4M3aIsShlgBp5dDY5g=='> Has (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Indicates whether a content type is registered or not. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcTypeKey</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the content type is registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200104qGKfxqLsqzQ2Tqyi5ViMA==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200104qGKfxqLsqzQ2Tqyi5ViMA=='> Has (Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200104qGKfxqLsqzQ2Tqyi5ViMA=='> Has (Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Indicates whether a key is registered or not. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTypeKey</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the content type is registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010931JBMyiGJAOZjzYt5p5TQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010931JBMyiGJAOZjzYt5p5TQ=='> Has (Enum)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010931JBMyiGJAOZjzYt5p5TQ=='> Has (Enum)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Indicates whether a key is registered or not. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTypeKey</i>
+    </td>
+    <td>
+       Progress.Lang.Enum
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the content type is registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010P+EjA06LCylbc8HWvAP9Qg==" href="#Top">Top</a>
+                <a name="  <a href='#020010P+EjA06LCylbc8HWvAP9Qg=='> InitializeRegistry (BuilderRegistry)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010P+EjA06LCylbc8HWvAP9Qg=='> InitializeRegistry (BuilderRegistry)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Adds initial values into the registry </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRegistry</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010KBgNXAShq/peSIF9kFt0oA==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010KBgNXAShq/peSIF9kFt0oA=='> Put (character, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010KBgNXAShq/peSIF9kFt0oA=='> Put (character, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Registers type for a key </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcTypeKey</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>poType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the type was previously registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010+ShgAcMZoZXlFyrfR7Ez1A==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010+ShgAcMZoZXlFyrfR7Ez1A=='> Put (Class, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010+ShgAcMZoZXlFyrfR7Ez1A=='> Put (Class, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Registers type for a key </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTypeKey</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the type was previously registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010xy/x8LSu4JrhlNBTHCHDGQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010xy/x8LSu4JrhlNBTHCHDGQ=='> Put (Enum, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010xy/x8LSu4JrhlNBTHCHDGQ=='> Put (Enum, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Registers type for a key </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTypeKey</i>
+    </td>
+    <td>
+       Progress.Lang.Enum
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the type was previously registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010D7z6M4Dame4Nj3PuA8beow==" href="#Top">Top</a>
+                <a name="  <a href='#020010D7z6M4Dame4Nj3PuA8beow=='> PutAll (BuilderRegistry)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010D7z6M4Dame4Nj3PuA8beow=='> PutAll (BuilderRegistry)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds the contents of one registry to another. THis is an overwite </td></tr><td class='paramname'></td><td class='paramdesc'>operation (ie existing maps are overwritten; new ones added) </td></tr><td class='paramname'></td><td class='paramdesc'>Call Clear() to delete nefore additions. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRegistry</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200104tanm8Q8zvVdekN6sxa1bA==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200104tanm8Q8zvVdekN6sxa1bA=='> Remove (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200104tanm8Q8zvVdekN6sxa1bA=='> Remove (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Deregisters a content type writer </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcTypeKey</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the content type was previously registered
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010HV2B9VUIux6MTgGEFODjxg==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a> <a href='#020010HV2B9VUIux6MTgGEFODjxg=='> Registry</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a> <a href='#020010HV2B9VUIux6MTgGEFODjxg=='> Registry</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Q07LFhFj4PRKUImoHIcDCQ==" href="#Top">Top</a>
+                <a name=" INTEGER <a href='#020010Q07LFhFj4PRKUImoHIcDCQ=='> Size</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC INTEGER <a href='#020010Q07LFhFj4PRKUImoHIcDCQ=='> Size</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INTEGER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200106vpU73p8kvjVWbvSiBjD9g==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Class <a href='#0200106vpU73p8kvjVWbvSiBjD9g=='> ValueType</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Class <a href='#0200106vpU73p8kvjVWbvSiBjD9g=='> ValueType</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.BuilderRegistry.html'>OpenEdge.Core.Util.BuilderRegistry</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Class 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <font class="footer_timestamp">11.01.2018 15:30:53</font>
+    </BODY>
+</HTML>

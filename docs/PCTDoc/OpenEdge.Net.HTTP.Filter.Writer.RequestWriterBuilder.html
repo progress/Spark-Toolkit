@@ -1,0 +1,3212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>Progress Spark Toolkit (v4.4.0)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="OpenEdge.Net.HTTP.Filter.Writer.package.html">OpenEdge.Net.HTTP.Filter.Writer<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Class&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">RequestWriterBuilder</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.Lang.Object                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:1em; height:16px' class='parentclassesitem'>                                                            <table>                                                                <tr>                                                                    <td>                                                                        <div class='parentclassnode'></div>                                                                    </td>                                                                    <td>                                                                    <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a>                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:4em; height:16px' class='parentclassesitem'>                                                            <table>                                                                <tr>                                                                    <td>                                                                        <div class='parentclassnode'></div>                                                                    </td>                                                                    <td>                                                                    <a href='OpenEdge.Net.HTTP.ConfigBuilder.html'>OpenEdge.Net.HTTP.ConfigBuilder</a>                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:6em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits"><a href='OpenEdge.Net.HTTP.ConfigBuilder.html'>OpenEdge.Net.HTTP.ConfigBuilder</a></span>
+                                </td>
+                            </tr>
+                            
+                            <!--
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"></span> 
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c)  2015, 2018 by Progress Software Corporation. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>RequestWriterBuilder </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Builds a request writer for a given type of entity </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Thu Jan 29 09:30:28 EST 2015 </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010yIgp725zAvM2aI1Q7FMXEg=='> AppendArrayCharacterValue (character, character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Appends a character value to an array (convenience)
+
+@param character The option name
+@param character the value          */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder <a href='#020010jOor7hPpr7d7KROh/6ppiw=='> Build ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns a request writer for a given request.
+
+@return RequestWriterBuilder The  writer to use */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder <a href='#020010TN8MFNTm2EroqUSuQnnb+g=='> Build (IHttpRequest)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns a request writer for a given request.
+
+@param IHttpRequest The request for which to build a writer
+@return RequestWriterBuilder The  writer to use */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010SE5KdVmWQO1x4km5Yko6ZQ=='> ClearOptions ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Clears all options for this builder */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         DATETIME-TZ <a href='#020010sPJHrJhV9Qd4Gt55d4cvyQ=='> GetOptionDateTimeValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's datetime value
+
+@param character The option name
+@return datetime-tz the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010Ex0TG6yaEZl0Hxd15K1EMw=='> GetOptionLogicalValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's logical value
+
+@param character The option name
+@return logical the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LONGCHAR <a href='#020010UaA+9xm+taYO7AmMLUyc1A=='> GetOptionLongcharValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's longchar value
+
+@param character The option name
+@return longchar the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         DECIMAL <a href='#020010spuXsAwAZyzCiOYbhdr2Og=='> GetOptionNumericValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's decimal value
+
+@param character The option name
+@return decimal the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Object <a href='#020010d0+Wn85e5tzNmuNCrZTI+A=='> GetOptionObjectValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's object value
+
+@param character The option name
+@return Object the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010NFAO7L5/MCr8wDQSRKzZNw=='> GetOptionStringArrayValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's character array value
+
+@param character The option name
+@return character[] the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010uYBgyhQ5ck3hJEcjcJLqhA=='> GetOptionStringValue (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns an option's character value
+
+@param character The option name
+@return character the value    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Class <a href='#020010qipKyNgu0BsIx/bSbGVK8A=='> GetWriter (IHttpRequest, BuilderRegistry)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Returns a request writer from a particular registry
+
+The search alogrithm is
+1. A writer for the HTTP Version+METHOD
+2. A writer for the HTTP version
+- The default is HTTP/1.1
+
+@param IHttpRequest The request for which we are seeking a writer
+@param BuilderRegistry The registry in which to look
+@return Progress.Lang.Class The type of the writer. It's the caller's responsibility to
+invoke and use the writer */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010DN1MY35bAgrJap9A23gyvQ=='> HasOption (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Checks whether a config option already exists
+
+@param  character The option name
+@return logical True if the named configuration option exists */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010P+EjA06LCylbc8HWvAP9Qg=='> InitializeRegistry (BuilderRegistry)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Adds initial values into the registry
+
+@param BuilderRegistry The registry to populate */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.Filter.Payload.MessageWriter <a href='#0200103/qk73vbJYdn9isr+J05hw=='> NewRequestWriter ()</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#0200108UFERmFk3CufJPcyOdbH8A=='> RemoveOption (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Removes an option
+
+@param character The option name */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder <a href='#0200108o58/bMcq/9qYOzZSbWpfQ=='> Request (IHttpRequest)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Adds a message to the writer (for any extra context).
+
+@param  IHttpRequest The message
+@return RequestWriterBuilder The writer used */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#0200106mm17d0jQ24buzEQOp6xSw=='> SetOption (character, character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores an value as an option
+
+@param character The option name
+@param character the value
+@return logical True is the option was overwritten */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010qfh48P11DIQcciJJWbtZFw=='> SetOption (character, character[])</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores an value as an option
+
+@param character The option name
+@param character the value
+@return logical True is the option was overwritten */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010um4yUeL19whskSLTdITFOg=='> SetOption (character, datetime-tz)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores a datetime-tzvalue as an option
+
+@param character The option name
+@param datetime-tz the value
+@return logical True is the option was overwritten */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010M+w0hajtZH4LAaiuZ6xqjg=='> SetOption (character, decimal)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores an numeric value as an option
+
+@param character The option name
+@param Object the value
+@return logical True is the option was overwritten */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010Eb1K3Fl8hYGwlfa165HGCQ=='> SetOption (character, logical)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores a logical value as an option
+
+@param character The option name
+@param logical the value
+@return logical True is the option was overwritten */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#0200103SgWGhggOXPe3zo1zcBeUw=='> SetOption (character, Object)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores an object value as an option
+
+@param character The option name
+@param Object the value
+@return logical True is the option was overwritten    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010ZUR8Vk/3jy7okAogikI1lQ=='> SetOption (Class, Object)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Stores an object value as an option
+
+@param Progress.Lang&gt;Class The option name (as a type)
+@param Object the value
+@return logical True is the option was overwritten    */ <br> <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder <a href='#020010mlPVkLfXjd80RyJPHXMavA=='> WriteTo (ByteBucket)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** Specifies the ByteBucket to use for the message body
+
+@param  ByteBucket The bucket to use
+@return RequestWriterBuilder The writer used */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010JKJmiD5yBKRVh3nqfMQUCw=='> RequestWriterBuilder ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Default constructor */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010KNHbfEUU65OoetJkIxbXvg=='> RequestWriterBuilder (IHttpRequest)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Constructor.
+
+@param IHttpRequest */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.BuilderRegistry <a href='#020010HV2B9VUIux6MTgGEFODjxg=='> Registry</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.IHttpRequest <a href='#0200107uQm33nuyiUKFfduelZEfQ=='> Request</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Net.HTTP.Filter.Payload.MessageWriter <a href='#0200104J4aZqRTG0QPBx1ijO5mNQ=='> Writer</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010yIgp725zAvM2aI1Q7FMXEg==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010yIgp725zAvM2aI1Q7FMXEg=='> AppendArrayCharacterValue (character, character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010yIgp725zAvM2aI1Q7FMXEg=='> AppendArrayCharacterValue (character, character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Appends a character value to an array (convenience) </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcValue</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010jOor7hPpr7d7KROh/6ppiw==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#020010jOor7hPpr7d7KROh/6ppiw=='> Build ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#020010jOor7hPpr7d7KROh/6ppiw=='> Build ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns a request writer for a given request. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        RequestWriterBuilder The  writer to use
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010TN8MFNTm2EroqUSuQnnb+g==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#020010TN8MFNTm2EroqUSuQnnb+g=='> Build (IHttpRequest)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#020010TN8MFNTm2EroqUSuQnnb+g=='> Build (IHttpRequest)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns a request writer for a given request. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pRequest</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        RequestWriterBuilder The  writer to use
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010SE5KdVmWQO1x4km5Yko6ZQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010SE5KdVmWQO1x4km5Yko6ZQ=='> ClearOptions ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010SE5KdVmWQO1x4km5Yko6ZQ=='> ClearOptions ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Clears all options for this builder </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010sPJHrJhV9Qd4Gt55d4cvyQ==" href="#Top">Top</a>
+                <a name=" DATETIME-TZ <a href='#020010sPJHrJhV9Qd4Gt55d4cvyQ=='> GetOptionDateTimeValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED DATETIME-TZ <a href='#020010sPJHrJhV9Qd4Gt55d4cvyQ=='> GetOptionDateTimeValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's datetime value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      DATETIME-TZ 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        datetime-tz the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Ex0TG6yaEZl0Hxd15K1EMw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010Ex0TG6yaEZl0Hxd15K1EMw=='> GetOptionLogicalValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010Ex0TG6yaEZl0Hxd15K1EMw=='> GetOptionLogicalValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's logical value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010UaA+9xm+taYO7AmMLUyc1A==" href="#Top">Top</a>
+                <a name=" LONGCHAR <a href='#020010UaA+9xm+taYO7AmMLUyc1A=='> GetOptionLongcharValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LONGCHAR <a href='#020010UaA+9xm+taYO7AmMLUyc1A=='> GetOptionLongcharValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's longchar value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LONGCHAR 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        longchar the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010spuXsAwAZyzCiOYbhdr2Og==" href="#Top">Top</a>
+                <a name=" DECIMAL <a href='#020010spuXsAwAZyzCiOYbhdr2Og=='> GetOptionNumericValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED DECIMAL <a href='#020010spuXsAwAZyzCiOYbhdr2Og=='> GetOptionNumericValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's decimal value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      DECIMAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        decimal the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010d0+Wn85e5tzNmuNCrZTI+A==" href="#Top">Top</a>
+                <a name=" Object <a href='#020010d0+Wn85e5tzNmuNCrZTI+A=='> GetOptionObjectValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED Object <a href='#020010d0+Wn85e5tzNmuNCrZTI+A=='> GetOptionObjectValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's object value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Object 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Object the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010NFAO7L5/MCr8wDQSRKzZNw==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010NFAO7L5/MCr8wDQSRKzZNw=='> GetOptionStringArrayValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010NFAO7L5/MCr8wDQSRKzZNw=='> GetOptionStringArrayValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's character array value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        character[] the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010uYBgyhQ5ck3hJEcjcJLqhA==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010uYBgyhQ5ck3hJEcjcJLqhA=='> GetOptionStringValue (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010uYBgyhQ5ck3hJEcjcJLqhA=='> GetOptionStringValue (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an option's character value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        character the value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010qipKyNgu0BsIx/bSbGVK8A==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Class <a href='#020010qipKyNgu0BsIx/bSbGVK8A=='> GetWriter (IHttpRequest, BuilderRegistry)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED Progress.Lang.Class <a href='#020010qipKyNgu0BsIx/bSbGVK8A=='> GetWriter (IHttpRequest, BuilderRegistry)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns a request writer from a particular registry </td></tr><td class='paramname'></td><td class='paramdesc'>The search alogrithm is </td></tr><td class='paramname'></td><td class='paramdesc'>1. A writer for the HTTP Version+METHOD </td></tr><td class='paramname'></td><td class='paramdesc'>2. A writer for the HTTP version </td></tr><td class='paramname'></td><td class='paramdesc'>- The default is HTTP/1.1 </td></tr><td class='paramname'></td><td class='paramdesc'>invoke and use the writer </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pRequest</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pRegistry</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Class 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Class The type of the writer. It's the caller's responsibility to
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010DN1MY35bAgrJap9A23gyvQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010DN1MY35bAgrJap9A23gyvQ=='> HasOption (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010DN1MY35bAgrJap9A23gyvQ=='> HasOption (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Checks whether a config option already exists </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcConfigName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True if the named configuration option exists
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010P+EjA06LCylbc8HWvAP9Qg==" href="#Top">Top</a>
+                <a name="  <a href='#020010P+EjA06LCylbc8HWvAP9Qg=='> InitializeRegistry (BuilderRegistry)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010P+EjA06LCylbc8HWvAP9Qg=='> InitializeRegistry (BuilderRegistry)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Adds initial values into the registry </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRegistry</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200103/qk73vbJYdn9isr+J05hw==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.Filter.Payload.MessageWriter.html'>OpenEdge.Net.HTTP.Filter.Payload.MessageWriter</a> <a href='#0200103/qk73vbJYdn9isr+J05hw=='> NewRequestWriter ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED <a href='OpenEdge.Net.HTTP.Filter.Payload.MessageWriter.html'>OpenEdge.Net.HTTP.Filter.Payload.MessageWriter</a> <a href='#0200103/qk73vbJYdn9isr+J05hw=='> NewRequestWriter ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.Filter.Payload.MessageWriter.html'>OpenEdge.Net.HTTP.Filter.Payload.MessageWriter</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200108UFERmFk3CufJPcyOdbH8A==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200108UFERmFk3CufJPcyOdbH8A=='> RemoveOption (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#0200108UFERmFk3CufJPcyOdbH8A=='> RemoveOption (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Removes an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200108o58/bMcq/9qYOzZSbWpfQ==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#0200108o58/bMcq/9qYOzZSbWpfQ=='> Request (IHttpRequest)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#0200108o58/bMcq/9qYOzZSbWpfQ=='> Request (IHttpRequest)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Adds a message to the writer (for any extra context). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poMessage</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        RequestWriterBuilder The writer used
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200106mm17d0jQ24buzEQOp6xSw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200106mm17d0jQ24buzEQOp6xSw=='> SetOption (character, character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#0200106mm17d0jQ24buzEQOp6xSw=='> SetOption (character, character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores an value as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcValue</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010qfh48P11DIQcciJJWbtZFw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010qfh48P11DIQcciJJWbtZFw=='> SetOption (character, character[])</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010qfh48P11DIQcciJJWbtZFw=='> SetOption (character, character[])</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores an value as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcValue</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010um4yUeL19whskSLTdITFOg==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010um4yUeL19whskSLTdITFOg=='> SetOption (character, datetime-tz)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010um4yUeL19whskSLTdITFOg=='> SetOption (character, datetime-tz)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores a datetime-tzvalue as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>ptValue</i>
+    </td>
+    <td>
+       DATETIME-TZ
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010M+w0hajtZH4LAaiuZ6xqjg==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010M+w0hajtZH4LAaiuZ6xqjg=='> SetOption (character, decimal)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010M+w0hajtZH4LAaiuZ6xqjg=='> SetOption (character, decimal)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores an numeric value as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pdValue</i>
+    </td>
+    <td>
+       DECIMAL
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Eb1K3Fl8hYGwlfa165HGCQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010Eb1K3Fl8hYGwlfa165HGCQ=='> SetOption (character, logical)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010Eb1K3Fl8hYGwlfa165HGCQ=='> SetOption (character, logical)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores a logical value as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>plValue</i>
+    </td>
+    <td>
+       LOGICAL
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200103SgWGhggOXPe3zo1zcBeUw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200103SgWGhggOXPe3zo1zcBeUw=='> SetOption (character, Object)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#0200103SgWGhggOXPe3zo1zcBeUw=='> SetOption (character, Object)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores an object value as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>poValue</i>
+    </td>
+    <td>
+       Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010ZUR8Vk/3jy7okAogikI1lQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010ZUR8Vk/3jy7okAogikI1lQ=='> SetOption (Class, Object)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010ZUR8Vk/3jy7okAogikI1lQ=='> SetOption (Class, Object)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Core.Util.ConfigBuilder.html'>OpenEdge.Core.Util.ConfigBuilder</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Stores an object value as an option </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pName</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pValue</i>
+    </td>
+    <td>
+       Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        logical True is the option was overwritten
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010mlPVkLfXjd80RyJPHXMavA==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#020010mlPVkLfXjd80RyJPHXMavA=='> WriteTo (ByteBucket)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> <a href='#020010mlPVkLfXjd80RyJPHXMavA=='> WriteTo (ByteBucket)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Specifies the ByteBucket to use for the message body </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poMessageBody</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Core.ByteBucket.html'>OpenEdge.Core.ByteBucket</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder.html'>OpenEdge.Net.HTTP.Filter.Writer.RequestWriterBuilder</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        RequestWriterBuilder The writer used
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010JKJmiD5yBKRVh3nqfMQUCw==" href="#Top">Top</a>
+                <a name="  <a href='#020010JKJmiD5yBKRVh3nqfMQUCw=='> RequestWriterBuilder ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010JKJmiD5yBKRVh3nqfMQUCw=='> RequestWriterBuilder ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default constructor </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010KNHbfEUU65OoetJkIxbXvg==" href="#Top">Top</a>
+                <a name="  <a href='#020010KNHbfEUU65OoetJkIxbXvg=='> RequestWriterBuilder (IHttpRequest)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010KNHbfEUU65OoetJkIxbXvg=='> RequestWriterBuilder (IHttpRequest)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Constructor. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pRequest</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010HV2B9VUIux6MTgGEFODjxg==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a> <a href='#020010HV2B9VUIux6MTgGEFODjxg=='> Registry</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a> <a href='#020010HV2B9VUIux6MTgGEFODjxg=='> Registry</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.BuilderRegistry.html'>OpenEdge.Net.HTTP.BuilderRegistry</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200107uQm33nuyiUKFfduelZEfQ==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a> <a href='#0200107uQm33nuyiUKFfduelZEfQ=='> Request</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a> <a href='#0200107uQm33nuyiUKFfduelZEfQ=='> Request</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.IHttpRequest.html'>OpenEdge.Net.HTTP.IHttpRequest</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200104J4aZqRTG0QPBx1ijO5mNQ==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Net.HTTP.Filter.Payload.MessageWriter.html'>OpenEdge.Net.HTTP.Filter.Payload.MessageWriter</a> <a href='#0200104J4aZqRTG0QPBx1ijO5mNQ=='> Writer</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Net.HTTP.Filter.Payload.MessageWriter.html'>OpenEdge.Net.HTTP.Filter.Payload.MessageWriter</a> <a href='#0200104J4aZqRTG0QPBx1ijO5mNQ=='> Writer</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Net.HTTP.Filter.Payload.MessageWriter.html'>OpenEdge.Net.HTTP.Filter.Payload.MessageWriter</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <font class="footer_timestamp">11.01.2018 15:30:54</font>
+    </BODY>
+</HTML>

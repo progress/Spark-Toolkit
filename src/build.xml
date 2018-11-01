@@ -148,6 +148,12 @@
                 <include name="**/*.cls"/>
             </fileset>
         </PCTCompile>
+
+		<!-- Remove temporary files. -->
+		<delete dir="${build.tmp}/.pct" quiet="true"/>
+        <delete dir="${build.tmp}/BusinessLogic" quiet="true"/>
+        <delete dir="${build.tmp}/Common" quiet="true"/>
+        <delete dir="${build.tmp}/ServiceManager" quiet="true"/>
     </target>
 
     <target name="compile_spark_core">
@@ -195,7 +201,6 @@
     <target name="compile_spark_diag">
 		<init_oe/>
 
-		<delete dir="${preprocess}/OpenEdge" quiet="true"/>
         <delete dir="${preprocess}/Spark/Diagnostic" quiet="true"/>
 
 		<report_oe_vars/>
@@ -243,10 +248,11 @@
         <property name="abldoc.home" value="${dlcHome}/oeide/eclipse/plugins/com.progress.openedge.pdt.abldoc.core_${oe.version}.00"/>
         <property name="abldoc.lib" value="${abldoc.home}/lib"/>
         <property name="artifacts" value="${abldoc.home}/abldoc-artifacts"/>
-        <property name="abldocs.output" value="${basedir}/docs/ABLDoc"/>
-        <property name="abldocs.title" value="Spark v${release.version}"/>
+        <property name="abldocs.title" value="Progress Spark Toolkit v${release.version}"/>
+		<property name="abldocs.output" value="${doc.out}/ABLDoc"/>
 
         <delete dir="${abldocs.output}" quiet="true"/>
+
         <mkdir dir="${abldocs.output}"/>
 
         <!-- Load the JAR's from the Eclipse plugin for this release of OpenEdge. -->
@@ -285,8 +291,8 @@
 
         <!-- Required for PCT for ABLDuck task. -->
 		<!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
-		<typedef resource="types.properties" classpath="tools/PCT.jar"/>
-        <taskdef resource="extras115.properties" classpath="tools/PCT.jar"/>
+		<typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
+        <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
         <property name="ablduck.output" value="${doc.out}/ABLDuck"/>
 
@@ -298,8 +304,9 @@
         <!-- Compile all code. -->
         <antcall target="compile_ccs"/>
         <antcall target="compile_spark_core"/>
+		<antcall target="compile_spark_diag"/>
 
-        <ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="Spark (v${release.version})">
+		<ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="Progress Spark Toolkit (v${release.version})">
             <fileset dir="${preprocess}">
                 <include name="**/*.cls"/>
 				<include name="**/*.p"/>
@@ -321,12 +328,12 @@
 
         <!-- Required for PCT for ClassDocumentation task. -->
 		<!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
-        <typedef resource="types.properties" classpath="tools/PCT.jar"/>
-        <taskdef resource="extras115.properties" classpath="tools/PCT.jar"/>
+        <typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
+        <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
         <property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
 
-        <delete dir="${pctdocs.output}" quiet="true"/>
+		<delete dir="${pctdocs.output}" quiet="true"/>
 
         <mkdir dir="${doc.tmp}"/>
         <mkdir dir="${pctdocs.output}"/>
@@ -334,6 +341,7 @@
         <!-- Compile all code. -->
         <antcall target="compile_ccs"/>
         <antcall target="compile_spark_core"/>
+		<antcall target="compile_spark_diag"/>
 
         <!-- Document ONLY class files, ENUM's are not supported (yet). -->
         <ClassDocumentation destDir="${doc.tmp}" dlcHome="${dlcHome}">
@@ -365,7 +373,7 @@
 
         <!-- Convert the above output (XML) into HTML documents. -->
         <HTMLDocumentation sourceDir="${doc.tmp}" destDir="${pctdocs.output}" dlcHome="${dlcHome}"
-                           treeViewOverview="true" title="Spark (v${release.version})">
+                           treeViewOverview="true" title="Progress Spark Toolkit (v${release.version})">
 		    <propath>
                 <pathelement path="${src.dir}/Ccs"/>
                 <pathelement path="${src.dir}/Spark"/>
@@ -384,10 +392,6 @@
 
         <!-- Next, remove old/temporary files. -->
         <delete file="${build.out}/Ccs.pl" quiet="true"/>
-		<delete dir="${build.tmp}/.pct" quiet="true"/>
-        <delete dir="${build.tmp}/BusinessLogic" quiet="true"/>
-        <delete dir="${build.tmp}/Common" quiet="true"/>
-        <delete dir="${build.tmp}/ServiceManager" quiet="true"/>
 
         <!-- Finally, build PL file with R-code. -->
         <PCTLibrary destfile="${build.out}/Ccs.pl" dlcHome="${dlcHome}">
