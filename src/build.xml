@@ -294,17 +294,16 @@
 		<typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
         <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
-        <property name="ablduck.output" value="${doc.out}/ABLDuck"/>
-
-        <delete dir="${ablduck.output}" quiet="true"/>
-
-        <mkdir dir="${doc.tmp}"/>
-        <mkdir dir="${ablduck.output}"/>
-
         <!-- Compile all code. -->
         <antcall target="compile_ccs"/>
         <antcall target="compile_spark_core"/>
 		<antcall target="compile_spark_diag"/>
+
+        <!-- Prepare directories for output. -->
+		<property name="ablduck.output" value="${doc.out}/ABLDuck"/>
+        <delete dir="${ablduck.output}" quiet="true"/>
+        <mkdir dir="${doc.tmp}"/>
+        <mkdir dir="${ablduck.output}"/>
 
 		<ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="Progress Spark Toolkit (v${release.version})">
             <fileset dir="${preprocess}">
@@ -331,17 +330,16 @@
         <typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
         <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
-        <property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
-
-		<delete dir="${pctdocs.output}" quiet="true"/>
-
-        <mkdir dir="${doc.tmp}"/>
-        <mkdir dir="${pctdocs.output}"/>
-
         <!-- Compile all code. -->
         <antcall target="compile_ccs"/>
         <antcall target="compile_spark_core"/>
 		<antcall target="compile_spark_diag"/>
+
+        <!-- Prepare directories for output. -->
+		<property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
+		<delete dir="${pctdocs.output}" quiet="true"/>
+        <mkdir dir="${doc.tmp}"/>
+        <mkdir dir="${pctdocs.output}"/>
 
         <!-- Document ONLY class files, ENUM's are not supported (yet). -->
         <ClassDocumentation destDir="${doc.tmp}" dlcHome="${dlcHome}">
