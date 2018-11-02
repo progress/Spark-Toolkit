@@ -24,7 +24,7 @@
             <fail message="@{message}">
                 <condition>
 					<not>
-						<available file="@{file}" />
+						<available file="@{file}" type="file"/>
 					</not>
                 </condition>
             </fail>
