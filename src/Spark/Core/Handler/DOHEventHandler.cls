@@ -423,13 +423,13 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
             end finally.
         end. /* Read Operation */
 
-        define variable fElapsed as decimal no-undo initial 0.
-        if dInvokeTime ne ? then do on error undo, throw:
-            define variable oHeader  as HttpHeader no-undo.
+        define variable iElapsed as int64 no-undo initial 0.
+        if dInvokeTime ne ? then do on error undo, leave:
+            define variable oHeader as HttpHeader no-undo.
 
             /* Add the elapsed time for this request as a custom header value. */
-            assign fElapsed = interval(now, dInvokeTime, string(OpenEdge.Core.DateTimeAddIntervalEnum:Milliseconds)).
-            assign oHeader = new HttpHeader("X-Elapsed", trim(string(fElapsed, ">>>,>>9")) + "ms").
+            assign iElapsed = interval(now, dInvokeTime, string(OpenEdge.Core.DateTimeAddIntervalEnum:Milliseconds)).
+            assign oHeader = new HttpHeader("X-Elapsed", trim(string(iElapsed, ">>>,>>>,>>9")) + "ms").
             poEventArgs:Response:SetHeader(oHeader).
         end. /* iStart gt 0 */
 
@@ -442,7 +442,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                                      string(poEventArgs:Operation:Method),
                                      poEventArgs:Service:Name,
                                      poEventArgs:Operation:TargetName,
-                                     fElapsed)).
+                                     iElapsed)).
         if oTargetType eq TargetTypeEnum:Procedure then
             oLogger:Debug(substitute("INVOKED_ - &1 /&2 &3 -> '&4' in &5",
                                      string(poEventArgs:Operation:Method),
@@ -457,7 +457,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                                      poEventArgs:Operation:ServiceURI,
                                      poEventArgs:Operation:TargetName,
                                      poEventArgs:Operation:TargetFunction,
-                                     fElapsed)).
+                                     iElapsed)).
 
         catch err as Progress.Lang.Error:
             assign poEventArgs:Error = err.
