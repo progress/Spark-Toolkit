@@ -4,12 +4,12 @@
 
 The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/CCS) reference implementation from Progress meant to aid in creating an ABL application which provides RESTful API's for microservices. This repository primarily contains ABL artifacts and was built specifically for the **Progress Application Server for OpenEdge** to provide the back-end (server-side) support for exposing ABL logic via HTTP/HTTP.
 
-**Latest Release:** v4.3.0 (September 2018) for OE 11.7.3
+**Latest Release:** v4.4.0 (November 2018) for OE 11.7.4
 
 
 ## Requirements
 
-**OpenEdge 11.7.3** or later is required, with the current toolkit release being compiled on version 11.7.3 and utilizing several product improvements available. Some new features appearing in the 4.3.0 release utilize code available in the (forthcoming) 11.7.4 release, and are provided automatically in the Spark.pl for this release.
+**OpenEdge 11.7.4** or later is required, with the current toolkit release being compiled on version 11.7.4 and utilizing several product improvements available. Some new features appearing in the 4.4.0 release may still be used with 11.7.3 but may first require a recompile and build of a new PL file.
 
 
 ### Supporting Tools
@@ -41,9 +41,9 @@ This repository should be ready to use as-is within **Progress Developer Studio 
 
 ## Builds / Distribution
 
-To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `Spark.pl` file you would use the target `build_spark_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the version "4.3.0":
+To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `Spark.pl` file you would use the target `build_spark_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the version "4.4.0":
 
-    ant build_spark_pl -Dversion=4.3.0
+    ant build_spark_pl -Dversion=4.4.0
 
 
 ## Documentation
