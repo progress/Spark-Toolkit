@@ -11,22 +11,17 @@
         https://documentation.progress.com/output/pdo/#page/pdo%2Fgeterrors(-)-method.html
   ----------------------------------------------------------------------*/
 
-using OpenEdge.BusinessLogic.BusinessEntity from propath.
 using Progress.Json.ObjectModel.* from propath.
 using Ccs.BusinessLogic.* from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
-using Spark.Core.Manager.IMessageManager from propath.
-using Spark.Core.Message.IRequest from propath.
-using Spark.Core.Message.IResponse from propath.
-using Spark.Core.Service.ISparkEntity from propath.
 using Spark.Core.Util.* from propath.
 
 block-level on error undo, throw.
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
 
-class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEntity use-widget-pool abstract:
+class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEntity implements Spark.Core.Service.ISparkEntity use-widget-pool abstract:
 
     /**
      * Defined in OpenEdge.BusinessLogic.BusinessEntity as handle to DataSet in context:
@@ -62,19 +57,6 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
         end get.
         set.
 
-    define protected property oMessageManager as IMessageManager no-undo
-        get:
-            if not valid-object(oMessageManager) then do:
-                /* Manager may be optionally created, so check for existence before using. */
-                define variable oManager as Ccs.Common.IManager no-undo.
-                assign oManager = Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)).
-                if valid-object(oManager) then
-                    assign oMessageManager = cast(oManager, IMessageManager).
-            end.
-            return oMessageManager.
-        end get.
-        set.
-
     define public property LastCount as int64 no-undo get. private set.
 
     define protected variable iSeq as integer no-undo.
@@ -95,14 +77,6 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
     end constructor.
 
     /***** Protected *****/
-
-    method protected character appendMessage ( input pcExisting   as character,
-                                               input pcNewMessage as character ):
-        if (pcExisting gt "") eq true then
-            return trim(trim(substitute("&1, &2", pcExisting, pcNewMessage), ",")).
-
-        return pcNewMessage.
-    end method. /* appendMessage */
 
     method protected int64 filterData ( input pcFilter as character ):
         define variable hQuery         as handle    no-undo.
@@ -349,11 +323,19 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
     end method. /* getDataset */
 
     method public IGetDataResponse getData ( poRequest as IGetDataRequest,
-                                             output dataset-handle phDataset ):
+                                             output dataset-handle phDataSet ):
     end method. /* getData */
 
     method public IGetResultCountResponse getResultCount ( poRequest as IGetDataRequest ):
     end method. /* getResultCount */
+
+    method public Progress.Lang.Object updateData ( input-output dataset-handle phDataSet,
+                                                    poUpdateDataRequest as IUpdateDataRequest ):
+        /**
+         * Should act like the "submit" operation with CUD mode
+         * being determined by the dataset before/after data.
+         */
+    end method. /* updateData */
 
     method protected int64 getRecCount ( input pcRawFilter as character ):
         define variable hDBBuffer  as handle    no-undo extent.
@@ -370,14 +352,14 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
             assign hDBBuffer[ix] = ProDataSource[ix]:get-source-buffer(1) no-error.
         end. /* ProDataSource */
 
-        getFilterParams( input  getFilter(pcRawFilter),
-                         output cFilter,
-                         output cSortBy,
-                         output cRecID,
-                         output iStartRow,
-                         output iMaxRows ).
+        this-object:getFilterParams( input  this-object:getFilter(pcRawFilter),
+                                     output cFilter,
+                                     output cSortBy,
+                                     output cRecID,
+                                     output iStartRow,
+                                     output iMaxRows ).
 
-        return getRecCount(cFilter, hDBBuffer[1]).
+        return this-object:getRecCount(cFilter, hDBBuffer[1]).
 
         finally:
             do ix = 1 to extent(hDBBuffer):
@@ -414,18 +396,18 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
     end method. /* getRecCount */
 
     method protected void preCommitLogic ( input pcAction as character,
-                                           input-output dataset-handle phDataset ):
+                                           input-output dataset-handle phDataSet ):
     end method. /* preCommitLogic */
 
     method protected void postCommitLogic ( input pcAction as character,
-                                            input-output dataset-handle phDataset ):
+                                            input-output dataset-handle phDataSet ):
     end method. /* postCommitLogic */
 
     method protected void postFetchRecord ( ):
     end method. /* postFetchRecord */
 
     method protected character validateData ( input pcAction as character,
-                                              input-output dataset-handle phDataSet):
+                                              input-output dataset-handle phDataSet ):
     end method. /* validateData */
 
     /******* Public *******/
@@ -455,7 +437,7 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
     end method. /* postRowFill */
 
     method protected override void readData ( input pcRawFilter as character ):
-        assign LastCount = this-object:filterData(pcRawFilter).
+        this-object:LastCount = this-object:filterData(pcRawFilter).
     end method. /* readData */
 
     method public void readData ( input  filter  as character,
@@ -465,8 +447,8 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
             assign ProDataSet = phDataSet. /* Ensure proper handle is set. */
 
         /* Custom readData that uses filter and returns record count with dataset. */
-        assign LastCount = this-object:filterData(filter).
-        assign numRecs = LastCount. /* Get record count */
+        this-object:LastCount = this-object:filterData(filter).
+        assign numRecs = this-object:LastCount. /* Get record count */
         postFetchRecord(). /* Extra fetch logic. */
 
         /* If handles are different, copy the internal dataset back to the param. */
@@ -522,18 +504,13 @@ class Spark.Core.Service.SparkEntity inherits BusinessEntity implements ISparkEn
 
     method public void submitData ( input-output dataset-handle phDataSet ):
         validateData(input "Submit", input-output dataset-handle phDataSet by-reference).
-        if phDataSet:error then do:
-            if valid-object(oMessageManager) then
-                oMessageManager:setResponseCode(500). /* Trigger UI Error. */
-        end.
-        else do:
-            if valid-handle(phDataSet) then
-                assign ProDataSet = phDataSet. /* Ensure proper handle is set. */
 
-            preCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
-            super:Submit(input-output dataset-handle phDataSet by-reference).
-            postCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
-        end.
+        if valid-handle(phDataSet) then
+            assign ProDataSet = phDataSet. /* Ensure proper handle is set. */
+
+        preCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
+        super:Submit(input-output dataset-handle phDataSet by-reference).
+        postCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
 
         finally:
             delete object phDataSet no-error.

@@ -472,4 +472,13 @@ class Spark.Core.Util.Strings use-widget-pool:
             return substitute("&1&2", pcString, fill(pcPad, piLength - length(pcString))).
     end method. /* rightPad */
 
+
+    method public static character appendWithComma ( input pcExisting   as character,
+                                                     input pcNewMessage as character ):
+        if (pcExisting gt "") eq true then
+            return trim(trim(substitute("&1, &2", pcExisting, pcNewMessage), ",")).
+
+        return pcNewMessage.
+    end method. /* appendWithComma */
+
 end class.

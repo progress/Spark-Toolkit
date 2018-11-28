@@ -18,7 +18,6 @@ using OpenEdge.Web.DataObject.* from propath.
 using OpenEdge.Web.DataObject.Writer.* from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
-using Spark.Core.Manager.IMessageManager from propath.
 using Spark.Core.Manager.ISchemaManager from propath.
 using Spark.Core.Service.IDynamicEntity from propath.
 using Spark.Core.Service.IDynamicResource from propath.
@@ -29,8 +28,8 @@ using Spark.Core.Util.OSTools from propath.
 using Spark.Core.Util.Reflection from propath.
 
 block-level on error undo, throw.
+
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
-&GLOBAL-DEFINE CAN_USE_REFLECTION (lookup(substring(proversion, 1, 4), "11.0,11.1,11.2,11.3,11.4,11.5") = 0)
 
 class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager implements ICatalogManager use-widget-pool:
 
@@ -567,7 +566,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
              where bResource.ServiceURI eq pcServiceURI
                and bResource.ClassPath eq pcResClassPath no-error.
         if available(bResource) then do:
-            &if {&CAN_USE_REFLECTION} &then
             /* Generate class signature (in JSON) using reflection. */
             oClassSig = Reflection:getClassSignature(pcResClassPath).
             if lUseDebugs then do:
@@ -576,18 +574,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     os-create-dir value(substitute("&1signatures", OSTools:sparkConf)).
                 oClassSig:WriteFile(substitute("&1signatures/&2.json", OSTools:sparkConf, pcResClassPath), true).
             end.
-            &else
-            /* Class reflection not available, so attempt to read signatures from file. */
-            file-info:file-name = substitute("&1signatures/&2.json", OSTools:sparkConf, pcResClassPath).
-            if file-info:full-pathname ne ? then do:
-                /* Signature was given as a static file, load as JSON text. */
-                oClassSig = cast(oParser:parseFile(file-info:full-pathname), JsonObject).
-            end. /* JSON Sig File */
-            else do:
-                oLoggingManager:logMessage(substitute("WARNING: Signature file is not present for &1", pcResClassPath), "SPARK-WARN", 0).
-                oClassSig = new JsonObject().
-            end.
-            &endif
+
 
             /* Extract the specific class signature from the file. */
             if oClassSig:Has(pcResClassPath) then
@@ -2020,73 +2007,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getCatalog */
 
 
-    method public Progress.Lang.Object getResourceMetadata ( input  pcServiceURI   as character,
-                                                             input  pcResourceName as character,
-                                                             input  pcMethodName   as character,
-                                                             output phProcHandle   as handle,
-                                                             output pcEntityName   as character,
-                                                             output plUseTableBI   as logical ):
-        define variable cClassPath   as character no-undo.
-        define variable cClassMethod as character no-undo.
-        define variable cHttpMethod  as character no-undo.
-        define variable oParamArr    as JsonArray no-undo.
-
-        /* Check if object contains method (using action). */
-        assign cHttpMethod = cast(Ccs.Common.Application:StartupManager:getManager(get-class(IMessageManager)), IMessageManager):HttpMethod.
-
-        /* Use default service if none provided. */
-        if (pcServiceURI gt "") ne true then pcServiceURI = cDefaultURI.
-
-        /* Set any public properties with information about this service. */
-        for first ServiceList no-lock
-            where ServiceList.ServiceURI eq pcServiceURI:
-            UseRequestObj = ServiceList.UseRequest.
-        end. /* for first */
-
-        /* Obtain procedure handle and entity name (if applicable) as well as true method name. */
-        this-object:getMethod( input  pcServiceURI,
-                               input  pcResourceName,
-                               input  pcMethodName,
-                               input  cHttpMethod,
-                               output cClassMethod,
-                               output phProcHandle,
-                               output pcEntityName ).
-
-        if (cClassMethod gt "") ne true then /* If method cannot be determined, then resource cannot be invoked. */
-            undo, throw new ApplicationError(substitute("Requested method '&1:&2' (&3) not available via &4.", pcResourceName, pcMethodName, pcServiceURI, upper(cHttpMethod)), -404).
-
-        /* Make sure we have the real name (class path) of this resource. */
-        assign cClassPath = this-object:getClassPath(pcServiceURI, pcResourceName).
-
-        case cClassMethod:
-            when "readData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:read:toString()).
-            when "createData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:create:toString()).
-            when "updateData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:update:toString()).
-            when "deleteData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:delete:toString()).
-            when "submitData" then
-                assign plUseTableBI = this-object:getBeforeImageFlag(pcServiceURI, cClassPath, OperationEnum:submit:toString()).
-            otherwise
-                assign plUseTableBI = false.
-        end case.
-
-        /* Obtain the method signature from this resource. */
-        assign oParamArr = this-object:getMethodSignature( pcServiceURI,
-                                                           cClassPath,
-                                                           cClassMethod ).
-
-        /* Prepare signature object with parsed values. */
-        return new Spark.Core.Util.MethodSignature(cClassPath, cClassMethod, oParamArr).
-
-        finally:
-            delete object oParamArr no-error.
-        end finally.
-    end method. /* getResourceMetadata */
-
-
     method public void stopProcedures ( ):
         define buffer bResource for ResourceInfo.
 
@@ -2155,6 +2075,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
             /* Register the service using the name and version discovered. */
             assign oService = poRegistry:RegisterService(pcServiceName, poServiceVersion, ?, ?).
+
+            /* Store the catalog data within the DOS instance. */
+            oService:Catalog = this-object:getCatalog(bService.ServiceURI, "").
 
             for each bResource no-lock
                where bResource.ServiceURI eq bService.ServiceURI,
@@ -2281,6 +2204,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         else
                             assign oElementType = ElementTypeEnum:Field. /* Otherwise, use field of body. */
 
+                        if cParamName eq "bodyInput" then
+                            assign oElementType = ElementTypeEnum:Body. /* Special name indicates use of body. */
+
                         extent(oParam:InputElement) = 1.
                         assign oParam:InputElement[1] = new MessageElement(oElementType, cParamName, IOModeEnum:Input).
                     end. /* input */
@@ -2291,6 +2217,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         else
                             assign oElementType = ElementTypeEnum:Field. /* Otherwise, use field of body. */
 
+                        if cParamName eq "bodyOutput" then
+                            assign oElementType = ElementTypeEnum:Body. /* Special name indicates use of body. */
+
                         extent(oParam:OutputElement) = 1.
                         assign oParam:OutputElement[1] = new MessageElement(oElementType, cParamName, IOModeEnum:Output).
                     end. /* output */
@@ -2300,6 +2229,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                             assign oElementType = ElementTypeEnum:Body. /* Output dataset/table as body. */
                         else
                             assign oElementType = ElementTypeEnum:Field. /* Otherwise, use field of body. */
+
+                        if cParamName eq "bodyInputOutput" then
+                            assign oElementType = ElementTypeEnum:Body. /* Special name indicates use of body. */
 
                         extent(oParam:InputElement) = 1.
                         extent(oParam:OutputElement) = 1.
@@ -2363,7 +2295,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                              ?, /* No operation options required for this endpoint. */
                                                              integer(StatusCodeEnum:ok) ).
 
-                    /* Create parameter and add to list. */
+                    /* Create a single "catalog" parameter as body output and add to list. */
                     assign oParam = new OperationParameter( IOModeEnum:Output, "class Progress.Json.ObjectModel.JsonObject", "catalog" ).
                     extent(oParam:OutputElement) = 1.
                     assign oParam:OutputElement[1] = new MessageElement(ElementTypeEnum:Body, "catalog", IOModeEnum:Output).

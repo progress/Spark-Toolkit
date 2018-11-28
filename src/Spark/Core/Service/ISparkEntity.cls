@@ -1,13 +1,14 @@
 /*------------------------------------------------------------------------
     File        : ISparkEntity
-    Purpose     :
+    Purpose     : Provides standard/supporting methods for use with dynamic
+                  discovery of business logic through the CatalogManager.
     Description :
     Author(s)   : Dustin Grau (dugrau@progress.com)
     Created     : Tue Mar 17 09:29:59 EDT 2015
     Notes       :
   ----------------------------------------------------------------------*/
 
-interface Spark.Core.Service.ISparkEntity inherits Ccs.BusinessLogic.IBusinessEntity:
+interface Spark.Core.Service.ISparkEntity inherits Ccs.BusinessLogic.IUpdatableBusinessEntity:
 
     define public property LastCount as int64 no-undo get.
 

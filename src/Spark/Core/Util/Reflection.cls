@@ -14,7 +14,7 @@ using Progress.Lang.* from propath.
 using Progress.Json.ObjectModel.* from propath.
 
 block-level on error undo, throw.
-&GLOBAL-DEFINE CAN_USE_REFLECTION (lookup(substring(proversion, 1, 4), "11.0,11.1,11.2,11.3,11.4,11.5") = 0)
+
 &GLOBAL-DEFINE SKIP_NAMES "addIdField,addError,addWarning,getData,getDataset,getResultCount,initialize,dispose,postFetch,postRowFill,preCommit,postCommit,validateData"
 
 class Spark.Core.Util.Reflection final:
@@ -23,7 +23,6 @@ class Spark.Core.Util.Reflection final:
         define variable oConstructs as JsonObject no-undo.
         assign oConstructs = new JsonObject().
 
-        &if {&CAN_USE_REFLECTION} &then
         define variable oConstsExt  as Progress.Reflect.Constructor no-undo extent.
         define variable oConstsInt  as Progress.Reflect.Constructor no-undo.
         define variable oElementSig as JsonObject                   no-undo.
@@ -67,7 +66,6 @@ class Spark.Core.Util.Reflection final:
             oElementSig:Add("params", oParamArr).
             oConstructs:Add(oConstsInt:Name, oElementSig).
         end. /* oConstsExt */
-        &endif
 
         return oConstructs.
 
@@ -82,7 +80,6 @@ class Spark.Core.Util.Reflection final:
         define variable oProperties as JsonObject no-undo.
         assign oProperties = new JsonObject().
 
-        &if {&CAN_USE_REFLECTION} &then
         define variable oPropsExt   as Progress.Reflect.Property no-undo extent.
         define variable oPropsInt   as Progress.Reflect.Property no-undo.
         define variable oElementSig as JsonObject                no-undo.
@@ -117,7 +114,6 @@ class Spark.Core.Util.Reflection final:
 
             oProperties:Add(oPropsInt:Name, oElementSig).
         end. /* oPropsExt */
-        &endif
 
         return oProperties.
 
@@ -132,7 +128,6 @@ class Spark.Core.Util.Reflection final:
         define variable oVariables as JsonObject no-undo.
         assign oVariables = new JsonObject().
 
-        &if {&CAN_USE_REFLECTION} &then
         define variable oVarsExt    as Progress.Reflect.Variable no-undo extent.
         define variable oVarsInt    as Progress.Reflect.Variable no-undo.
         define variable oElementSig as JsonObject                no-undo.
@@ -163,7 +158,6 @@ class Spark.Core.Util.Reflection final:
                 oElementSig:Add("extent", oVarsInt:Extent).
             oVariables:Add(oVarsInt:Name, oElementSig).
         end. /* oVarsExt */
-        &endif
 
         return oVariables.
 
@@ -178,7 +172,6 @@ class Spark.Core.Util.Reflection final:
         define variable oMethods as JsonObject no-undo.
         assign oMethods = new JsonObject().
 
-        &if {&CAN_USE_REFLECTION} &then
         define variable oMethodExt  as Progress.Reflect.Method    no-undo extent.
         define variable oMethodInt  as Progress.Reflect.Method    no-undo.
         define variable oElementSig as JsonObject                 no-undo.
@@ -210,10 +203,11 @@ class Spark.Core.Util.Reflection final:
                  * therefore overloaded methods are not currently supported. The reason being
                  * that for externally-exposed (public) methods, the dynamic method invocation
                  * logic must match against a single method signature (partly for performance).
+                 * Since the reflection works from the inner-most class outward, we should at
+                 * least remove the exiting method and use whatever is defined last (meaning
+                 * within the originating class) during discovery.
                  */
-                if log-manager:logging-level ge 2 then
-                    message substitute("Public method '&1:&2' already exists.", oMethodInt:DeclaringClass:TypeName, oMethodInt:name).
-                next methodblk.
+                oMethods:Remove(oMethodInt:name).
             end. /* Has Method */
 
             assign
@@ -242,13 +236,14 @@ class Spark.Core.Util.Reflection final:
             end. /* oParamExt */
 
             /* Add current method with params. */
+            oElementSig:Add("origin", oMethodInt:OriginatingClass:TypeName).
+            oElementSig:Add("defined", oMethodInt:DeclaringClass:TypeName).
             oElementSig:Add("return", cReturnType).
             oElementSig:Add("params", oParamArr).
             if oMethodInt:ReturnExtent gt 0 then
                 oElementSig:Add("extent", oMethodInt:ReturnExtent).
             oMethods:Add(oMethodInt:name, oElementSig).
         end. /* oMethodExt */
-        &endif
 
         return oMethods.
 
@@ -269,7 +264,6 @@ class Spark.Core.Util.Reflection final:
         define variable oClassSig as JsonObject no-undo.
         assign oClassSig = new Progress.Json.ObjectModel.JsonObject().
 
-        &if {&CAN_USE_REFLECTION} &then
         /* Obtain reference to a class by full package name. */
         define variable oClassRef as Progress.Lang.Class no-undo.
         assign oClassRef = Progress.Lang.Class:GetClass(pcClassName) no-error.
@@ -292,17 +286,6 @@ class Spark.Core.Util.Reflection final:
             oClassSig:Add("variables", getVariables(oClassRef)).
             oClassSig:Add("methods", getMethods(oClassRef)).
         end. /* valid-object */
-        &else
-        oClassSig:Add("super", "").
-        oClassSig:Add("abstract", false).
-        oClassSig:Add("final", false).
-        oClassSig:Add("interface", false).
-        oClassSig:Add("statics", false).
-        oClassSig:Add("constructors", new JsonObject()).
-        oClassSig:Add("properties", new JsonObject()).
-        oClassSig:Add("variables", new JsonObject()).
-        oClassSig:Add("methods", new JsonObject()).
-        &endif
 
         /* If omitting name from object, return now. */
         if plOmitName then return oClassSig.

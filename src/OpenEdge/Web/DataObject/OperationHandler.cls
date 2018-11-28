@@ -520,6 +520,37 @@ class OpenEdge.Web.DataObject.OperationHandler implements IOperationHandler, ISu
         return fieldData.
     end method.
     
+    /* Reads the value (base or or parameter) from a named header
+       
+       @param MessageElement The message element we are reading from
+       @param IWebRequest The request message
+       @return character The header value (base or parameter) */
+    method protected character ReadHeaderValue(input pMsgElement as MessageElement,
+                                               input pRequest as IWebRequest):
+        define variable hdrName as character no-undo.
+        define variable hdrValue as character no-undo.
+        define variable paramName as character no-undo.
+        
+        Assert:NotNull(pMsgElement, 'Message element').
+        Assert:NotNull(pRequest, 'Request').
+        
+        assign hdrName = entry(1, pMsgElement:ElementName, ';':u).
+        if num-entries(pMsgElement:ElementName, ';':u) ge 2 then
+            assign paramName = entry(2, pMsgElement:ElementName, ';':u).
+        else
+            assign paramName = ?.
+        
+        if not pRequest:HasHeader(hdrName) then
+            return ?.
+        
+        if paramName eq ? then
+            assign hdrValue = pRequest:GetHeader(hdrName):Value.
+        else
+            assign hdrValue = pRequest:GetHeader(hdrName):GetParameterValue(paramName).
+        
+        return hdrValue.
+    end method.
+    
     /* Reads the value of a named field from the body.
        
        @param OperationArgument The current argument being processed
@@ -1042,15 +1073,14 @@ class OpenEdge.Web.DataObject.OperationHandler implements IOperationHandler, ISu
                     otherwise
                         valueWriter:Write(pRequest:URI:GetQueryMap()).
                 end case.
-                        
+                
                 when ElementTypeEnum:Header then
-                    if pRequest:HasHeader(msgElem:ElementName) then
-                    case true:
-                        when writeProperty then
-                            valueWriter:Write(new KeyValuePair(msgElem:ABLReference, pRequest:GetHeader(msgElem:ElementName):Value)).
-                        otherwise
-                            valueWriter:Write(pRequest:GetHeader(msgElem:ElementName):Value).
-                    end case.
+                case true:
+                    when writeProperty then
+                        valueWriter:Write(new KeyValuePair(msgElem:ABLReference, ReadHeaderValue(msgElem, pRequest))).
+                    otherwise
+                        valueWriter:Write(ReadHeaderValue(msgElem, pRequest)).
+                end case.
                 
                 when ElementTypeEnum:HeaderSet then
                 do:

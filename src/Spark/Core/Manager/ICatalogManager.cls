@@ -49,13 +49,6 @@ interface Spark.Core.Manager.ICatalogManager inherits IManager:
     method public JsonObject getCatalog ( input pcServiceURI   as character,
                                           input pcResourceName as character ).
 
-    method public Progress.Lang.Object getResourceMetadata( input  pcServiceURI   as character,
-                                                            input  pcResourceName as character,
-                                                            input  pcMethodName   as character,
-                                                            output phProc         as handle,
-                                                            output pcSchemaObj    as character,
-                                                            output plUseTableBI   as logical ).
-
     method public void stopProcedures ( ).
 
     method public void registerAllServices ( input poRegistry as OpenEdge.Web.DataObject.IServiceRegistry ).

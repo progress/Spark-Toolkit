@@ -13,6 +13,7 @@ using Progress.Json.ObjectModel.* from propath.
 using OpenEdge.Core.Assert from propath.
 using OpenEdge.Net.HTTP.Credentials from propath.
 using OpenEdge.Net.HTTP.HttpClient from propath.
+using OpenEdge.Net.HTTP.MethodEnum from propath.
 using OpenEdge.Net.HTTP.IHttpRequest from propath.
 using OpenEdge.Net.HTTP.IHttpResponse from propath.
 using OpenEdge.Net.HTTP.RequestBuilder from propath.
@@ -81,25 +82,17 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     define private property GetAgentSessionURI as character no-undo
         initial "/applications/&1/agents/&2/sessions" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/trackABLObjects/true */
-    define private property TrackObjectsOn as character no-undo
-        initial "/trackABLObjects/true" get. set.
-
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/trackABLObjects/false */
-    define private property TrackObjectsOff as character no-undo
-        initial "/trackABLObjects/false" get. set.
-
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/trackingABLObjects */
-    define private property TrackingObjects as character no-undo
-        initial "/trackingABLObjects" get. set.
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/ABLObjects/status */
+    define private property TrackObjects as character no-undo
+        initial "/ABLObjects/status" get. set.
 
     /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/getABLObjectsReport */
     define private property GetObjectsReport as character no-undo
-        initial "/getABLObjectsReport" get. set.
+        initial "/ABLObjects" get. set.
 
     /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/getABLObjectsReport/sessions/<sess_id> */
     define private property GetSessionObjectsReport as character no-undo
-        initial "/getABLObjectsReport/sessions/&3" get. set.
+        initial "/ABLObjects/sessions/&3" get. set.
 
     /*** OEJMX Properties ***/
 
@@ -197,31 +190,45 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
 
     method private JsonObject InvokeAPI ( input pcRequestURI as character ):
+        /* Request the necessary information via GET by default. */
+        return this-object:InvokeAPI(pcRequestURI, MethodEnum:GET, ?).
+    end method. /* InvokeAPI */
+
+
+    method private JsonObject InvokeAPI ( input pcRequestURI  as character,
+                                          input poHttpMethod  as MethodEnum,
+                                          input poRequestData as JsonObject ):
         /**
          * Use the OEManager webapp to run the necessary queries on the PAS
          * instance. This requires use of the OEHttpClient library to make
          * an API call via REST. For environments where OEManager is not
          * available or desired, use the OEJMX approach.
          */
-
         define variable oHttpReq     as IHttpRequest  no-undo.
         define variable oHttpResp    as IHttpResponse no-undo.
         define variable oCredentials as Credentials   no-undo.
 
         Assert:NotNullOrEmpty(pcRequestURI). /* Must have a URL! */
 
-        oLogger:Debug(substitute("Requesting URL: &1", pcRequestURI)).
+        /* Report which endpoint is being access, with verb and payload (if available). */
+        oLogger:Debug(substitute("Invoking: &1 &2 &3", poHttpMethod:ToString(), pcRequestURI)).
+        if valid-object(poRequestData) then
+            oLogger:Debug(substitute("Payload: &1", poRequestData:getJsonText())).
 
         /* Set credentials for HTTP basic using the specific realm. */
         assign oCredentials = new Credentials(this-object:ManagerRealm,
                                               this-object:ManagerUsername,
                                               this-object:ManagerPassword).
-
-        /* Request the necessary information via GET. */
-        oHttpReq = RequestBuilder:Get(pcRequestURI)
-                                 :ContentType("application/vnd.progress+json")
-                                 :UsingBasicAuthentication(oCredentials)
-                                 :Request.
+        if poHttpMethod eq MethodEnum:put then
+            oHttpReq = RequestBuilder:Put(pcRequestURI, poRequestData)
+                                     :ContentType("application/vnd.progress+json")
+                                     :UsingBasicAuthentication(oCredentials)
+                                     :Request.
+        else
+            oHttpReq = RequestBuilder:Get(pcRequestURI)
+                                     :ContentType("application/vnd.progress+json")
+                                     :UsingBasicAuthentication(oCredentials)
+                                     :Request.
         oHttpResp = HttpClient:Instance():Execute(oHttpReq).
 
         if oHttpResp:StatusCode ne 200 then do:
@@ -623,25 +630,27 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         do on error undo, throw:
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
+            define variable oData       as JsonObject no-undo.
 
             Assert:NotNullOrEmpty(this-object:InstanceURI).
 
             /* Set the base URL to get information for a specific agent. */
-            assign cRequestURI = substitute("&1&2&3",
+            assign cRequestURI = substitute("&1&2&3&4",
                                             this-object:InstanceURI, this-object:ManagerURI,
-                                            this-object:GetAgentURI).
+                                            this-object:GetAgentURI, this-object:TrackObjects).
 
-            /* Build the initial URL, to prepare to set the tracking flag. */
+            /* Build the initial URL, to prepare to set the tracking flag for payload. */
             assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign oData = new JsonObject().
             if plEnable then
                 /* Turn tracking on. */
-                assign cRequestURI = substitute("&1&2", cRequestURI, this-object:TrackObjectsOn).
+                oData:Add("enable", "true").
             else
                 /* Turn tracking off. */
-                assign cRequestURI = substitute("&1&2", cRequestURI, this-object:TrackObjectsOff).
+                oData:Add("enable", "false").
 
             /* Make the request to the endpoint and parse results. */
-            assign oRequest = this-object:InvokeAPI(cRequestURI).
+            assign oRequest = this-object:InvokeAPI(cRequestURI, MethodEnum:PUT, oData).
             if valid-object(oRequest) and oRequest:Has("result") then do:
                 if not oRequest:IsNull("result") then
                     assign lSuccess = (oRequest:GetLogical("result") eq true).
@@ -649,6 +658,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
             finally:
                 delete object oRequest no-error.
+                delete object oData no-error.
             end finally.
         end. /* oemanager */
 
@@ -711,7 +721,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             /* Build the initial URL, to obtain the tracking flag. */
             assign cRequestURI = substitute("&1&2&3&4",
                                             this-object:InstanceURI, this-object:ManagerURI,
-                                            this-object:GetAgentURI, this-object:TrackingObjects).
+                                            this-object:GetAgentURI, this-object:TrackObjects).
 
             /* Replace PAS instance name and specific Agent ID. */
             assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).

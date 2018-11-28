@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Spark (v4.2.3)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.0)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -462,24 +462,6 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         Progress.Lang.Object <a href='#020010AtvDgLwiwIqGc3ZcUY8Wag=='> getResourceMetadata (character, character, character, handle, character, logical)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getCatalog */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
     <font>-</font>
     <font></font>
     <font></font>
@@ -660,6 +642,24 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010QtHn1AEHZmZJGbyrE1IRLQ=='> registerAllServices (IServiceRegistry)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* stopProcedures */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
     <font>-</font>
     <font></font>
     <font></font>
@@ -708,6 +708,24 @@
   <td class="cell">
      
 /* registerMethods */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Web.DataObject.DataObjectService <a href='#020010WXUdYANqQuoTG6Lxv37P1g=='> registerService (IServiceRegistry, character, SemanticVersion)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* registerAllServices */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -779,7 +797,7 @@
   </td>
   <td class="cell">
      
-/* getResourceMetadata */ <br> <i>  </i>
+/* getCatalog */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -880,6 +898,23 @@
   <td class="signature_col cell">
     <font>
          DECIMAL <a href='#020010kX4XDyVlxBBqm2TqRrqlDA=='> ApiVersion</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010sOUhy7hehGZjIOiRhAg3Sg=='> CatalogService</a>
     </font>
   </td>
   <td class="cell">
@@ -2831,164 +2866,6 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010AtvDgLwiwIqGc3ZcUY8Wag==" href="#Top">Top</a>
-                <a name=" Progress.Lang.Object <a href='#020010AtvDgLwiwIqGc3ZcUY8Wag=='> getResourceMetadata (character, character, character, handle, character, logical)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC Progress.Lang.Object <a href='#020010AtvDgLwiwIqGc3ZcUY8Wag=='> getResourceMetadata (character, character, character, handle, character, logical)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getCatalog </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcMethodName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>phProcHandle</i>
-    </td>
-    <td>
-       HANDLE
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcEntityName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>plUseTableBI</i>
-    </td>
-    <td>
-       LOGICAL
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      Progress.Lang.Object 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
                 <a name="020010Pu8szDVQHT1kKKwTNFkSUg==" href="#Top">Top</a>
                 <a name=" CHARACTER <a href='#020010Pu8szDVQHT1kKKwTNFkSUg=='> getResourcePath (character, character)</a>"></a>
             </font>
@@ -3865,6 +3742,68 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010QtHn1AEHZmZJGbyrE1IRLQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010QtHn1AEHZmZJGbyrE1IRLQ=='> registerAllServices (IServiceRegistry)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010QtHn1AEHZmZJGbyrE1IRLQ=='> registerAllServices (IServiceRegistry)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* stopProcedures </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRegistry</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.IServiceRegistry.html'>OpenEdge.Web.DataObject.IServiceRegistry</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010rJ4wzlVdFyAPsKRjiC6UpQ==" href="#Top">Top</a>
                 <a name="  <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a>"></a>
             </font>
@@ -4110,6 +4049,116 @@
     </td>
     <td>
        HANDLE
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010WXUdYANqQuoTG6Lxv37P1g==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Web.DataObject.DataObjectService.html'>OpenEdge.Web.DataObject.DataObjectService</a> <a href='#020010WXUdYANqQuoTG6Lxv37P1g=='> registerService (IServiceRegistry, character, SemanticVersion)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Web.DataObject.DataObjectService.html'>OpenEdge.Web.DataObject.DataObjectService</a> <a href='#020010WXUdYANqQuoTG6Lxv37P1g=='> registerService (IServiceRegistry, character, SemanticVersion)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* registerAllServices </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poRegistry</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.IServiceRegistry.html'>OpenEdge.Web.DataObject.IServiceRegistry</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcServiceName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>poServiceVersion</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Core.SemanticVersion.html'>OpenEdge.Core.SemanticVersion</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Web.DataObject.DataObjectService.html'>OpenEdge.Web.DataObject.DataObjectService</a> 
     </td>
     <td>
     </td>
@@ -4438,7 +4487,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getResourceMetadata </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getCatalog </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -4632,6 +4681,68 @@
     </td>
     <td>
       DECIMAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010sOUhy7hehGZjIOiRhAg3Sg==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010sOUhy7hehGZjIOiRhAg3Sg=='> CatalogService</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010sOUhy7hehGZjIOiRhAg3Sg=='> CatalogService</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
     </td>
     <td>
     </td>
@@ -5089,6 +5200,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">08.16.2018 12:49:01</font>
+    <font class="footer_timestamp">11.01.2018 15:31:24</font>
     </BODY>
 </HTML>

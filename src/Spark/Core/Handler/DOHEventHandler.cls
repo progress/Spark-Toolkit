@@ -8,7 +8,7 @@
                   Can only be used with 11.6.3 or later.
   ----------------------------------------------------------------------*/
 
-&GLOBAL-DEFINE MIN_VERSION_11_7_2 (lookup(substring(proversion(1), 1, 6), "11.6.3,11.6.4,11.6.5,11.7.0,11.7.1") = 0)
+&GLOBAL-DEFINE MIN_VERSION_11_7_2 (lookup(substring(proversion(1), 1, 6), "11.6.0,11.6.1,11.6.2,11.6.2,11.6.3,11.6.4,11.6.5,11.6.6,11.7.0,11.7.1") = 0)
 
 block-level on error undo, throw.
 
@@ -63,8 +63,24 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         end get.
         private set.
 
+    /* Access the Spark logging manager for consistent message output. */
+    define protected property oLoggingManager as ILoggingManager no-undo
+        get():
+            if not valid-object(oLoggingManager) then do:
+                /* Manager may be optionally created, so check for existence before using. */
+                define variable oManager as Ccs.Common.IManager no-undo.
+                assign oManager = Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)).
+                if valid-object(oManager) then
+                    assign oLoggingManager = cast(oManager, ILoggingManager).
+            end.
+            return oLoggingManager.
+        end get.
+        private set.
+
     constructor public DOHEventHandler():
         assign oCheat = this-object.
+
+        this-object:UpdateLogging(). /* Refresh logging options for Spark. */
 
         this-object:DefineEvents(). /* Subscribe to standard DOH events. */
 
@@ -76,11 +92,11 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:Invoking:Unsubscribe(this-object:InvokingHandler).
         DataObjectHandler:Invoked:Unsubscribe(this-object:InvokedHandler).
         DataObjectHandler:OperationError:Unsubscribe(this-object:OperationErrorHandler).
-        &IF {&MIN_VERSION_11_7_2} &THEN
-        /* Only available for 11.7.2 and later. */
-        DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
-        DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
-        &ENDIF
+        if {&MIN_VERSION_11_7_2} then do:
+            /* Only available for 11.7.2 and later. */
+            DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
+            DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
+        end.
     end destructor.
 
 
@@ -119,18 +135,27 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:Invoking:Subscribe(this-object:InvokingHandler).
         DataObjectHandler:Invoked:Subscribe(this-object:InvokedHandler).
         DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
-        &IF {&MIN_VERSION_11_7_2} &THEN
-        /* Only available for 11.7.2 and later. */
-        DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
-        DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
-        &ENDIF
+        if {&MIN_VERSION_11_7_2} then do:
+            /* Only available for 11.7.2 and later. */
+            DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
+            DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
+        end.
     end method. /* Define Events */
 
 
     method private void InitializeRegistries ( ):
-        /* Inform the DOH of what portion of the URL is to be ignored. */
-        if valid-object(oCatalogManager) then
+        define variable dStart as datetime-tz no-undo.
+        assign dStart = now. /* Mark start time. */
+
+        /* Read business entities from disk and creates method signatures for API requests. */
+        if valid-object(oCatalogManager) then do:
+            /* Inform the DOH of what portion of the URL is to be ignored. */
             DataObjectHandler:HANDLER_PREFIX = oCatalogManager:ServicePrefix.
+
+            oLoggingManager:logMessage("Discovering resources to load...", "SPARK-STRT", 3).
+            oCatalogManager:loadResources(). /* Locates available classes/procedures. */
+            oLoggingManager:logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
+        end. /* valid-object */
 
         /* Start some of the internal registries by accessing the static properties. */
         ArgumentValueWriterRegistry:Registry.
@@ -142,24 +167,35 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         ResponseElementWriterRegistry:Registry.
         ServiceRegistry:Registry.
 
-        /* Register the ROOT service for handling the catalog. */
-        if valid-object(oCatalogManager) then
+        if valid-object(oCatalogManager) then do:
+            /* Register the ROOT service for handling the catalog. */
             oCatalogManager:registerService(ServiceRegistry:Registry, ServiceRegistry:ROOT_SERVICE_NAME, SemanticVersion:Parse("")).
 
-        /* Register all known services for this application. */
-        if valid-object(oCatalogManager) then
+            /* Register all known services for this application. */
             oCatalogManager:registerAllServices(ServiceRegistry:Registry).
 
-        /* Create a master catalog for all services (caches output). */
-        if valid-object(oCatalogManager) then
+            /* Create a master catalog for all services (caches output). */
             oCatalogManager:getCatalog("", "").
+        end. /* valid-object */
+
+        /* Discover any file-based DOH services if ROOT.map exists. */
+        define variable cServiceMapPath as character no-undo.
+        file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
+        if file-info:full-pathname ne ? then /* File is present, so obtain the base path of the file. */
+            assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
+        if (cServiceMapPath gt "") eq true then do:
+            /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
+            oLoggingManager:logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
+            OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
+        end. /* cServiceMapPath */
+
+        /* Log the end of the initialization process with an elapsed time. */
+        oLoggingManager:logMessage(substitute("Finshed Loading Resource Metadata in &1ms",
+                                              interval(now, dStart, string(DateTimeAddIntervalEnum:Milliseconds))), "SPARK-STRT", 2).
     end method. /* InitializeRegistries */
 
 
     method private void UpdateLogging ( ):
-        define variable oLoggingManager as ILoggingManager no-undo.
-        assign oLoggingManager = cast(Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)), ILoggingManager).
-
         /**
          * Force the reset of the logging config object,
          * and update to the latest logging level/types.
@@ -387,13 +423,13 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
             end finally.
         end. /* Read Operation */
 
-        define variable fElapsed as decimal no-undo initial 0.
-        if dInvokeTime ne ? then do on error undo, throw:
-            define variable oHeader  as HttpHeader no-undo.
+        define variable iElapsed as int64 no-undo initial 0.
+        if dInvokeTime ne ? then do on error undo, leave:
+            define variable oHeader as HttpHeader no-undo.
 
             /* Add the elapsed time for this request as a custom header value. */
-            assign fElapsed = interval(now, dInvokeTime, string(OpenEdge.Core.DateTimeAddIntervalEnum:Milliseconds)).
-            assign oHeader = new HttpHeader("X-Elapsed", trim(string(fElapsed, ">>>,>>9")) + "ms").
+            assign iElapsed = interval(now, dInvokeTime, string(OpenEdge.Core.DateTimeAddIntervalEnum:Milliseconds)).
+            assign oHeader = new HttpHeader("X-Elapsed", trim(string(iElapsed, ">>>,>>>,>>9")) + "ms").
             poEventArgs:Response:SetHeader(oHeader).
         end. /* iStart gt 0 */
 
@@ -406,7 +442,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                                      string(poEventArgs:Operation:Method),
                                      poEventArgs:Service:Name,
                                      poEventArgs:Operation:TargetName,
-                                     fElapsed)).
+                                     iElapsed)).
         if oTargetType eq TargetTypeEnum:Procedure then
             oLogger:Debug(substitute("INVOKED_ - &1 /&2 &3 -> '&4' in &5",
                                      string(poEventArgs:Operation:Method),
@@ -421,7 +457,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                                      poEventArgs:Operation:ServiceURI,
                                      poEventArgs:Operation:TargetName,
                                      poEventArgs:Operation:TargetFunction,
-                                     fElapsed)).
+                                     iElapsed)).
 
         catch err as Progress.Lang.Error:
             assign poEventArgs:Error = err.

@@ -589,7 +589,7 @@ class OpenEdge.Web.DataObject.ServiceRegistryLoader implements ISupportLogging:
                                 assign oElem = propArray:GetJsonObject(iElemLoop).
                                 // The splitting of msgElems into INPUT and OUTPUT only makes sense for IN-OUT params
                                 if     oElem:Has(string(ServiceMappingFileSchemaEnum:ioMode))
-                                   and oParam:IOMode eq IOModeEnum:Input-Output
+                                   and oParam:IOMode:IsFlagSet(IOModeEnum:Input-Output)
                                 then
                                     assign ioMode = IOModeEnum:GetEnum(oElem:GetCharacter(string(ServiceMappingFileSchemaEnum:ioMode))).
                                 else

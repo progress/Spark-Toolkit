@@ -12,8 +12,6 @@
 
 /* ***************************  Definitions  ************************** */
 
-&GLOBAL-DEFINE CAN_USE_DOH (lookup(substring(proversion, 1, 4), "11.0,11.1,11.2,11.3,11.4,11.5") = 0 and lookup(substring(proversion(1), 1, 6), "11.6.0,11.6.1,11.6.2") = 0)
-
 block-level on error undo, throw.
 
 /* Standard input parameter as set via sessionStartupProcParam */
@@ -23,7 +21,7 @@ define input parameter startup-data as character no-undo.
 {Spark/version.i} /* Allow framework version to be updated by build process. */
 define variable CurrentVersion as character no-undo initial "{&SPARK_VERSION}".
 
-/* Set up a custom log file if not in an MSAS environment. */
+/* Set up a custom log file if not in an MSAS environment (eg. ABLUnit). */
 if session:client-type eq "4GLCLIENT" then do:
     log-manager:logfile-name = session:temp-directory + "server.log".
 end. /* session:client-type */
@@ -43,14 +41,6 @@ logMessage(substitute("Configs: &1", Spark.Core.Util.OSTools:sparkConf), "SPARK-
 Ccs.Common.Application:StartupManager = Spark.Core.Manager.StartupManager:Instance.
 logMessage("Session Startup - Application Initialized", "SPARK-STRT", 3).
 
-/* Read business entities from disk and creates method signatures for API requests. */
-define variable oManager as Ccs.Common.IManager no-undo.
-assign oManager = Ccs.Common.Application:StartupManager:getManager(get-class(Spark.Core.Manager.ICatalogManager)).
-if valid-object(oManager) then do:
-    cast(oManager, Spark.Core.Manager.ICatalogManager):loadResources().
-    logMessage("Session Startup Resources Loaded", "SPARK-STRT", 3).
-end. /* valid-object */
-
 /**
  * Create a persistent handler for OpenEdge.Web.DataObject.DataObjectHandler events.
  * This defines overrides to the default DOH class events and provides integration
@@ -58,22 +48,9 @@ end. /* valid-object */
  * use of the CCS Manager classes. Additionally, starting the class will subscribe
  * to the necessary events and begin loading the necessary registries ahead of any
  * requests. This greatly reduces the "time to first data" on the initial request.
+ * Only relevant if using OE 11.6.3 or later.
  */
-&IF {&CAN_USE_DOH} &THEN
-/* Only relevant if using OE 11.6.3 or later. */
 new Spark.Core.Handler.DOHEventHandler().
-
-/* Discover any file-based DOH services for this webapp. */
-define variable cServiceMapPath as character no-undo.
-file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
-if file-info:full-pathname ne ? then /* File is present, so obtain the base path of the file. */
-    assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
-if (cServiceMapPath gt "") eq true then do:
-    /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
-    logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
-    OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
-end. /* cServiceMapPath */
-&ENDIF
 
 catch err as Progress.Lang.Error:
     logError("Session Startup Error", err, "SPARK-STRT", 0).

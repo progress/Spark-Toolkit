@@ -42,3 +42,6 @@
 -Add a property "foreignKey" as character to each BE that utilizes DynamicEntity.
 -Note: Login process is updated to utilize new AuthenticationProvider in JSDO.
 -Note: The bindAll() method is deprecated in favor of new init() method.
+
+## 4.1 to later releases
+-See the "Spark Migration Guide" document for more detailed information.

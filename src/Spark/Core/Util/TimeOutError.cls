@@ -1,7 +1,7 @@
 using Progress.Lang.* from propath.
 using Spark.Core.Util.GenTools from propath.
 using Spark.Core.Util.ApplicationError from propath.
-using Spark.Core.Message.ErrorTypeEnum from propath.
+using Spark.Core.Util.ErrorTypeEnum from propath.
 using OpenEdge.Net.HTTP.StatusCodeEnum from propath.
 
 block-level on error undo, throw.

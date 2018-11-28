@@ -1,6 +1,6 @@
 using Progress.Lang.AppError from propath.
 using Spark.Core.Manager.ITranslationManager from propath.
-using Spark.Core.Message.ErrorTypeEnum from propath.
+using Spark.Core.Util.ErrorTypeEnum from propath.
 
 block-level on error undo, throw.
 
