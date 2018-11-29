@@ -1079,7 +1079,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                               cDataSetName,
                                                               entry(iZ, cTableList)), "SPARK-CTLG", 6).
                         assign schemaObj = this-object:getTable(entry(iX, cDatasetNames), entry(iZ, cTableList), cPKName, cFKData, output cTableName).
-                        tableObj:Add(cTableName, schemaObj).
+                        if (cTableName gt "") eq true then
+                            tableObj:Add(cTableName, schemaObj).
+                        else
+                            oLoggingManager:logMessage(substitute("Unresolved table name, cannot add schema [&1.&2].", entry(iX, cDatasetNames), entry(iZ, cTableList)), "SPARK-CTLG", 3).
                     end. /* Tables */
                     datasetObj:Add("properties", tableObj).
                     oProperty:Add(cDataSetName, datasetObj).
@@ -1102,7 +1105,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 oLoggingManager:logMessage(substitute("Adding schema to catalog for '&1'",
                                                       entry(iX, cTableNames)), "SPARK-CTLG", 6).
                 assign schemaObj = this-object:getTable("", entry(iX, cTableNames), cPKName, cFKData, output cTableName).
-                oProperty:Add(cTableName, schemaObj).
+                if (cTableName gt "") eq true then
+                    oProperty:Add(cTableName, schemaObj).
+                else
+                    oLoggingManager:logMessage(substitute("Unresolved table name, cannot add schema [&1].", entry(iX, cTableNames)), "SPARK-CTLG", 3).
             end. /* Tables */
         end. /* Has Dataset(s) or Temp-Table(s) */
 
@@ -1327,11 +1333,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                     /* Use appropriate field name. */
                     if (hField:xml-node-name gt "") eq true then
-                        cFieldName = hField:xml-node-name.
+                        assign cFieldName = hField:xml-node-name.
                     else if (hField:serialize-name gt "") eq true then
-                        cFieldName = hField:serialize-name.
+                        assign cFieldName = hField:serialize-name.
                     else
-                        cFieldName = hField:name.
+                        assign cFieldName = hField:name.
 
                     /**
                      * To provide support for a "semanticType" property on your fields, utilize the "describeFields"

@@ -9,6 +9,8 @@
 
 interface Spark.Core.Service.IDynamicResource inherits Ccs.Common.IService:
 
+    define public property oContextMessage as Spark.Core.Message.IContextMessage no-undo get.
+
     define public property serviceURI   as character no-undo get.
     define public property resourceName as character no-undo get.
 

@@ -10,6 +10,8 @@
 
 interface Spark.Core.Service.ISparkEntity inherits Ccs.BusinessLogic.IUpdatableBusinessEntity:
 
+    define public property oContextMessage as Spark.Core.Message.IContextMessage no-undo get.
+
     define public property LastCount as int64 no-undo get.
 
     method public void postRowFill ( input dataset-handle phDataset ).

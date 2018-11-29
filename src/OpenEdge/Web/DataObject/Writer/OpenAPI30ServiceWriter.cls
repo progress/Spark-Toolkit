@@ -430,60 +430,64 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
                                    schemaJson  = new JsonObject()
                                    .
                             operJson:Add('requestBody':u, childObj).
-                                childObj:Add('description':u, opParam:ABLType).
-                                childObj:Add('content':u,   jsonData).
-                                    jsonData:Add(pData:ContentType, contentJson).
-                                        contentJson:Add('schema':u, schemaJson).
-                                            schemaJson:Add('type':u, 'object':u).
-                                            schemaJson:Add('description':u, 'FIELD mapping').
+                            childObj:Add('description':u, opParam:ABLType).
+                            childObj:Add('content':u,   jsonData).
+                            jsonData:Add(pData:ContentType, contentJson).
+                            contentJson:Add('schema':u, schemaJson).
+                            schemaJson:Add('type':u, 'object':u).
+                            schemaJson:Add('description':u, 'FIELD mapping').
                         end.
                     end.
                     
                     when ElementTypeEnum:Body then
                     do:
-                        assign childObj    = new JsonObject()
-                               jsonData    = new JsonObject()
-                               contentJson = new JsonObject()
-                               schemaJson  = new JsonObject()
-                               .
-                        operJson:Add('requestBody':u, childObj).
+                        if not operJson:Has('requestBody':u) then
+                        do:
+                            assign childObj    = new JsonObject()
+                                   jsonData    = new JsonObject()
+                                   contentJson = new JsonObject()
+                                   schemaJson  = new JsonObject()
+                                   .
+                            operJson:Add('requestBody':u, childObj).
                             childObj:Add('description':u, opParam:ABLType).
                             childObj:Add('content':u,   jsonData).
-                                jsonData:Add(pData:ContentType, contentJson).
-                                    contentJson:Add('schema':u, schemaJson).
-                        // for per-operation schemas, use inline; for service schemas, use a reference
-                        assign operSchema  = pData:GetSchema(opParam:ABLName).
-                        if valid-handle(operSchema) then
-                        do:
-                            assign schemaChild = new JsonObject().
-                            schemaJson:Add('type':u, 'object':u).
-                            schemaJson:Add('description':u, 'BODY mapping').
-                            schemaJson:Add('additionalProperties':u, false).
-                            schemaJson:Add('properties', schemaChild).
-                            /*
-                                "type": "object",
-                                "additionalProperties": false,
-                                "properties": {"dsEmployee": {
-                            */
-                            case operSchema:type:
-                                when 'dataset':u then
-                                    schemaChild:Add(operSchema:serialize-name, WriteDataset(operSchema)).
-                                when 'buffer':u then
-                                    schemaChild:Add(operSchema:serialize-name, WriteTable(operSchema)).
-                                when 'table':u then
-                                    schemaChild:Add(operSchema:serialize-name, WriteTable(operSchema:default-buffer-handle)).
-                            end case.
+                            jsonData:Add(pData:ContentType, contentJson).
+                            contentJson:Add('schema':u, schemaJson).
+
+                            // for per-operation schemas, use inline; for service schemas, use a reference
+                            assign operSchema  = pData:GetSchema(opParam:ABLName).
+                            if valid-handle(operSchema) then
+                            do:
+                                assign schemaChild = new JsonObject().
+                                schemaJson:Add('type':u, 'object':u).
+                                schemaJson:Add('description':u, 'BODY mapping').
+                                schemaJson:Add('additionalProperties':u, false).
+                                schemaJson:Add('properties', schemaChild).
+                                /*
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {"dsEmployee": {
+                                */
+                                case operSchema:type:
+                                    when 'dataset':u then
+                                        schemaChild:Add(operSchema:serialize-name, WriteDataset(operSchema)).
+                                    when 'buffer':u then
+                                        schemaChild:Add(operSchema:serialize-name, WriteTable(operSchema)).
+                                    when 'table':u then
+                                        schemaChild:Add(operSchema:serialize-name, WriteTable(operSchema:default-buffer-handle)).
+                                end case.
+                            end.
+                            else
+                                assign operSchema = pService:GetSchema(opParam:ABLName).
+                            
+                            if valid-handle(operSchema) then
+                            do:
+                                //WriteSchema(pService, operSchema).
+                                schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
+                            end.
+                            else
+                                schemaJson:Add('type':u, 'object':u).
                         end.
-                        else
-                            assign operSchema = pService:GetSchema(opParam:ABLName).
-                        
-                        if valid-handle(operSchema) then
-                        do:
-                            //WriteSchema(pService, operSchema).
-                            schemaJson:Add('$ref':u, '#/components/schemas/':u + operSchema:serialize-name).
-                        end.
-                        else
-                            schemaJson:Add('type':u, 'object':u).
                     end.
                     
                     otherwise
