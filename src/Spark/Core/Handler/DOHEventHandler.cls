@@ -399,7 +399,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         define variable lChanged as logical    no-undo initial false.
 
         case true:
-            when poEventArgs:BusinessEntity:GetClass():IsA(get-class(ISparkEntity)) then do:
+            when type-of(poEventArgs:BusinessEntity, ISparkEntity) then do:
                 /* If dealing with a Spark Entity class performing a READ operation, attempt to get
                  * the last-known number of records read and return as part of the response object.
                  * Also output any messages queued for output as part of any executed class method.
@@ -433,7 +433,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                 end. /* Valid JSON Entity */
             end. /* ISparkEntity */
 
-            when poEventArgs:BusinessEntity:GetClass():IsA(get-class(IDynamicResource)) then do:
+            when type-of(poEventArgs:BusinessEntity, IDynamicResource) then do:
                 /* If dealing with any Dynamic Resource, check for context messages to add to the response. */
                 define variable oResource as IDynamicResource no-undo.
 
