@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.0)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.1)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -184,7 +184,12 @@
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Returns JSON type and format information for an ABL type
+
+@param character An ABL type (primitive)
+@param character OUTPUT The JSON format for the data type
+@return character The JSON data type */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -219,7 +224,13 @@
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the JSON for a particular path (operation)
+
+@param DataObjectService The parent service
+@param character The relative URI for the operaton
+@param MethodEnum The HTTP method of this operation
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -297,7 +308,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes a dataset schema
+
+@param handle A valid dataset handle
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -335,7 +350,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes any default (shared) schemas
+
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -352,7 +370,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* A set of default server objects
+
+@return JsonArray A set of default server objects */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -389,7 +410,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the headers for an operation
+
+@param MappedOperation The mapped operation
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -406,7 +431,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the "info" element
+
+@return JsonObject The INFO object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -423,7 +451,12 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteOperation (DataObjectService, MappedOperation)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteOperation (DataObjectService, MappedOperation)</a> </i>
+     
+/* Writes the an operation
+
+@param DataObjectService The parent service
+@param MappedOperation The mapped operation
+@return JsonObject The schema object values */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteOperation (DataObjectService, MappedOperation)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteOperation (DataObjectService, MappedOperation)</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -440,7 +473,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteSchema (DataObjectService, handle)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteSchema (DataObjectService, handle)</a> </i>
+     
+/* Writes a schema
+
+@param DataObjectService The parent service
+@param handle A valid schema handle */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteSchema (DataObjectService, handle)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteSchema (DataObjectService, handle)</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -457,7 +494,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteService (DataObjectService)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteService (DataObjectService)</a> </i>
+     
+/* Writes a Data Object Service
+
+@param DataObjectService The service to write */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteService (DataObjectService)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteService (DataObjectService)</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -474,7 +514,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the top-level / root of the doc and default values
+
+@return JsonObject The root object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -491,7 +534,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes a temp-table schema
+
+@param handle A valid temp-table handle
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -508,7 +555,12 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes a tag
+
+@param character REQUIRED Thye tag name
+@param character The tag sescription
+@param JsonObject Optioanl external documentation data */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -568,7 +620,8 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Static constructor */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -842,7 +895,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns JSON type and format information for an ABL type </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -898,7 +951,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        character The JSON data type
     </td>
 </tr>
               </table>
@@ -982,7 +1035,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the JSON for a particular path (operation) </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1054,7 +1107,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -1262,7 +1315,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a dataset schema </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1302,7 +1355,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -1418,7 +1471,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes any default (shared) schemas </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1442,7 +1495,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -1480,7 +1533,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* A set of default server objects </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1504,7 +1557,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonArray A set of default server objects
     </td>
 </tr>
               </table>
@@ -1604,7 +1657,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the headers for an operation </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1644,7 +1697,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -1682,7 +1735,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the "info" element </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1706,7 +1759,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The INFO object values
     </td>
 </tr>
               </table>
@@ -1744,7 +1797,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the an operation </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1822,7 +1875,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a schema </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1900,7 +1953,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a Data Object Service </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1962,7 +2015,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the top-level / root of the doc and default values </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1986,7 +2039,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The root object values
     </td>
 </tr>
               </table>
@@ -2024,7 +2077,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a temp-table schema </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2064,7 +2117,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -2102,7 +2155,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a tag </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2276,7 +2329,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Static constructor </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -2629,6 +2682,6 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <br>
     <br>
     
-    <font class="footer_timestamp">11.01.2018 15:31:18</font>
+    <font class="footer_timestamp">12.07.2018 08:19:17</font>
     </BODY>
 </HTML>
