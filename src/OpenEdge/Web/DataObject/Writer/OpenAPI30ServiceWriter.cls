@@ -143,19 +143,6 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
         //string  The Terms of Service for the API.
         infoData:Add('termsOfService':u, '':u).
 
-        //Object  The contact information for the exposed API.
-        assign childData = new JsonObject().
-        infoData:Add('contact':u, childData).
-            childData:Add('name':u, '':u).
-            childData:Add('url':u, '':u).
-            childData:Add('email':u, '':u).
-
-        //Object  The license information for the exposed API.
-        assign childData = new JsonObject().
-        infoData:Add('license':u, childData).
-            childData:Add('name':u, '':u).
-            childData:Add('url':u, '':u).
-
         // The version of the OpenAPI document (which is distinct from the OpenAPI Specification
         // version or the API implementation version).
         infoData:Add('version':u, '1.0.0':u).
@@ -691,6 +678,8 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
         tableJson:Add('items':u, itemsJson).
             itemsJson:Add('additionalProperties':u, false).
             itemsJson:Add('properties':u, propsJson).
+        // don't add required fields if there aren't any
+        if reqFlds:Length gt 0 then
             itemsJson:Add('required':u, reqFlds).
 
         do loop = 1 to cnt:
@@ -948,5 +937,79 @@ class OpenEdge.Web.DataObject.Writer.OpenAPI30ServiceWriter inherits DataObjectS
         svr:Add('url':u, pData:ToString()).
         svr:Add('description':u, 'Server configuration':u).
     end method.
+
+    /* Writes a tuple (key-value pair).
+       This is effectively a VIRTUAL method (no default behaviour but not compiled enforcement either).
+
+       @param Progress.Lang.Object The key value - property name (required)
+       @param Progress.Lang.Object A value to be written for the property. May be null. */
+/*    method override protected void WriteTuple(input pKey as Progress.Lang.Object,                                     */
+/*                                              input pValue as Progress.Lang.Object):                                  */
+/*        define variable parent as JsonObject no-undo.                                                                 */
+/*        define variable securitySchemes as JsonObject no-undo.                                                        */
+/*        define variable inputSchemes as JsonObject no-undo.                                                           */
+/*        define variable loop as integer no-undo.                                                                      */
+/*        define variable cnt as integer no-undo.                                                                       */
+/*        define variable names as longchar extent no-undo.                                                             */
+/*                                                                                                                      */
+/*        case pKey:ToString():                                                                                         */
+/*            when 'info.contact':u then                                                                                */
+/*            do:                                                                                                       */
+/*                if not valid-object(pValue) then                                                                      */
+/*                    return.                                                                                           */
+/*                                                                                                                      */
+/*                if type-of(pValue, JsonObject) then                                                                   */
+/*                do:                                                                                                   */
+/*                    assign parent = cast(this-object:Value, JsonObject):GetJsonObject('info':u).                      */
+/*                    if parent:Has('contact':u) then                                                                   */
+/*                        parent:Set('contact':u, cast(pValue, JsonObject)).                                            */
+/*                    else                                                                                              */
+/*                        parent:Add('contact':u, cast(pValue, JsonObject)).                                            */
+/*                end.                                                                                                  */
+/*            end.    //contact                                                                                         */
+/*                                                                                                                      */
+/*            when 'info.license':u then                                                                                */
+/*            do:                                                                                                       */
+/*                if not valid-object(pValue) then                                                                      */
+/*                    return.                                                                                           */
+/*                                                                                                                      */
+/*                if type-of(pValue, JsonObject) then                                                                   */
+/*                do:                                                                                                   */
+/*                    assign parent = cast(this-object:Value, JsonObject):GetJsonObject('info':u).                      */
+/*                    if parent:Has('license':u) then                                                                   */
+/*                        parent:Set('license':u, cast(pValue, JsonObject)).                                            */
+/*                    else                                                                                              */
+/*                        parent:Add('license':u, cast(pValue, JsonObject)).                                            */
+/*                end.                                                                                                  */
+/*            end.    //license                                                                                         */
+/*                                                                                                                      */
+/*            when 'securitySchemes':u then                                                                             */
+/*            do:                                                                                                       */
+/*                if not valid-object(pValue) then                                                                      */
+/*                    return.                                                                                           */
+/*                                                                                                                      */
+/*                if type-of(pValue, JsonObject) then                                                                   */
+/*                do:                                                                                                   */
+/*                    assign parent   = cast(this-object:Value, JsonObject):GetJsonObject('components':u)               */
+/*                           inputSchemes = cast(pValue, JsonObject)                                                    */
+/*                           .                                                                                          */
+/*                    if parent:Has('securitySchemes':u) then                                                           */
+/*                        assign securitySchemes = parent:GetJsonObject('securitySchemes':u).                           */
+/*                                                                                                                      */
+/*                    if not valid-object(securitySchemes) then                                                         */
+/*                        parent:Add('securitySchemes':u, inputSchemes).                                                */
+/*                    else                                                                                              */
+/*                    do:                                                                                               */
+/*                        assign names = inputSchemes:GetNames()                                                        */
+/*                               cnt   = extent(names)                                                                  */
+/*                               .                                                                                      */
+/*                        do loop = 1 to cnt:                                                                           */
+/*                            securitySchemes:Add(string(names[loop]), inputSchemes:GetJsonObject(string(names[loop]))).*/
+/*                        end.                                                                                          */
+/*                    end.                                                                                              */
+/*                end.                                                                                                  */
+/*            end.                                                                                                      */
+/*        end case.                                                                                                     */
+/*    end method.                                                                                                       */
 
 end class.
