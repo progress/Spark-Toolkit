@@ -66,7 +66,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     define protected variable DataSourceArray as handle    no-undo extent.
     define protected variable SkipListArray   as character no-undo extent.
 
-    /***** Public *****/ 
+    /***** Public *****/
 
     /* Hold non-fatal messages for output (as determined by interface for class access). */
     define public property oContextMessage as IContextMessage no-undo
@@ -78,7 +78,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         private set.
 
     /* To be used by DOHEventHandler to supply record count on response object for READ. */
-    define public property LastCount as int64 no-undo get. private set.
+    define public property LastCount as int64 no-undo get. protected set.
 
     constructor public SparkEntity ( ):
         /* Implement constructor in each class instance to provide a handle to ProDataSet! */
