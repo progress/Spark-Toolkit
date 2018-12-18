@@ -1,0 +1,22 @@
+{
+    "general": {
+        "pollIgnore": "Sports.Spark.Core.Security.SportsRealm*",
+        "pollStart": "2018-12-01T08:00:00",
+        "pollStop": "2018-12-31T20:00:00"
+    },
+    "remote": {
+        "exclude": "*OpenEdge.Core.*,*OpenEdge.Logging.*,*OpenEdge.Net.*,*OpenEdge.Web.*,*Progress.Web.*,*Spark.*",
+        "oemUser": "tomcat",
+        "oemPass": "tomcat",
+        "outputInterval": 120000,
+        "source": "oemanager",
+        "trackMemory": true,
+        "trackObjects": true,
+        "trackRequests": false
+    },
+    "profiler": {
+        "enabled": false,
+        "filter": "*",
+        "threshold": 1000
+    }
+}
