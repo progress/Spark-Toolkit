@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.0)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.1)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -184,7 +184,12 @@
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Returns JSON type and format information for an ABL type
+
+@param character An ABL type (primitive)
+@param character OUTPUT The JSON format for the data type
+@return character The JSON data type */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -215,11 +220,38 @@
   </td>
   <td class="signature_col cell">
     <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010DD5W6jrYPgmkHML4vZVKLA=='> GetCatalogSchema (SemanticVersion)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Returns a schema for a Data Object Service Catalog
+
+@param  SemanticVersion The catalog version
+@return JsonObject The catalog JSON-schema   */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
          Progress.Json.ObjectModel.JsonObject <a href='#020010XNnobJK1itVW7t6GA3CB2g=='> GetPathJson (DataObjectService, character, MethodEnum)</a>
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the JSON for a particular path (operation)
+
+@param DataObjectService The parent service
+@param character The relative URI for the operaton
+@param MethodEnum The HTTP method of this operation
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -293,11 +325,16 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
   </td>
   <td class="signature_col cell">
     <font>
-         Progress.Json.ObjectModel.JsonObject <a href='#020010sYikLc23Jf7RQf4HR00cow=='> WriteDataset (handle)</a>
+          <a href='#020010MwUIoh9orP3SAubyBl25vg=='> WriteDataset (handle, JsonObject, logical)</a>
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes a dataset schema
+
+@param handle     A valid dataset handle
+@param JsonObject The schema root for writing the schemas into. This should NOT include path
+@param logical    TRUE if tables should be written as references */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -335,7 +372,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes any default (shared) schemas
+
+@return JsonObject The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -352,7 +392,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* A set of default server objects
+
+@return JsonArray A set of default server objects */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -385,11 +428,101 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
   </td>
   <td class="signature_col cell">
     <font>
-         Progress.Json.ObjectModel.JsonObject <a href='#0200102Yap297jI5wnQLmf92GBHA=='> WriteHeaders (MappedOperation)</a>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010Tl2H4cL0px2/TQr87v8sCA=='> WriteElementSchema (MessageElement, OperationParameter, MappedOperation)</a>
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes JSON for a message body element (request or response)
+
+@param  MessageElement The message element
+@param  OperationParameter The (parent) Parameter
+@return JsonObject the JSON for this field element */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010n4xs7U++f59LoD1Rq9qJvw=='> WriteEnvelope (character, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds an envelope to the request or response body
+
+@param character The envelope to add
+@param JsonObject The current body schema */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#0200101ZZ7CjihiIU6H1cW+7ahcg=='> WriteFieldSchema (MessageElement, OperationParameter, MappedOperation, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Writes JSON for a message field element (request or response)
+
+@param  MessageElement The message element
+@param  OperationParameter The (parent) Parameter
+@return JsonObject the JSON for this field element */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010sg2fXKj+UtWmynlV3cSgKA=='> WriteFileSchema (MappedOperation, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Writes content/schemas for FILE operations
+
+@param MappedOperation The operations
+@param JsonObject The content root for the response */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#0200109cvRaXO1quHvecsRTBE0cQ=='> WriteHeaders (HttpHeaderCollection, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Writes the headers for an operation
+
+@param HttpHeaderCollection The headers to write
+@param JsonObject      The schema object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -406,7 +539,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the "info" element's default values
+
+@return JsonObject The INFO object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -423,7 +559,34 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteOperation (DataObjectService, MappedOperation)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteOperation (DataObjectService, MappedOperation)</a> </i>
+     
+/* Writes the an operation
+
+@param DataObjectService The parent service
+@param MappedOperation The mapped operation */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteOperation (DataObjectService, MappedOperation)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteOperation (DataObjectService, MappedOperation)</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010V2XzUzCwhyYiLj3JAr/ypA=='> WriteResponseElements (MessageElement, OperationParameter, MappedOperation, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Writes FIELD and BODY outputs into a responses/content/&lt;content-type&gt;/ property
+
+@param MessageElement The element being written
+@param OperationParameter The element's parent
+@param MappedOperation The parameter's parent
+@param JsonObject The root object into which to write the element(s).    */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -440,7 +603,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteSchema (DataObjectService, handle)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteSchema (DataObjectService, handle)</a> </i>
+     
+/* Writes a schema into the #/components/schemas section
+
+@param DataObjectService The parent service
+@param handle A valid schema handle */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteSchema (DataObjectService, handle)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteSchema (DataObjectService, handle)</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -457,7 +624,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteService (DataObjectService)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteService (DataObjectService)</a> </i>
+     
+/* Writes a Data Object Service
+
+@param DataObjectService The service to write */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteService (DataObjectService)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteService (DataObjectService)</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -474,7 +644,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes the top-level / root of the doc and default values
+
+@return JsonObject The root object values */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -487,11 +660,15 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
   </td>
   <td class="signature_col cell">
     <font>
-         Progress.Json.ObjectModel.JsonObject <a href='#0200108s3WPFpSVuCuBPmRUoSBEw=='> WriteTable (handle)</a>
+          <a href='#020010fsBjoEgRMDi/fDwWla+0kg=='> WriteTable (handle, JsonObject)</a>
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes a temp-table schema
+
+@param handle A valid temp-table handle
+@param JsonObject The schema root */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -508,7 +685,34 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Writes a tag
+
+@param character REQUIRED Thye tag name
+@param character The tag sescription
+@param JsonObject Optioanl external documentation data */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010Q5tvFNM5khb6Jv0m6yzczg=='> WriteTuple (Object, Object)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Writes a tuple (key-value pair).
+This is effectively a VIRTUAL method (no default behaviour but not compiled enforcement either).
+
+@param Progress.Lang.Object The key value - property name (required)
+@param Progress.Lang.Object A value to be written for the property. May be null. */ <br> <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteTuple (Object, Object)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteTuple (Object, Object)</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -568,7 +772,8 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* STatic constructor */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -842,7 +1047,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns JSON type and format information for an ABL type </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -898,7 +1103,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        character The JSON data type
     </td>
 </tr>
               </table>
@@ -957,6 +1162,84 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010DD5W6jrYPgmkHML4vZVKLA==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010DD5W6jrYPgmkHML4vZVKLA=='> GetCatalogSchema (SemanticVersion)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010DD5W6jrYPgmkHML4vZVKLA=='> GetCatalogSchema (SemanticVersion)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns a schema for a Data Object Service Catalog </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pVersion</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Core.SemanticVersion.html'>OpenEdge.Core.SemanticVersion</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject The catalog JSON-schema
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010XNnobJK1itVW7t6GA3CB2g==" href="#Top">Top</a>
                 <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010XNnobJK1itVW7t6GA3CB2g=='> GetPathJson (DataObjectService, character, MethodEnum)</a>"></a>
             </font>
@@ -982,7 +1265,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the JSON for a particular path (operation) </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1054,7 +1337,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -1237,11 +1520,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010sYikLc23Jf7RQf4HR00cow==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010sYikLc23Jf7RQf4HR00cow=='> WriteDataset (handle)</a>"></a>
+                <a name="020010MwUIoh9orP3SAubyBl25vg==" href="#Top">Top</a>
+                <a name="  <a href='#020010MwUIoh9orP3SAubyBl25vg=='> WriteDataset (handle, JsonObject, logical)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010sYikLc23Jf7RQf4HR00cow=='> WriteDataset (handle)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010MwUIoh9orP3SAubyBl25vg=='> WriteDataset (handle, JsonObject, logical)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1262,7 +1545,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a dataset schema </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1290,10 +1573,26 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </td>
 </tr><tr>
     <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
+        <i>pSchemaRoot</i>
     </td>
     <td>
-      Progress.Json.ObjectModel.JsonObject 
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pWriteRef</i>
+    </td>
+    <td>
+       LOGICAL
     </td>
     <td>
     </td>
@@ -1418,7 +1717,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes any default (shared) schemas </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1442,7 +1741,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The schema object values
     </td>
 </tr>
               </table>
@@ -1480,7 +1779,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* A set of default server objects </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1504,7 +1803,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonArray A set of default server objects
     </td>
 </tr>
               </table>
@@ -1579,11 +1878,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200102Yap297jI5wnQLmf92GBHA==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#0200102Yap297jI5wnQLmf92GBHA=='> WriteHeaders (MappedOperation)</a>"></a>
+                <a name="020010Tl2H4cL0px2/TQr87v8sCA==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010Tl2H4cL0px2/TQr87v8sCA=='> WriteElementSchema (MessageElement, OperationParameter, MappedOperation)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#0200102Yap297jI5wnQLmf92GBHA=='> WriteHeaders (MappedOperation)</a></h3>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010Tl2H4cL0px2/TQr87v8sCA=='> WriteElementSchema (MessageElement, OperationParameter, MappedOperation)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1604,7 +1903,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes JSON for a message body element (request or response) </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1616,7 +1915,39 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pData</i>
+        <i>pElement</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.MessageElement.html'>OpenEdge.Web.DataObject.MessageElement</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pParameter</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.OperationParameter.html'>OpenEdge.Web.DataObject.OperationParameter</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pOperation</i>
     </td>
     <td>
        <a href='OpenEdge.Web.DataObject.MappedOperation.html'>OpenEdge.Web.DataObject.MappedOperation</a>
@@ -1636,6 +1967,350 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </td>
     <td>
       Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject the JSON for this field element
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010n4xs7U++f59LoD1Rq9qJvw==" href="#Top">Top</a>
+                <a name="  <a href='#020010n4xs7U++f59LoD1Rq9qJvw=='> WriteEnvelope (character, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010n4xs7U++f59LoD1Rq9qJvw=='> WriteEnvelope (character, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds an envelope to the request or response body </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pEnvelope</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pBody</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200101ZZ7CjihiIU6H1cW+7ahcg==" href="#Top">Top</a>
+                <a name="  <a href='#0200101ZZ7CjihiIU6H1cW+7ahcg=='> WriteFieldSchema (MessageElement, OperationParameter, MappedOperation, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#0200101ZZ7CjihiIU6H1cW+7ahcg=='> WriteFieldSchema (MessageElement, OperationParameter, MappedOperation, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes JSON for a message field element (request or response) </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pElement</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.MessageElement.html'>OpenEdge.Web.DataObject.MessageElement</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pParameter</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.OperationParameter.html'>OpenEdge.Web.DataObject.OperationParameter</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pOperation</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.MappedOperation.html'>OpenEdge.Web.DataObject.MappedOperation</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pSchemaRoot</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010sg2fXKj+UtWmynlV3cSgKA==" href="#Top">Top</a>
+                <a name="  <a href='#020010sg2fXKj+UtWmynlV3cSgKA=='> WriteFileSchema (MappedOperation, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010sg2fXKj+UtWmynlV3cSgKA=='> WriteFileSchema (MappedOperation, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes content/schemas for FILE operations </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pOperation</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.MappedOperation.html'>OpenEdge.Web.DataObject.MappedOperation</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pResponseRoot</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200109cvRaXO1quHvecsRTBE0cQ==" href="#Top">Top</a>
+                <a name="  <a href='#0200109cvRaXO1quHvecsRTBE0cQ=='> WriteHeaders (HttpHeaderCollection, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#0200109cvRaXO1quHvecsRTBE0cQ=='> WriteHeaders (HttpHeaderCollection, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the headers for an operation </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pData</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Net.HTTP.HttpHeaderCollection.html'>OpenEdge.Net.HTTP.HttpHeaderCollection</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pHeaderRoot</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
     </td>
     <td>
     </td>
@@ -1682,7 +2357,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the "info" element's default values </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1706,7 +2381,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The INFO object values
     </td>
 </tr>
               </table>
@@ -1744,7 +2419,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the an operation </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1797,6 +2472,116 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010V2XzUzCwhyYiLj3JAr/ypA==" href="#Top">Top</a>
+                <a name="  <a href='#020010V2XzUzCwhyYiLj3JAr/ypA=='> WriteResponseElements (MessageElement, OperationParameter, MappedOperation, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010V2XzUzCwhyYiLj3JAr/ypA=='> WriteResponseElements (MessageElement, OperationParameter, MappedOperation, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes FIELD and BODY outputs into a responses/content/&lt;content-type&gt;/ property </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pElement</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.MessageElement.html'>OpenEdge.Web.DataObject.MessageElement</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pParameter</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.OperationParameter.html'>OpenEdge.Web.DataObject.OperationParameter</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pOperation</i>
+    </td>
+    <td>
+       <a href='OpenEdge.Web.DataObject.MappedOperation.html'>OpenEdge.Web.DataObject.MappedOperation</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pSchemaRoot</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010tEunBOC3pL9pp9yATMUM7Q==" href="#Top">Top</a>
                 <a name="  <a href='#020010tEunBOC3pL9pp9yATMUM7Q=='> WriteSchema (DataObjectService, handle)</a>"></a>
             </font>
@@ -1822,7 +2607,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a schema into the #/components/schemas section </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1900,7 +2685,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a Data Object Service </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1962,7 +2747,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes the top-level / root of the doc and default values </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -1986,7 +2771,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        JsonObject The root object values
     </td>
 </tr>
               </table>
@@ -1999,11 +2784,11 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200108s3WPFpSVuCuBPmRUoSBEw==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#0200108s3WPFpSVuCuBPmRUoSBEw=='> WriteTable (handle)</a>"></a>
+                <a name="020010fsBjoEgRMDi/fDwWla+0kg==" href="#Top">Top</a>
+                <a name="  <a href='#020010fsBjoEgRMDi/fDwWla+0kg=='> WriteTable (handle, JsonObject)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#0200108s3WPFpSVuCuBPmRUoSBEw=='> WriteTable (handle)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010fsBjoEgRMDi/fDwWla+0kg=='> WriteTable (handle, JsonObject)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2024,7 +2809,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a temp-table schema </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2052,10 +2837,10 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </td>
 </tr><tr>
     <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
+        <i>pSchemaRoot</i>
     </td>
     <td>
-      Progress.Json.ObjectModel.JsonObject 
+       Progress.Json.ObjectModel.JsonObject
     </td>
     <td>
     </td>
@@ -2102,7 +2887,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a tag </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2150,6 +2935,84 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     </td>
     <td>
        Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Q5tvFNM5khb6Jv0m6yzczg==" href="#Top">Top</a>
+                <a name="  <a href='#020010Q5tvFNM5khb6Jv0m6yzczg=='> WriteTuple (Object, Object)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010Q5tvFNM5khb6Jv0m6yzczg=='> WriteTuple (Object, Object)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Overrides <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html#WriteTuple (Object, Object)'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter:WriteTuple (Object, Object)</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a tuple (key-value pair). </td></tr><td class='paramname'></td><td class='paramdesc'>This is effectively a VIRTUAL method (no default behaviour but not compiled enforcement either). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pKey</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pValue</i>
+    </td>
+    <td>
+       Progress.Lang.Object
     </td>
     <td>
     </td>
@@ -2276,7 +3139,7 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* STatic constructor </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -2629,6 +3492,6 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
     <br>
     <br>
     
-    <font class="footer_timestamp">11.01.2018 15:31:18</font>
+    <font class="footer_timestamp">12.19.2018 14:49:15</font>
     </BODY>
 </HTML>

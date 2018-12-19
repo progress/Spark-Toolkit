@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.0)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.1)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -186,6 +186,27 @@
   <td class="cell">
      
 /** Flushes(writes) the input to the target */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010DD5W6jrYPgmkHML4vZVKLA=='> GetCatalogSchema (SemanticVersion)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Returns a schema for a Data Object Service Catalog
+
+@param  SemanticVersion The catalog version
+@return JsonObject The catalog JSON-schema   */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -559,6 +580,28 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
   </td>
   <td class="signature_col cell">
     <font>
+          <a href='#020010Q5tvFNM5khb6Jv0m6yzczg=='> WriteTuple (Object, Object)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Writes a tuple (key-value pair).
+This is effectively a VIRTUAL method (no default behaviour but not compiled enforcement either).
+
+@param Progress.Lang.Object The key value - property name (required)
+@param Progress.Lang.Object A value to be written for the property. May be null. */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
           <a href='#0200102BLQqmNX1EE6CMCDh9/UXQ=='> WriteUnknownOperation (MappedOperation, JsonObject)</a>
     </font>
   </td>
@@ -585,8 +628,8 @@ a DataObjectService */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.
   </td>
   <td class="cell">
      
-/* Writes a URI to the output. THis is effectively a VIRTUAL method (no default behaviour
-but not compiler enforcement either).
+/* Writes a URI to the output. This is effectively a VIRTUAL method (no default behaviour
+but not compiled enforcement either).
 
 @param URI The URI to write */ <br> <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
   </td>
@@ -900,6 +943,84 @@ but not compiler enforcement either).
                   </tr>
                   -->
                   
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010DD5W6jrYPgmkHML4vZVKLA==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010DD5W6jrYPgmkHML4vZVKLA=='> GetCatalogSchema (SemanticVersion)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010DD5W6jrYPgmkHML4vZVKLA=='> GetCatalogSchema (SemanticVersion)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns a schema for a Data Object Service Catalog </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pVersion</i>
+    </td>
+    <td>
+       SemanticVersion
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject The catalog JSON-schema
+    </td>
+</tr>
               </table>
             </dl>
           </dd>
@@ -2266,6 +2387,84 @@ but not compiler enforcement either).
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010Q5tvFNM5khb6Jv0m6yzczg==" href="#Top">Top</a>
+                <a name="  <a href='#020010Q5tvFNM5khb6Jv0m6yzczg=='> WriteTuple (Object, Object)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010Q5tvFNM5khb6Jv0m6yzczg=='> WriteTuple (Object, Object)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter.html'>OpenEdge.Web.DataObject.Writer.DataObjectServiceWriter</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a tuple (key-value pair). </td></tr><td class='paramname'></td><td class='paramdesc'>This is effectively a VIRTUAL method (no default behaviour but not compiled enforcement either). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pKey</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pValue</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="0200102BLQqmNX1EE6CMCDh9/UXQ==" href="#Top">Top</a>
                 <a name="  <a href='#0200102BLQqmNX1EE6CMCDh9/UXQ=='> WriteUnknownOperation (MappedOperation, JsonObject)</a>"></a>
             </font>
@@ -2369,7 +2568,7 @@ but not compiler enforcement either).
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a URI to the output. THis is effectively a VIRTUAL method (no default behaviour </td></tr><td class='paramname'></td><td class='paramdesc'>but not compiler enforcement either). </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Writes a URI to the output. This is effectively a VIRTUAL method (no default behaviour </td></tr><td class='paramname'></td><td class='paramdesc'>but not compiled enforcement either). </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2788,6 +2987,6 @@ but not compiler enforcement either).
     <br>
     <br>
     
-    <font class="footer_timestamp">11.01.2018 15:31:16</font>
+    <font class="footer_timestamp">12.19.2018 14:49:13</font>
     </BODY>
 </HTML>

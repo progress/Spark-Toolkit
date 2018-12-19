@@ -1005,7 +1005,7 @@ class Spark.Core.Message.AbstractMessage implements IAbstractMessage abstract:
      * @param pcParam The name of the Parameter to get
      * @return The Parameter value as an logical
      */
-    method public logical getParamAsLog(input pcParam as character  ):
+    method public logical getParamAsLog( input pcParam as character ):
 
         return getParamAsLog(pcParam, false).
 
@@ -1017,7 +1017,7 @@ class Spark.Core.Message.AbstractMessage implements IAbstractMessage abstract:
      * @param plOptionalParam if true then don't throw an error if the parameter does not exits
      * @return The Parameter value as an logical or undefined in not found
      */
-    method public logical getParamAsLog(input pcParam as character, input plOptionalParam as logical ):
+    method public logical getParamAsLog( input pcParam as character, input plOptionalParam as logical ):
 
         define variable lReturn as logical   init ? no-undo.
         define variable cTemp   as character no-undo.
@@ -1030,11 +1030,11 @@ class Spark.Core.Message.AbstractMessage implements IAbstractMessage abstract:
                 if cTemp eq ? then
                     lReturn = ?.
                 else if can-do("True,Yes,Y",string(cTemp)) then
-                        lReturn = true.
-                    else if can-do("False,No,N",string(cTemp)) then
-                            lReturn = false.
-                        else
-                            lReturn = ?.
+                    lReturn = true.
+                else if can-do("False,No,N",string(cTemp)) then
+                    lReturn = false.
+                else
+                    lReturn = ?.
             end.
             else
                 lReturn = moMsgParams:GetLogical(pcParam).
@@ -1085,10 +1085,10 @@ class Spark.Core.Message.AbstractMessage implements IAbstractMessage abstract:
                         lReturn[iLoop] = ?.
                     else if can-do("True,Yes,Y",cTemp[iLoop]) then
                             lReturn[iLoop] = true.
-                        else if can-do("False,No,N",cTemp[iLoop]) then
-                                lReturn[iLoop] = false.
-                            else
-                                lReturn[iLoop] = ?.
+                    else if can-do("False,No,N",cTemp[iLoop]) then
+                        lReturn[iLoop] = false.
+                    else
+                        lReturn[iLoop] = ?.
                 end.
             end.
             else

@@ -4,7 +4,7 @@
 
 The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/CCS) reference implementation from Progress meant to aid in creating an ABL application which provides RESTful API's for microservices. This repository primarily contains ABL artifacts and was built specifically for the **Progress Application Server for OpenEdge** to provide the back-end (server-side) support for exposing ABL logic via HTTP/HTTP.
 
-**Latest Release:** v4.4.0 (November 2018) for OE 11.7.4
+**Latest Release:** v4.4.1 (December 2018) for OE 11.7.4
 
 
 ## Requirements
@@ -41,9 +41,9 @@ This repository should be ready to use as-is within **Progress Developer Studio 
 
 ## Builds / Distribution
 
-To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `Spark.pl` file you would use the target `build_spark_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the version "4.4.0":
+To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `Spark.pl` file you would use the target `build_spark_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the format of "major.minor.revision":
 
-    ant build_spark_pl -Dversion=4.4.0
+    ant build_spark_pl -Dversion=Ma.Ma.Rv
 
 
 ## Documentation

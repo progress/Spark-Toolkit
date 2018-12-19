@@ -9,6 +9,7 @@
 
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
+using Spark.Core.Message.IContextMessage from propath.
 
 /* Default options for class. */
 block-level on error undo, throw.
@@ -23,7 +24,18 @@ class Spark.Core.Service.DynamicResource implements Spark.Core.Service.IDynamicR
     define public abstract property resourceName as character no-undo
         get. protected set.
 
-    /***** Protected *****/
+    /***** Public *****/ 
+
+    /* Hold non-fatal messages for output (as determined by interface for class access). */
+    define public property oContextMessage as IContextMessage no-undo
+        get:
+            if not valid-object(oContextMessage) then
+                assign oContextMessage = new Spark.Core.Message.ContextMessage().
+            return oContextMessage.
+        end get.
+        private set.
+
+    /***** Protected *****/ 
 
     define protected property oClientContext as IClientContext no-undo
         get:

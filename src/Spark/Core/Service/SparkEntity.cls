@@ -16,6 +16,7 @@ using Ccs.BusinessLogic.* from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
+using Spark.Core.Message.IContextMessage from propath.
 using Spark.Core.Util.* from propath.
 
 block-level on error undo, throw.
@@ -57,8 +58,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         end get.
         set.
 
-    define public property LastCount as int64 no-undo get. private set.
-
     define protected variable iSeq as integer no-undo.
 
     define protected variable cRowField as character no-undo initial "id".
@@ -66,6 +65,20 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     define protected variable DataSourceArray as handle    no-undo extent.
     define protected variable SkipListArray   as character no-undo extent.
+
+    /***** Public *****/
+
+    /* Hold non-fatal messages for output (as determined by interface for class access). */
+    define public property oContextMessage as IContextMessage no-undo
+        get:
+            if not valid-object(oContextMessage) then
+                assign oContextMessage = new Spark.Core.Message.ContextMessage().
+            return oContextMessage.
+        end get.
+        private set.
+
+    /* To be used by DOHEventHandler to supply record count on response object for READ. */
+    define public property LastCount as int64 no-undo get. protected set.
 
     constructor public SparkEntity ( ):
         /* Implement constructor in each class instance to provide a handle to ProDataSet! */

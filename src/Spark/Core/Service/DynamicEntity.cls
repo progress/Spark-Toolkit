@@ -8,7 +8,6 @@
   ----------------------------------------------------------------------*/
 
 using Progress.Json.ObjectModel.* from propath.
-using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Util.FormatTools from propath.
 
 /* Default options for class. */
