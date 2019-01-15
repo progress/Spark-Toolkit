@@ -32,9 +32,9 @@
     Notes       :
   ----------------------------------------------------------------------*/
 
-ENUM Ccs.BusinessLogic.QueryOperatorEnum:
+enum Ccs.BusinessLogic.QueryOperatorEnum:
 
-    DEFINE ENUM /* Operators requiring a single value */
+    define enum /* Operators requiring a single value */
                 Eq
                 Begins
                 Contains
@@ -43,9 +43,10 @@ ENUM Ccs.BusinessLogic.QueryOperatorEnum:
                 Gt
                 Le
                 Lt
+                Ne
 
                 /* Operators requiring a list of values */
                 InList
                 InRange
                 .
-END ENUM .
+end enum .
