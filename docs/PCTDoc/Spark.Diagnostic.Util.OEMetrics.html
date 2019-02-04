@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.1)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.2)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -432,7 +432,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010RaDSfM4CJPNDylQv+NYVDw=='> StartProfiler ()</a>
+         LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -450,7 +450,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a>
+         LOGICAL <a href='#0200104yyrpDfCpg3e1KkK4NXUjA=='> StartProfiler (character, character)</a>
     </font>
   </td>
   <td class="cell">
@@ -558,7 +558,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010Y9fsTRyi3OpoS0gsAQp97Q=='> WriteProfiler ()</a>
+         LOGICAL <a href='#0200109w3DSbFjZWV+S3+hRaWTUA=='> WriteProfiler (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -576,7 +576,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010CnmlOa1VLxzTiFAEOnpdTA=='> WriteProfiler (integer)</a>
+         LOGICAL <a href='#020010AUDud8gxdedUS/jQoD9ryg=='> WriteProfiler (character, integer)</a>
     </font>
   </td>
   <td class="cell">
@@ -737,6 +737,23 @@
   </td>
   <td class="cell">
       <br> <i> Inherited from <a href='Spark.Diagnostic.Util.Logger.html'>Spark.Diagnostic.Util.Logger</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Logging.ILogWriter <a href='#020010dmJBDav/O4dBFfNsEwUZDQ=='> oMetricsLogger</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -1966,11 +1983,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010RaDSfM4CJPNDylQv+NYVDw==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010RaDSfM4CJPNDylQv+NYVDw=='> StartProfiler ()</a>"></a>
+                <a name="020010uvuY2P1XqmgFI3d3hvgh/g==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010RaDSfM4CJPNDylQv+NYVDw=='> StartProfiler ()</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1994,14 +2011,30 @@
             <table><tbody class='commment_formater_table'></tbody></table>
             <dl>
               <table class="parameter_table">
-                  <!--
+                  
                   <tr>
                     <td colspan="2">
                       <b>Parameters:</b>           
                     </td>
                   </tr>
-                  -->
+                  
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcTrackBy</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i><b>Returns</b></i>
     </td>
@@ -2028,11 +2061,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010uvuY2P1XqmgFI3d3hvgh/g==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a>"></a>
+                <a name="0200104yyrpDfCpg3e1KkK4NXUjA==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200104yyrpDfCpg3e1KkK4NXUjA=='> StartProfiler (character, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200104yyrpDfCpg3e1KkK4NXUjA=='> StartProfiler (character, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2064,6 +2097,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcTrackBy</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>pcFilter</i>
     </td>
@@ -2480,11 +2529,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010Y9fsTRyi3OpoS0gsAQp97Q==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010Y9fsTRyi3OpoS0gsAQp97Q=='> WriteProfiler ()</a>"></a>
+                <a name="0200109w3DSbFjZWV+S3+hRaWTUA==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200109w3DSbFjZWV+S3+hRaWTUA=='> WriteProfiler (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010Y9fsTRyi3OpoS0gsAQp97Q=='> WriteProfiler ()</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200109w3DSbFjZWV+S3+hRaWTUA=='> WriteProfiler (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2508,14 +2557,30 @@
             <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* StartProfiler </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
-                  <!--
+                  
                   <tr>
                     <td colspan="2">
                       <b>Parameters:</b>           
                     </td>
                   </tr>
-                  -->
+                  
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcTrackBy</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i><b>Returns</b></i>
     </td>
@@ -2542,11 +2607,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010CnmlOa1VLxzTiFAEOnpdTA==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010CnmlOa1VLxzTiFAEOnpdTA=='> WriteProfiler (integer)</a>"></a>
+                <a name="020010AUDud8gxdedUS/jQoD9ryg==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010AUDud8gxdedUS/jQoD9ryg=='> WriteProfiler (character, integer)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010CnmlOa1VLxzTiFAEOnpdTA=='> WriteProfiler (integer)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010AUDud8gxdedUS/jQoD9ryg=='> WriteProfiler (character, integer)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2578,6 +2643,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcTrackBy</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piExecThreshold</i>
     </td>
@@ -2968,6 +3049,68 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010dmJBDav/O4dBFfNsEwUZDQ==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Logging.ILogWriter.html'>OpenEdge.Logging.ILogWriter</a> <a href='#020010dmJBDav/O4dBFfNsEwUZDQ=='> oMetricsLogger</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE <a href='OpenEdge.Logging.ILogWriter.html'>OpenEdge.Logging.ILogWriter</a> <a href='#020010dmJBDav/O4dBFfNsEwUZDQ=='> oMetricsLogger</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Logging.ILogWriter.html'>OpenEdge.Logging.ILogWriter</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010yy4PodFM5j+pbqpSCxuZjg==" href="#Top">Top</a>
                 <a name=" <a href='Spark.Diagnostic.Util.RemoteMetrics.html'>Spark.Diagnostic.Util.RemoteMetrics</a> <a href='#020010yy4PodFM5j+pbqpSCxuZjg=='> oRemoteMetrics</a>"></a>
             </font>
@@ -3280,6 +3423,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">12.19.2018 14:49:35</font>
+    <font class="footer_timestamp">02.04.2019 11:29:06</font>
     </BODY>
 </HTML>

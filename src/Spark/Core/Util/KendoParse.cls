@@ -1,5 +1,5 @@
 using Progress.Json.ObjectModel.* from propath.
-using Spark.Core.Util.ApplicationError from propath.
+using Spark.Core.BusinessLogic.QuerySortEntry from propath.
 using Spark.Core.Util.ClientParse from propath.
 
 block-level on error undo, throw.
@@ -162,6 +162,11 @@ class Spark.Core.Util.KendoParse inherits ClientParse:
         return (new JsonArray()).
     end method. /* getRawCriteria */
 
+    method public override character buildWherePhrase ( input poFilter as JsonObject ):
+        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter */
+        return buildWherePhrase("", poFilter).
+    end method. /* buildWherePhrase */
+
     method public override character buildSortPhrase ( input poOptions as JsonArray ):
         /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-sort */
         define variable oSortObj as JsonObject no-undo.
@@ -178,16 +183,41 @@ class Spark.Core.Util.KendoParse inherits ClientParse:
                                                 cSortBy,
                                                 hField:name,
                                                 if oSortObj:GetCharacter("dir") eq "asc" then "" else "descending").
-            end.
+            end. /* do iX */
             assign cSortBy = trim(cSortBy).
-        end.
+        end. /* valid-object */
 
         return cSortBy.
     end method. /* buildOrderPhrase */
 
-    method public override character buildWherePhrase ( input poFilter as JsonObject ):
-        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter */
-        return buildWherePhrase("", poFilter).
-    end method. /* buildWherePhrase */
+    method public override QuerySortEntry extent buildSortEntries ( input poOptions as JsonArray ):
+        define variable oSortList as QuerySortEntry extent no-undo.
+        define variable oSortObj  as JsonObject            no-undo.
+        define variable hField    as handle                no-undo.
+        define variable iX        as integer               no-undo.
+
+        if valid-object(poOptions) and poOptions:Length gt 0 then do:
+            /**
+             * An extent must be specified, even if some of the fields are not valid for sorting.
+             * Since we shouldn't have more sort entries than items in the array, use that count.
+             */
+            extent(oSortList) = poOptions:length.
+
+            do iX = 1 to poOptions:length:
+                assign oSortObj = poOptions:GetJsonObject(iX).
+                assign hField = getFieldBuffer(oSortObj:GetCharacter("field")).
+                if valid-handle(hField) then do:
+                    /* Add a new sort entry object with field and direction. */
+                    oSortList[iX] = new QuerySortEntry().
+                    oSortList[iX]:FieldName = hField:name.
+                    oSortList[iX]:SortOrder = if oSortObj:GetCharacter("dir") eq "asc"
+                                              then Ccs.BusinessLogic.SortOrderEnum:Ascending
+                                              else Ccs.BusinessLogic.SortOrderEnum:Descending.
+                end. /* valid-handle */
+            end. /* do iX */
+        end. /* valid-object */
+
+        return oSortList.
+    end method. /* buildSortPhrase */
 
 end class.

@@ -1,8 +1,8 @@
 {
     "general": {
         "pollIgnore": "Sports.Spark.Core.Security.SportsRealm*",
-        "pollStart": "2018-12-01T08:00:00",
-        "pollStop": "2018-12-31T20:00:00"
+        "pollStart": "2019-01-01T08:00:00",
+        "pollStop": "2019-12-31T20:00:00"
     },
     "remote": {
         "exclude": "*OpenEdge.Core.*,*OpenEdge.Logging.*,*OpenEdge.Net.*,*OpenEdge.Web.*,*Progress.Web.*,*Spark.*",

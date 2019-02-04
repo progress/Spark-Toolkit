@@ -110,7 +110,7 @@ class Spark.Core.Handler.StatusHandler inherits OpenEdge.Web.WebHandler use-widg
                 oWriter:write('</table>').
                 oWriter:write('</section>').
 
-                oWriter:write('<footer>Copyright &copy; 2018 Progress Software Corporation. All rights reserved.</footer>').
+                oWriter:write('<footer>Copyright &copy; 2019 Progress Software Corporation. All rights reserved.</footer>').
                 oWriter:write( "</body>" ).
                 oWriter:write( "</html>" ).
             end.
