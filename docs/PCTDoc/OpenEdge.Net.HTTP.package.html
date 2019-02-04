@@ -2,7 +2,7 @@
 <HTML id="packagehtml">
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.1)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.2)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -58,7 +58,7 @@
         </div>
     </td>
     <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.Lib.package.html">OpenEdge.Net.HTTP.Lib</a>
+        <a href="OpenEdge.Net.HTTP.Filter.package.html">OpenEdge.Net.HTTP.Filter</a>
     </td>
     <td>
         
@@ -69,7 +69,7 @@
         </div>
     </td>
     <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.Filter.package.html">OpenEdge.Net.HTTP.Filter</a>
+        <a href="OpenEdge.Net.HTTP.Lib.package.html">OpenEdge.Net.HTTP.Lib</a>
     </td>
     <td>
         
@@ -79,30 +79,6 @@
 <br/><table class="packagegroup">
     <th colspan="3">Interfaces</th>
     <tr>
-    <td class="packageitemicon">
-        <div class="node_imginterface">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.ISupportCookies.html">OpenEdge.Net.HTTP.ISupportCookies</a>
-    </td>
-    <td>
-         Indicates that a client supports cookies (is stateful) 
-    
-    </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imginterface">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.ISupportProxy.html">OpenEdge.Net.HTTP.ISupportProxy</a>
-    </td>
-    <td>
-         
-    
-    </td>
-<tr><tr>
     <td class="packageitemicon">
         <div class="node_imginterface">
         </div>
@@ -199,110 +175,35 @@
          
     
     </td>
-<tr>
-</table>
-<br/><table class="packagegroup">
-    <th colspan="3">Classes</th>
-    <tr>
+<tr><tr>
     <td class="packageitemicon">
-        <div class="node_imgclass">
+        <div class="node_imginterface">
         </div>
     </td>
     <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.NullHeader.html">NullHeader</a>
+        <a href="OpenEdge.Net.HTTP.ISupportCookies.html">OpenEdge.Net.HTTP.ISupportCookies</a>
     </td>
     <td>
-         A special header with a UNKNOWN Name and Value, intended 
-                  to allow calls to GetHeader() to be chained 
+         Indicates that a client supports cookies (is stateful) 
     
     </td>
 <tr><tr>
     <td class="packageitemicon">
-        <div class="node_imgclass">
+        <div class="node_imginterface">
         </div>
     </td>
     <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.ProxyHttpClient.html">ProxyHttpClient</a>
-    </td>
-    <td>
-         Http client with support for proxy server, for all requests
-    
-    </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imgclass">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.ProxyHttpRequest.html">ProxyHttpRequest</a>
+        <a href="OpenEdge.Net.HTTP.ISupportProxy.html">OpenEdge.Net.HTTP.ISupportProxy</a>
     </td>
     <td>
          
     
     </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imgclass">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.RequestBuilder.html">RequestBuilder</a>
-    </td>
-    <td>
-         Builds an HttpRequest for use with an HttpClient 
-    
-    </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imgclass">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.ResponseBuilder.html">ResponseBuilder</a>
-    </td>
-    <td>
-         Creates an instance of an HttpResponse object. Most of the
-                  contents of the response are populated by a response filter.
-    
-    </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imgclass">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.SemicolonParamHeaderBuilder.html">SemicolonParamHeaderBuilder</a>
-    </td>
-    <td>
-         Builder for headers that have semil-colon-delimted parameters 
-    
-    </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imgclass">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.StatefulHttpClient.html">StatefulHttpClient</a>
-    </td>
-    <td>
-         Http client with support for cookies
-    
-    </td>
-<tr><tr>
-    <td class="packageitemicon">
-        <div class="node_imgclass">
-        </div>
-    </td>
-    <td class="packageitem">
-        <a href="OpenEdge.Net.HTTP.StatusCodeHelper.html">StatusCodeHelper</a>
-    </td>
-    <td>
-         Helps to convert/find default values for status codes and 
-                  their messages 
-    
-    </td>
-<tr><tr>
+<tr>
+</table>
+<br/><table class="packagegroup">
+    <th colspan="3">Classes</th>
+    <tr>
     <td class="packageitemicon">
         <div class="node_imgclass">
         </div>
@@ -728,13 +629,112 @@
                   combinations                  
     
     </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.NullHeader.html">NullHeader</a>
+    </td>
+    <td>
+         A special header with a UNKNOWN Name and Value, intended 
+                  to allow calls to GetHeader() to be chained 
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.ProxyHttpClient.html">ProxyHttpClient</a>
+    </td>
+    <td>
+         Http client with support for proxy server, for all requests
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.ProxyHttpRequest.html">ProxyHttpRequest</a>
+    </td>
+    <td>
+         
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.RequestBuilder.html">RequestBuilder</a>
+    </td>
+    <td>
+         Builds an HttpRequest for use with an HttpClient 
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.ResponseBuilder.html">ResponseBuilder</a>
+    </td>
+    <td>
+         Creates an instance of an HttpResponse object. Most of the
+                  contents of the response are populated by a response filter.
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.SemicolonParamHeaderBuilder.html">SemicolonParamHeaderBuilder</a>
+    </td>
+    <td>
+         Builder for headers that have semil-colon-delimted parameters 
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.StatefulHttpClient.html">StatefulHttpClient</a>
+    </td>
+    <td>
+         Http client with support for cookies
+    
+    </td>
+<tr><tr>
+    <td class="packageitemicon">
+        <div class="node_imgclass">
+        </div>
+    </td>
+    <td class="packageitem">
+        <a href="OpenEdge.Net.HTTP.StatusCodeHelper.html">StatusCodeHelper</a>
+    </td>
+    <td>
+         Helps to convert/find default values for status codes and 
+                  their messages 
+    
+    </td>
 <tr>
 </table>
 <br/>
         </div>
     </div>
     <div id="packagefooter">
-        <font class="footer_timestamp">12.19.2018 14:49:40</font>
+        <font class="footer_timestamp">02.04.2019 11:29:08</font>
     </div>
 </BODY>
 </HTML>

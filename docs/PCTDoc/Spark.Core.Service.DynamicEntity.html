@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.1)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.2)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -257,7 +257,7 @@
   </td>
   <td class="cell">
      
-/* getDataset */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/******* Public | CCS-compliant Read, Count, and Update (aka. Submit) *******/ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -275,7 +275,7 @@
   </td>
   <td class="cell">
      
-/* getFilterParams */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/******* Public | Helper Methods *******/ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -306,7 +306,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010k1chY8zojgCHt4DEQ9hbdQ=='> getFilterParams (JsonObject, character, character, character, int64, int64)</a>
+         CHARACTER <a href='#0200104f172yR+ppXEpKvy9jHE1g=='> getFilterOnly (JsonObject)</a>
     </font>
   </td>
   <td class="cell">
@@ -324,12 +324,48 @@
   </td>
   <td class="signature_col cell">
     <font>
+          <a href='#020010k1chY8zojgCHt4DEQ9hbdQ=='> getFilterParams (JsonObject, character, character, character, int64, int64)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* getFilterOnly */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#0200103JnxcPx/xKU9eIrPc3p0Ig=='> getFilterParams (JsonObject, character, character, QuerySortEntry[], character, int64, int64)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* getFilterParams */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
          INT64 <a href='#020010sdsBukMgmjPj3zSg1M+gcQ=='> getRecCount (character)</a>
     </font>
   </td>
   <td class="cell">
      
-/* updateData */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/* getFilterParams */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -383,7 +419,7 @@
   </td>
   <td class="cell">
      
-/******* Public *******/ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/******* Public | IService Methods *******/ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -437,7 +473,7 @@
   </td>
   <td class="cell">
      
-/* dispose */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/* getDataset */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -473,7 +509,7 @@
   </td>
   <td class="cell">
      
-/* postRowFill */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/* validateData */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -491,7 +527,7 @@
   </td>
   <td class="cell">
      
-/* readData */ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+/******* Public | Legacy CRUD+Submit (Create, Read, Update, Delete, Submit) *******/ <br> <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -1291,7 +1327,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getDataset </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1385,7 +1421,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getFilterParams </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1500,6 +1536,84 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="0200104f172yR+ppXEpKvy9jHE1g==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#0200104f172yR+ppXEpKvy9jHE1g=='> getFilterOnly (JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#0200104f172yR+ppXEpKvy9jHE1g=='> getFilterOnly (JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getCriteria </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poFilter</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010k1chY8zojgCHt4DEQ9hbdQ==" href="#Top">Top</a>
                 <a name="  <a href='#020010k1chY8zojgCHt4DEQ9hbdQ=='> getFilterParams (JsonObject, character, character, character, int64, int64)</a>"></a>
             </font>
@@ -1525,7 +1639,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getCriteria </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getFilterOnly </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1642,6 +1756,164 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="0200103JnxcPx/xKU9eIrPc3p0Ig==" href="#Top">Top</a>
+                <a name="  <a href='#0200103JnxcPx/xKU9eIrPc3p0Ig=='> getFilterParams (JsonObject, character, character, QuerySortEntry[], character, int64, int64)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#0200103JnxcPx/xKU9eIrPc3p0Ig=='> getFilterParams (JsonObject, character, character, QuerySortEntry[], character, int64, int64)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i> Inherited from <a href='Spark.Core.Service.SparkEntity.html'>Spark.Core.Service.SparkEntity</a> </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getFilterParams </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>poFilter</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcFilter</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcSortBy</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>poSortList</i>
+    </td>
+    <td>
+       QuerySortEntry
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcRecID</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>piStart</i>
+    </td>
+    <td>
+       INT64
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>piMaxRow</i>
+    </td>
+    <td>
+       INT64
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010sdsBukMgmjPj3zSg1M+gcQ==" href="#Top">Top</a>
                 <a name=" INT64 <a href='#020010sdsBukMgmjPj3zSg1M+gcQ=='> getRecCount (character)</a>"></a>
             </font>
@@ -1667,7 +1939,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* updateData </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getFilterParams </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2087,7 +2359,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* dispose </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getDataset </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2227,7 +2499,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* postRowFill </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* validateData </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2289,7 +2561,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* readData </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -3532,6 +3804,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">12.19.2018 14:49:30</font>
+    <font class="footer_timestamp">02.04.2019 11:29:00</font>
     </BODY>
 </HTML>
