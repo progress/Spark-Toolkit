@@ -26,7 +26,7 @@ do on error undo, throw:
     assign iStart = mtime.
 
     /* Stop the profiler for this request, if enabled. */
-    Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler().
+    Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler("request").
 
     /* Output the current ABLObjects report for this agent/session. */
     Spark.Diagnostic.Util.OEMetrics:Instance:PrepareSessionReports().

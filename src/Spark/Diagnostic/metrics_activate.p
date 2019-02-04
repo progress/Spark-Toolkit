@@ -29,7 +29,7 @@ do on error undo, throw:
     Spark.Diagnostic.Util.OEMetrics:Instance:StartTrackingObjects().
 
     /* Start the profiler for this request, if enabled. */
-    Spark.Diagnostic.Util.OEMetrics:Instance:StartProfiler().
+    Spark.Diagnostic.Util.OEMetrics:Instance:StartProfiler("request").
 
     if log-manager:logging-level ge 3 then
         message substitute("Elapsed: &1ms", (mtime - iStart)).

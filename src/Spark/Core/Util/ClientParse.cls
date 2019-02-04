@@ -1,5 +1,5 @@
 using Progress.Json.ObjectModel.* from propath.
-using Spark.Core.Util.ApplicationError from propath.
+using Spark.Core.BusinessLogic.QuerySortEntry from propath.
 
 block-level on error undo, throw.
 
@@ -52,6 +52,10 @@ class Spark.Core.Util.ClientParse implements Spark.Core.Util.IClientParse:
         return (new JsonArray()).
     end method. /* getRawCriteria */
 
+    method public character buildWherePhrase ( input poFilter as JsonObject ):
+        return string(poFilter:GetJsonText()).
+    end method. /* buildWherePhrase */
+
     method public character buildSortPhrase ( input pcOrderBy as character ):
         return substitute(" by &1", pcOrderBy).
     end method. /* buildSortPhrase */
@@ -60,8 +64,14 @@ class Spark.Core.Util.ClientParse implements Spark.Core.Util.IClientParse:
         return string(poOptions:GetJsonText()).
     end method. /* buildSortPhrase */
 
-    method public character buildWherePhrase ( input poFilter as JsonObject ):
-        return string(poFilter:GetJsonText()).
-    end method. /* buildWherePhrase */
+    method public QuerySortEntry extent buildSortEntries ( input pcOrderBy as character ):
+        define variable oSortList as QuerySortEntry extent no-undo.
+        return oSortList.
+    end method. /* buildSortPhrase */
+
+    method public Spark.Core.BusinessLogic.QuerySortEntry extent buildSortEntries ( input poOptions as JsonArray ):
+        define variable oSortList as QuerySortEntry extent no-undo.
+        return oSortList.
+    end method. /* buildSortPhrase */
 
 end class.

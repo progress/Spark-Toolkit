@@ -208,7 +208,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         define variable oHttpResp    as IHttpResponse no-undo.
         define variable oCredentials as Credentials   no-undo.
 
-        Assert:NotNullOrEmpty(pcRequestURI). /* Must have a URL! */
+        if (pcRequestURI gt "") ne true then
+            undo, throw new AppError("No request URI provided.", 0).
 
         /* Report which endpoint is being access, with verb and payload (if available). */
         oLogger:Debug(substitute("Invoking: &1 &2 &3", poHttpMethod:ToString(), pcRequestURI)).
@@ -271,7 +272,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         define variable cCommand    as character no-undo.
         define variable iTime       as integer   no-undo.
 
-        Assert:NotNullOrEmpty(pcQueryPath). /* Must have a query! */
+        if (pcQueryPath gt "") ne true then
+            undo, throw new AppError("No query path provided.", 0).
 
         assign iTime = mtime. /* Each request should be timestamped. */
         assign cBinaryPath = substitute("&1/bin/&2", this-object:CatalinaBase, OEJMXBinary). /* oejmx.[bat|sh] */
@@ -480,7 +482,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         end. /* oejmx */
         else if this-object:MetricSource eq "oemanager" then
         do on error undo, throw:
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
@@ -552,7 +555,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         end. /* oejmx */
         else if this-object:MetricSource eq "oemanager" then
         do on error undo, throw:
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
@@ -592,7 +596,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             input plEnable  as logical ):
         define variable lSuccess as logical no-undo initial false.
 
-        Assert:NonZero(piAgentID).
+        if piAgentID le 0 or piAgentID eq ? then return false.
 
         if this-object:MetricSource eq "oejmx" then
         do on error undo, throw:
@@ -632,7 +636,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable oRequest    as JsonObject no-undo.
             define variable oData       as JsonObject no-undo.
 
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             /* Set the base URL to get information for a specific agent. */
             assign cRequestURI = substitute("&1&2&3&4",
@@ -664,7 +669,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
         /* Report the result of the previous request. */
         oLogger:Debug(substitute("trackABLObjects (&1): &2 = &3",
-                                piAgentID, trim(string(plEnable, "enabled/disabled")), lSuccess)).
+                                 piAgentID, trim(string(plEnable, "enabled/disabled")), lSuccess)).
 
         return lSuccess. /* Return the value from the tracking request. */
 
@@ -678,7 +683,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     method public logical TrackingABLObjects ( input piAgentID as integer ):
         define variable lSuccess as logical no-undo initial false.
 
-        Assert:NonZero(piAgentID).
+        if piAgentID le 0 or piAgentID eq ? then return false.
 
         if this-object:MetricSource eq "oejmx" then
         do on error undo, throw:
@@ -716,7 +721,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
 
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             /* Build the initial URL, to obtain the tracking flag. */
             assign cRequestURI = substitute("&1&2&3&4",
@@ -753,7 +759,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                               output poRequests as JsonArray ):
         define variable oResult as JsonObject no-undo.
 
-        Assert:NonZero(piAgentID).
+        if piAgentID le 0 or piAgentID eq ? then return false.
 
         if this-object:MetricSource eq "oejmx" then
         do on error undo, throw:
@@ -791,7 +797,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
 
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             /* Build the initial URL, to obtain the tracking flag. */
             assign cRequestURI = substitute("&1&2&3",
@@ -837,7 +844,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         define variable cSessionID  as character  no-undo.
         define variable ix          as integer    no-undo.
 
-        Assert:NonZero(piAgentID).
+        if piAgentID le 0 or piAgentID eq ? then return false.
 
         /* Leave a quick note about what is being built, and with any exceptions. */
         oLogger:Debug(substitute("Reporting ABLObjects for Agent #&1, excluding: &2", piAgentID, pcExclude)).
@@ -888,7 +895,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
 
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             /* Build the initial URL, to obtain ABLObjects report. */
             assign cRequestURI = substitute("&1&2&3&4",
@@ -959,8 +967,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         define variable oABLOutput  as JsonObject no-undo.
         define variable oABLObjects as JsonObject no-undo.
 
-        Assert:NonZero(piAgentID).
-        Assert:NonZero(piSessionID).
+        if piAgentID le 0 or piAgentID eq ? then return false.
+        if piSessionID le 0 or piSessionID eq ? then return false.
 
         /* Leave a quick note about what is being built, and with any exceptions. */
         oLogger:Debug(substitute("Reporting ABLObjects for Agent #&1, Session #&2, excluding: &3",
@@ -1009,7 +1017,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable cRequestURI as character  no-undo.
             define variable oRequest    as JsonObject no-undo.
 
-            Assert:NotNullOrEmpty(this-object:InstanceURI).
+            if (this-object:InstanceURI gt "") ne true then
+                undo, throw new AppError("No instance URI provided.", 0).
 
             /* Build the initial URL, to obtain ABLObjects report. */
             assign cRequestURI = substitute("&1&2&3&4",
