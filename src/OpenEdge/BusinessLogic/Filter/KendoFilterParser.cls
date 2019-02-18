@@ -1,5 +1,5 @@
 /* *************************************************************************************************************************
-Copyright (c) 2018 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
+Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : KendoFilterParser
@@ -26,6 +26,7 @@ using OpenEdge.BusinessLogic.QueryGroup.
 using OpenEdge.BusinessLogic.QueryOperatorHelper.
 using OpenEdge.BusinessLogic.QueryPredicate.
 using OpenEdge.Core.String.
+using OpenEdge.Core.StringConstant.
 using Progress.Json.ObjectModel.JsonArray.
 using Progress.Json.ObjectModel.JsonConstruct.
 using Progress.Json.ObjectModel.JsonDataType.
@@ -56,16 +57,15 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
        @param P.L.Object The filter/where clause data
        @return IQueryEntry The query entry.We return one of an IQueryPredicate (single clause) 
                            or an IQueryGroup (many clauses) */
-    method override public IQueryEntry ParseWhere(input pWhere as Progress.Lang.Object):    
+    method override public IQueryEntry ParseWhere(input pWhere as Progress.Lang.Object):
     end method.
     
     /* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects.
        
        @param P.L.Object The SORT-BY data
        @return IQuerySortEntry[] An array of sort phrases. An indeterminate array is returned if the input phrase is empty */
-    method override public IQuerySortEntry extent ParseSortBy(input pSortBy as Progress.Lang.Object):    
+    method override public IQuerySortEntry extent ParseSortBy(input pSortBy as Progress.Lang.Object):
     end method.
-    
     
     /* Reads and processes (parses) the filter.  
        
@@ -126,7 +126,8 @@ filter: [
                and jsonFilter:GetType('filters':u) eq JsonDataType:ARRAY
             then
                 assign filters   = jsonFilter:GetJsonArray('filters':u)
-                       groupJoin = JoinEnum:And     //default join
+                       //default join
+                       groupJoin = JoinEnum:And
                        .
             else
             do:
@@ -141,13 +142,13 @@ filter: [
         end.
         else
             assign filters = cast(pData, JsonArray).
-                   .
-        // for all kinds    
-        assign dataRequest                  = new GetDataRequest(1)     // this is a single-table object for now
+        
+        // for all kinds
+        // this is a single-table object for now
+        assign dataRequest                  = new GetDataRequest(1)
                tableRequest                 = new GetDataTableRequest(FilterTable[1])
                dataRequest:TableRequests[1] = tableRequest
                
-////               
                cnt                          = filters:Length
                qryDef                       = new QueryDefinition()
                tableRequest:QueryDefinition = qryDef
@@ -164,8 +165,8 @@ filter: [
                    joinAs     = groupJoin
                    .
             // we need a name
-            if     not jsonFilter:Has('name':u)
-               and not jsonFilter:GetType('name':u) eq JsonDataType:STRING
+            if    not jsonFilter:Has('name':u)
+               or not jsonFilter:GetType('name':u) eq JsonDataType:STRING
             then
                 next.
             
@@ -177,16 +178,16 @@ filter: [
                                                 jsonFilter:GetCharacter('name':u)), 0).
                 
                 when JsonDataType:NULL then
-                    assign fieldValue = new OpenEdge.Core.String(string(?)).
+                    assign fieldValue = new OpenEdge.Core.String(StringConstant:UNKNOWN).
                 
                 // we don't at this point know what the underlying schmema and data type are, so stringify it all
                 otherwise
                     assign fieldValue = new OpenEdge.Core.String(jsonFilter:GetJsonText('value':u)).
             end case.
             
-            //operator 
-            if     not jsonFilter:Has('operator':u)
-               and not jsonFilter:GetType('operator':u) eq JsonDataType:STRING
+            //operator
+            if    not jsonFilter:Has('operator':u)
+               or not jsonFilter:GetType('operator':u) eq JsonDataType:STRING
             then
                 next.
             
@@ -194,11 +195,11 @@ filter: [
             case charValue:
                 when 'isnull':u then
                     assign operator   = QueryOperatorEnum:Eq
-                           fieldValue = new OpenEdge.Core.String(string(?))  
+                           fieldValue = new OpenEdge.Core.String(StringConstant:UNKNOWN)  
                            .
                 when 'isnotnull':u then
                     assign operator   = QueryOperatorEnum:Ne
-                           fieldValue = new OpenEdge.Core.String(string(?))
+                           fieldValue = new OpenEdge.Core.String(StringConstant:UNKNOWN)
                            .
                 when 'isempty':u then
                     assign operator   = QueryOperatorEnum:Eq

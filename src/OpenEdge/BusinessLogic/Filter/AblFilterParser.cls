@@ -52,19 +52,19 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
     
     /* Constructor.
        
-       @param character (mandatory) A table name for which to construct the filter */
+       @param longchar (mandatory) A table name for which to construct the filter */
     constructor public AblFilterParser(input pTable as character):
         super(pTable).
     end constructor.
     
     /* Constructor.
        
-       @param character[] (mandatory) An array of table name for which to construct the filter */
+       @param longchar[] (mandatory) An array of table name for which to construct the filter */
     constructor public AblFilterParser(input pTable as character extent):
         super(pTable).
     end constructor.
     
-    method protected IQuerySortEntry extent ParseSortString(input pSortBy as character):
+    method protected IQuerySortEntry extent ParseSortString(input pSortBy as longchar):
         define variable querySortEntry as  IQuerySortEntry extent no-undo.
         define variable sortOrder as SortOrderEnum no-undo.
         define variable sortDirection as character no-undo.
@@ -96,8 +96,8 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         
         return querySortEntry.
     end method.
-
-    method protected IQueryEntry ParseWhereString(input pWhere as character):
+    
+    method protected IQueryEntry ParseWhereString(input pWhere as longchar):
         define variable qryGroup as QueryGroup no-undo.
         define variable parentGroup as QueryGroup no-undo.
         define variable groupStack as ObjectStack no-undo.
@@ -471,6 +471,26 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         return qryEntry.
     end method.
     
+    /* Reads and processes (parses) a complete data filter.
+       
+       @param longchar The filter data
+       @param IGetDataRequest A new filter object 
+    method override public IGetDataRequest Parse(input pData as longchar):
+        define variable dataRequest as GetDataRequest no-undo.
+        define variable qryDef as QueryDefinition no-undo.
+        define variable tableRequest as GetDataTableRequest no-undo.
+        
+        assign dataRequest                       = new GetDataRequest(1)
+               tableRequest                      = new GetDataTableRequest(FilterTable[1])
+               dataRequest:TableRequests[1]      = tableRequest
+               qryDef                            = new QueryDefinition()
+               tableRequest:QueryDefinition      = qryDef
+               qryDef:QuerySelection             = ParseWhereString(string(pData))
+               .
+        return cast(dataRequest, IGetDataRequest).
+    end method.
+       */
+    
     /* Reads and processes (parses) the filter.
        
        @param P.L.Object The filter data
@@ -491,14 +511,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             
             when type-of(pData, ICharacterHolder) or
             when type-of(pData, ILongcharHolder) then
-                assign extent(stringData)                = 1
-                       extent(dataRequest:TableRequests) = 1
-                       stringData[1]                     = dynamic-property(pData, 'Value':u) 
+                assign dataRequest                       = new GetDataRequest(1)
                        tableRequest                      = new GetDataTableRequest(FilterTable[1])
                        dataRequest:TableRequests[1]      = tableRequest
                        qryDef                            = new QueryDefinition()
                        tableRequest:QueryDefinition      = qryDef
-                       qryDef:QuerySelection             = ParseWhereString(string(stringData[1]))
+                       qryDef:QuerySelection             = ParseWhereString(dynamic-property(pData, 'Value':u))
                        .
             
             when type-of(pData, ICharacterArrayHolder) or
