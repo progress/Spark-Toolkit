@@ -13,9 +13,9 @@
 
 using Progress.Json.ObjectModel.* from propath.
 using Ccs.BusinessLogic.* from propath.
+using OpenEdge.BusinessLogic.* from propath.
 using OpenEdge.BusinessLogic.Filter.FilterParser from propath.
 using OpenEdge.BusinessLogic.Filter.FilterParserBuilder from propath.
-using Spark.Core.BusinessLogic.* from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
@@ -105,7 +105,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         define variable hDataSet      as handle          no-undo.
         define variable oFilterParser as FilterParser    no-undo.
         define variable oSortList     as QuerySortEntry  no-undo extent.
-        define variable oDataRequest  as GetDataRequest  no-undo.
+        define variable oDataRequest  as IGetDataRequest no-undo.
 
         if not valid-handle(ProDataSet) then
             undo, throw new Progress.Lang.AppError("Warning: ProDataSet handle is not available.", 0).
@@ -123,52 +123,52 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
                                      output iMaxRows ).
 
         /* This will be the new way, once the FilterParser works as expected. */
-/*        if oFilter:Has("mappingType") and oFilter:GetType("mappingType") eq JsonDataType:string then     */
-/*            assign oFilterParser = FilterParserBuilder:Build(oFilter:GetCharacter("mappingType")):Parser.*/
-/*        else if oFilter:Has("client") and oFilter:GetType("client") eq JsonDataType:string then          */
-/*            case oFilter:GetCharacter("client"):                                                         */
-/*                when "Kendo" or                                                                          */
-/*                when "KendoUI" then                                                                      */
-/*                    /* Parse from KendoUI criteria object passed as filter data. */                      */
-/*                    assign oFilterParser = FilterParserBuilder:Build("KENDO"):Parser.                    */
-/*            end case.                                                                                    */
-/*        else                                                                                             */
-/*            assign oFilterParser = FilterParserBuilder:Build(oFilter):Parser.                            */
+        if oFilter:Has("mappingType") and oFilter:GetType("mappingType") eq JsonDataType:string then
+            assign oFilterParser = FilterParserBuilder:Build(oFilter:GetCharacter("mappingType")):Parser.
+        else if oFilter:Has("client") and oFilter:GetType("client") eq JsonDataType:string then
+            case oFilter:GetCharacter("client"):
+                when "Kendo" or
+                when "KendoUI" then
+                    /* Parse from KendoUI criteria object passed as filter data. */
+                    assign oFilterParser = FilterParserBuilder:Build("KENDO"):Parser.
+            end case.
+        else
+            assign oFilterParser = FilterParserBuilder:Build(oFilter):Parser.
 
-/*        if valid-object(oFilterParser) then                                          */
-/*            assign oDataRequest = cast(oFilterParser:Parse(oFilter), GetDataRequest).*/
+        if valid-object(oFilterParser) then
+            assign oDataRequest = oFilterParser:Parse(oFilter).
 
         /* @TODO: Remove this once the FilterParser pattern is established and working. */
-        do on error undo, throw:
-            /* Prepare data structures for use with CCS BE class methods. */
-            define variable oTableRequest as GetDataTableRequest no-undo.
-            define variable oDefinedQuery as QueryDefinition     no-undo.
-            define variable oQueryEntry   as QueryEntry          no-undo.
-
-            assign oDataRequest = new GetDataRequest().
-            assign oDefinedQuery = new QueryDefinition().
-            assign oQueryEntry = new QueryEntry().
-            assign oTableRequest = new GetDataTableRequest().
-
-            assign oQueryEntry:Join = Ccs.BusinessLogic.JoinEnum:None.
-            assign oDefinedQuery:QuerySelection = oQueryEntry.
-
-            extent(oDefinedQuery:QuerySort) = extent(oSortList).
-            assign oDefinedQuery:QuerySort = oSortList.
-
-            assign
-                oTableRequest:QueryString     = cFilter
-                oTableRequest:QueryDefinition = oDefinedQuery
-                oTableRequest:PagingContext   = cRecID
-                oTableRequest:Skip            = iStartRow
-                oTableRequest:NumRecords      = iMaxRows
-                oTableRequest:TableName       = ProDataSet:get-buffer-handle(1):name
-                .
-
-            /* @TODO: Make this work with more than just a single table. */
-            extent(oDataRequest:TableRequests) = 1.
-            oDataRequest:TableRequests[1] = oTableRequest.
-        end. /* do */
+/*        do on error undo, throw:                                                    */
+/*            /* Prepare data structures for use with CCS BE class methods. */        */
+/*            define variable oTableRequest as GetDataTableRequest no-undo.           */
+/*            define variable oDefinedQuery as QueryDefinition     no-undo.           */
+/*            define variable oQueryEntry   as QueryEntry          no-undo.           */
+/*                                                                                    */
+/*            assign oDataRequest = new GetDataRequest().                             */
+/*            assign oDefinedQuery = new QueryDefinition().                           */
+/*            assign oQueryEntry = new QueryEntry().                                  */
+/*            assign oTableRequest = new GetDataTableRequest().                       */
+/*                                                                                    */
+/*            assign oQueryEntry:Join = Ccs.BusinessLogic.JoinEnum:None.              */
+/*            assign oDefinedQuery:QuerySelection = oQueryEntry.                      */
+/*                                                                                    */
+/*            extent(oDefinedQuery:QuerySort) = extent(oSortList).                    */
+/*            assign oDefinedQuery:QuerySort = oSortList.                             */
+/*                                                                                    */
+/*            assign                                                                  */
+/*                oTableRequest:QueryString     = cFilter                             */
+/*                oTableRequest:QueryDefinition = oDefinedQuery                       */
+/*                oTableRequest:PagingContext   = cRecID                              */
+/*                oTableRequest:Skip            = iStartRow                           */
+/*                oTableRequest:NumRecords      = iMaxRows                            */
+/*                oTableRequest:TableName       = ProDataSet:get-buffer-handle(1):name*/
+/*                .                                                                   */
+/*                                                                                    */
+/*            /* @TODO: Make this work with more than just a single table. */         */
+/*            extent(oDataRequest:TableRequests) = 1.                                 */
+/*            oDataRequest:TableRequests[1] = oTableRequest.                          */
+/*        end. /* do */                                                               */
 
         /* Utilizes the method as expected by the CCS IBusinessEntity interface. */
         if valid-object(oDataRequest) then
@@ -428,7 +428,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         hQuery:set-buffers(phTable).
         hQuery:query-prepare(substitute("preselect each &1 &2", phTable:name, pcFilter)).
         hQuery:query-open.
-        assign iCount = hQuery:num-results.        
+        assign iCount = hQuery:num-results.
 
         finally:
             if valid-handle(hQuery) then
@@ -686,7 +686,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
         assign /* Create the main response, and the count object to be held within. */
             oResponse = new GetResultCountResponse()
-            oCount    = new GetTableResultCountResponse()
+            oCount    = new GetTableResultCountResponse(poRequest:TableRequests[1]:TableName)
             .
 
         /**

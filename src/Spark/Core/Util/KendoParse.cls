@@ -1,5 +1,5 @@
 using Progress.Json.ObjectModel.* from propath.
-using Spark.Core.BusinessLogic.QuerySortEntry from propath.
+using OpenEdge.BusinessLogic.QuerySortEntry from propath.
 using Spark.Core.Util.ClientParse from propath.
 
 block-level on error undo, throw.
@@ -208,11 +208,9 @@ class Spark.Core.Util.KendoParse inherits ClientParse:
                 assign hField = getFieldBuffer(oSortObj:GetCharacter("field")).
                 if valid-handle(hField) then do:
                     /* Add a new sort entry object with field and direction. */
-                    oSortList[iX] = new QuerySortEntry().
-                    oSortList[iX]:FieldName = hField:name.
-                    oSortList[iX]:SortOrder = if oSortObj:GetCharacter("dir") eq "asc"
-                                              then Ccs.BusinessLogic.SortOrderEnum:Ascending
-                                              else Ccs.BusinessLogic.SortOrderEnum:Descending.
+                    oSortList[iX] = new QuerySortEntry(hField:name, if oSortObj:GetCharacter("dir") eq "asc"
+                                                                    then Ccs.BusinessLogic.SortOrderEnum:Ascending
+                                                                    else Ccs.BusinessLogic.SortOrderEnum:Descending).
                 end. /* valid-handle */
             end. /* do iX */
         end. /* valid-object */

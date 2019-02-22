@@ -1,5 +1,5 @@
 using Progress.Json.ObjectModel.* from propath.
-using Spark.Core.BusinessLogic.QuerySortEntry from propath.
+using OpenEdge.BusinessLogic.QuerySortEntry from propath.
 using Spark.Core.Util.ClientParse from propath.
 
 block-level on error undo, throw.
@@ -34,20 +34,13 @@ class Spark.Core.Util.JFPParse inherits ClientParse:
 
         if pcOrderBy gt "" then do:
             extent(oSortList) = 1.
-            oSortList[1] = new QuerySortEntry().
 
             /* @TODO: This needs to be tested more fully. */
             assign pcOrderBy = this-object:buildSortPhrase(pcOrderBy).
             if index(pcOrderBy, " desc") gt 0 then
-                assign
-                    oSortList[1]:FieldName = entry(1, pcOrderBy, " ")
-                    oSortList[1]:SortOrder = Ccs.BusinessLogic.SortOrderEnum:Descending
-                    .
+                oSortList[1] = new QuerySortEntry(entry(1, pcOrderBy, " "), Ccs.BusinessLogic.SortOrderEnum:Descending).
             else
-                assign
-                    oSortList[1]:FieldName = pcOrderBy
-                    oSortList[1]:SortOrder = Ccs.BusinessLogic.SortOrderEnum:Ascending
-                    .
+                oSortList[1] = new QuerySortEntry(pcOrderBy, Ccs.BusinessLogic.SortOrderEnum:Ascending).
         end.
 
         return oSortList.

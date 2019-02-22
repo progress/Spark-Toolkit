@@ -1,5 +1,5 @@
 using Progress.Json.ObjectModel.* from propath.
-using Spark.Core.BusinessLogic.QuerySortEntry from propath.
+using OpenEdge.BusinessLogic.QuerySortEntry from propath.
 
 block-level on error undo, throw.
 
@@ -69,7 +69,7 @@ class Spark.Core.Util.ClientParse implements Spark.Core.Util.IClientParse:
         return oSortList.
     end method. /* buildSortPhrase */
 
-    method public Spark.Core.BusinessLogic.QuerySortEntry extent buildSortEntries ( input poOptions as JsonArray ):
+    method public OpenEdge.BusinessLogic.QuerySortEntry extent buildSortEntries ( input poOptions as JsonArray ):
         define variable oSortList as QuerySortEntry extent no-undo.
         return oSortList.
     end method. /* buildSortPhrase */

@@ -68,7 +68,7 @@ class OpenEdge.BusinessLogic.QueryDefinition implements IQueryDefinition:
         end.
         assign qrySort = qrySort + ']':u.
         
-        return substitute('selection:&1; sort:&2',
+        return substitute('selection: &1; sort: &2',
                 (if valid-object(this-object:QuerySelection) then this-object:QuerySelection:ToString() else ?),
                 qrySort ).
     end method.
