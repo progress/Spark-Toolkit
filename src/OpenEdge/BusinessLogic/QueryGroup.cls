@@ -18,6 +18,7 @@ using Ccs.BusinessLogic.JoinEnum.
 using OpenEdge.Core.Assert.
 
 class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup:
+
     /* Returns the array of query predicates and nested query groups */
     define public property Entries as IQueryEntry extent no-undo get. set.
     

@@ -23,6 +23,7 @@ using Progress.Json.ObjectModel.JsonDataType.
 using Progress.Json.ObjectModel.JsonArray.
 
 class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
+
     /* (mandatory) The filter pattern for which we create the Parser */
     define public property FilterPattern as character no-undo
         get.
@@ -188,7 +189,7 @@ class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
         
         return parser.
     end method.
-    
+
     /* Sets the table for which this filter applies, if any
        
        @param character A table name for this filter

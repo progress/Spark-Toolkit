@@ -20,7 +20,8 @@ using Ccs.Common.Support.IPrimitiveHolder.
 using OpenEdge.Core.Assert.
 using OpenEdge.Core.AssertionFailedError.
 
-class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate: 
+class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate:
+
     /* Returns the name of the field for this query predicate */
     define public property FieldName as character no-undo 
         get.
