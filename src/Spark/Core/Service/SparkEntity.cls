@@ -143,10 +143,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             /* Assume filtering on the top temp-table name (used for schema info as well). */
             assign this-object:TopTableName = ProDataSet:get-top-buffer(1):name.
             oFilterBuilder:TableName(this-object:TopTableName).
-
-            if oFilterBuilder:FilterPattern eq "kendo" then
-                cast(oFilterBuilder:Parser, KendoFilterParser):ProDataSet = ProDataSet.
-
             assign oDataRequest = oFilterBuilder:Parser:Parse(oFilter).
         end.
 

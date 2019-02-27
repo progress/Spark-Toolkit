@@ -37,10 +37,6 @@ using Progress.Lang.AppError.
 
 class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
 
-    define public property ProDataSet as handle no-undo
-        get.
-        set.
-
     /* Default constructor */
     constructor public KendoFilterParser ():
         super().
@@ -59,186 +55,6 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
     constructor public KendoFilterParser (input pTable as character extent):
         super(pTable).
     end constructor.
-
-    /***** Start Carry-Over from Spark KendoParse *****/
-
-    method private handle getFieldBuffer ( input pcWebFieldName as character ):
-        define variable bhTable as handle  no-undo.
-        define variable bhField as handle  no-undo.
-        define variable ix      as integer no-undo.
-
-        /* Return the datatype of the field, if it exists. */
-        if valid-handle(ProDataSet) then
-            assign bhTable = ProDataSet:get-buffer-handle(1) no-error. /* Get top table. */
-        else
-            undo, throw new Progress.Lang.AppError("Invalid or unset handle to ProDataSet.").
-
-        if valid-handle(bhTable) then do:
-            do ix = 1 to bhTable:num-fields:
-                assign bhField = bhTable:buffer-field(ix) no-error.
-                /* Web-based field matches real name or serialized name. */
-                if valid-handle(bhField) then do:
-                    if bhField:name eq pcWebFieldName or
-                       bhField:serialize-name eq pcWebFieldName then
-                        return bhField.
-                    else
-                        delete object bhField no-error.
-                end. /* valid-handle */
-            end. /* do ix */
-        end. /* valid-handle */
-
-        return ?. /* Return ? to indicate field is not in temp-table. */
-
-        finally:
-            delete object bhTable no-error.
-            delete object bhField no-error.
-        end finally.
-    end method. /* getFieldBuffer */
-
-    method private character getMapping ( input pcKendoOperator as character,
-                                          input pcFieldDataType as character ):
-        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.operator */
-        define variable cTemplate as character no-undo.
-
-        case pcKendoOperator:
-            when "equals":u or
-            when "eq":u then
-                if pcFieldDataType eq "character" then
-                    assign cTemplate = '&1 eq "&2"':u.
-                else
-                    assign cTemplate = '&1 eq &2':u.
-            when "ne":u or
-            when "neq":u then
-                if pcFieldDataType eq "character" then
-                    assign cTemplate = '&1 ne "&2"':u.
-                else
-                    assign cTemplate = '&1 ne &2':u.
-            when "lt":u then
-                assign cTemplate = '&1 lt &2':u.
-            when "lte":u then
-                assign cTemplate = '&1 le &2':u.
-            when "gt":u then
-                assign cTemplate = '&1 gt &2':u.
-            when "gte":u then
-                assign cTemplate = '&1 ge &2':u.
-            when "startswith":u then
-                assign cTemplate = '&1 begins "&2"':u.
-            when "contains":u then
-                assign cTemplate = '&1 matches "*&2*"':u.
-            when "doesnotcontain":u then
-                assign cTemplate = 'not (&1 matches "*&2*")':u.
-            when "endswith":u then
-                assign cTemplate = '&1 matches "*&2"':u.
-            otherwise
-                undo, throw new Progress.Lang.AppError("Unknown operator for filter.":u, 0).
-        end.
-
-        return cTemplate.
-    end method. /* getMapping */
-
-    method private JsonArray getFilters ( input poFilter as JsonObject ):
-        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.filters */
-        if valid-object(poFilter) and poFilter:Has("filters") and
-           poFilter:GetType("filters") eq JsonDataType:array then
-            return poFilter:GetJsonArray("filters").
-
-        return (new JsonArray()).
-    end method. /* getFilters */
-
-    method private character buildClause ( input poClause as JsonObject ):
-        define variable hField   as handle     no-undo.
-        define variable cClause  as character  no-undo.
-        define variable cMapping as character  no-undo.
-        define variable cField   as character  no-undo.
-        define variable cOper    as character  no-undo.
-        define variable cType    as character  no-undo.
-
-        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.field */
-        assign
-            hField  = this-object:getFieldBuffer(poClause:GetCharacter("field"))
-            cOper   = poClause:GetCharacter("operator")
-            no-error.
-
-        if not valid-handle(hField) then return "".
-
-        assign
-            cField = hField:name
-            cType  = hField:data-type
-            no-error.
-
-        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.value */
-        assign cMapping = this-object:getMapping(cOper, cType) no-error.
-        case cType:
-            when "character":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetCharacter("value")).
-            when "date":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetDate("value")).
-            when "datetime":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetDatetime("value")).
-            when "datetime-tz":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetDatetimeTZ("value")).
-            when "decimal":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetDecimal("value")).
-            when "integer":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetInteger("value")).
-            when "logical":u then
-                assign cClause = substitute(cMapping, cField, poClause:GetLogical("value")).
-        end.
-
-        return cClause.
-    end method. /* buildClause */
-
-    method private character buildWherePhrase ( input pcWhere  as character,
-                                                input poFilter as JsonObject ):
-        define variable oFilters as JsonArray  no-undo.
-        define variable oClause  as JsonObject no-undo.
-        define variable cClause  as character  no-undo initial "".
-        define variable cLogic   as character  no-undo initial "and".
-        define variable ix       as integer    no-undo.
-
-        if poFilter eq ? or not valid-object(poFilter) then return "".
-
-        assign oFilters = getFilters(poFilter). /* Obtain initial filters array. */
-
-        if not valid-object(oFilters) or oFilters:length eq 0 then return pcWhere.
-
-        /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.logic */
-        if poFilter:Has("logic") then
-            assign cLogic = poFilter:GetCharacter("logic").
-
-        filterblk:
-        do ix = 1 to oFilters:Length:
-            oClause = oFilters:GetJsonObject(ix).
-
-            /* No point in creating a group for a single-clause filter, just promote object. */
-            if oClause:Has("logic") and oClause:Has("filters") and
-               oClause:GetType("filters") eq JsonDataType:array and
-               oClause:GetJsonArray("filters"):length eq 1 then
-                oClause = oClause:GetJsonArray("filters"):GetJsonObject(1).
-
-            if oClause:Has("logic") then
-                assign cClause = this-object:buildWherePhrase("", oClause).
-            else
-                assign cClause = this-object:buildClause(oClause).
-
-            if (cClause gt "") eq true then do:
-                if (pcWhere gt "") eq true then
-                    assign pcWhere = substitute("&1 &2 &3",
-                                                pcWhere, cLogic, cClause).
-                else
-                    assign pcWhere = cClause.
-            end.
-        end.
-
-        return substitute("(&1)", trim(pcWhere)).
-
-        finally:
-            delete object oFilters no-error.
-            delete object oClause  no-error.
-        end finally.
-    end method. /* buildWherePhrase */
-
-    /***** End Carry-Over from Spark KendoParse *****/
 
     method protected IQueryEntry ParsePredicate (input pJoin as JoinEnum,
                                                  input pFilter as JsonObject):
@@ -390,7 +206,6 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
     method override public IQuerySortEntry extent ParseSortBy (input pSortBy as Progress.Lang.Object):
         define variable oSortEntry as QuerySortEntry no-undo extent.
         define variable oSortObj   as JsonObject     no-undo.
-        define variable hField     as handle         no-undo.
         define variable iX         as integer        no-undo.
 
         if not valid-object(pSortBy) or not type-of(pSortBy, JsonConstruct) then
@@ -405,13 +220,10 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
 
             do iX = 1 to cast(pSortBy, JsonArray):length:
                 assign oSortObj = cast(pSortBy, JsonArray):GetJsonObject(iX).
-                assign hField = this-object:getFieldBuffer(oSortObj:GetCharacter("field":u)).
-                if valid-handle(hField) then do:
-                    /* Add a new sort entry object with field and direction. */
-                    oSortEntry[iX] = new QuerySortEntry(hField:name, if oSortObj:GetCharacter("dir":u) eq "asc":u
-                                                                     then Ccs.BusinessLogic.SortOrderEnum:Ascending
-                                                                     else Ccs.BusinessLogic.SortOrderEnum:Descending).
-                end. /* valid-handle */
+                /* Add a new sort entry object with field and direction. */
+                oSortEntry[iX] = new QuerySortEntry(oSortObj:GetCharacter("field":u), if oSortObj:GetCharacter("dir":u) eq "asc":u
+                                                                                      then Ccs.BusinessLogic.SortOrderEnum:Ascending
+                                                                                      else Ccs.BusinessLogic.SortOrderEnum:Descending).
             end. /* do iX */
         end. /* valid-object */
 
