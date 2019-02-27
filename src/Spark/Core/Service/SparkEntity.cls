@@ -14,8 +14,7 @@
 using Progress.Json.ObjectModel.* from propath.
 using Ccs.BusinessLogic.* from propath.
 using OpenEdge.BusinessLogic.* from propath.
-using OpenEdge.BusinessLogic.Filter.FilterParser from propath.
-using OpenEdge.BusinessLogic.Filter.FilterParserBuilder from propath.
+using OpenEdge.BusinessLogic.Filter.* from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
@@ -69,6 +68,8 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     define protected variable DataSourceArray as handle    no-undo extent.
     define protected variable SkipListArray   as character no-undo extent.
 
+    define protected variable TopTableName as character no-undo.
+
     /***** Public | Properties, Constructor, Destructor *****/
 
     /* Hold non-fatal messages for output (as determined by interface for class access). */
@@ -95,17 +96,17 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     /***** Protected *****/
 
     method protected int64 filterData ( input pcFilter as character ):
-        define variable oFilter       as JsonObject      no-undo.
-        define variable cFilter       as character       no-undo initial "".
-        define variable cRecID        as character       no-undo initial "".
-        define variable cSortBy       as character       no-undo initial "".
-        define variable cTableName    as character       no-undo initial "".
-        define variable iMaxRows      as int64           no-undo initial ?.
-        define variable iStartRow     as int64           no-undo initial ?.
-        define variable hDataSet      as handle          no-undo.
-        define variable oFilterParser as FilterParser    no-undo.
-        define variable oSortList     as QuerySortEntry  no-undo extent.
-        define variable oDataRequest  as IGetDataRequest no-undo.
+        define variable oFilter        as JsonObject          no-undo.
+        define variable cFilter        as character           no-undo initial "".
+        define variable cRecID         as character           no-undo initial "".
+        define variable cSortBy        as character           no-undo initial "".
+        define variable cTableName     as character           no-undo initial "".
+        define variable iMaxRows       as int64               no-undo initial ?.
+        define variable iStartRow      as int64               no-undo initial ?.
+        define variable hDataSet       as handle              no-undo.
+        define variable oFilterBuilder as FilterParserBuilder no-undo.
+        define variable oSortList      as QuerySortEntry      no-undo extent.
+        define variable oDataRequest   as IGetDataRequest     no-undo.
 
         if not valid-handle(ProDataSet) then
             undo, throw new Progress.Lang.AppError("Warning: ProDataSet handle is not available.", 0).
@@ -122,53 +123,32 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
                                      output iStartRow,
                                      output iMaxRows ).
 
-        /* This will be the new way, once the FilterParser works as expected. */
+        /* Firstm, check an obvious mapping type as provided by the client (easiest detection). */
         if oFilter:Has("mappingType") and oFilter:GetType("mappingType") eq JsonDataType:string then
-            assign oFilterParser = FilterParserBuilder:Build(oFilter:GetCharacter("mappingType")):Parser.
+            assign oFilterBuilder = FilterParserBuilder:Build(oFilter:GetCharacter("mappingType")).
         else if oFilter:Has("client") and oFilter:GetType("client") eq JsonDataType:string then
+            /* Next, try checking for any given "client" type and parse using that value. */
             case oFilter:GetCharacter("client"):
                 when "Kendo" or
                 when "KendoUI" then
                     /* Parse from KendoUI criteria object passed as filter data. */
-                    assign oFilterParser = FilterParserBuilder:Build("KENDO"):Parser.
+                    assign oFilterBuilder = FilterParserBuilder:Build("kendo").
             end case.
         else
-            assign oFilterParser = FilterParserBuilder:Build(oFilter):Parser.
+            /* Last, let the filter parser builder figure out the mapping. */
+            assign oFilterBuilder = FilterParserBuilder:Build(oFilter).
 
-        if valid-object(oFilterParser) then
-            assign oDataRequest = oFilterParser:Parse(oFilter).
+        if valid-object(oFilterBuilder) then
+        do on error undo, throw:
+            /* Assume filtering on the top temp-table name (used for schema info as well). */
+            assign this-object:TopTableName = ProDataSet:get-top-buffer(1):name.
+            oFilterBuilder:TableName(this-object:TopTableName).
 
-        /* @TODO: Remove this once the FilterParser pattern is established and working. */
-/*        do on error undo, throw:                                                    */
-/*            /* Prepare data structures for use with CCS BE class methods. */        */
-/*            define variable oTableRequest as GetDataTableRequest no-undo.           */
-/*            define variable oDefinedQuery as QueryDefinition     no-undo.           */
-/*            define variable oQueryEntry   as QueryEntry          no-undo.           */
-/*                                                                                    */
-/*            assign oDataRequest = new GetDataRequest().                             */
-/*            assign oDefinedQuery = new QueryDefinition().                           */
-/*            assign oQueryEntry = new QueryEntry().                                  */
-/*            assign oTableRequest = new GetDataTableRequest().                       */
-/*                                                                                    */
-/*            assign oQueryEntry:Join = Ccs.BusinessLogic.JoinEnum:None.              */
-/*            assign oDefinedQuery:QuerySelection = oQueryEntry.                      */
-/*                                                                                    */
-/*            extent(oDefinedQuery:QuerySort) = extent(oSortList).                    */
-/*            assign oDefinedQuery:QuerySort = oSortList.                             */
-/*                                                                                    */
-/*            assign                                                                  */
-/*                oTableRequest:QueryString     = cFilter                             */
-/*                oTableRequest:QueryDefinition = oDefinedQuery                       */
-/*                oTableRequest:PagingContext   = cRecID                              */
-/*                oTableRequest:Skip            = iStartRow                           */
-/*                oTableRequest:NumRecords      = iMaxRows                            */
-/*                oTableRequest:TableName       = ProDataSet:get-buffer-handle(1):name*/
-/*                .                                                                   */
-/*                                                                                    */
-/*            /* @TODO: Make this work with more than just a single table. */         */
-/*            extent(oDataRequest:TableRequests) = 1.                                 */
-/*            oDataRequest:TableRequests[1] = oTableRequest.                          */
-/*        end. /* do */                                                               */
+            if oFilterBuilder:FilterPattern eq "kendo" then
+                cast(oFilterBuilder:Parser, KendoFilterParser):ProDataSet = ProDataSet.
+
+            assign oDataRequest = oFilterBuilder:Parser:Parse(oFilter).
+        end.
 
         /* Utilizes the method as expected by the CCS IBusinessEntity interface. */
         if valid-object(oDataRequest) then

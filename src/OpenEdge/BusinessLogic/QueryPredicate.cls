@@ -93,11 +93,11 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate:
     end constructor.
     
     method override public character ToString():
-        return substitute('&1 &2 &3 &4',
-                    this-object:FieldName,
-                    this-object:Operator:ToString(),
-                    (if valid-object(this-object:Value) then this-object:Value:ToString() else if valid-object(this-object:Values) then this-object:Values:ToString() else ?),
-                    (if valid-object(this-object:Join) then this-object:Join:ToString() else '':u) ).
+        return trim(substitute('&1 &2 &3 &4',
+                               this-object:FieldName,
+                               this-object:Operator:ToString(),
+                               (if valid-object(this-object:Value) then this-object:Value:ToString() else if valid-object(this-object:Values) then this-object:Values:ToString() else ?),
+                               (if valid-object(this-object:Join) then this-object:Join:ToString() else '':u))).
     end method.
     
 end class

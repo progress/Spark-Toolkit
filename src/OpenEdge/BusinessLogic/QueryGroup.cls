@@ -40,4 +40,21 @@ class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup:
         assign extent(Entries) = pNumEntries.
     end constructor.
 
+    method override public character ToString():
+        define variable queryString as character no-undo.
+        define variable cnt as integer no-undo.
+        define variable loop as integer no-undo.
+
+        assign cnt = extent(this-object:Entries).
+
+        do loop = 1 to cnt:
+            queryString = substitute('&1 &2 (&3)',
+                                     trim(queryString),
+                                     if queryString eq "" then "" else this-object:Join:ToString(),
+                                     trim(this-object:Entries[loop]:ToString())).
+        end.
+
+        return trim(queryString).
+    end method.
+
 end class.
