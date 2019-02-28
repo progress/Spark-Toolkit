@@ -68,8 +68,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     define protected variable DataSourceArray as handle    no-undo extent.
     define protected variable SkipListArray   as character no-undo extent.
 
-    define protected variable TopTableName as character no-undo.
-
     /***** Public | Properties, Constructor, Destructor *****/
 
     /* Hold non-fatal messages for output (as determined by interface for class access). */
@@ -97,12 +95,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     method protected int64 filterData ( input pcFilter as character ):
         define variable oFilter        as JsonObject          no-undo.
-        define variable cFilter        as character           no-undo initial "".
-        define variable cRecID         as character           no-undo initial "".
-        define variable cSortBy        as character           no-undo initial "".
-        define variable cTableName     as character           no-undo initial "".
-        define variable iMaxRows       as int64               no-undo initial ?.
-        define variable iStartRow      as int64               no-undo initial ?.
         define variable hDataSet       as handle              no-undo.
         define variable oFilterBuilder as FilterParserBuilder no-undo.
         define variable oSortList      as QuerySortEntry      no-undo extent.
@@ -114,19 +106,20 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         /* Extract a JSON object from the incoming "filter" data. */
         assign oFilter = this-object:getFilter(pcFilter).
 
-        /* Handle parsing of the filter data into relevant variables. */
-        this-object:getFilterParams( input  oFilter,
-                                     output cFilter,
-                                     output cSortBy,
-                                     output oSortList,
-                                     output cRecID,
-                                     output iStartRow,
-                                     output iMaxRows ).
+        /**
+         * The purpose of the FilterParserBuilder is to normalize the creation of criteria data
+         * such that no matter what client-side pattern was used to pass the data it will appear
+         * in a consistent object pattern for parsing. At this level there is no concern about
+         * mapping of fields (serialize-name) or confirming schema (datatype, etc.), simply the
+         * creation of the necessary query clauses and any sort options.
+         */
 
-        /* Firstm, check an obvious mapping type as provided by the client (easiest detection). */
-        if oFilter:Has("mappingType") and oFilter:GetType("mappingType") eq JsonDataType:string then
+        /* First, check an obvious mapping type as provided by the client (easiest detection). */
+        if oFilter:Has("mappingType") and
+           oFilter:GetType("mappingType") eq JsonDataType:string then
             assign oFilterBuilder = FilterParserBuilder:Build(oFilter:GetCharacter("mappingType")).
-        else if oFilter:Has("client") and oFilter:GetType("client") eq JsonDataType:string then
+        else if oFilter:Has("client") and
+                oFilter:GetType("client") eq JsonDataType:string then
             /* Next, try checking for any given "client" type and parse using that value. */
             case oFilter:GetCharacter("client"):
                 when "Kendo" or
@@ -141,8 +134,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         if valid-object(oFilterBuilder) then
         do on error undo, throw:
             /* Assume filtering on the top temp-table name (used for schema info as well). */
-            assign this-object:TopTableName = ProDataSet:get-top-buffer(1):name.
-            oFilterBuilder:TableName(this-object:TopTableName).
+            oFilterBuilder:TableName(ProDataSet:get-top-buffer(1):name).
             assign oDataRequest = oFilterBuilder:Parser:Parse(oFilter).
         end.
 
@@ -194,49 +186,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             delete object oParser no-error.
         end finally.
     end method. /* getFilter */
-
-    method protected JsonArray getCriteria ( input pcRawFilter as longchar ):
-        define variable oParser   as ObjectModelParser no-undo.
-        define variable oFilter   as JsonObject        no-undo.
-        define variable oCriteria as JsonArray         no-undo.
-
-        /* Obtain filter criteria, if available as an array. */
-        assign oFilter = getFilter(pcRawFilter).
-        if valid-object(oFilter) then do:
-            /* Utilizes a more open parser system, which can check the client
-             * type as reported by the request. This way we can support many
-             * UI criteria objects in a more dynamic way. This will also mean
-             * creation of a better structure for the parser classes.
-             */
-            define variable oParse as IClientParse no-undo.
-            if oFilter:Has("client") then do:
-                case oFilter:GetCharacter("client"):
-                    when "KendoUI" then
-                        /* Parse from KendoUI criteria object into a standard ABL "where" phrase. */
-                        assign oParse = new KendoParse(input ProDataSet).
-                end case.
-            end. /* Has Client */
-            else
-                /* Default to JavascriptFilterPattern, using a plain-text "where" phrase. */
-                assign oParse = new JFPParse(input ProDataSet).
-
-            /* Default name for Read Filter is just "filter" by JSDO specs. */
-            define variable cReadFilter as character no-undo initial "filter".
-            if valid-object(oCatalogManager) then
-                assign cReadFilter = oCatalogManager:ReadFilter.
-
-            /* Object must contain a JSON property named according to catalog ReadFilter. */
-            if oFilter:Has(cReadFilter) and not oFilter:IsNull(cReadFilter) and
-               oFilter:GetType(cReadFilter) eq JsonDataType:object then
-                return oParse:getRawCriteria(oFilter:GetJsonObject(cReadFilter)).
-        end. /* valid-object(oFilter) */
-
-        return (new JsonArray()).
-
-        finally:
-            delete object oParser no-error.
-        end finally.
-    end method. /* getCriteria */
 
     method protected character getFilterOnly ( input poFilter as JsonObject ):
         define variable cFilter as character no-undo.
@@ -443,6 +392,9 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     method public void dispose ( ):
         define variable ix as integer no-undo.
+
+        if extent(DataSourceArray) ne ? and
+           extent(DataSourceArray) ge 1 then
         do ix = 1 to extent(DataSourceArray):
             delete object DataSourceArray[ix] no-error.
         end.
@@ -572,20 +524,23 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         else
             assign cRowField = "id". /* Default per JSDO spec. */
 
-        if (poRequest:TableRequests[1]:QueryString gt "") eq true then
-            oLoggingManager:logMessage(substitute("Filter: &1", poRequest:TableRequests[1]:QueryString), "ENTITY-DBG", 3).
+        if valid-object(poRequest:TableRequests[1]) then do:
+            if (poRequest:TableRequests[1]:QueryString gt "") eq true then
+                oLoggingManager:logMessage(substitute("Filter: &1", poRequest:TableRequests[1]:QueryString), "ENTITY-DBG", 3).
+            if valid-object(poRequest:TableRequests[1]:QueryDefinition) then
+                oLoggingManager:logMessage(substitute("QueryDef: &1", poRequest:TableRequests[1]:QueryDefinition:ToString()), "ENTITY-DBG", 3).
+        end. /* Valid TableRequests */
 
         define variable oSortList as QuerySortEntry extent no-undo.
         assign oSortList = cast(poRequest:TableRequests[1]:QueryDefinition:QuerySort, QuerySortEntry).
+        if extent(oSortList) ne ? then
         do ix = 1 to extent(oSortList):
             if valid-object(oSortList[ix]) then
                 assign cSortBy = trim(substitute("&1 by &2 &3", cSortBy, oSortList[ix]:FieldName,
                                                  if oSortList[ix]:SortOrder eq Ccs.BusinessLogic.SortOrderEnum:Ascending
                                                  then "" else oSortList[ix]:SortOrder:ToString())).
-        end. /* do ix */
 
-        if (cSortBy gt "") eq true then
-            oLoggingManager:logMessage(substitute("Sort: &1", cSortBy), "ENTITY-DBG", 3).
+        end. /* do ix */
 
         this-object:ValidateDataSources().
         DataSetTools:emptyDataSet(ProDataSet).
@@ -611,13 +566,13 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
                 hTTBuffer[1]:batch-size = 0.
         end.
 
-        /* Prepare to fill Dataset via where phrase. */
+        /* Prepare to fill Dataset via where phrase from the table request. */
         extent(hDBBuffer) = extent(ProDataSource).
         do ix = 1 to extent(ProDataSource):
             assign hDBBuffer[ix] = ProDataSource[ix]:get-source-buffer(1) no-error.
         end. /* ProDataSource */
 
-        /* Set where string for first buffer. */
+        /* @TODO: Change this to use the forthcoming QueryBuilder logic. */
         ProDataSource[1]:fill-where-string = substitute("where &1 &2",
                                                         if (poRequest:TableRequests[1]:QueryString gt "") eq true
                                                         then poRequest:TableRequests[1]:QueryString else "true",

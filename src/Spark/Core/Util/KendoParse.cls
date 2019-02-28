@@ -19,7 +19,6 @@ class Spark.Core.Util.KendoParse inherits ClientParse:
         define variable cTemplate as character no-undo.
 
         case pcKendoOperator:
-            when "equals" or
             when "eq" then
                 if pcFieldDataType eq "character" then
                     assign cTemplate = '&1 eq "&2"'.

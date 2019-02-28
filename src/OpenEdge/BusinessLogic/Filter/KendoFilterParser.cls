@@ -143,20 +143,25 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         define variable oFilters    as JsonArray         no-undo.
         define variable oFilter     as JsonObject        no-undo.
 
+        /* Check for and assign the overall join for this group. */
         if     pFilter:Has("logic":u)
            and pFilter:GetType("logic":u) eq JsonDataType:STRING
         then
             assign pGroup:join = JoinEnum:GetEnum(pFilter:GetCharacter("logic":u)).
 
+        /* Check for and extract the filters for this group. */
         if     pFilter:Has("filters":u)
            and pFilter:GetType("filters":u) eq JsonDataType:ARRAY
         then
             assign oFilters = pFilter:GetJsonArray("filters":u).
 
+        /* No need to proceed if filters list is empty. */
+        if oFilters:length eq 0 then return pGroup.
+
         /* Set extent of QueryGroup entries equal to number of filters at this level. */
         extent(pGroup:Entries) = oFilters:length.
 
-        /* Iterate over the filters as provided. */
+        /* Iterate over the filters array as provided. */
         do iLoop = 1 to oFilters:length:
             if not oFilters:GetType(iLoop) eq JsonDataType:OBJECT then next.
 
@@ -254,9 +259,9 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         then
             return dataRequest.
 
-        if type-of(pData, JsonObject) then
+        if type-of(pData, JsonObject) and extent(this-object:FilterTable) ge 1 then
         do:
-            /* There should be only 1 table and filter data should be a JsonObject. */
+            /* There should be only 1 table (for now) and filter data should be a JsonObject. */
             assign extent(dataRequest:TableRequests) = 1
                    dataRequest:TableRequests[1]      = ParseTableRequest(this-object:FilterTable[1],
                                                                          cast(pData, JsonObject))
