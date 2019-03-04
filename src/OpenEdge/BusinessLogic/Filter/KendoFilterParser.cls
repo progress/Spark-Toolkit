@@ -76,6 +76,9 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         then
             return ?.
 
+        /* Default the join to that of the overall group (as passed in). */
+        assign oJoinAs = pJoin.
+
         /* Field Value */
         case pFilter:GetType("value":u):
             when JsonDataType:ARRAY  or
@@ -111,15 +114,35 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
                 assign oOperator   = QueryOperatorEnum:Ne
                        oFieldValue = new OpenEdge.Core.String("":u)
                        .
+            when "isnullorempty":u then
+                /* @TODO: This may need more work. */
+                assign oOperator   = QueryOperatorEnum:Eq
+                       oFieldValue = new OpenEdge.Core.String("":u)
+                       .
+            when "isnotnullorempty":u then
+                /* @TODO: This may need more work. */
+                assign oOperator   = QueryOperatorEnum:Ne
+                       oFieldValue = new OpenEdge.Core.String("":u)
+                       .
             when "endswith":u then
             do:
                 assign oOperator = QueryOperatorEnum:Matches.
                 oFieldValue:Prepend("*":u).
             end.
+            when "contains":u then
+            do:
+                assign oOperator = QueryOperatorEnum:Contains.
+                oFieldValue:Append("*":u).
+                oFieldValue:Prepend("*":u).
+            end.
             when "doesnotcontain":u then
             do:
                 assign oOperator = QueryOperatorEnum:Contains.
-                if pJoin eq JoinEnum:And then
+                oFieldValue:Append("*":u).
+                oFieldValue:Prepend("*":u).
+
+                /* Convert current join into a "and/or not" .*/
+                if oJoinAs eq JoinEnum:And then
                     assign oJoinAs = JoinEnum:AndNot.
                 else
                     assign oJoinAs = JoinEnum:OrNot.
@@ -131,7 +154,7 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         end case.
 
         assign oClause      = new QueryPredicate(pFilter:GetCharacter("field":u), oOperator, oFieldValue)
-               oClause:Join = oJoinAs /* nulls are ok here */
+               oClause:Join = oJoinAs /* Use the determined join value. */
                .
 
         return oClause.
@@ -143,11 +166,19 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         define variable oFilters    as JsonArray         no-undo.
         define variable oFilter     as JsonObject        no-undo.
 
+        /**
+         * Note: This is a recursive method, whereby the QueryGroup passed in may
+         * consist of only query predicates (field, operator, value) or another
+         * sub-group entirely. For the case of the latter, the newly-found group
+         * will be passed again into this method for parsing. This allows for the
+         * case of nested queries to be generated from the KendoUI query.
+         */
+
         /* Check for and assign the overall join for this group. */
         if     pFilter:Has("logic":u)
            and pFilter:GetType("logic":u) eq JsonDataType:STRING
         then
-            assign pGroup:join = JoinEnum:GetEnum(pFilter:GetCharacter("logic":u)).
+            assign pGroup:Join = JoinEnum:GetEnum(pFilter:GetCharacter("logic":u)).
 
         /* Check for and extract the filters for this group. */
         if     pFilter:Has("filters":u)
@@ -171,7 +202,7 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
                 assign pGroup:Entries[iLoop] = this-object:ParseWhere(new QueryGroup(), oFilter).
             else
                 /* Otherwise, the current object is destined to become a new QueryPredicate entry. */
-                assign pGroup:Entries[iLoop] = this-object:ParsePredicate(pGroup:join, oFilter).
+                assign pGroup:Entries[iLoop] = this-object:ParsePredicate(pGroup:Join, oFilter).
         end. /* iLoop */
 
         return pGroup.

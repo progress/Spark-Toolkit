@@ -47,8 +47,8 @@ class OpenEdge.BusinessLogic.QuerySortEntry implements IQuerySortEntry:
     end constructor.
 
     method override public character ToString():
-        return substitute('field: &1; direction: &2',
-                          this-object:FieldName, (if this-object:SortOrder eq SortOrderEnum:descending then "desc" else "asc")).
+        return substitute("field: &1; direction: &2":u,
+                          this-object:FieldName, (if this-object:SortOrder eq SortOrderEnum:descending then "desc":u else "asc":u)).
     end method.
 
 end class.
