@@ -276,8 +276,6 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
 
         assign cQueryString = substitute("&1 &2", cQueryString, cSortBy).
 
-message "QueryString:" cQueryString.
-
         return trim(cQueryString).
     end method.
     
