@@ -158,6 +158,11 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
                .
 
         return oClause.
+
+        finally:
+            delete object oOperator no-error.
+            delete object oJoinAs no-error.
+        end finally.
     end method.
 
     method protected IQueryEntry ParseWhere (input pGroup  as QueryGroup,
@@ -193,7 +198,8 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         extent(pGroup:Entries) = oFilters:length.
 
         /* Iterate over the filters array as provided. */
-        do iLoop = 1 to oFilters:length:
+        do iLoop = 1 to oFilters:length
+        on error undo, throw:
             if not oFilters:GetType(iLoop) eq JsonDataType:OBJECT then next.
 
             assign oFilter = oFilters:GetJsonObject(iLoop).
@@ -203,9 +209,17 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
             else
                 /* Otherwise, the current object is destined to become a new QueryPredicate entry. */
                 assign pGroup:Entries[iLoop] = this-object:ParsePredicate(pGroup:Join, oFilter).
+
+            finally:
+                delete object oFilter no-error.
+            end finally.
         end. /* iLoop */
 
         return pGroup.
+
+        finally:
+            delete object oFilters no-error.
+        end finally.
     end method.
 
     /* Parses where/filter phrase and returns an IQueryEntry object for a single table
@@ -285,6 +299,7 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
          * }
          */
 
+        /* If no valid JSON object available as input, simply create an empty object. */
         if    not valid-object(pData)
            or not type-of(pData, JsonConstruct)
         then
@@ -294,8 +309,8 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         do:
             /* There should be only 1 table (for now) and filter data should be a JsonObject. */
             assign extent(dataRequest:TableRequests) = 1
-                   dataRequest:TableRequests[1]      = ParseTableRequest(this-object:FilterTable[1],
-                                                                         cast(pData, JsonObject))
+                   dataRequest:TableRequests[1]      = this-object:ParseTableRequest(this-object:FilterTable[1],
+                                                                                     cast(pData, JsonObject))
                    .
         end.
 

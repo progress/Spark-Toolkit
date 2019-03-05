@@ -394,7 +394,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             when type-of(pSortBy, ILongcharHolder)  or
             when type-of(pSortBy, ICharacterHolder) then
                 assign sortByString = dynamic-property(pSortBy, 'Value':u)
-                       qrySort      = ParseSortString(sortByString)
+                       qrySort      = this-object:ParseSortString(sortByString)
                        .
             
             when type-of(pSortBy, ICharacterArrayHolder) or
@@ -409,7 +409,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 do loop = 1 to cnt:
                     assign sortByString = sortByString + StringConstant:SPACE + sortByArray[loop].
                 end.
-                assign qrySort = ParseSortString(sortByString).
+                assign qrySort = this-object:ParseSortString(sortByString).
             end.
             
             otherwise

@@ -181,25 +181,25 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         case cType:
             when "character" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, string(poClause:Value)).
+                                            cField, poClause:Value:ToString()).
             when "date" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, date(string(poClause:Value))).
+                                            cField, date(poClause:Value:ToString())).
             when "datetime" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, datetime(string(poClause:Value))).
+                                            cField, datetime(poClause:Value:ToString())).
             when "datetime-tz" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, datetime-tz(string(poClause:Value))).
+                                            cField, datetime-tz(poClause:Value:ToString())).
             when "decimal" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, decimal(poClause:Value)).
+                                            cField, decimal(poClause:Value:ToString())).
             when "integer" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, integer(poClause:Value)).
+                                            cField, integer(poClause:Value:ToString())).
             when "logical" then
                 assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
-                                            cField, logical(poClause:Value)).
+                                            cField, logical(poClause:Value:ToString())).
         end.
 
         return cClause.
