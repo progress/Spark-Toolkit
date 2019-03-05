@@ -53,19 +53,17 @@ class OpenEdge.BusinessLogic.QueryDefinition implements IQueryDefinition:
     end constructor.
     
     method override public character ToString():
-        define variable qrySort as character no-undo.
-        define variable cnt as integer no-undo.
+        define variable qrySort as character no-undo initial "".
         define variable loop as integer no-undo.
-        
-        assign cnt = extent(this-object:QuerySort).
-        do loop = 1 to cnt:
+
+        do loop = 1 to extent(this-object:QuerySort):
             assign qrySort = qrySort + '[':u.
             if valid-object(this-object:QuerySort[loop]) then
                 assign qrySort = qrySort + this-object:QuerySort[loop]:ToString().
             else
                 assign qrySort = qrySort + '?':u.
+            assign qrySort = qrySort + ']':u.
         end.
-        assign qrySort = qrySort + ']':u.
         
         return substitute('selection: &1; sort: &2',
                 (if valid-object(this-object:QuerySelection) then this-object:QuerySelection:ToString() else ?),

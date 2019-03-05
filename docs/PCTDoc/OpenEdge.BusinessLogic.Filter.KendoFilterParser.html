@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.2)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.3)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -101,7 +101,7 @@
                     </table>
                 	<br>
                 	<span class="unit_comment">
-                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2018 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>KendoFilterParser </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Wed Dec 07 14:11:10 EST 2016 </td></tr></tbody></table>
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>KendoFilterParser </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge & dgrau </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Wed Dec 07 14:11:10 EST 2016 </td></tr></tbody></table>
                 	</span>
                 	<br>
                 </div>
@@ -159,6 +159,23 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.BusinessLogic.IQueryEntry <a href='#020010Rd0ibGGhft6P4/AiVCL9Ug=='> ParsePredicate (JoinEnum, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
     <font>+</font>
     <font></font>
     <font></font>
@@ -171,9 +188,34 @@
   <td class="cell">
      
 /* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects.
+http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-sort
 
 @param P.L.Object The SORT-BY data
 @return IQuerySortEntry[] An array of sort phrases. An indeterminate array is returned if the input phrase is empty */ <br> <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.FilterParser.html#ParseSortBy (Object)'>OpenEdge.BusinessLogic.Filter.FilterParser:ParseSortBy (Object)</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.BusinessLogic.IGetDataTableRequest <a href='#0200109NcxlwY6Avxw1Fa9EheDPw=='> ParseTableRequest (character, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Reads a single table's request.
+
+This method knows which properties in the input JSON are for the where clause, for the sort-by etc
+
+@param character The table name to which this filter applies
+@param JsonObject The input filter
+@return IGetDataTableRequest A single table Get Request */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -192,10 +234,28 @@
   <td class="cell">
      
 /* Parses where/filter phrase and returns an IQueryEntry object for a single table
+http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter
 
 @param P.L.Object The filter/where clause data
-@return IQueryEntry The query entry.We return one of an IQueryPredicate (single clause)
+@return IQueryEntry The query entry. We return one of an IQueryPredicate (single clause)
 or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.FilterParser.html#ParseWhere (Object)'>OpenEdge.BusinessLogic.Filter.FilterParser:ParseWhere (Object)</a> </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.BusinessLogic.IQueryEntry <a href='#020010HJuwRIR0W76/MwVSsEvcYw=='> ParseWhere (QueryGroup, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
   </td>
 </tr>
     
@@ -235,7 +295,8 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* Default constructor */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -441,6 +502,100 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010Rd0ibGGhft6P4/AiVCL9Ug==" href="#Top">Top</a>
+                <a name=" <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> <a href='#020010Rd0ibGGhft6P4/AiVCL9Ug=='> ParsePredicate (JoinEnum, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> <a href='#020010Rd0ibGGhft6P4/AiVCL9Ug=='> ParsePredicate (JoinEnum, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pJoin</i>
+    </td>
+    <td>
+       Ccs.BusinessLogic.JoinEnum
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pFilter</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010Pqv1z9h7dH6AMIoiAsnBBA==" href="#Top">Top</a>
                 <a name=" <a href='Ccs.BusinessLogic.IQuerySortEntry.html'>Ccs.BusinessLogic.IQuerySortEntry</a> <a href='#020010Pqv1z9h7dH6AMIoiAsnBBA=='> ParseSortBy (Object)</a>"></a>
             </font>
@@ -466,7 +621,7 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects. </td></tr><td class='paramname'></td><td class='paramdesc'><a href='http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-sort' target='_blank'>http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-sort</a> </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -519,6 +674,100 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="0200109NcxlwY6Avxw1Fa9EheDPw==" href="#Top">Top</a>
+                <a name=" <a href='Ccs.BusinessLogic.IGetDataTableRequest.html'>Ccs.BusinessLogic.IGetDataTableRequest</a> <a href='#0200109NcxlwY6Avxw1Fa9EheDPw=='> ParseTableRequest (character, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED <a href='Ccs.BusinessLogic.IGetDataTableRequest.html'>Ccs.BusinessLogic.IGetDataTableRequest</a> <a href='#0200109NcxlwY6Avxw1Fa9EheDPw=='> ParseTableRequest (character, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Reads a single table's request. </td></tr><td class='paramname'></td><td class='paramdesc'>This method knows which properties in the input JSON are for the where clause, for the sort-by etc </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTable</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='Ccs.BusinessLogic.IGetDataTableRequest.html'>Ccs.BusinessLogic.IGetDataTableRequest</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IGetDataTableRequest A single table Get Request
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010RLG6Kyv8gzUiqvykDXmDXg==" href="#Top">Top</a>
                 <a name=" <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> <a href='#020010RLG6Kyv8gzUiqvykDXmDXg=='> ParseWhere (Object)</a>"></a>
             </font>
@@ -544,7 +793,7 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses where/filter phrase and returns an IQueryEntry object for a single table </td></tr><td class='paramname'></td><td class='paramdesc'>or an IQueryGroup (many clauses) </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses where/filter phrase and returns an IQueryEntry object for a single table </td></tr><td class='paramname'></td><td class='paramdesc'><a href='http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter' target='_blank'>http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter</a> </td></tr><td class='paramname'></td><td class='paramdesc'>or an IQueryGroup (many clauses) </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -584,7 +833,101 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
     <td class="document_detail_parameter">
     </td>
     <td>
-        IQueryEntry The query entry.We return one of an IQueryPredicate (single clause)
+        IQueryEntry The query entry. We return one of an IQueryPredicate (single clause)
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010HJuwRIR0W76/MwVSsEvcYw==" href="#Top">Top</a>
+                <a name=" <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> <a href='#020010HJuwRIR0W76/MwVSsEvcYw=='> ParseWhere (QueryGroup, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> <a href='#020010HJuwRIR0W76/MwVSsEvcYw=='> ParseWhere (QueryGroup, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pGroup</i>
+    </td>
+    <td>
+       <a href='OpenEdge.BusinessLogic.QueryGroup.html'>OpenEdge.BusinessLogic.QueryGroup</a>
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pFilter</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='Ccs.BusinessLogic.IQueryEntry.html'>Ccs.BusinessLogic.IQueryEntry</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
     </td>
 </tr>
               </table>
@@ -640,7 +983,7 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default constructor </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -885,6 +1228,6 @@ or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.Busines
     <br>
     <br>
     
-    <font class="footer_timestamp">02.04.2019 11:27:42</font>
+    <font class="footer_timestamp">03.05.2019 14:15:19</font>
     </BODY>
 </HTML>

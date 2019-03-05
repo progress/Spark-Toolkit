@@ -278,17 +278,17 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
         /*
          * {
          *   "mappingType": "kendo",
-         *   "filter": ~{"logic": "and", "filters": []},
+         *   "filter": ~{"logic": "and|or", "filters": []},
          *   "sort": [],
-         *   "skip": 40,
-         *   "top": 20
+         *   "skip": #,
+         *   "top": #
          * }
          */
 
         if    not valid-object(pData)
            or not type-of(pData, JsonConstruct)
         then
-            return dataRequest.
+            assign pData = new JsonObject().
 
         if type-of(pData, JsonObject) and extent(this-object:FilterTable) ge 1 then
         do:

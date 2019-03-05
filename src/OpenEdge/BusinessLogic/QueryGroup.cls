@@ -41,16 +41,13 @@ class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup:
     end constructor.
 
     method override public character ToString():
-        define variable queryString as character no-undo.
-        define variable cnt as integer no-undo.
+        define variable queryString as character no-undo initial "".
         define variable loop as integer no-undo.
 
-        assign cnt = extent(this-object:Entries).
-
-        do loop = 1 to cnt:
+        do loop = 1 to extent(this-object:Entries):
             queryString = substitute('&1 &2 (&3)',
                                      trim(queryString),
-                                     if queryString eq "" then "" else this-object:Join:ToString(),
+                                     if trim(queryString) eq "" then "" else this-object:Join:ToString(),
                                      trim(this-object:Entries[loop]:ToString())).
         end.
 

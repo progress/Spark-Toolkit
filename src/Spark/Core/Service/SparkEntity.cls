@@ -106,11 +106,11 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         if pcRawFilter ne ? and pcRawFilter begins "~{" then do:
             assign oParser = new ObjectModelParser().
             assign pcRawFilter = FormatTools:convertToUTF8(pcRawFilter).
-            assign oFilter = cast(oParser:Parse(pcRawFilter), jsonObject).
-            return oFilter.
+            assign oFilter = cast(oParser:Parse(pcRawFilter), JsonObject).
+            return oFilter. /* Return the parsed JSON filter object. */
         end. /* non-empty string beginning with { */
 
-        return ?.
+        return new JsonObject(). /* Return an empty JSON object. */
 
         finally:
             delete object oParser no-error.
@@ -154,6 +154,10 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             /* Last, let the filter parser builder figure out the mapping. */
             assign oFilterBuilder = FilterParserBuilder:Build(oFilter).
 
+        /* As a last resort, just create a simple ABL filter. */
+        if not valid-object(oFilterBuilder) then
+            assign oFilterBuilder = FilterParserBuilder:Build("ABL").
+
         if valid-object(oFilterBuilder) then
         do on error undo, throw:
             /* Assume filtering on the top temp-table name (used for schema info as well). */
@@ -189,41 +193,20 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     end method. /* filterData */
 
     method protected character getFilterOnly ( input poFilter as JsonObject ):
-        define variable cFilter as character no-undo.
-        assign cFilter = "".
+        define variable oDataRequest   as IGetDataRequest     no-undo.
+        define variable oFilterBuilder as FilterParserBuilder no-undo.
+        define variable oQueryBuilder  as QueryBuilder        no-undo.
+        define variable cFilter        as character           no-undo initial "".
 
         if valid-object(poFilter) then do {&THROW}:
-            /* Utilizes a more open parser system, which can check the client
-             * type as reported by the request. This way we can support many
-             * UI criteria objects in a more dynamic way. This will also mean
-             * creation of a better structure for the parser classes.
-             */
-            define variable oParse as IClientParse no-undo.
-            if poFilter:Has("client") then do:
-                case poFilter:GetCharacter("client"):
-                    when "KendoUI" then
-                        /* Parse from KendoUI criteria object into a standard ABL "where" phrase. */
-                        assign oParse = new KendoParse(input ProDataSet).
-                end case.
-            end. /* Has Client */
-            else
-                /* Default to JavascriptFilterPattern, using a plain-text "where" phrase. */
-                assign oParse = new JFPParse(input ProDataSet).
-
-            /* Default name for Read Filter is just "filter" by JSDO specs. */
-            define variable cReadFilter as character no-undo initial "filter".
-            if valid-object(oCatalogManager) then
-                assign cReadFilter = oCatalogManager:ReadFilter.
-
-            /* Filter Criteria */
-            if poFilter:Has(cReadFilter) and not poFilter:IsNull(cReadFilter) and
-               poFilter:GetType(cReadFilter) eq JsonDataType:object /* Must be a JSON object! */ then
-                assign cFilter = oParse:buildWherePhrase(poFilter:GetJsonObject(cReadFilter)) no-error.
-            else if poFilter:Has("ablFilter") and not poFilter:IsNull("ablFilter") then
-                assign cFilter = poFilter:GetCharacter("ablFilter") no-error.
+            oFilterBuilder:TableName(ProDataSet:get-top-buffer(1):name).
+            assign oDataRequest = oFilterBuilder:Parser:Parse(poFilter).
+            assign oQueryBuilder = new QueryBuilder().
+            assign cFilter = oQueryBuilder:BuildQueryString(oDataRequest, ProDataSet).
 
             finally:
-                delete object oParse no-error.
+                delete object oDataRequest no-error.
+                delete object oQueryBuilder no-error.
 
                 return cFilter.
             end finally.
@@ -408,12 +391,12 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     method public IGetDataResponse getData ( input  poRequest as IGetDataRequest,
                                              output dataset-handle phDataSet ):
-        define variable cSortBy   as character no-undo.
-        define variable hDBBuffer as handle    no-undo extent.
-        define variable hTTBuffer as handle    no-undo extent.
-        define variable ix        as integer   no-undo.
+        define variable oQueryBuilder as QueryBuilder no-undo.
+        define variable hDBBuffer     as handle       no-undo extent.
+        define variable hTTBuffer     as handle       no-undo extent.
+        define variable ix            as integer      no-undo.
 
-        assign iSeq = 0. /* Reset record sequence on filter. */
+        assign iSeq = 0. /* Reset record sequence on read operation. */
 
         if not valid-handle(ProDataSet) then
             undo, throw new Progress.Lang.AppError("Warning: ProDataSet handle is not available.", 0).
@@ -426,13 +409,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             assign cRowField = oCatalogManager:IdProperty.
         else
             assign cRowField = "id". /* Default per JSDO spec. */
-
-        if valid-object(poRequest:TableRequests[1]) then do:
-            if (poRequest:TableRequests[1]:QueryString gt "") eq true then
-                oLoggingManager:logMessage(substitute("Filter: &1", poRequest:TableRequests[1]:QueryString), "ENTITY-DBG", 3).
-            if valid-object(poRequest:TableRequests[1]:QueryDefinition) then
-                oLoggingManager:logMessage(substitute("QueryDef: &1", poRequest:TableRequests[1]:QueryDefinition:ToString()), "ENTITY-DBG", 3).
-        end. /* Valid TableRequests */
 
         this-object:ValidateDataSources().
         DataSetTools:emptyDataSet(ProDataSet).
@@ -465,9 +441,11 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         end. /* ProDataSource */
 
         /* Use the query builder to convert the request object into a valid "where" phrase. */
-        define variable oQueryBuilder as QueryBuilder no-undo.
         assign oQueryBuilder = new QueryBuilder().
         ProDataSource[1]:fill-where-string = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
+
+        /* Echo the current query to the log if debugging is enabled. */
+        oLoggingManager:logMessage(substitute("Query: &1", ProDataSource[1]:fill-where-string), "ENTITY-DBG", 3).
 
         /* Start fill operation at specified offset (by page or record). */
         if (poRequest:TableRequests[1]:Skip ne ? and poRequest:TableRequests[1]:Skip gt 0) then

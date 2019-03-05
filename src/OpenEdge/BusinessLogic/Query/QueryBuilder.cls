@@ -214,6 +214,14 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        @return handle A valid QUERY handle */
     method public handle BuildQuery (input pFilter as IGetDataRequest,
                                      input pSchema as handle):
+        define variable hQuery as handle no-undo.
+
+        create query hQuery.
+        hQuery:set-buffers(pSchema).
+        hQuery:query-prepare(substitute("for each &1 &2", pSchema:name, this-object:BuildQueryString(pFilter, pSchema))).
+        hQuery:query-open.
+
+        return hQuery.
     end method.
     
     /* Builds a query string from a IGetDataRequest object. This method does
@@ -222,6 +230,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        @param IGetDataRequest A valid queryn definition
        @return character A complete WHERE clause , with no name conversions */
     method public character BuildQueryString (input pFilter as IGetDataRequest):
+        /* Call internal method with filter but no schema. */
         return BuildQueryString(pFilter, ?).
     end method.
     
