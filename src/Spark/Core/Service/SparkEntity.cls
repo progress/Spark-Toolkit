@@ -214,7 +214,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             else
                 /* Last, let the filter parser builder figure out the mapping. */
                 assign oFilterBuilder = FilterParserBuilder:Build(poFilter).
-    
+
             /* As a last resort, just create a simple ABL filter. */
             if not valid-object(oFilterBuilder) then
                 assign oFilterBuilder = FilterParserBuilder:Build("ABL").
@@ -286,11 +286,6 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     method protected character validateData ( input pcAction as character,
                                               input-output dataset-handle phDataSet ):
     end method. /* validateData */
-
-    method protected override void readData ( input pcRawFilter as character ):
-        /* Just pass the raw filter and obtain a count from the resulting query. */
-        this-object:LastCount = this-object:getRecCount(pcRawFilter).
-    end method. /* readData */
 
     /******* Public | IService Methods *******/
 
