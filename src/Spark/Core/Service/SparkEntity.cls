@@ -158,6 +158,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         if not valid-object(oFilterBuilder) then
             assign oFilterBuilder = FilterParserBuilder:Build("ABL").
 
+        /* Use the filter builder to create a valid data request from the filter data. */
         if valid-object(oFilterBuilder) then
         do on error undo, throw:
             /* Assume filtering on the top temp-table name (used for schema info as well). */
@@ -195,22 +196,41 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
     method protected character getFilterOnly ( input poFilter as JsonObject ):
         define variable oDataRequest   as IGetDataRequest     no-undo.
         define variable oFilterBuilder as FilterParserBuilder no-undo.
-        define variable oQueryBuilder  as QueryBuilder        no-undo.
         define variable cFilter        as character           no-undo initial "".
 
-        if valid-object(poFilter) then do {&THROW}:
+        if valid-object(poFilter) then do:
+            if poFilter:Has("mappingType") and
+               poFilter:GetType("mappingType") eq JsonDataType:string then
+                assign oFilterBuilder = FilterParserBuilder:Build(poFilter:GetCharacter("mappingType")).
+            else if poFilter:Has("client") and
+                    poFilter:GetType("client") eq JsonDataType:string then
+                /* Next, try checking for any given "client" type and parse using that value. */
+                case poFilter:GetCharacter("client"):
+                    when "Kendo" or
+                    when "KendoUI" then
+                        /* Parse from KendoUI criteria object passed as filter data. */
+                        assign oFilterBuilder = FilterParserBuilder:Build("kendo").
+                end case.
+            else
+                /* Last, let the filter parser builder figure out the mapping. */
+                assign oFilterBuilder = FilterParserBuilder:Build(poFilter).
+    
+            /* As a last resort, just create a simple ABL filter. */
+            if not valid-object(oFilterBuilder) then
+                assign oFilterBuilder = FilterParserBuilder:Build("ABL").
+
+            /* Utilize the FilterBuilder and QueryBuilder to generate a "where" phrase. */
             oFilterBuilder:TableName(ProDataSet:get-top-buffer(1):name).
             assign oDataRequest = oFilterBuilder:Parser:Parse(poFilter).
-            assign oQueryBuilder = new QueryBuilder().
-            assign cFilter = oQueryBuilder:BuildQueryString(oDataRequest, ProDataSet).
-
-            finally:
-                delete object oDataRequest no-error.
-                delete object oQueryBuilder no-error.
-
-                return cFilter.
-            end finally.
+            assign cFilter = QueryBuilder:BuildQueryString(oDataRequest, ProDataSet).
         end. /* valid-object */
+
+        finally:
+            delete object oDataRequest no-error.
+            delete object oFilterBuilder no-error.
+
+            return cFilter.
+        end finally.
     end method. /* getFilterOnly */
 
     method protected int64 getRecCount ( input pcRawFilter as character ):
@@ -391,10 +411,9 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     method public IGetDataResponse getData ( input  poRequest as IGetDataRequest,
                                              output dataset-handle phDataSet ):
-        define variable oQueryBuilder as QueryBuilder no-undo.
-        define variable hDBBuffer     as handle       no-undo extent.
-        define variable hTTBuffer     as handle       no-undo extent.
-        define variable ix            as integer      no-undo.
+        define variable hDBBuffer as handle  no-undo extent.
+        define variable hTTBuffer as handle  no-undo extent.
+        define variable ix        as integer no-undo.
 
         assign iSeq = 0. /* Reset record sequence on read operation. */
 
@@ -441,31 +460,32 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         end. /* ProDataSource */
 
         /* Use the query builder to convert the request object into a valid "where" phrase. */
-        assign oQueryBuilder = new QueryBuilder().
-        ProDataSource[1]:fill-where-string = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
+        ProDataSource[1]:fill-where-string = QueryBuilder:BuildQueryString(poRequest, ProDataSet).
 
-        /* Echo the current query to the log if debugging is enabled. */
+        /* Echo the current query phrase to the log if debugging is enabled. */
         oLoggingManager:logMessage(substitute("Query: &1", ProDataSource[1]:fill-where-string), "ENTITY-DBG", 3).
 
-        /* Start fill operation at specified offset (by page or record). */
+        /* Start fill operation at specified offset (by page or record) when supplied. */
         if (poRequest:TableRequests[1]:Skip ne ? and poRequest:TableRequests[1]:Skip gt 0) then
             ProDataSource[1]:restart-row = integer(poRequest:TableRequests[1]:Skip + 1).
         else if (poRequest:TableRequests[1]:PagingContext gt "") eq true then
             ProDataSource[1]:restart-rowid(1) = to-rowid((poRequest:TableRequests[1]:PagingContext)).
 
-        /* Fill dataset and set additional values as needed. */
+        /* Fill dataset and set additional record values via the callback as needed. */
         hTTBuffer[1]:set-callback("after-row-fill", "postRowFill", this-object).
-        ProDataSet:fill().
+        ProDataSet:fill(). /* Where the magic happens... */
 
-        this-object:postFetchRecord(). /* Perform any extra fetch logic. */
+        this-object:postFetchRecord(). /* Perform any extra fetch logic on the dataset overall. */
 
+        /**
+         * Prepare a new response object to hold the result count any any other data.
+         * The ProDataSet should contain the actual results (records) at this point.
+         */
         define variable oResponse as IGetDataResponse no-undo.
         assign oResponse = new GetDataResponse().
         return oResponse.
 
         finally:
-            delete object oQueryBuilder no-error.
-
             if valid-handle(ProDataSet) and extent(hTTBuffer) ne ? then
             do ix = 1 to ProDataSet:num-buffers:
                 if valid-handle(hTTBuffer[ix]) then

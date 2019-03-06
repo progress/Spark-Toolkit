@@ -13,16 +13,21 @@ Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiari
 block-level on error undo, throw.
 
 using Ccs.BusinessLogic.IGetDataRequest.
-using Ccs.BusinessLogic.IQueryEntry.
 using Ccs.BusinessLogic.JoinEnum.
 using Ccs.BusinessLogic.QueryOperatorEnum.
-using OpenEdge.BusinessLogic.*.
-using OpenEdge.BusinessLogic.Filter.*.
+using OpenEdge.BusinessLogic.GetDataTableRequest.
+using OpenEdge.BusinessLogic.QueryDefinition.
+using OpenEdge.BusinessLogic.QueryGroup.
+using OpenEdge.BusinessLogic.QueryPredicate.
+using OpenEdge.BusinessLogic.QuerySortEntry.
+using OpenEdge.BusinessLogic.Query.QueryBuilder.
 
 class OpenEdge.BusinessLogic.Query.QueryBuilder: 
 
-    method protected handle getFieldBuffer (input phTable     as handle,
-                                            input pcFieldName as character):
+    /***** Begin Protected Methods *****/
+
+    method protected static handle getFieldBuffer (input phTable     as handle,
+                                                   input pcFieldName as character):
         define variable bhField as handle  no-undo.
         define variable ix      as integer no-undo.
 
@@ -48,8 +53,8 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         end finally.
     end method. /* getFieldBuffer */
 
-    method private character mapOperator (input poOperator as QueryOperatorEnum,
-                                          input pcDataType as character ):
+    method protected static character mapOperator (input poOperator as QueryOperatorEnum,
+                                                   input pcDataType as character ):
         /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.operator */
         define variable cTemplate as character no-undo.
 
@@ -85,9 +90,9 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return cTemplate.
     end method. /* mapOperator */
 
-    method private character mapJoin (input pcQuery  as character,
-                                      input pcClause as character,
-                                      input poJoinAs as JoinEnum):
+    method protected static character mapJoin (input pcQuery  as character,
+                                               input pcClause as character,
+                                               input poJoinAs as JoinEnum):
         if pcQuery eq "" then
             /* When query string is blank, only provide negations as needed. */
             case poJoinAs:
@@ -118,8 +123,8 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return pcQuery.
     end method. /* mapJoin */
 
-    method private character buildGroup (input phTable  as handle,
-                                         input poGroup as QueryGroup):
+    method protected static character buildGroup (input phTable as handle,
+                                                  input poGroup as QueryGroup):
         define variable cQueryString as character no-undo initial "".
         define variable cClause      as character no-undo.
         define variable iLoop        as integer   no-undo.
@@ -136,25 +141,25 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         do iLoop = 1 to extent(poGroup:Entries):
             if type-of(poGroup:Entries[iLoop], QueryGroup) then
                 /* Create a nested query from this child group. */
-                assign cClause = this-object:buildGroup(phTable, cast(poGroup:Entries[iLoop], QueryGroup))
+                assign cClause = QueryBuilder:buildGroup(phTable, cast(poGroup:Entries[iLoop], QueryGroup))
                        oJoinAs = poGroup:join /* Use the overall group join. */
                        .
             else
                 /* Create a simple clause frmo the given predicate. */
-                assign cClause = this-object:buildClause(phTable, cast(poGroup:Entries[iLoop], QueryPredicate))
+                assign cClause = QueryBuilder:buildClause(phTable, cast(poGroup:Entries[iLoop], QueryPredicate))
                        oJoinAs = cast(poGroup:Entries[iLoop], QueryPredicate):Join
                        .
 
             /* Continue with joining the clause (single or nested) to the query if non-blank. */
             if (cClause gt "") eq true then
-                assign cQueryString = this-object:mapJoin(cQueryString, cClause, oJoinAs).
+                assign cQueryString = QueryBuilder:mapJoin(cQueryString, cClause, oJoinAs).
         end. /* Looping Entries */
 
         return cQueryString.
     end method. /* buildGroup */
 
-    method private character buildClause (input phTable  as handle,
-                                          input poClause as QueryPredicate):
+    method protected static character buildClause (input phTable  as handle,
+                                                   input poClause as QueryPredicate):
         define variable hField   as handle     no-undo.
         define variable cClause  as character  no-undo.
         define variable cField   as character  no-undo.
@@ -168,7 +173,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
          * determine the correct datatype without assistance from the field buffer, so that too will be
          * used to convert the value appropriately for the resulting query phrase. 
          */
-        assign hField = this-object:getFieldBuffer(phTable, poClause:FieldName) no-error.
+        assign hField = QueryBuilder:getFieldBuffer(phTable, poClause:FieldName) no-error.
 
         if not valid-handle(hField) then return "".
 
@@ -180,30 +185,32 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         /* Based on the datatype, convert the value and obtain a valid operation string. */
         case cType:
             when "character" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, poClause:Value:ToString()).
             when "date" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, date(poClause:Value:ToString())).
             when "datetime" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, datetime(poClause:Value:ToString())).
             when "datetime-tz" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, datetime-tz(poClause:Value:ToString())).
             when "decimal" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, decimal(poClause:Value:ToString())).
             when "integer" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, integer(poClause:Value:ToString())).
             when "logical" then
-                assign cClause = substitute(this-object:mapOperator(poClause:Operator, cType),
+                assign cClause = substitute(QueryBuilder:mapOperator(poClause:Operator, cType),
                                             cField, logical(poClause:Value:ToString())).
         end.
 
         return cClause.
     end method. /* buildClause */
+
+    /***** End Protected / Begin Public *****/
 
     /* Builds a query handle (object) from a IGetDataRequest object. This method maps
        the input names to the input handle's SERIALIZE-NAMEs and uses the 'real'
@@ -212,28 +219,34 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        @param IGetDataRequest A valid queryn definition
        @param handle a Dataset or buffer (TT or DB) handle 
        @return handle A valid QUERY handle */
-    method public handle BuildQuery (input pFilter as IGetDataRequest,
-                                     input pSchema as handle):
+    method public static handle BuildQuery (input pFilter as IGetDataRequest,
+                                            input pSchema as handle):
         define variable hQuery as handle no-undo.
 
         create query hQuery.
         hQuery:set-buffers(pSchema).
-        hQuery:query-prepare(substitute("for each &1 &2", pSchema:name, this-object:BuildQueryString(pFilter, pSchema))).
+        hQuery:query-prepare(substitute("for each &1 &2", pSchema:name, QueryBuilder:BuildQueryString(pFilter, pSchema))).
         hQuery:query-open.
 
         return hQuery.
     end method.
-    
+
     /* Builds a query string from a IGetDataRequest object. This method does
        no name conversions - just takes the names from the input object.
        
        @param IGetDataRequest A valid queryn definition
        @return character A complete WHERE clause , with no name conversions */
-    method public character BuildQueryString (input pFilter as IGetDataRequest):
-        /* Call internal method with filter but no schema. */
+    method public static character BuildQueryString (input pFilter as IGetDataRequest):
+        /**
+         * Call internal method with filter but no schema. However, due to the
+         * need to utilize schema for detecting real field names (from public,
+         * serialized names) and field datatypes this will likely result in a
+         * thrown error. It is far better to call this method directly with a
+         * dataset or temp-table handle.
+         */
         return BuildQueryString(pFilter, ?).
     end method.
-    
+
     /* Builds a query string from a IGetDataRequest object. This method maps
        the input names to the input handle's SERIALIZE-NAMEs and uses the 'real'
        names to build the where clause
@@ -241,18 +254,20 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        @param IGetDataRequest A valid queryn definition
        @param handle a Dataset or buffer (TT or DB) handle 
        @return character A complete WHERE clause */
-    method public character BuildQueryString (input pFilter as IGetDataRequest,
-                                              input pSchema as handle):
-        define variable oQueryDef     as QueryDefinition no-undo.
-        define variable cQueryString  as character       no-undo initial "".
-        define variable oSortList     as QuerySortEntry  no-undo extent.
-        define variable bhTable       as handle          no-undo.
-        define variable bhField       as handle          no-undo.
-        define variable iLoop         as integer         no-undo.
-        define variable cSortBy       as character       no-undo.
+    method public static character BuildQueryString (input pFilter as IGetDataRequest,
+                                                     input pSchema as handle):
+        define variable oQueryDef    as QueryDefinition no-undo.
+        define variable oSortList    as QuerySortEntry  no-undo extent.
+        define variable cQueryString as character       no-undo initial "".
+        define variable bhTable      as handle          no-undo.
+        define variable bhField      as handle          no-undo.
+        define variable iLoop        as integer         no-undo.
+        define variable cSortBy      as character       no-undo.
 
-        if valid-handle(pSchema) then
-            assign bhTable = pSchema:get-buffer-handle(1) no-error. /* Get the top table. */
+        if valid-handle(pSchema) and pSchema:type eq "dataset" then
+            assign bhTable = pSchema:get-buffer-handle(1). /* Get the top table. */
+        else if valid-handle(pSchema) and pSchema:type eq "temp-table" then
+            assign bhTable = pSchema. /* Use given temp-table handle as-is. */
         else
             undo, throw new Progress.Lang.AppError("Invalid or unset handle to ProDataSet.").
 
@@ -261,9 +276,9 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
 
         /* Build either a nested query or a simple clause, depending on the object available. */
         if type-of(oQueryDef:QuerySelection, QueryGroup) then
-            assign cQueryString = this-object:buildGroup(bhTable, cast(oQueryDef:QuerySelection, QueryGroup)).
+            assign cQueryString = QueryBuilder:buildGroup(bhTable, cast(oQueryDef:QuerySelection, QueryGroup)).
         else if type-of(oQueryDef:QuerySelection, QueryPredicate) then
-            assign cQueryString = this-object:buildClause(bhTable, cast(oQueryDef:QuerySelection, QueryPredicate)).
+            assign cQueryString = QueryBuilder:buildClause(bhTable, cast(oQueryDef:QuerySelection, QueryPredicate)).
 
         if extent(oSortList) ne ? then
         do iLoop = 1 to extent(oSortList):
@@ -277,15 +292,24 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
             end. /* Valid Sort Entry*/
         end. /* do iLoop */
 
+        /* Ensure a blank string becomes a valid query phrase. */
         if trim(cQueryString) eq "" then
             assign cQueryString = "where true".
 
+        /* Add a "where" as necessary to the constructed string. */
         if not cQueryString begins "where" then
             assign cQueryString = substitute("where &1", cQueryString).
 
+        /* Add the sort phrase to the string. */
         assign cQueryString = substitute("&1 &2", cQueryString, cSortBy).
 
-        return trim(cQueryString).
+        /* If the QueryString property is empty, provide the derived query string. */
+        if (pFilter:TableRequests[1]:QueryString gt "") ne true then
+            cast(pFilter:TableRequests[1], GetDataTableRequest):QueryString = cQueryString.
+
+        finally:
+            return trim(cQueryString).
+        end finally.
     end method.
     
 end class.
