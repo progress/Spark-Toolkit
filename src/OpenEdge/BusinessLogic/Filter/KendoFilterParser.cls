@@ -6,7 +6,7 @@ Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiari
     Purpose     :
     Syntax      :
     Description :
-    Author(s)   : pjudge & dgrau
+    Author(s)   : pjudge & dugrau
     Created     : Wed Dec 07 14:11:10 EST 2016
     Notes       :
   ----------------------------------------------------------------------*/

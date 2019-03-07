@@ -6,7 +6,7 @@ Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiari
     Purpose     : 
     Syntax      : 
     Description : 
-    Author(s)   : pjudge
+    Author(s)   : pjudge & dugrau
     Created     : Thu May 10 12:38:00 EDT 2018
     Notes       : ADAS-101
   ----------------------------------------------------------------------*/
