@@ -98,7 +98,11 @@ do iDB = 1 to num-dbs:
         /* Add info to necessary metadata objects. */
         assign oEntry = new Progress.Json.ObjectModel.JsonObject().
         oEntry:Add("domain", domainName).
-        oEntry:Add("accessCode", substitute("{&PassCodePrefix}&1", audit-policy:encrypt-audit-mac-key(domainAccessCode))).
+        &if proversion(1) begins "12" &then
+            oEntry:Add("accessCode", security-policy:encode-domain-access-code("{&PassCode}")).
+        &else
+            oEntry:Add("accessCode", substitute("{&PassCodePrefix}&1", audit-policy:encrypt-audit-mac-key(domainAccessCode))).
+        &endif
         oEntry:Add("description", oDomain:Description).
         oDomains:Add(oEntry).
 
