@@ -18,7 +18,7 @@ using Ccs.BusinessLogic.IQueryEntry.
 using Ccs.BusinessLogic.IQuerySortEntry.
 using Ccs.BusinessLogic.JoinEnum.
 using Ccs.BusinessLogic.QueryOperatorEnum.
-using Ccs.Common.Support.IPrimitiveArrayHolder.
+using Ccs.Common.Support.IPrimitiveHolder.
 using OpenEdge.BusinessLogic.Filter.FilterParser.
 using OpenEdge.BusinessLogic.GetDataRequest.
 using OpenEdge.BusinessLogic.GetDataTableRequest.
@@ -59,7 +59,7 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
     method protected IQueryEntry ParsePredicate (input pJoin as JoinEnum,
                                                  input pFilter as JsonObject):
         define variable oClause     as QueryPredicate    no-undo.
-        define variable oFieldValue as class String      no-undo.
+        define variable oFieldValue as IPrimitiveHolder  no-undo.
         define variable oJoinAs     as JoinEnum          no-undo.
         define variable oOperator   as QueryOperatorEnum no-undo.
         define variable cOperator   as character         no-undo.
@@ -127,19 +127,19 @@ class OpenEdge.BusinessLogic.Filter.KendoFilterParser inherits FilterParser:
             when "endswith":u then
             do:
                 assign oOperator = QueryOperatorEnum:Matches.
-                oFieldValue:Prepend("*":u).
+                cast(oFieldValue, OpenEdge.Core.String):Prepend("*":u).
             end.
             when "contains":u then
             do:
                 assign oOperator = QueryOperatorEnum:Contains.
-                oFieldValue:Append("*":u).
-                oFieldValue:Prepend("*":u).
+                cast(oFieldValue, OpenEdge.Core.String):Append("*":u).
+                cast(oFieldValue, OpenEdge.Core.String):Prepend("*":u).
             end.
             when "doesnotcontain":u then
             do:
                 assign oOperator = QueryOperatorEnum:Contains.
-                oFieldValue:Append("*":u).
-                oFieldValue:Prepend("*":u).
+                cast(oFieldValue, OpenEdge.Core.String):Append("*":u).
+                cast(oFieldValue, OpenEdge.Core.String):Prepend("*":u).
 
                 /* Convert current join into a "and/or not" .*/
                 if oJoinAs eq JoinEnum:And then
