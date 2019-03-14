@@ -21,29 +21,43 @@ using OpenEdge.BusinessLogic.QueryDefinition.
 using OpenEdge.BusinessLogic.QueryGroup.
 using OpenEdge.BusinessLogic.QueryPredicate.
 using OpenEdge.BusinessLogic.QuerySortEntry.
-using OpenEdge.BusinessLogic.Query.QueryBuilder.
 
 class OpenEdge.BusinessLogic.Query.QueryBuilder: 
 
     /***** Begin Protected Methods *****/
 
-    method protected static handle GetTableBuffer (input phSchema    as handle,
-                                                   input pcTableName as character):
-        if valid-handle(phSchema) and phSchema:type ne "dataset" then
-            return phSchema.
+    method protected handle GetTableBuffer (input phSchema    as handle,
+                                            input pcTableName as character):
+        define variable iBuffer as integer no-undo.
+        define variable hTable  as handle  no-undo.
 
-        if (pcTableName gt "") eq true then
-            return phSchema:get-buffer-handle(pcTableName). /* Get the requested table by name. */
-        else
-            return phSchema:get-buffer-handle(1). /* Get the top buffer by default. */
+        if not valid-handle(phSchema) or phSchema:type ne "dataset" then
+            return phSchema. /* Return handle as-is if not a dataset. */
+
+        if (pcTableName gt "") ne true then
+            return phSchema:get-buffer-handle(1). /* No table name, just get the top buffer by default. */
+        else do:
+            assign hTable= phSchema:get-buffer-handle(pcTableName). /* Get the requested table by name. */
+            if valid-handle(hTable) then
+                return hTable. /* Return if found by actual table name. */
+            
+            /* If still here, search by serialize-name of table. */
+            do iBuffer = 1 to phSchema:num-buffers:
+                assign hTable= phSchema:get-buffer-handle(iBuffer).
+                if hTable:serialize-name eq pcTableName then
+                    return hTable. /* Found table by serialize-name. */
+            end. /* iBuffer */
+        end. /* Non-Empty TableName */
+
+        return ?. /* No schema, no table name, no table found, just return unknown value. */
     end method. /* GetTableBuffer */
 
-    method protected static handle GetFieldBuffer (input phTable     as handle,
-                                                   input pcFieldName as character):
+    method protected handle GetFieldBuffer (input phTable     as handle,
+                                            input pcFieldName as character):
         define variable bhField as handle  no-undo.
         define variable ix      as integer no-undo.
 
-        /* Return the datatype of the field, if it exists in the table. */
+        /* Return the buffer for the field, if it exists in the table. */
         if valid-handle(phTable) then do:
             do ix = 1 to phTable:num-fields:
                 assign bhField = phTable:buffer-field(ix) no-error.
@@ -65,8 +79,8 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         end finally.
     end method. /* GetFieldBuffer */
 
-    method protected static character MapOperator (input poOperator as QueryOperatorEnum,
-                                                   input pcDataType as character ):
+    method protected character MapOperator (input poOperator as QueryOperatorEnum,
+                                            input pcDataType as character ):
         /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.operator */
         define variable cTemplate as character no-undo.
 
@@ -102,9 +116,9 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return cTemplate.
     end method. /* MapOperator */
 
-    method protected static character MapJoin (input pcQuery  as character,
-                                               input pcClause as character,
-                                               input poJoinAs as JoinEnum):
+    method protected character MapJoin (input pcQuery  as character,
+                                        input pcClause as character,
+                                        input poJoinAs as JoinEnum):
         if pcQuery eq "" then
             /* When query string is blank, only provide negations as needed. */
             case poJoinAs:
@@ -135,8 +149,8 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return pcQuery.
     end method. /* MapJoin */
 
-    method protected static character BuildGroup (input phTable as handle,
-                                                  input poGroup as QueryGroup):
+    method protected character BuildGroup (input phTable as handle,
+                                           input poGroup as QueryGroup):
         define variable cQueryString as character no-undo initial "".
         define variable cClause      as character no-undo.
         define variable iLoop        as integer   no-undo.
@@ -153,25 +167,25 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         do iLoop = 1 to extent(poGroup:Entries):
             if type-of(poGroup:Entries[iLoop], QueryGroup) then
                 /* Create a nested query from this child group. */
-                assign cClause = QueryBuilder:BuildGroup(phTable, cast(poGroup:Entries[iLoop], QueryGroup))
+                assign cClause = this-object:BuildGroup(phTable, cast(poGroup:Entries[iLoop], QueryGroup))
                        oJoinAs = poGroup:join /* Use the overall group join. */
                        .
             else
                 /* Create a simple clause frmo the given predicate. */
-                assign cClause = QueryBuilder:BuildClause(phTable, cast(poGroup:Entries[iLoop], QueryPredicate))
+                assign cClause = this-object:BuildClause(phTable, cast(poGroup:Entries[iLoop], QueryPredicate))
                        oJoinAs = cast(poGroup:Entries[iLoop], QueryPredicate):Join
                        .
 
             /* Continue with joining the clause (single or nested) to the query if non-blank. */
             if (cClause gt "") eq true then
-                assign cQueryString = QueryBuilder:MapJoin(cQueryString, cClause, oJoinAs).
+                assign cQueryString = this-object:MapJoin(cQueryString, cClause, oJoinAs).
         end. /* Looping Entries */
 
         return cQueryString.
     end method. /* BuildGroup */
 
-    method protected static character BuildClause (input phTable  as handle,
-                                                   input poClause as QueryPredicate):
+    method protected character BuildClause (input phTable  as handle,
+                                            input poClause as QueryPredicate):
         define variable hField  as handle     no-undo.
         define variable cClause as character  no-undo.
         define variable cField  as character  no-undo.
@@ -185,7 +199,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
          * determine the correct datatype without assistance from the field buffer, so that too will be
          * used to convert the value appropriately for the resulting query phrase. 
          */
-        assign hField = QueryBuilder:GetFieldBuffer(phTable, poClause:FieldName) no-error.
+        assign hField = this-object:GetFieldBuffer(phTable, poClause:FieldName) no-error.
 
         if valid-handle(hField) then
             assign
@@ -254,61 +268,61 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
             when "character" then do:
                 /* Assumes the Value should only be of Longchar/Character type. */
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value:ToString()).
             end. /* character */
 
             when "date" then do:
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, date(poClause:Value:ToString())).
                 else if type-of(poClause:Value, IDateHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value).
             end. /* date */
 
             when "datetime" then do:
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, datetime(poClause:Value:ToString())).
                 else if type-of(poClause:Value, IDateTimeHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value).
             end. /* datetime */
 
             when "datetime-tz" then do:
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, datetime-tz(poClause:Value:ToString())).
                 else if type-of(poClause:Value, IDateTimeTzHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value).
             end. /* datetime-tz */
 
             when "decimal" then do:
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, decimal(poClause:Value:ToString())).
                 else if type-of(poClause:Value, IDecimalHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value).
             end. /* decimal */
 
             when "integer" then do:
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, integer(poClause:Value:ToString())).
                 else if type-of(poClause:Value, IIntegerHolder) or type-of(poClause:Value, IInt64Holder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value).
             end. /* integer */
 
             when "logical" then do:
                 if type-of(poClause:Value, ILongcharHolder) or type-of(poClause:Value, ICharacterHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, logical(poClause:Value:ToString())).
                 else if type-of(poClause:Value, ILogicalHolder) then
-                    assign cClause = substitute(QueryBuilder:MapOperator(poClause:Operator, cType),
+                    assign cClause = substitute(this-object:MapOperator(poClause:Operator, cType),
                                                 cField, poClause:Value).
             end. /* logical */
         end case.
@@ -330,13 +344,13 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        @param IGetDataRequest A valid queryn definition
        @param handle a Dataset or buffer (TT or DB) handle 
        @return handle A valid QUERY handle */
-    method public static handle BuildQuery (input pFilter as IGetDataRequest,
-                                            input pSchema as handle):
+    method public handle BuildQuery (input pFilter as IGetDataRequest,
+                                     input pSchema as handle):
         define variable hQuery as handle no-undo.
 
         create query hQuery.
         hQuery:set-buffers(pSchema).
-        hQuery:query-prepare(substitute("for each &1 &2", pSchema:name, QueryBuilder:BuildQueryString(pFilter, pSchema))).
+        hQuery:query-prepare(substitute("for each &1 &2", pSchema:name, this-object:BuildQueryString(pFilter, pSchema))).
         hQuery:query-open.
 
         return hQuery.
@@ -347,7 +361,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        
        @param IGetDataRequest A valid queryn definition
        @return character A complete WHERE clause , with no name conversions */
-    method public static character BuildQueryString (input pFilter as IGetDataRequest):
+    method public character BuildQueryString (input pFilter as IGetDataRequest):
         /**
          * Call internal method with filter but no schema. However, due to the
          * need to utilize schema for detecting real field names (from public,
@@ -365,70 +379,91 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
        @param IGetDataRequest A valid queryn definition
        @param handle a Dataset or buffer (TT or DB) handle 
        @return character A complete WHERE clause */
-    method public static character BuildQueryString (input pFilter as IGetDataRequest,
-                                                     input pSchema as handle):
+    method public character BuildQueryString (input pFilter as IGetDataRequest,
+                                              input pSchema as handle):
         define variable oQueryDef    as QueryDefinition no-undo.
         define variable oSortList    as QuerySortEntry  no-undo extent.
-        define variable cQueryString as character       no-undo extent.
+        define variable cQueryString as character       no-undo.
+        define variable cTableQuery  as character       no-undo extent.
         define variable bhTable      as handle          no-undo.
         define variable bhField      as handle          no-undo.
         define variable iTable       as integer         no-undo.
         define variable iLoop        as integer         no-undo.
-        define variable cSortBy      as character       no-undo.
+        define variable cSortBy      as character       no-undo extent.
+        define variable cTable       as character       no-undo extent.
 
         /* Cycle through all the table requests for this filter. */
-        extent(cQueryString) = extent(pFilter:TableRequests).
+        extent(cSortBy) = extent(pFilter:TableRequests).
+        extent(cTable) = extent(pFilter:TableRequests).
+        extent(cTableQuery) = extent(pFilter:TableRequests).
         do iTable = 1 to extent(pFilter:TableRequests):
             if valid-handle(pSchema) and pSchema:type eq "dataset" then
-                assign bhTable = QueryBuilder:GetTableBuffer(pSchema,
-                                                             cast(pFilter:TableRequests[iTable], GetDataTableRequest):TableName).
+                assign bhTable = this-object:GetTableBuffer(pSchema,
+                                                            cast(pFilter:TableRequests[iTable], GetDataTableRequest):TableName).
             else if valid-handle(pSchema) and pSchema:type eq "temp-table" then
                 assign bhTable = pSchema. /* Use given temp-table handle as-is. */
+
+            /* Remember the real name for each table. */
+            if valid-handle(bhTable) then
+                assign cTable[iTable] = bhTable:name.
 
             assign oQueryDef = cast(cast(pFilter:TableRequests[iTable], GetDataTableRequest):QueryDefinition, QueryDefinition).
             assign oSortList = cast(oQueryDef:QuerySort, QuerySortEntry).
 
             /* Build either a nested query or a simple clause, depending on the object available. */
             if type-of(oQueryDef:QuerySelection, QueryGroup) then
-                assign cQueryString = QueryBuilder:BuildGroup(bhTable, cast(oQueryDef:QuerySelection, QueryGroup)).
+                assign cTableQuery[iTable] = this-object:BuildGroup(bhTable, cast(oQueryDef:QuerySelection, QueryGroup)).
             else if type-of(oQueryDef:QuerySelection, QueryPredicate) then
-                assign cQueryString = QueryBuilder:BuildClause(bhTable, cast(oQueryDef:QuerySelection, QueryPredicate)).
+                assign cTableQuery[iTable] = this-object:BuildClause(bhTable, cast(oQueryDef:QuerySelection, QueryPredicate)).
 
             if extent(oSortList) ne ? then
             do iLoop = 1 to extent(oSortList):
                 if valid-object(oSortList[iLoop]) then do:
                     /* Create the sort clause based on the real field information. */
-                    assign bhField = QueryBuilder:GetFieldBuffer(bhTable, oSortList[iLoop]:FieldName).
+                    assign bhField = this-object:GetFieldBuffer(bhTable, oSortList[iLoop]:FieldName).
                     if valid-object(bhField) then
-                        assign cSortBy = trim(substitute("&1 by &2 &3", cSortBy, bhField:name,
-                                                         if oSortList[iLoop]:SortOrder eq Ccs.BusinessLogic.SortOrderEnum:Ascending
-                                                         then "" else oSortList[iLoop]:SortOrder:ToString())).
+                        assign cSortBy[iTable] = trim(substitute("&1 by &2 &3", cSortBy[iTable], bhField:name,
+                                                                 if oSortList[iLoop]:SortOrder eq Ccs.BusinessLogic.SortOrderEnum:Ascending
+                                                                 then "" else oSortList[iLoop]:SortOrder:ToString())).
                     else /* Otherwise use the given field name. */
-                        assign cSortBy = trim(substitute("&1 by &2 &3", cSortBy, oSortList[iLoop]:FieldName,
-                                                         if oSortList[iLoop]:SortOrder eq Ccs.BusinessLogic.SortOrderEnum:Ascending
-                                                         then "" else oSortList[iLoop]:SortOrder:ToString())).
+                        assign cSortBy[iTable] = trim(substitute("&1 by &2 &3", cSortBy[iTable], oSortList[iLoop]:FieldName,
+                                                                 if oSortList[iLoop]:SortOrder eq Ccs.BusinessLogic.SortOrderEnum:Ascending
+                                                                 then "" else oSortList[iLoop]:SortOrder:ToString())).
                 end. /* Valid Sort Entry*/
             end. /* do iLoop */
 
-            /* Ensure a blank string becomes a valid query phrase. */
-            if trim(cQueryString[iTable]) eq "" then
-                assign cQueryString[iTable] = "where true".
+            /* If query string is blank, set to simply "true". */
+            if (cTableQuery[iTable] gt "") ne true then
+                assign cTableQuery[iTable] = "true". /* Will add the "where" to this later. */
 
-            /* Add a "where" as necessary to the constructed string. */
-            if not cQueryString[iTable] begins "where" then
-                assign cQueryString[iTable] = substitute("where &1", cQueryString[iTable]).
-
-            /* Add the sort phrase to the string. */
-            assign cQueryString[iTable] = substitute("&1 &2", cQueryString[iTable], cSortBy).
-
-            /* If the QueryString property is empty, provide the derived query string. */
+            /* If the table request's QueryString property is empty, provide the derived table query string and sort phrase. */
             if (cast(pFilter:TableRequests[iTable], GetDataTableRequest):QueryString gt "") ne true then
-                cast(pFilter:TableRequests[iTable], GetDataTableRequest):QueryString = trim(cQueryString[iTable]).
+                cast(pFilter:TableRequests[iTable], GetDataTableRequest):QueryString = substitute("where &1 &2",
+                                                                                                  cTableQuery[iTable],
+                                                                                                  cSortBy[iTable]).
         end. /* extent pFilter:TableRequests */
+
+        /* Build the query string from each table query. */
+        do iLoop = 1 to extent(cTableQuery):
+            if (cQueryString gt "") ne true then
+                /* Set blank query string to first table's query string. */
+                assign cQueryString = substitute("each &1 where &2", cTable[iLoop], cTableQuery[iLoop]).
+            else
+                /* If we have a valid name for an additional table, append the next table query. */
+                assign cQueryString = substitute("&1, each &2 where &3", cQueryString, cTable[iLoop], cTableQuery[iLoop]).
+
+            /* Trim commas and spaces from query string after each table. */
+            assign cQueryString = trim(trim(cQueryString, ",")).
+        end. /* extent cTableQuery */
+
+        /* Add the sort phrases after all table "where" phrases. */
+        do iLoop = 1 to extent(cSortBy):
+            assign cQueryString = substitute("&1 &2", cQueryString, cSortBy[iLoop]).
+        end. /* extent cSortBy */
 
         finally:
             /* Return the first TableRequest's query string by default. */
-            return trim(cQueryString[1]).
+            return trim(cQueryString).
         end finally.
     end method. /* BuildQueryString */
     

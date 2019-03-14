@@ -183,10 +183,10 @@ class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
                    filterTable[1]      = '':u
                    .
         parser = dynamic-new string(parserType:TypeName) (filterTable).
-        
+
         if type-of(parser, ISupportInitialize) then
             cast(parser, ISupportInitialize):Initialize().
-        
+
         return parser.
     end method.
 
