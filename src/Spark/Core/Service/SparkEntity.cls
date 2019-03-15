@@ -226,7 +226,11 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             assign oQueryBuilder = new QueryBuilder().
             oQueryBuilder:BuildQueryString(oDataRequest, ProDataSet).
 
-            /* @TODO: Make this work appropriately with all table requests? */
+            /**
+             * Only need the top table's query string for this operation.
+             * Reason: This must begin with a "where" and is only applicable
+             * to one table when the dynamic query does a "preselect each".
+             */
             assign cFilter = oDataRequest:TableRequests[1]:QueryString.
         end. /* valid-object */
 
@@ -495,9 +499,10 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
             if valid-handle(ProDataSet) and extent(hTTBuffer) ne ? then
             do ix = 1 to ProDataSet:num-buffers:
-                if valid-handle(hTTBuffer[ix]) then
+                if valid-handle(hTTBuffer[ix]) then do:
                     hTTBuffer[ix]:detach-data-source() no-error.
-                delete object hTTBuffer[ix] no-error.
+                    delete object hTTBuffer[ix] no-error.
+                end.
             end.
 
             if extent(hDBBuffer) ne ? then

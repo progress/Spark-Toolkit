@@ -241,6 +241,10 @@
 		<delete dir="${preprocess}" quiet="true"/>
 		<delete dir="${build.tmp}" quiet="true"/>
 		<delete dir="${doc.tmp}" quiet="true"/>
+
+		<delete quiet="true">
+            <fileset dir="${src.dir}" includes="**/*.r"/>
+        </delete>
 	</target>
 
     <target name="build_abldoc" depends="clean">
