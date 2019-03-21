@@ -2,10 +2,10 @@
     File        : createDomain.p
     Purpose     : Create or update a single domain for securing API requests.
     Syntax      : Execute procedure while connected to application databases.
-    Description : 
+    Description :
     Author(s)   : Dustin Grau
     Created     : Mon Dec 19 15:06:27 EST 2016
-    Notes       : Adds domain to database(s), and produces a PMFO config file.
+    Notes       : Adds domain to database(s), and produces a Spark config file.
   ----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
@@ -17,9 +17,9 @@ using OpenEdge.DataAdmin.Lang.Collections.* from propath.
 
 block-level on error undo, throw.
 
+/* NOTICE: Do not use the "@" symbol in any passcodes! */
 &global-define DLC C:\Progress\OpenEdge
 &global-define DomainType _extsso
-&global-define PassCodePrefix oech1::
 &global-define ResetName "SparkReset.cp"
 
 define variable domainName        as character no-undo.
@@ -58,7 +58,7 @@ update
 
 /* Apply changes to all connected databases. */
 do iDB = 1 to num-dbs:
-    /* Used for PMFO config file. */
+    /* Used for Spark config file. */
     assign oSession = new Progress.Json.ObjectModel.JsonObject().
     assign oConfig = new Progress.Json.ObjectModel.JsonObject().
     assign oParams = new Progress.Json.ObjectModel.JsonArray().
@@ -99,9 +99,9 @@ do iDB = 1 to num-dbs:
         assign oEntry = new Progress.Json.ObjectModel.JsonObject().
         oEntry:Add("domain", domainName).
         &if proversion(1) begins "12" &then
-            oEntry:Add("accessCode", security-policy:encode-domain-access-code("{&PassCode}")).
+            oEntry:Add("accessCode", security-policy:encode-domain-access-code(domainAccessCode)).
         &else
-            oEntry:Add("accessCode", substitute("{&PassCodePrefix}&1", audit-policy:encrypt-audit-mac-key(domainAccessCode))).
+            oEntry:Add("accessCode", substitute("oech1::&1", audit-policy:encrypt-audit-mac-key(domainAccessCode))).
         &endif
         oEntry:Add("description", oDomain:Description).
         oDomains:Add(oEntry).
@@ -109,7 +109,7 @@ do iDB = 1 to num-dbs:
         delete object oService.
     end. /* valid-object(oService) */
 
-    /* Output domain data to session.json config file for PMFO. */
+    /* Output domain data to session.json config file for Spark. */
     oConfig:Add("Domains", oDomains).
     oSession:Add("Config", oConfig).
     oSession:WriteFile("session.json", true).
