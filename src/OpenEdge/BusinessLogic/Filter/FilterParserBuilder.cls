@@ -19,8 +19,11 @@ using OpenEdge.Core.ISupportInitialize.
 using OpenEdge.Core.Util.BuilderRegistry.
 using OpenEdge.Core.Util.ConfigBuilder.
 using Progress.Json.ObjectModel.JsonObject.
+using Progress.Json.ObjectModel.JsonDataType.
+using Progress.Json.ObjectModel.JsonArray.
 
 class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
+
     /* (mandatory) The filter pattern for which we create the Parser */
     define public property FilterPattern as character no-undo
         get.
@@ -81,25 +84,65 @@ class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
         return builder.
     end method.
     
-    /** Returns an argument value writer for a argument type
-    
-        Specialised JSON filter parsers are used. To figure out which on to 
-        use
-           1. Look for a parser that matches the name of the first property in the JSON
-           2. If none is found, then loop for a property in the JSON that matches one of the
-              registered filter parsers.
-           3. If no parser is found, return without raising error.
+    /* Builds a parser for a JSON filter. This array version loops through the
+       array and passes any OBJECT or STRING entries to the relevant Build() 
+       method.
+       
+       @param  JsonArray The entire filter
+       @return FilterParserBuilder The filter parser builder to use */
+    method static public FilterParserBuilder Build(input pFilter as JsonArray):
+        define variable builder as FilterParserBuilder no-undo.
+        define variable loop as integer no-undo.
+        define variable cnt as integer no-undo.
         
-        @param  JsonObject The entire filter
-        @return FilterParserBuilder The entity writer builder to use */
+        Assert:NotNull(pFilter, 'JSON Filter').
+        
+        assign cnt = pFilter:Length.
+        do loop = 1 to cnt
+        while not valid-object(builder):
+            
+            case pFilter:GetType(loop):
+                when JsonDataType:ARRAY then
+                    assign builder = FilterParserBuilder:Build(pFilter:GetJsonArray(loop)).
+                when JsonDataType:OBJECT then
+                    assign builder = FilterParserBuilder:Build(pFilter:GetJsonObject(loop)).
+                when JsonDataType:STRING then
+                    assign builder = FilterParserBuilder:Build(pFilter:GetCharacter(loop)).
+            end case.
+        end.
+        
+        return builder.
+    end method.
+    
+    /* Builds a parser for a JSON filter
+    
+       Specialised JSON filter parsers are used. To figure out which on to 
+       use
+           1. Look for a string property called mappingType and use that property value
+           2. Loop for a property in the JSON that matches one of the
+              registered filter parsers.
+           3. Return without raising error.
+        
+       @param  JsonObject The entire filter
+       @return FilterParserBuilder The filter parser builder to use */
     method static public FilterParserBuilder Build(input pFilter as JsonObject):
         define variable builder as FilterParserBuilder no-undo.
         define variable keyCnt as integer no-undo.
         define variable keyMax as integer no-undo.
         // AS CHARACTER suffers from ADAS-7500
         define variable propNames as longchar extent no-undo.
-        
+            
         Assert:NotNull(pFilter, 'JSON Filter').
+        
+        // 1. shortcut via a string mappingType property
+        if     pFilter:Has('mappingType':u)
+           and pFilter:GetType('mappingType':u) eq JsonDataType:STRING
+        then
+            assign builder = FilterParserBuilder:Build(pFilter:GetCharacter('mappingType':u)).
+        
+        // we found a builder. If not we'll try the slow way.
+        if valid-object(builder) then
+            return builder.
         
         assign propNames = pFilter:GetNames()
                keyMax    = extent(propNames)
@@ -108,10 +151,13 @@ class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
         if extent(propNames) eq ? then
             return builder.
         
-        do keyCnt = 1 to keyMax while not valid-object(builder):
+        // 2. Loop through the list of properties, by property name (not value) 
+        do keyCnt = 1 to keyMax
+        while not valid-object(builder):
             assign builder = FilterParserBuilder:Build(string(propNames[keyCnt])).
         end.
         
+        // 3. Return
         return builder.
     end method.
     
@@ -137,13 +183,13 @@ class OpenEdge.BusinessLogic.Filter.FilterParserBuilder inherits ConfigBuilder:
                    filterTable[1]      = '':u
                    .
         parser = dynamic-new string(parserType:TypeName) (filterTable).
-        
+
         if type-of(parser, ISupportInitialize) then
             cast(parser, ISupportInitialize):Initialize().
-        
+
         return parser.
     end method.
-    
+
     /* Sets the table for which this filter applies, if any
        
        @param character A table name for this filter

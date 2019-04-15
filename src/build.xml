@@ -86,7 +86,6 @@
 
 			<!-- Set properties for special directories. -->
 			<property name="src.dir" value="${basedir}"/>
-			<property name="build.out" value="${src.dir}/../dist"/>
 			<property name="build.tmp" value="${src.dir}/build"/>
 			<property name="doc.out" value="${src.dir}/../docs"/>
 			<property name="doc.tmp" value="${src.dir}/doctemp"/>
@@ -123,6 +122,10 @@
 			<!-- Access the OE version info, and read into a property. -->
 			<ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
 			<property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
+
+			<!-- Set properties for special directories. -->
+			<property name="build.out" value="${src.dir}/../dist/oe${oeMajor}"/>
+			<mkdir dir="${build.out}"/>
 		</sequential>
     </macrodef>
 
@@ -238,6 +241,10 @@
 		<delete dir="${preprocess}" quiet="true"/>
 		<delete dir="${build.tmp}" quiet="true"/>
 		<delete dir="${doc.tmp}" quiet="true"/>
+
+		<delete quiet="true">
+            <fileset dir="${src.dir}" includes="**/*.r"/>
+        </delete>
 	</target>
 
     <target name="build_abldoc" depends="clean">

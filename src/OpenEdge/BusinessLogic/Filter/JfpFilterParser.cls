@@ -73,6 +73,7 @@ class OpenEdge.BusinessLogic.Filter.JfpFilterParser inherits AblFilterParser:
         assign qryDef                       = new QueryDefinition()
                tableRequest:QueryDefinition = qryDef
                .
+
         if     pData:Has('orderBy':u)
            and pData:GetType('orderBy':u) eq JsonDataType:STRING
         then

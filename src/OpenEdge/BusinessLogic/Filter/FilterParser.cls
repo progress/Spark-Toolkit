@@ -1,10 +1,11 @@
 /************************************************
-Copyright (c)  2018 by Progress Software Corporation. All rights reserved.
+Copyright (c) 2019 by Progress Software Corporation. All rights reserved.
 *************************************************/ 
 /*------------------------------------------------------------------------
     File        : FilterParser
-    Purpose     : A parent/abstract filter parsee class for creating
-                  objects data requests for a Business Entity's getData() operations
+    Purpose     : A parent/abstract filter parse class for creating
+                  objects data requests for a CCS Business Entity's getData()
+                  and getResultCount() operations
     Syntax      : 
     Description : 
     Author(s)   : pjudge
@@ -40,13 +41,12 @@ class OpenEdge.BusinessLogic.Filter.FilterParser abstract:
                this-object:FilterTable[1] = pTable
                .
     end constructor.
-
+    
     /* Constructor.
        
        @param character[] (mandatory) An array of table name for which to construct the filter */
     constructor public FilterParser(input pTable as character extent):
         super().
-        
         Assert:NotNull(pTable, 'Table name').
         assign this-object:FilterTable = pTable.
     end constructor.

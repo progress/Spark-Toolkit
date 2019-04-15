@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.2)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.4.3)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -186,22 +186,45 @@
   </td>
   <td class="signature_col cell">
     <font>
+         OpenEdge.BusinessLogic.Filter.FilterParserBuilder <a href='#020010ZMUyZVX1QNzPmOw0kgS4Xg=='> Build (JsonArray)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Builds a parser for a JSON filter. This array version loops through the
+array and passes any OBJECT or STRING entries to the relevant Build()
+method.
+
+@param  JsonArray The entire filter
+@return FilterParserBuilder The filter parser builder to use */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
          OpenEdge.BusinessLogic.Filter.FilterParserBuilder <a href='#020010Eg3iRno9HZ2WTgx0HAswVg=='> Build (JsonObject)</a>
     </font>
   </td>
   <td class="cell">
      
-/** Returns an argument value writer for a argument type
+/* Builds a parser for a JSON filter
 
 Specialised JSON filter parsers are used. To figure out which on to
 use
-1. Look for a parser that matches the name of the first property in the JSON
-2. If none is found, then loop for a property in the JSON that matches one of the
+1. Look for a string property called mappingType and use that property value
+2. Loop for a property in the JSON that matches one of the
 registered filter parsers.
-3. If no parser is found, return without raising error.
+3. Return without raising error.
 
 @param  JsonObject The entire filter
-@return FilterParserBuilder The entity writer builder to use */ <br> <i>  </i>
+@return FilterParserBuilder The filter parser builder to use */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -961,6 +984,84 @@ registered filter parsers.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010ZMUyZVX1QNzPmOw0kgS4Xg==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.BusinessLogic.Filter.FilterParserBuilder.html'>OpenEdge.BusinessLogic.Filter.FilterParserBuilder</a> <a href='#020010ZMUyZVX1QNzPmOw0kgS4Xg=='> Build (JsonArray)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.BusinessLogic.Filter.FilterParserBuilder.html'>OpenEdge.BusinessLogic.Filter.FilterParserBuilder</a> <a href='#020010ZMUyZVX1QNzPmOw0kgS4Xg=='> Build (JsonArray)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Builds a parser for a JSON filter. This array version loops through the </td></tr><td class='paramname'></td><td class='paramdesc'>array and passes any OBJECT or STRING entries to the relevant Build() </td></tr><td class='paramname'></td><td class='paramdesc'>method. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pFilter</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.BusinessLogic.Filter.FilterParserBuilder.html'>OpenEdge.BusinessLogic.Filter.FilterParserBuilder</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        FilterParserBuilder The filter parser builder to use
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010Eg3iRno9HZ2WTgx0HAswVg==" href="#Top">Top</a>
                 <a name=" <a href='OpenEdge.BusinessLogic.Filter.FilterParserBuilder.html'>OpenEdge.BusinessLogic.Filter.FilterParserBuilder</a> <a href='#020010Eg3iRno9HZ2WTgx0HAswVg=='> Build (JsonObject)</a>"></a>
             </font>
@@ -986,7 +1087,7 @@ registered filter parsers.
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Returns an argument value writer for a argument type </td></tr><td class='paramname'></td><td class='paramdesc'>Specialised JSON filter parsers are used. To figure out which on to </td></tr><td class='paramname'></td><td class='paramdesc'>use </td></tr><td class='paramname'></td><td class='paramdesc'>1. Look for a parser that matches the name of the first property in the JSON </td></tr><td class='paramname'></td><td class='paramdesc'>2. If none is found, then loop for a property in the JSON that matches one of the </td></tr><td class='paramname'></td><td class='paramdesc'>registered filter parsers. </td></tr><td class='paramname'></td><td class='paramdesc'>3. If no parser is found, return without raising error. </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Builds a parser for a JSON filter </td></tr><td class='paramname'></td><td class='paramdesc'>Specialised JSON filter parsers are used. To figure out which on to </td></tr><td class='paramname'></td><td class='paramdesc'>use </td></tr><td class='paramname'></td><td class='paramdesc'>1. Look for a string property called mappingType and use that property value </td></tr><td class='paramname'></td><td class='paramdesc'>2. Loop for a property in the JSON that matches one of the </td></tr><td class='paramname'></td><td class='paramdesc'>registered filter parsers. </td></tr><td class='paramname'></td><td class='paramdesc'>3. Return without raising error. </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1026,7 +1127,7 @@ registered filter parsers.
     <td class="document_detail_parameter">
     </td>
     <td>
-        FilterParserBuilder The entity writer builder to use
+        FilterParserBuilder The filter parser builder to use
     </td>
 </tr>
               </table>
@@ -2967,6 +3068,6 @@ registered filter parsers.
     <br>
     <br>
     
-    <font class="footer_timestamp">02.04.2019 11:27:42</font>
+    <font class="footer_timestamp">03.05.2019 14:15:19</font>
     </BODY>
 </HTML>

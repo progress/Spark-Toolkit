@@ -52,19 +52,19 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
     
     /* Constructor.
        
-       @param character (mandatory) A table name for which to construct the filter */
+       @param longchar (mandatory) A table name for which to construct the filter */
     constructor public AblFilterParser(input pTable as character):
         super(pTable).
     end constructor.
     
     /* Constructor.
        
-       @param character[] (mandatory) An array of table name for which to construct the filter */
+       @param longchar[] (mandatory) An array of table name for which to construct the filter */
     constructor public AblFilterParser(input pTable as character extent):
         super(pTable).
     end constructor.
     
-    method protected IQuerySortEntry extent ParseSortString(input pSortBy as character):
+    method protected IQuerySortEntry extent ParseSortString(input pSortBy as longchar):
         define variable querySortEntry as  IQuerySortEntry extent no-undo.
         define variable sortOrder as SortOrderEnum no-undo.
         define variable sortDirection as character no-undo.
@@ -96,8 +96,8 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         
         return querySortEntry.
     end method.
-
-    method protected IQueryEntry ParseWhereString(input pWhere as character):
+    
+    method protected IQueryEntry ParseWhereString(input pWhere as longchar):
         define variable qryGroup as QueryGroup no-undo.
         define variable parentGroup as QueryGroup no-undo.
         define variable groupStack as ObjectStack no-undo.
@@ -125,6 +125,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                haveOperator = no
                haveValue    = no
                .
+
         if String:IsNullOrEmpty(pWhere) then
             return qryPredicate.
         
@@ -133,6 +134,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             assign word   = entry(wordCnt, pWhere, StringConstant:SPACE)
                    chrPos = 0
                    .
+
             case word:
                 // inter-phrase delimiter; this table is done
                 when ',':u then
@@ -149,17 +151,17 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 when '(':u then
                 do:
                     // no-op for now
-                    //groupStack:Push(qryGroup).
+                    // groupStack:Push(qryGroup).
                 end.
                     
                 when ')':u then
                 do:
-                    //assign parentGroup = cast(groupStack:Pop(), QueryGroup).
+                    // assign parentGroup = cast(groupStack:Pop(), QueryGroup).
                     // no-op for now
                 end.
                 
                 // special cases that we (for now) IGNORE
-                //@todo().
+                // @todo().
                 when 'TRUE'  or
                 when 'FALSE' then
                 do:
@@ -330,7 +332,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                         
                         // we have a value
                         assign word = substring(word, operStartPos + operLen).
-                    end.    // there is an operator
+                    end. // there is an operator
                     
                     // all that's in the word now should be the value.
                     // haveValue may be TRUE from earlier code.
@@ -362,7 +364,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                        haveOperator = no
                        haveValue    = no
                        .
-        end.    // WORD-LOOP:
+        end. // WORD-LOOP:
         
         // we return one of an IQueryPredicate (single clause) or an IQueryGroup (many clauses) 
         if valid-object(qryGroup) then
@@ -392,7 +394,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             when type-of(pSortBy, ILongcharHolder)  or
             when type-of(pSortBy, ICharacterHolder) then
                 assign sortByString = dynamic-property(pSortBy, 'Value':u)
-                       qrySort      = ParseSortString(sortByString)
+                       qrySort      = this-object:ParseSortString(sortByString)
                        .
             
             when type-of(pSortBy, ICharacterArrayHolder) or
@@ -407,7 +409,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 do loop = 1 to cnt:
                     assign sortByString = sortByString + StringConstant:SPACE + sortByArray[loop].
                 end.
-                assign qrySort = ParseSortString(sortByString).
+                assign qrySort = this-object:ParseSortString(sortByString).
             end.
             
             otherwise
@@ -435,7 +437,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             when type-of(pWhere, ILongcharHolder)  or
             when type-of(pWhere, ICharacterHolder) then
                 assign whereString  = dynamic-property(pWhere, 'Value':u)
-                       qryEntry     = ParseWhereString(whereString)
+                       qryEntry     = this-object:ParseWhereString(whereString)
                        .
             
             when type-of(pWhere, ICharacterArrayHolder) or
@@ -445,13 +447,13 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                        cnt        = extent(stringData)
                        .
                 if cnt eq 1 then
-                    assign qryEntry = ParseWhereString(string(stringData[1])).
+                    assign qryEntry = this-object:ParseWhereString(string(stringData[1])).
                 else
                 if not cnt eq ? then
                 do:
                     assign qryGrp = new QueryGroup(cnt).
                     do loop = 1 to cnt:
-                        assign qryEntry = ParseWhereString(string(stringData[loop])).
+                        assign qryEntry = this-object:ParseWhereString(string(stringData[loop])).
                         //yuk, but the interfaces are defined READ-ONLY
                         if type-of(qryEntry, QueryPredicate) then
                             assign cast(qryEntry, QueryPredicate):Join = JoinEnum:And.
@@ -470,6 +472,26 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         
         return qryEntry.
     end method.
+    
+    /* Reads and processes (parses) a complete data filter.
+       
+       @param longchar The filter data
+       @param IGetDataRequest A new filter object 
+    method override public IGetDataRequest Parse(input pData as longchar):
+        define variable dataRequest as GetDataRequest no-undo.
+        define variable qryDef as QueryDefinition no-undo.
+        define variable tableRequest as GetDataTableRequest no-undo.
+        
+        assign dataRequest                       = new GetDataRequest(1)
+               tableRequest                      = new GetDataTableRequest(FilterTable[1])
+               dataRequest:TableRequests[1]      = tableRequest
+               qryDef                            = new QueryDefinition()
+               tableRequest:QueryDefinition      = qryDef
+               qryDef:QuerySelection             = ParseWhereString(string(pData))
+               .
+        return cast(dataRequest, IGetDataRequest).
+    end method.
+       */
     
     /* Reads and processes (parses) the filter.
        
@@ -491,14 +513,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             
             when type-of(pData, ICharacterHolder) or
             when type-of(pData, ILongcharHolder) then
-                assign extent(stringData)                = 1
-                       extent(dataRequest:TableRequests) = 1
-                       stringData[1]                     = dynamic-property(pData, 'Value':u) 
+                assign dataRequest                       = new GetDataRequest(1)
                        tableRequest                      = new GetDataTableRequest(FilterTable[1])
                        dataRequest:TableRequests[1]      = tableRequest
                        qryDef                            = new QueryDefinition()
                        tableRequest:QueryDefinition      = qryDef
-                       qryDef:QuerySelection             = ParseWhereString(string(stringData[1]))
+                       qryDef:QuerySelection             = this-object:ParseWhereString(dynamic-property(pData, 'Value':u))
                        .
             
             when type-of(pData, ICharacterArrayHolder) or
@@ -517,7 +537,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                            dataRequest:TableRequests[loop]   = tableRequest
                            qryDef                            = new QueryDefinition()
                            tableRequest:QueryDefinition      = qryDef
-                           qryDef:QuerySelection             = ParseWhereString(string(stringData[loop]))
+                           qryDef:QuerySelection             = this-object:ParseWhereString(string(stringData[loop]))
                            .
                 end.
             end.
@@ -576,7 +596,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         if     pData:Has('WHERE':u) 
            and pData:GetType('WHERE':u) eq JsonDataType:STRING
         then
-            assign qryDef:QuerySelection = ParseWhereString(pData:GetCharacter('WHERE':u)).
+            assign qryDef:QuerySelection = this-object:ParseWhereString(pData:GetCharacter('WHERE':u)).
         
         return cast(tableRequest, IGetDataTableRequest).
     end method.
