@@ -2,7 +2,6 @@ using Progress.Json.ObjectModel.JsonArray from propath.
 using Progress.Json.ObjectModel.JsonObject from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.ITranslationManager from propath.
-using Spark.Core.Util.ApplicationError from propath.
 using Spark.Core.Util.ErrorTypeEnum from propath.
 
 block-level on error undo, throw.

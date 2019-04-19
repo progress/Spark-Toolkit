@@ -1,4 +1,4 @@
- /*------------------------------------------------------------------------
+/*------------------------------------------------------------------------
     File        : SparkEntity
     Purpose     :
     Description :
@@ -176,7 +176,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             assign oCountResponse = this-object:getResultCount(oDataRequest).
 
         catch err as Progress.Lang.Error:
-            message substitute("Error Filtering Data: &1", err:GetMessage(1)).
+            oLoggingManager:logError("Error Filtering Data:", err, "ENTITY-ERR", 1).
         end catch.
         finally:
             define variable iCount as int64 no-undo initial 0.
@@ -436,15 +436,16 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         /* Use the query builder to convert the request object into a valid "where" phrases. */
         assign oQueryBuilder = new QueryBuilder().
         assign cQueryString = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
-
         extent(hTTBuffer) = ProDataSet:num-buffers.
         do ix = 1 to ProDataSet:num-buffers:
             assign hTTBuffer[ix] = ProDataSet:get-buffer-handle(ix) no-error.
+
             if valid-handle(hTTBuffer[ix]) then do:
                 hTTBuffer[ix]:empty-temp-table().
                 hTTBuffer[ix]:attach-data-source(ProDataSource[ix]).
 
-                if valid-object(poRequest:TableRequests[ix]) then do:
+                if extent(poRequest:TableRequests) ge ix and
+                   valid-object(poRequest:TableRequests[ix]) then do:
                     /* Set batch size per max rows to return, or use paging context if available. */
                     if poRequest:TableRequests[ix]:NumRecords gt 0 then
                         hTTBuffer[ix]:batch-size = integer(poRequest:TableRequests[ix]:NumRecords).
@@ -466,7 +467,8 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         do ix = 1 to extent(ProDataSource):
             assign hDBBuffer[ix] = ProDataSource[ix]:get-source-buffer(1) no-error.
 
-            if valid-object(poRequest:TableRequests[ix]) then do:
+            if extent(poRequest:TableRequests) ge ix and
+               valid-object(poRequest:TableRequests[ix]) then do:
                 ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
 
                 /* Echo the current query phrase to the log if debugging is enabled. */
@@ -494,6 +496,9 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         assign oResponse = new GetDataResponse().
         return oResponse.
 
+        catch err as Progress.Lang.Error:
+            oLoggingManager:logError("Error Getting Data:", err, "ENTITY-ERR", 1).
+        end catch.
         finally:
             delete object oQueryBuilder no-error.
 

@@ -21,7 +21,6 @@ using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.ISchemaManager from propath.
 using Spark.Core.Service.IDynamicEntity from propath.
 using Spark.Core.Service.IDynamicResource from propath.
-using Spark.Core.Util.ApplicationError from propath.
 using Spark.Core.Util.GenTools from propath.
 using Spark.Core.Util.OperationEnum from propath.
 using Spark.Core.Util.OSTools from propath.
