@@ -4,7 +4,7 @@
     Description : https://en.wikipedia.org/wiki/Base32
     Author(s)   : Dustin Grau
     Created     : Mon Oct 16 10:02:54 EDT 2017
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.* from propath.
@@ -13,7 +13,7 @@ using OpenEdge.Core.Collections.StringStringMap from propath.
 
 block-level on error undo, throw.
 
-class Spark.Core.Util.Base32 use-widget-pool: 
+class Spark.Core.Util.Base32 use-widget-pool:
 
     define private static variable oEncodeMap as StringStringMap no-undo.
     define private static variable oDecodeMap as StringKeyedMap  no-undo.
@@ -23,38 +23,38 @@ class Spark.Core.Util.Base32 use-widget-pool:
         assign oEncodeMap = new StringStringMap().
         assign oDecodeMap = new StringKeyedMap().
 
-        oEncodeMap:Put("0", "A"). 
-        oEncodeMap:Put("1", "B"). 
-        oEncodeMap:Put("2", "C"). 
-        oEncodeMap:Put("3", "D"). 
-        oEncodeMap:Put("4", "E"). 
-        oEncodeMap:Put("5", "F"). 
-        oEncodeMap:Put("6", "G"). 
-        oEncodeMap:Put("7", "H"). 
-        oEncodeMap:Put("8", "I"). 
-        oEncodeMap:Put("9", "J"). 
-        oEncodeMap:Put("10", "K"). 
-        oEncodeMap:Put("11", "L"). 
-        oEncodeMap:Put("12", "M"). 
-        oEncodeMap:Put("13", "N"). 
-        oEncodeMap:Put("14", "O"). 
-        oEncodeMap:Put("15", "P"). 
-        oEncodeMap:Put("16", "Q"). 
-        oEncodeMap:Put("17", "R"). 
-        oEncodeMap:Put("18", "S"). 
-        oEncodeMap:Put("19", "T"). 
-        oEncodeMap:Put("20", "U"). 
-        oEncodeMap:Put("21", "V"). 
-        oEncodeMap:Put("22", "W"). 
-        oEncodeMap:Put("23", "X"). 
-        oEncodeMap:Put("24", "Y"). 
-        oEncodeMap:Put("25", "Z"). 
-        oEncodeMap:Put("26", "2"). 
-        oEncodeMap:Put("27", "3"). 
-        oEncodeMap:Put("28", "4"). 
-        oEncodeMap:Put("29", "5"). 
-        oEncodeMap:Put("30", "6"). 
-        oEncodeMap:Put("31", "7"). 
+        oEncodeMap:Put("0", "A").
+        oEncodeMap:Put("1", "B").
+        oEncodeMap:Put("2", "C").
+        oEncodeMap:Put("3", "D").
+        oEncodeMap:Put("4", "E").
+        oEncodeMap:Put("5", "F").
+        oEncodeMap:Put("6", "G").
+        oEncodeMap:Put("7", "H").
+        oEncodeMap:Put("8", "I").
+        oEncodeMap:Put("9", "J").
+        oEncodeMap:Put("10", "K").
+        oEncodeMap:Put("11", "L").
+        oEncodeMap:Put("12", "M").
+        oEncodeMap:Put("13", "N").
+        oEncodeMap:Put("14", "O").
+        oEncodeMap:Put("15", "P").
+        oEncodeMap:Put("16", "Q").
+        oEncodeMap:Put("17", "R").
+        oEncodeMap:Put("18", "S").
+        oEncodeMap:Put("19", "T").
+        oEncodeMap:Put("20", "U").
+        oEncodeMap:Put("21", "V").
+        oEncodeMap:Put("22", "W").
+        oEncodeMap:Put("23", "X").
+        oEncodeMap:Put("24", "Y").
+        oEncodeMap:Put("25", "Z").
+        oEncodeMap:Put("26", "2").
+        oEncodeMap:Put("27", "3").
+        oEncodeMap:Put("28", "4").
+        oEncodeMap:Put("29", "5").
+        oEncodeMap:Put("30", "6").
+        oEncodeMap:Put("31", "7").
 
         oDecodeMap:Put("A", new OpenEdge.Core.Integer(0)).
         oDecodeMap:Put("B", new OpenEdge.Core.Integer(1)).

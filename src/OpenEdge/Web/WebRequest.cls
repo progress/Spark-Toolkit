@@ -91,13 +91,13 @@ class OpenEdge.Web.WebRequest implements IWebRequest:
                 return new WidgetHandle(web-context:x-document).
             else 
             if web-context:is-json then
-                return new ObjectModelParser():Parse(web-context).        
+                return new ObjectModelParser():Parse(web-context).
             else
             if get-size(web-context:form-long-input) ne ? then
                 /* ideally this should use one of the content-type writers to get a real type */
-                return new Memptr(web-context:form-long-input).
+                return new memptr(web-context:form-long-input).
             else
-                return new Memptr(0).
+                return new memptr(0).
         end. 
         set(prop as Object):
             undo, throw new AppError(GetReadOnlyMessage(),?).

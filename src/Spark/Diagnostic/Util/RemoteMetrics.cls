@@ -86,11 +86,11 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     define private property TrackObjects as character no-undo
         initial "/ABLObjects/status" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/getABLObjectsReport */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/ABLObjects */
     define private property GetObjectsReport as character no-undo
         initial "/ABLObjects" get. set.
 
-    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/getABLObjectsReport/sessions/<sess_id> */
+    /* scheme://server:port/oemanager/applications/<app_name>/agents/<agent_id>/ABLObjects/sessions/<sess_id> */
     define private property GetSessionObjectsReport as character no-undo
         initial "/ABLObjects/sessions/&3" get. set.
 
