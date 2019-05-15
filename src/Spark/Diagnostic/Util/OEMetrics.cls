@@ -17,15 +17,17 @@
   ----------------------------------------------------------------------*/
 
 /**
- * @TODO: Change the current output scheme from dumping all content to disk
- * as metrics are gathered, and instead build a large payload of content. Then
- * if the remote collector is enabled this can be sent to the remote server as
- * a single packet of data. If no remote collector is enabled then the data can
- * be written out to it's respective location on disk per the existing scheme.
- * The data structure could include the planned filename (full path) plus the
- * respective metrics data. This would provide the ISO datetime and agent/session
- * data as proposed and expected by the PAS Monitor parsing logic. The latter
- * will naturally need to be changed as well to pick apart the new payload.
+ * Dated: 5/15/19
+ *
+ * The latest output scheme will gather all individual metrics into a single
+ * JSON object. Then if the remote collector is enabled this can be sent to the
+ * remote server as a single packet of data. If no remote collector is enabled
+ * then the data will be written out to it's respective location on disk per the
+ * former scheme. * The data structure could include the planned filename (full
+ * path) plus the respective metrics data. This would provide the ISO datetime
+ * and agent/session data as proposed and expected by the PAS Monitor parsing
+ * logic. The latter  will naturally need to be changed as well to pick apart
+ * the new payload.
  */
 
 using Progress.Lang.* from propath.
@@ -353,32 +355,43 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
             catch err as Progress.Lang.Error:
                 /* Mark failure if any error occurs. */
+                oLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
                 assign lError = true.
             end catch.
             finally:
-                /* Dump the last metrics output object. */
-                this-object:MetricsOutput:WriteFile(substitute("&1/metrics/MetricsOutput_&2.&3_A&4_S&5.json",
-                                                               this-object:TemporaryDir, iso-date(today), mtime, piAgentID, piSessionID), true).
+                /* Dump the last metrics output object to disk if logging at debug/trace level. */
+                if oMetricsLogger:LogLevel eq LogLevelEnum:Debug or oMetricsLogger:LogLevel eq LogLevelEnum:Trace then 
+                    this-object:MetricsOutput:WriteFile(substitute("&1/metrics/MetricsOutput_&2.&3_A&4_S&5.json",
+                                                                   this-object:TemporaryDir, iso-date(today),
+                                                                   mtime, piAgentID, piSessionID), true).
             end finally.
         end. /* remote */
 
         /* Output each of the MetricsOutput to local files on disk. */
         if oConfig:CollectorType eq "file" or lError then do:
+            oMetricsLogger:Debug("Writing metrics to local files.").
+
             if this-object:MetricsOutput:Has("ABLObjects") then do:
                 assign oSubObj = this-object:MetricsOutput:GetJsonObject("ABLObjects").
-                if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array then
+
+                if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
+                   oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
             end. /* ABLObjects */
 
             if this-object:MetricsOutput:Has("Sessions") then do:
                 assign oSubObj = this-object:MetricsOutput:GetJsonObject("Sessions").
-                if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array then
+
+                if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
+                   oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
             end. /* Sessions */
 
             if this-object:MetricsOutput:Has("Requests") then do:
                 assign oSubObj = this-object:MetricsOutput:GetJsonObject("Requests").
-                if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array then
+
+                if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
+                   oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
             end. /* Requests */
         end. /* file */
@@ -880,7 +893,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          * Send the request to obtain request metrics by JMX/OEM.
          */
 
-        define variable oRequests as JsonArray.
+        define variable oRequests as JsonArray no-undo.
+        define variable iX        as integer   no-undo.
+        define variable iCount    as integer   no-undo.
 
         /* Check if general reporting is allowed, based on flags and scheduled time. */
         if not oConfig:AreRequestsEnabled("GetRequestMetrics") then return.
@@ -891,6 +906,16 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Obtain the current list of sessions for this agent. */
         oRemoteMetrics:GetRequestMetrics(input piAgentID, output oRequests).
+
+        do iX = 1 to oRequests:Length:
+            /* If a request occured prior to the last report from this session, delete the object. */
+            if oRequests:GetJsonObject(iX):GetDatetime("StartTime") lt dLastReportOutput then
+                assign iCount = iX.
+        end. /* do iX */
+
+        /* Remove the old requests. */
+        if iCount gt 1 then
+            oRequests:Remove(1, iCount).
 
         /* Output the report to the common JSON structure for tracking. */
         if valid-object(oRequests) and oRequests:Length gt 0 then do:
@@ -911,7 +936,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          * Send the request to obtain session metrics by JMX/OEM.
          */
 
-        define variable oSessions as JsonArray.
+        define variable oSessions as JsonArray no-undo.
 
         /* Check if session metrics are allowed, based on flags and scheduled time. */
         if not oConfig:IsMemoryEnabled("GetSessionMetrics") then return.
@@ -926,7 +951,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Output the report to the common JSON structure for tracking. */
         if valid-object(oSessions) and oSessions:Length gt 0 then do:
             this-object:MetricsOutput:Add("Sessions", new JsonObject()).
-            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Filename", this-object:GetRequestPath(piAgentID)).
+            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Filename", this-object:GetSessionPath(piAgentID)).
             this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Agent", piAgentID).
             this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Data", cast(oSessions:Clone(), JsonArray)).
         end.
@@ -969,12 +994,12 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Request report output if current time is equal/greater than the next expected interval. */
         if now ge dNextReportOutput then do:
-            /* Immediately update the timestamp to avoid this session requesting the report again. */
-            assign dLastReportOutput = now.
-
             oMetricsLogger:Debug(substitute("Requesting reports for Agent '&1', Session '&2'.",
                                             this-object:GetAgentID(), this-object:GetSessionID())).
             this-object:PrepareSessionReports(this-object:GetAgentID(), this-object:GetSessionID()).
+
+            /* Update the timestamp to avoid this session requesting the report again. */
+            assign dLastReportOutput = now.
         end. /* Do Output */
         else
             oMetricsLogger:Debug(substitute("Time Until Next Report Interval: &1s",
