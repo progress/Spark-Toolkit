@@ -17,17 +17,15 @@
   ----------------------------------------------------------------------*/
 
 /**
- * Dated: 5/15/19
+ * Changes, Dated 5/15/19
  *
  * The latest output scheme will gather all individual metrics into a single
- * JSON object. Then if the remote collector is enabled this can be sent to the
- * remote server as a single packet of data. If no remote collector is enabled
- * then the data will be written out to it's respective location on disk per the
- * former scheme. * The data structure could include the planned filename (full
- * path) plus the respective metrics data. This would provide the ISO datetime
- * and agent/session data as proposed and expected by the PAS Monitor parsing
- * logic. The latter  will naturally need to be changed as well to pick apart
- * the new payload.
+ * JSON object. If a remote collector is enabled this data can be sent to the
+ * remote server as a single packet of data. If no remote collector is enabled,
+ * or the remote server does not respond, or the process fails with an error,
+ * then the data will be written out to its respective folders on disk per the
+ * former scheme. The data can then be processed via manual processes on the
+ * same collector instance.
  */
 
 using Progress.Lang.* from propath.
@@ -91,8 +89,22 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
      *   }
      * }
      *
-     * @TODO: Figure out best format for sending profiler output.
      */
+
+    /* URI for remote metrics collector, relative to server/port. */
+    define private property CollectorMetricsURI as character no-undo
+        initial "web/pdo/monitor/intake/liveMetrics"
+        get. set.
+
+    /* URI for remote profile collector, relative to server/port. */
+    define private property CollectorProfileURI as character no-undo
+        initial "web/pdo/monitor/intake/liveProfile"
+        get. set.
+
+    /* URI for remote profile collector, relative to server/port. */
+    define private property CollectorLogsURI as character no-undo
+        initial "web/pdo/monitor/intake/liveLogs"
+        get. set.
 
     define private property oMetricsLogger as ILogWriter no-undo
         get():
@@ -319,55 +331,91 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     end method. /* ResetOutput */
 
 
+    method private logical SendToCollector ( input pcType as character,
+                                             input pcData as JsonObject ):
+        /* Send full MetricsOutput to remote collector endpoint. */
+        define variable oBody       as JsonObject    no-undo.
+        define variable cRequestURI as character     no-undo.
+        define variable oHttpReq    as IHttpRequest  no-undo.
+        define variable oHttpResp   as IHttpResponse no-undo.
+
+        /* Prepare the URL to the remote PAS Monitor instance endpoint for data intake. */
+        case pcType:
+            when "metrics" then
+                assign cRequestURI = substitute("&1://&2:&3/&4",
+                                                oConfig:CollectorScheme, oConfig:CollectorServer,
+                                                oConfig:CollectorPort, this-object:CollectorMetricsURI).
+            when "profile" then
+                assign cRequestURI = substitute("&1://&2:&3/&4",
+                                                oConfig:CollectorScheme, oConfig:CollectorServer,
+                                                oConfig:CollectorPort, this-object:CollectorProfileURI).
+            when "logs" then
+                assign cRequestURI = substitute("&1://&2:&3/&4",
+                                                oConfig:CollectorScheme, oConfig:CollectorServer,
+                                                oConfig:CollectorPort, this-object:CollectorLogsURI).
+        end case.
+
+        /* Prepare to send the metrics data as JSON to the endpoint. */
+        oMetricsLogger:Info(substitute("Sending &1 data to collector at &2", pcType, cRequestURI)).
+        oHttpReq = RequestBuilder:Put(cRequestURI, pcData)
+                                 :ContentType("application/json")
+                                 :Request.
+        oHttpResp = HttpClient:Instance():Execute(oHttpReq).
+
+        /* Check the status code from the remote collector. */
+        if oHttpResp:StatusCode ne 200 then
+            undo, throw new AppError(substitute("Collector response code was not HTTP/200: &1", string(oHttpResp:StatusCode)), 0).
+
+        if valid-object(oHttpResp:Entity) and type-of(oHttpResp:Entity, JsonObject) then
+            assign oBody = cast(oHttpResp:Entity, JsonObject).
+
+        if valid-object(oBody) and oBody:Has("success") and oBody:GetType("success") eq JsonDataType:Boolean then do:
+            if oBody:GetLogical("success") then do:
+                if oBody:Has("processed") and oBody:GetType("processed") eq JsonDataType:String then
+                    oLogger:Info(substitute("Collector processed &1 at &2", pcType, oBody:GetCharacter("processed"))).
+            end. /* success */
+            else
+                undo, throw new AppError("Unsuccessful response from collector.", 0).
+        end. /* oBody */
+
+        return false. /* Return false to indicate no errors during sending/processing. */
+
+        catch err as Progress.Lang.Error:
+            oLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
+            return true. /* Mark failure if any error occurs. */
+        end catch.
+        finally:
+            delete object oBody no-error.
+            delete object oHttpReq no-error.
+            delete object oHttpResp no-error.
+        end finally.
+    end method. /* SendToCollector */
+
+
     method private void WriteSessionReports ( input piAgentID   as integer,
                                               input piSessionID as integer ):
         define variable oSubObj as JsonObject no-undo.
         define variable lError  as logical    no-undo initial false.
 
-        /**
-         * Note when this output is being generated.
-         */
+        /* Note when this output is being generated. */
         oMetricsLogger:Debug(substitute("Writing metrics for Agent '&1', Session '&2'.", piAgentID, piSessionID)).
 
-        /* Output the collected metrics to their respective locations. */
-        if oConfig:CollectorType eq "remote" then do on error undo, throw:
-            /* Send full MetricsOutput to remote collector endpoint. */
-            define variable cRequestURI as character     no-undo.
-            define variable oHttpReq    as IHttpRequest  no-undo.
-            define variable oHttpResp   as IHttpResponse no-undo.
+        /* Output the collected metrics to the remote collector. */
+        if oConfig:CollectorType eq "remote" then do:
+            /* Use a common method to transport data, since the endpoints should be similar. */
+            assign lError = this-object:SendToCollector("metrics", this-object:MetricsOutput).
 
-            /* Prepare the URL to the remote PAS Monitor instance endpoint for data intake. */
-            assign cRequestURI = substitute("&1://&2:&3/web/pdo/monitor/intake/liveData",
-                                            oConfig:CollectorScheme, oConfig:CollectorServer, oConfig:CollectorPort).
-
-            /* Prepare to send the metrics data as JSON to the endpoint. */
-            oMetricsLogger:Info(substitute("Sending metrics data to collector at &1", cRequestURI)).
-            oHttpReq = RequestBuilder:Put(cRequestURI, this-object:MetricsOutput)
-                                     :ContentType("application/json")
-                                     :AcceptJson()
-                                     :AddHeader("Accept-Encoding", "gzip, deflate")
-                                     :Request.
-            oHttpResp = HttpClient:Instance():Execute(oHttpReq).
-
-            /* Check the status code from the remote collector. */
-            if oHttpResp:StatusCode ne 200 then
-                undo, throw new AppError(substitute("Collector response code was not HTTP/200: &1", string(oHttpResp:StatusCode)), 0).
-
-            catch err as Progress.Lang.Error:
-                /* Mark failure if any error occurs. */
-                oLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
-                assign lError = true.
-            end catch.
-            finally:
-                /* Dump the last metrics output object to disk if logging at debug/trace level. */
-                if oMetricsLogger:LogLevel eq LogLevelEnum:Debug or oMetricsLogger:LogLevel eq LogLevelEnum:Trace then 
-                    this-object:MetricsOutput:WriteFile(substitute("&1/metrics/MetricsOutput_&2.&3_A&4_S&5.json",
-                                                                   this-object:TemporaryDir, iso-date(today),
-                                                                   mtime, piAgentID, piSessionID), true).
-            end finally.
+            /* Dump the full metrics output object to disk if logging at trace level. */
+            if not lError and oMetricsLogger:LogLevel eq LogLevelEnum:Trace then 
+                this-object:MetricsOutput:WriteFile(substitute("&1/metrics/MetricsOutput_&2.&3_A&4_S&5.json",
+                                                               this-object:TemporaryDir, iso-date(today),
+                                                               mtime, piAgentID, piSessionID), true).
         end. /* remote */
 
-        /* Output each of the MetricsOutput to local files on disk. */
+        /**
+         * Output each of the MetricsOutput to local files on disk, separated by predetermined filename.
+         * Applies if collector type is "file" or an error occurred when sending data to the remote collector.
+         */
         if oConfig:CollectorType eq "file" or lError then do:
             oMetricsLogger:Debug("Writing metrics to local files.").
 
@@ -377,6 +425,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
+                else
+                    oLogger:Warn("ABLObjects missing Data or Filename.").
             end. /* ABLObjects */
 
             if this-object:MetricsOutput:Has("Sessions") then do:
@@ -385,6 +435,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
+                else
+                    oLogger:Warn("Sessions missing Data or Filename.").
             end. /* Sessions */
 
             if this-object:MetricsOutput:Has("Requests") then do:
@@ -393,6 +445,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
+                else
+                    oLogger:Warn("Requests missing Data or Filename.").
             end. /* Requests */
         end. /* file */
 
@@ -544,6 +598,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 profiler:enabled   = false
                 .
 
+            /* Profiler data must be written to disk first. */
             if oConfig:ProfilerTrackBy eq "session" then do:
                 oMetricsLogger:Debug(substitute("Write Profiler: A&1 | S&2",
                                                 this-object:GetAgentID(),
@@ -572,6 +627,35 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                                                     this-object:GetProcedureName(), iExecTime)).
             end. /* ProfilerTrackBy = Request */
 
+            /* Send profiler data to collector, if enabled. */
+            if oConfig:CollectorType eq "remote" then do on error undo, throw:
+                define variable lcProfile as longchar   no-undo.
+                define variable oProfiler as JsonObject no-undo.
+
+                /* Load the file into a longchar variable. */
+                copy-lob from file profiler:file-name to lcProfile no-error.
+
+                /* Prepare the JSON data for the collector. */
+                assign oProfiler = new JsonObject().
+                oProfiler:Add("AppName", trim(os-getenv("ABLAPP_NAME"))).
+                oProfiler:Add("Instance", trim(os-getenv("INSTANCE_URI"))).
+                oProfiler:Add("Agent", this-object:GetAgentID()).
+                oProfiler:Add("Session", this-object:GetSessionID()).
+                oProfiler:Add("Data", lcProfile).
+
+                /* Send without regard for failure (since we have the file locally). */
+                this-object:SendToCollector("profile", oProfiler).
+
+                catch err as Progress.Lang.Error:
+                    /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
+                    oLogger:Error(substitute("Error sending profile data to collector: &1", err:GetMessage(1))).
+                end catch.
+                finally:
+                    assign lcProfile = ?.
+                    delete object oProfiler no-error.
+                end finally.
+            end. /* remote */
+
             return true.
         end. /* profiler:enabled */
         else
@@ -586,6 +670,67 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             return false.
         end catch.
     end method. /* WriteProfiler */
+
+
+    method public void ProcessAccessLogs ():
+        define variable lcLogData as longchar   no-undo.
+        define variable oAccess   as JsonObject no-undo.
+        define variable oLogs     as JsonArray  no-undo.
+        define variable cLogDir   as character  no-undo.
+        define variable cFileName as character  no-undo.
+        define variable cFullName as character  no-undo.
+        define variable cCodes    as character  no-undo.
+        define variable cLogFiles as character  no-undo.
+        define variable iX        as integer    no-undo.
+
+        /* If not enabled for remote collection, leave. */
+        if oConfig:CollectorType ne "remote" then return.
+
+        /* Prepare the JSON data for the collector. */
+        assign oAccess = new JsonObject().
+        oAccess:Add("AppName", trim(os-getenv("ABLAPP_NAME"))).
+        oAccess:Add("Instance", trim(os-getenv("INSTANCE_URI"))).
+
+        /* @TODO: Prevent multiple sessions from sending the same log files. */
+
+        /* Look within the standard TC logs folder for access logs. */
+        assign cLogDir = substitute("&1\logs", os-getenv("CATALINA_BASE")).
+        input from os-dir(cLogDir) no-echo.
+        repeat:
+            import cFileName cFullName cCodes.
+
+            if cFileName = "." or
+               cFileName = ".." then next.
+
+            if cFileName matches "localhost_access_log*" then
+                assign cLogFiles = trim(substitute("&1,&2", cLogFiles, cFullName), ",").
+        end.
+        input close.
+
+        /* Add each access log into an array as longchar. */
+        assign oLogs = new JsonArray().
+        do iX = 1 to num-entries(cLogFiles, ","):
+            assign
+                lcLogData = ?
+                cFileName = entry(iX, cLogFiles)
+                .
+            copy-lob from file cFilename to lcLogData no-error.
+            oLogs:Add(lcLogData).
+        end.
+        oAccess:Add("Data", oLogs).
+
+        /* Send without regard for failure (since we have the file locally). */
+        this-object:SendToCollector("logs", oAccess).
+
+        catch err as Progress.Lang.Error:
+            /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
+            oLogger:Error(substitute("Error sending access log data to collector: &1", err:GetMessage(1))).
+        end catch.
+        finally:
+            assign lcLogData = ?.
+            delete object oAccess no-error.
+        end finally.
+    end method. /* ProcessAccessLogs */
 
 
     method public logical StartTrackingObjects ( ):
