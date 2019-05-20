@@ -406,7 +406,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             assign lError = this-object:SendToCollector("metrics", this-object:MetricsOutput).
 
             /* Dump the full metrics output object to disk if logging at trace level. */
-            if not lError and oMetricsLogger:LogLevel eq LogLevelEnum:Trace then 
+            if not lError and oMetricsLogger:LogLevel eq LogLevelEnum:Trace then
                 this-object:MetricsOutput:WriteFile(substitute("&1/metrics/MetricsOutput_&2.&3_A&4_S&5.json",
                                                                this-object:TemporaryDir, iso-date(today),
                                                                mtime, piAgentID, piSessionID), true).
@@ -643,8 +643,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 oProfiler:Add("Session", this-object:GetSessionID()).
                 oProfiler:Add("Data", lcProfile).
 
-                /* Send without regard for failure (since we have the file locally). */
-                this-object:SendToCollector("profile", oProfiler).
+                /* Send the file and then delete if no error reported. */
+                if not this-object:SendToCollector("profile", oProfiler) then
+                    os-delete value(profiler:file-name) no-error.
 
                 catch err as Progress.Lang.Error:
                     /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
@@ -702,7 +703,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             if cFileName = "." or
                cFileName = ".." then next.
 
-            if cFileName matches "localhost_access_log*" then
+            if cFileName matches "localhost_access_log*" or
+               cFileName matches "localhost-access*.log" then
                 assign cLogFiles = trim(substitute("&1,&2", cLogFiles, cFullName), ",").
         end.
         input close.
