@@ -718,8 +718,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 .
             copy-lob from file cFilename to lcLogData no-error.
             oLogs:Add(lcLogData).
-        end.
+        end. /* do iX */
         oAccess:Add("Data", oLogs).
+        oLogger:Info(substitute("Located &1 access log file(s) for parsing.", oLogs:Length)).
 
         /* Send without regard for failure (since we have the file locally). */
         this-object:SendToCollector("logs", oAccess).
