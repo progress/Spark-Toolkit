@@ -13,6 +13,9 @@ using progress.lang.* from propath.
 
 block-level on error undo, throw.
 
+/* Standard input parameter as set via sessionStartupProcParam */
+define input parameter startup-data as character no-undo.
+
 /* ***************************  Main Block  *************************** */
 
 define variable iStart as integer no-undo.
