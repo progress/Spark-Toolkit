@@ -1,18 +1,17 @@
 <project name="FrameworkTools" basedir="." default="usage">
 
-	<!-- Provide tasks to build the Ccs, Spark, and Diagnotic procedure library files. -->
+	<!-- Provide tasks to build the Spark (Core) and Diagnotic procedure library files. -->
 
     <target name="usage">
         <echo message="Usage Instructions:"/>
 		<echo message="${line.separator}Builds:"/>
-        <echo message="ant build_ccs_pl - Create PL archive for CCS classes"/>
         <echo message="ant build_spark_pl - Create PL archive for Spark classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
         <echo message="ant build_diag_pl - Create PL archive for diagnostic tools"/>
         <echo message="${line.separator}Documentation:"/>
-		<echo message="ant build_ablduck - Generate ABLDuck output for CCS/Spark"/>
+		<echo message="ant build_ablduck - Generate ABLDuck output for Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
-        <echo message="ant build_pctdoc - Generate PCTDoc output for CCS/Spark"/>
+        <echo message="ant build_pctdoc - Generate PCTDoc output for Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
 	</target>
 
@@ -138,27 +137,6 @@
 		</sequential>
     </macrodef>
 
-    <target name="compile_ccs">
-		<init_oe/>
-
-        <delete dir="${preprocess}/Ccs" quiet="true"/>
-
-		<report_oe_vars/>
-
-        <!-- Code compiles without need for extra libraries or a database. -->
-        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}/Ccs" dlcHome="${dlcHome}">
-            <fileset dir="${src.dir}/Ccs">
-                <include name="**/*.cls"/>
-            </fileset>
-        </PCTCompile>
-
-		<!-- Remove temporary files. -->
-		<delete dir="${build.tmp}/.pct" quiet="true"/>
-        <delete dir="${build.tmp}/BusinessLogic" quiet="true"/>
-        <delete dir="${build.tmp}/Common" quiet="true"/>
-        <delete dir="${build.tmp}/ServiceManager" quiet="true"/>
-    </target>
-
     <target name="compile_spark_core">
 		<init_oe/>
 
@@ -183,7 +161,7 @@
             </fileset>
         </PCTCompile>
 
-        <!-- Code compiles without need for a database, but uses Ccs and extra libs. -->
+        <!-- Code compiles without need for a database, but uses Ccs (from OE 11.7.4+) and any extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
                 <pathelement path="${src.dir}/Spark"/>
@@ -274,11 +252,6 @@
         <abldoc dlc="${dlcHome}" artifactLoc="${artifacts}" verbose="true"
                 includePrivate="true" includeProtected="true"
                 doctitle="${abldocs.title}" destdir="${abldocs.output}">
-            <abldocproject name="Ccs">
-                <sourcepath>
-                    <pathelement location="Ccs"/>
-                </sourcepath>
-            </abldocproject>
             <abldocproject name="Spark">
                 <sourcepath>
                     <pathelement location="Spark/Core"/>
@@ -301,7 +274,6 @@
         <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
         <!-- Compile all code. -->
-        <antcall target="compile_ccs"/>
         <antcall target="compile_spark_core"/>
 		<antcall target="compile_spark_diag"/>
 
@@ -336,7 +308,6 @@
         <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
         <!-- Compile all code. -->
-        <antcall target="compile_ccs"/>
         <antcall target="compile_spark_core"/>
 		<antcall target="compile_spark_diag"/>
 
@@ -384,23 +355,6 @@
         </HTMLDocumentation>
     </target>
 
-    <target name="build_ccs_pl" depends="clean">
-		<init_oe/>
-
-		<!-- First, compile the necessary code. -->
-		<antcall target="compile_ccs"/>
-
-        <!-- Next, remove old/temporary files. -->
-        <delete file="${build.out}/Ccs.pl" quiet="true"/>
-
-        <!-- Finally, build PL file with R-code. -->
-        <PCTLibrary destfile="${build.out}/Ccs.pl" dlcHome="${dlcHome}">
-            <fileset dir="${build.tmp}">
-                <include name="Ccs/**/*.r"/>
-            </fileset>
-        </PCTLibrary>
-    </target>
-
     <target name="build_spark_pl" depends="clean">
 		<init_oe/>
 
@@ -410,7 +364,6 @@
         <!-- Next, remove old/temporary files. -->
 		<delete file="${build.out}/Spark.pl" quiet="true"/>
         <delete dir="${build.tmp}/.pct" quiet="true"/>
-        <delete dir="${build.tmp}/Ccs" quiet="true"/>
         <delete dir="${build.tmp}/Core" quiet="true"/>
 
         <!-- Finally, build PL file with R-code. -->
@@ -431,7 +384,6 @@
         <!-- Next, remove old/temporary files. -->
 		<delete file="${build.out}/Diagnostic.pl" quiet="true"/>
         <delete dir="${build.tmp}/.pct" quiet="true"/>
-		<delete dir="${build.tmp}/Ccs" quiet="true"/>
 
         <!-- Finally, build PL file with R-code. -->
         <PCTLibrary destfile="${build.out}/Diagnostic.pl" dlcHome="${dlcHome}">
