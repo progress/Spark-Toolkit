@@ -1,4 +1,3 @@
-using Spark.Core.Util.ApplicationError from propath.
 using Spark.Core.Util.CryptoEncryptAlgorithmEnum from propath.
 using Spark.Core.Util.CryptoPbeHashAlgorithmEnum from propath.
 using Spark.Core.Util.FormatTools from propath.

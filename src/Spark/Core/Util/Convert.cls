@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------
     File        : Conversion Utilities
     Purpose     : Convert values between various formats (bin, int, hex, etc.)
-    Description : 
+    Description :
     Author(s)   : Dustin Grau (dugrau@progress.com)
     Created     : Wed Oct 18 09:15:16 EDT 2017
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.*.
@@ -55,10 +55,10 @@ class Spark.Core.Util.Convert use-widget-pool:
         define variable iVal    as int64     no-undo.
         define variable cBinary as character no-undo initial "".
 
-        assign iVal = piValue.     
+        assign iVal = piValue.
         do while iVal gt 0:
             /* Basically, keep dividing by 2 until the value is 0. */
-            assign 
+            assign
                 cBinary = substitute("&1&2", (iVal modulo 2), cBinary)
                 iVal    = truncate(iVal / 2, 0)
                 .
@@ -78,7 +78,7 @@ class Spark.Core.Util.Convert use-widget-pool:
         define variable cHex as character no-undo initial "".
 
         if piValue eq 0 then return "0". /* Zero is zero. */
-        
+
         /* Convert to binary, then convert to hex. */
         assign cBin = IntToBin(piValue).
         assign cHex = BinToHex(cBin).

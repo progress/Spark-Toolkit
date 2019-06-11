@@ -24,7 +24,7 @@ class Spark.Core.Service.DynamicResource implements Spark.Core.Service.IDynamicR
     define public abstract property resourceName as character no-undo
         get. protected set.
 
-    /***** Public *****/ 
+    /***** Public *****/
 
     /* Hold non-fatal messages for output (as determined by interface for class access). */
     define public property oContextMessage as IContextMessage no-undo
@@ -35,7 +35,7 @@ class Spark.Core.Service.DynamicResource implements Spark.Core.Service.IDynamicR
         end get.
         private set.
 
-    /***** Protected *****/ 
+    /***** Protected *****/
 
     define protected property oClientContext as IClientContext no-undo
         get:

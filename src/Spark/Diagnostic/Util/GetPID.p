@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     File        : GetPID.p
     Purpose     : Obtain a PID using OS-specific means.
-    Description : 
+    Description :
     Author(s)   : Dustin Grau
     Created     : Wed Jan 30 14:13:00 EST 2019
     Notes       :

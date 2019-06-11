@@ -1,18 +1,18 @@
 /*------------------------------------------------------------------------
     File        : Binary utilities
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : Dustin Grau
     Created     : Wed Oct 18 14:59:57 EDT 2017
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.*.
 
 block-level on error undo, throw.
 
-class Spark.Core.Util.Binary use-widget-pool: 
+class Spark.Core.Util.Binary use-widget-pool:
 
     method public static integer BinaryAND ( input piOperand1 as integer,
                                              input piOperand2 as integer ):

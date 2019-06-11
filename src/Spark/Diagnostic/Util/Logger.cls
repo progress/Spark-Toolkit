@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------
     File        : Logger
-    Purpose     : 
-    Description : 
+    Purpose     :
+    Description :
     Author(s)   : Dustin Grau (dugrau@progress.com)
     Created     : Thu Apr 26 13:30:07 EDT 2018
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.* from propath.

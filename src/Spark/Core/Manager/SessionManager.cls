@@ -97,8 +97,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
                 create client-principal hResetClientPrincipal.
                 hResetClientPrincipal:import-principal(rCP).
 
-                for each ttDatabase no-lock
-                   where not ttDatabase.UseAppRegistry:
+                for each ttDatabase no-lock:
                     /* Note: this will return true if no DB's connected. */
                     assign lValid = set-db-client(hResetClientPrincipal, ttDatabase.LogicalName) no-error.
                     if not lValid then
@@ -118,10 +117,10 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
      */
     method public void endRequestEnvironment ( ):
 
-        if valid-object(CurrentClientContext) then
-            CurrentClientContext:saveContext().
+        if valid-object(this-object:CurrentClientContext) then
+            this-object:CurrentClientContext:saveContext().
 
-        resetSession().
+        this-object:resetSession().
 
     end method.
 
@@ -132,13 +131,13 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
 
         define variable lValid as logical no-undo initial false.
 
-        if valid-object(CurrentClientContext) then
-            delete object CurrentClientContext no-error.
+        if valid-object(this-object:CurrentClientContext) then
+            delete object this-object:CurrentClientContext no-error.
 
         assign
-            CurrentClientContext = ?.
+            this-object:CurrentClientContext = ?.
 
-        registerDomains().
+        this-object:registerDomains().
 
         if num-dbs eq 0 then do:
             assign lValid = security-policy:set-client(hResetClientPrincipal) no-error.
@@ -146,8 +145,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
                 undo, throw new AppError(substitute("Invalid Reset Client-Principal; Reason(s): &1", GenTools:getAblError()), 0).
         end.
         else
-            for each ttDatabase no-lock
-               where not ttDatabase.UseAppRegistry:
+            for each ttDatabase no-lock:
                 assign lValid = set-db-client(hResetClientPrincipal, ttDatabase.LogicalName) no-error.
                 if not lValid then
                     undo, throw new AppError(substitute("Invalid Reset Client-Principal on &1; Reason(s): &2", ttDatabase.LogicalName, GenTools:getAblError()), 0).
@@ -189,16 +187,16 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         oClientContextImpl = cast(Ccs.Common.Application:ServiceManager, IServiceManager)
                                  :getServiceImplementation(get-class(IClientContext)).
         if valid-object(oClientContextImpl) then
-            CurrentClientContext = cast(oClientContextImpl:New(), IClientContext).
+            this-object:CurrentClientContext = cast(oClientContextImpl:New(), IClientContext).
 
-        if not valid-object(CurrentClientContext) then
+        if not valid-object(this-object:CurrentClientContext) then
             undo, throw new AppError("Invalid Client Context Object", 0).
 
-        CurrentClientContext:initializeContext(phClientPrincipal).
+        this-object:CurrentClientContext:initializeContext(phClientPrincipal).
 
-        assertUserCredentials(CurrentClientContext:clientPrincipal).
+        this-object:assertUserCredentials(CurrentClientContext:clientPrincipal).
 
-        resetSessionAttributes().
+        this-object:resetSessionAttributes().
 
     end method.
 
@@ -216,7 +214,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         define variable oPrincipal as OpenEdge.Security.Principal no-undo.
 
         assign oPrincipal = OpenEdge.Security.Principal:Import(session:current-request-info).
-        establishRequestEnvironment(oPrincipal:Token).
+        this-object:establishRequestEnvironment(oPrincipal:Token).
 
         finally:
             delete object oPrincipal no-error.
@@ -235,8 +233,9 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
     method protected void assertUserCredentials ( input phClientPrincipal as handle):
 
         define variable lValid as logical no-undo initial false.
+        define variable hCP    as handle  no-undo.
 
-        registerDomains().
+        this-object:registerDomains().
 
         if num-dbs eq 0 then
         do:
@@ -246,10 +245,22 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
                 undo, throw new AppError("Invalid User Token supplied.", -400). /* CPO must be sealed! */
         end.
         else
-            for each ttDatabase no-lock
-               where not ttDatabase.UseAppRegistry:
+            for each ttDatabase no-lock:
                 assign lValid = set-db-client(phClientPrincipal, ttDatabase.LogicalName) no-error.
-            end.
+
+                /**
+                 * If needed, provide output when user is asserted against the database.
+                 * Also reports if database is Domain Authority or Not applicable,
+                 * and if database uses the App Registry or has Domains Present.
+                 */
+/*                assign hCP = get-db-client(ttDatabase.LogicalName).                                                */
+/*                cast(Ccs.Common.Application:StartupManager:getManager(get-class(ILoggingManager)), ILoggingManager)*/
+/*                    :logMessage(substitute("User &1 asserted against Database &2 [&3, &4]",                        */
+/*                                           hCP:qualified-user-id,                                                  */
+/*                                           ttDatabase.LogicalName,                                                 */
+/*                                           string(ttDatabase.DomainAuthority, "DA/NA"),                            */
+/*                                           string(ttDatabase.UseAppRegistry, "AR/DP")), "SPARK-DB", 3).            */
+            end. /* for each ttDatabase */
 
         if not lValid then do:
             if error-status:error then
@@ -336,7 +347,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
 
         define variable iNumDB as integer no-undo.
 
-        if not databasesConnected() then
+        if not this-object:databasesConnected() then
         do:
             lDomainsLoaded = false. /* Reset flag. */
             /* Cannot assert credentials if any databases are not available. */
@@ -344,7 +355,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         end.
 
         if num-dbs gt 0 then
-            getDatabaseOptions(). /* Load options for all connected databases. */
+            this-object:getDatabaseOptions(). /* Load options for all connected databases. */
 
         if lDomainsLoaded then return.
 
@@ -404,12 +415,12 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         pcPassword = decryptPassword(pcPassword).
         hCPO:initialize(pcUserID + '@' + pcDomain, ?, tLoginExpiration, pcPassword ).
         hCPO:client-workstation = pcExtra.
-        setClientPrincipalAttributes(hCPO).
+        this-object:setClientPrincipalAttributes(hCPO).
 
         /* This new client principal is initialized with the users credentials
            and will be authenticated and validated in the establishRequestEnvironment called below. */
 
-        establishRequestEnvironment(hCPO).
+        this-object:establishRequestEnvironment(hCPO).
 
         return hCPO:export-principal ().
 
@@ -506,35 +517,35 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         define variable cSep as character no-undo.
         define variable cDec as character no-undo.
 
-        if CurrentClientContext:GetClass():IsA(get-class(Spark.Core.Manager.IClientContext)) then
+        if this-object:CurrentClientContext:GetClass():IsA(get-class(Spark.Core.Manager.IClientContext)) then
         case oAttribute:
             when SessionAttributeEnum:dateFormat then
                 do:
                     session:date-format = pcValue.
-                    if valid-object(CurrentClientContext) then
-                        cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:dateFormat:ToString(), session:date-format).
+                    if valid-object(this-object:CurrentClientContext) then
+                        cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:dateFormat:ToString(), session:date-format).
                 end.
             when SessionAttributeEnum:timezoneOffset then
                 do:
                     session:timezone = timezone(pcValue).
-                    if valid-object(CurrentClientContext) then
-                        cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:timezoneOffset:ToString(),string(session:timezone,"+HH:MM")).
+                    if valid-object(this-object:CurrentClientContext) then
+                        cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:timezoneOffset:ToString(),string(session:timezone,"+HH:MM")).
                 end.
             when SessionAttributeEnum:numericDecimalPoint then
                 do:
                     cSep = session:numeric-separator.
                     cDec = pcValue.
                     session:set-numeric-format (cSep,cDec).
-                    if valid-object(CurrentClientContext) then
-                        cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString(),session:numeric-decimal-point).
+                    if valid-object(this-object:CurrentClientContext) then
+                        cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString(),session:numeric-decimal-point).
                 end.
             when SessionAttributeEnum:numericSeparator then
                 do:
                     cSep = pcValue.
                     cDec = session:numeric-decimal-point.
                     session:set-numeric-format (cSep,cDec).
-                    if valid-object(CurrentClientContext) then
-                        cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericSeparator:ToString(),session:numeric-separator).
+                    if valid-object(this-object:CurrentClientContext) then
+                        cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericSeparator:ToString(),session:numeric-separator).
                 end.
             otherwise
                 do:
@@ -554,39 +565,39 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         define variable cSep   as character no-undo.
         define variable cDec   as character no-undo.
 
-        if valid-object(CurrentClientContext)
-           and CurrentClientContext:GetClass():IsA(get-class(Spark.Core.Manager.IClientContext)) then
+        if valid-object(this-object:CurrentClientContext)
+           and this-object:CurrentClientContext:GetClass():IsA(get-class(Spark.Core.Manager.IClientContext)) then
         do:
-            if cast(CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:dateFormat:ToString()) then
-                cValue = cast(CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:dateFormat:ToString()).
+            if cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:dateFormat:ToString()) then
+                cValue = cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:dateFormat:ToString()).
             else
                 cValue = ?.
             if cValue ne ? then
                 session:date-format = cValue.
             else
-                cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:dateFormat:ToString(),session:date-format).
+                cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:dateFormat:ToString(),session:date-format).
 
-            if cast(CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:timezoneOffset:ToString()) then
-                cValue = cast(CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:timezoneOffset:ToString()).
+            if cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:timezoneOffset:ToString()) then
+                cValue = cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:timezoneOffset:ToString()).
             else
                 cValue = ?.
             if cValue ne ? then
                 session:timezone = timezone(cValue).
             else
-                cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:timezoneOffset:ToString(),string(timezone,"+HH:MM")).
+                cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:timezoneOffset:ToString(),string(timezone,"+HH:MM")).
 
             assign
                 cSep = ?
                 cDec = ?.
-            if cast(CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:numericSeparator:ToString()) then
-                cSep = cast(CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:numericSeparator:ToString()).
-            if cast(CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString()) then
-                cDec = cast(CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString()).
+            if cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:numericSeparator:ToString()) then
+                cSep = cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:numericSeparator:ToString()).
+            if cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):hasUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString()) then
+                cDec = cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):getUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString()).
             if cSep ne ? and cDec ne ? then
                 session:set-numeric-format(cSep, cDec).
             else do:
-                cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericSeparator:ToString(),session:numeric-separator).
-                cast(CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString(),session:numeric-decimal-point).
+                cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericSeparator:ToString(),session:numeric-separator).
+                cast(this-object:CurrentClientContext, Spark.Core.Manager.IClientContext):setUserProperty(SessionAttributeEnum:numericDecimalPoint:ToString(),session:numeric-decimal-point).
             end.
         end.
 
@@ -601,16 +612,16 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
         define variable hCPO as handle    no-undo.
         define variable cCP  as character no-undo.
 
-        if valid-object(CurrentClientContext) then
+        if valid-object(this-object:CurrentClientContext) then
         do:
-            if CurrentClientContext:clientPrincipal:login-state eq "LOGIN" or
-               CurrentClientContext:clientPrincipal:login-state eq "SSO" then
+            if this-object:CurrentClientContext:clientPrincipal:login-state eq "LOGIN" or
+               this-object:CurrentClientContext:clientPrincipal:login-state eq "SSO" then
             do:
                 create client-principal hCPO.
-                hCPO:initialize(CurrentClientContext:clientPrincipal:qualified-user-id, ?, ptExpiration ).
-                hCPO:client-workstation = CurrentClientContext:clientPrincipal:client-workstation.
-                setClientPrincipalAttributes(hCPO).
-                hCPO:seal(getDomainAccessCode(CurrentClientContext:clientPrincipal:domain-name)).
+                hCPO:initialize(this-object:CurrentClientContext:clientPrincipal:qualified-user-id, ?, ptExpiration ).
+                hCPO:client-workstation = this-object:CurrentClientContext:clientPrincipal:client-workstation.
+                this-object:setClientPrincipalAttributes(hCPO).
+                hCPO:seal(getDomainAccessCode(this-object:CurrentClientContext:clientPrincipal:domain-name)).
 
                 assign
                     cCP  = string(base64-encode(hCPO:export-principal()))
@@ -660,7 +671,7 @@ class Spark.Core.Manager.SessionManager inherits Spark.Core.Manager.Manager impl
                 create client-principal hCPOOut.
                 hCPOOut:initialize(hCPOIn:qualified-user-id, ?, ptExpiration ).
                 hCPOOut:client-workstation = hCPOIn:client-workstation.
-                setClientPrincipalAttributes(hCPOOut).
+                this-object:setClientPrincipalAttributes(hCPOOut).
                 hCPOOut:seal(getDomainAccessCode(hCPOIn:domain-name)).
 
                 assign cCP = string(base64-encode(hCPOOut:export-principal())).
