@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.3)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.5.1)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -101,7 +101,7 @@
                     </table>
                 	<br>
                 	<span class="unit_comment">
-                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>QueryBuilder </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Thu May 10 12:38:00 EDT 2018 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>ADAS-101 </td></tr></tbody></table>
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>QueryBuilder </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge & dugrau </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Thu May 10 12:38:00 EDT 2018 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>ADAS-101 </td></tr></tbody></table>
                 	</span>
                 	<br>
                 </div>
@@ -138,36 +138,36 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>-</font>
+    <font>#</font>
     <font></font>
     <font></font>
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010l+at8THtJTZEdGtVkH3OwA=='> buildClause (handle, QueryPredicate)</a>
+         CHARACTER <a href='#020010Mv7pi+VIOvaZlB2v4QzcsA=='> BuildClause (handle, QueryPredicate)</a>
     </font>
   </td>
   <td class="cell">
      
-/* buildGroup */ <br> <i>  </i>
+/* BuildGroup */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>-</font>
+    <font>#</font>
     <font></font>
     <font></font>
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010CEpiXytCuLm6NSXEAHmtNA=='> buildGroup (handle, QueryGroup)</a>
+         CHARACTER <a href='#020010g7D6BPbv/SZWnn3BZ0GT0w=='> BuildGroup (handle, QueryGroup)</a>
     </font>
   </td>
   <td class="cell">
      
-/* mapJoin */ <br> <i>  </i>
+/* MapJoin */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -250,47 +250,66 @@ names to build the where clause
   </td>
   <td class="signature_col cell">
     <font>
-         HANDLE <a href='#020010SIU0b+zOTp1SF4dNL0GqtA=='> getFieldBuffer (handle, character)</a>
+         HANDLE <a href='#020010TMuQzFS9HwauHN9JciJylg=='> GetFieldBuffer (handle, character)</a>
     </font>
   </td>
   <td class="cell">
-      <br> <i>  </i>
+     
+/* GetTableBuffer */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>-</font>
+    <font>#</font>
     <font></font>
     <font></font>
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010oIu5WeLtp/TUCKik9KiWJw=='> mapJoin (character, character, JoinEnum)</a>
+         HANDLE <a href='#020010Ow3qwy66AXm5G8YZdBSYLA=='> GetTableBuffer (handle, character)</a>
     </font>
   </td>
   <td class="cell">
      
-/* mapOperator */ <br> <i>  </i>
+/***** Begin Protected Methods *****/ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>-</font>
+    <font>#</font>
     <font></font>
     <font></font>
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010lblVB+Td5cuOPJwf9R5uhg=='> mapOperator (QueryOperatorEnum, character)</a>
+         CHARACTER <a href='#020010RNTzgQXpnUgtrHf3jVrIPQ=='> MapJoin (character, character, JoinEnum)</a>
     </font>
   </td>
   <td class="cell">
      
-/* getFieldBuffer */ <br> <i>  </i>
+/* MapOperator */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010AFne+c+mchcP4s2SWtHniw=='> MapOperator (QueryOperatorEnum, character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* GetFieldBuffer */ <br> <i>  </i>
   </td>
 </tr>
     
@@ -384,11 +403,11 @@ names to build the where clause
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010l+at8THtJTZEdGtVkH3OwA==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010l+at8THtJTZEdGtVkH3OwA=='> buildClause (handle, QueryPredicate)</a>"></a>
+                <a name="020010Mv7pi+VIOvaZlB2v4QzcsA==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010Mv7pi+VIOvaZlB2v4QzcsA=='> BuildClause (handle, QueryPredicate)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010l+at8THtJTZEdGtVkH3OwA=='> buildClause (handle, QueryPredicate)</a></h3>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010Mv7pi+VIOvaZlB2v4QzcsA=='> BuildClause (handle, QueryPredicate)</a></h3>
         <table>
             <tr>
                 <td>
@@ -409,7 +428,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* buildGroup </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* BuildGroup </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -478,11 +497,11 @@ names to build the where clause
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010CEpiXytCuLm6NSXEAHmtNA==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010CEpiXytCuLm6NSXEAHmtNA=='> buildGroup (handle, QueryGroup)</a>"></a>
+                <a name="020010g7D6BPbv/SZWnn3BZ0GT0w==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010g7D6BPbv/SZWnn3BZ0GT0w=='> BuildGroup (handle, QueryGroup)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010CEpiXytCuLm6NSXEAHmtNA=='> buildGroup (handle, QueryGroup)</a></h3>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010g7D6BPbv/SZWnn3BZ0GT0w=='> BuildGroup (handle, QueryGroup)</a></h3>
         <table>
             <tr>
                 <td>
@@ -503,7 +522,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* mapJoin </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* MapJoin </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -838,11 +857,11 @@ names to build the where clause
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010SIU0b+zOTp1SF4dNL0GqtA==" href="#Top">Top</a>
-                <a name=" HANDLE <a href='#020010SIU0b+zOTp1SF4dNL0GqtA=='> getFieldBuffer (handle, character)</a>"></a>
+                <a name="020010TMuQzFS9HwauHN9JciJylg==" href="#Top">Top</a>
+                <a name=" HANDLE <a href='#020010TMuQzFS9HwauHN9JciJylg=='> GetFieldBuffer (handle, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED HANDLE <a href='#020010SIU0b+zOTp1SF4dNL0GqtA=='> getFieldBuffer (handle, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED HANDLE <a href='#020010TMuQzFS9HwauHN9JciJylg=='> GetFieldBuffer (handle, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -863,7 +882,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* GetTableBuffer </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -932,11 +951,11 @@ names to build the where clause
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010oIu5WeLtp/TUCKik9KiWJw==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010oIu5WeLtp/TUCKik9KiWJw=='> mapJoin (character, character, JoinEnum)</a>"></a>
+                <a name="020010Ow3qwy66AXm5G8YZdBSYLA==" href="#Top">Top</a>
+                <a name=" HANDLE <a href='#020010Ow3qwy66AXm5G8YZdBSYLA=='> GetTableBuffer (handle, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010oIu5WeLtp/TUCKik9KiWJw=='> mapJoin (character, character, JoinEnum)</a></h3>
+        <h3 class="Signature_Font">PROTECTED HANDLE <a href='#020010Ow3qwy66AXm5G8YZdBSYLA=='> GetTableBuffer (handle, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -957,7 +976,101 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* mapOperator </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>phSchema</i>
+    </td>
+    <td>
+       HANDLE
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcTableName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      HANDLE 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010RNTzgQXpnUgtrHf3jVrIPQ==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010RNTzgQXpnUgtrHf3jVrIPQ=='> MapJoin (character, character, JoinEnum)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010RNTzgQXpnUgtrHf3jVrIPQ=='> MapJoin (character, character, JoinEnum)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* MapOperator </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1042,11 +1155,11 @@ names to build the where clause
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010lblVB+Td5cuOPJwf9R5uhg==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010lblVB+Td5cuOPJwf9R5uhg=='> mapOperator (QueryOperatorEnum, character)</a>"></a>
+                <a name="020010AFne+c+mchcP4s2SWtHniw==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010AFne+c+mchcP4s2SWtHniw=='> MapOperator (QueryOperatorEnum, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010lblVB+Td5cuOPJwf9R5uhg=='> mapOperator (QueryOperatorEnum, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010AFne+c+mchcP4s2SWtHniw=='> MapOperator (QueryOperatorEnum, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1067,7 +1180,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getFieldBuffer </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* GetFieldBuffer </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1192,6 +1305,6 @@ names to build the where clause
     <br>
     <br>
     -->
-    <font class="footer_timestamp">03.05.2019 14:15:20</font>
+    <font class="footer_timestamp">06.11.2019 09:07:37</font>
     </BODY>
 </HTML>

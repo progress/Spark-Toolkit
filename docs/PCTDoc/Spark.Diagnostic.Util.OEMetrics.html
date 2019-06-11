@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.4.3)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.5.1)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -101,7 +101,7 @@
                     </table>
                 	<br>
                 	<span class="unit_comment">
-                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>OEMetrics </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Gather and report OE metrics for the current PAS instance </td></tr><tr><td class='unitcommentparam'>Description:</td><td class='unitcommentdesc'>Utilizes JMX or OEManager queries to get PAS metrics </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Dustin Grau (dugrau@progress.com) </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Wed Apr 25 13:58:59 EDT 2018 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>Provides front-end methods to enable/disable features for </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>tracking metrics in a PASOE environment. For ABLObjects </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>the report must be requested at an application boundary, </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>meaning a point at the end of a request where all normal </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>cleanup has been performed and before the session is made </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>available for the next request. Depends on a configuration </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>file at CATALINA_BASE/bin/metrics_config.json to run the </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>necessary features. The name of this file is set in the </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>related metrics_setenv.[bat|sh] files which must also be </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>placed in the CATALINA_BASE/bin directory. </td></tr></tbody></table>
+                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>OEMetrics </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Gather and report OE metrics for the current PAS instance </td></tr><tr><td class='unitcommentparam'>Description:</td><td class='unitcommentdesc'>Utilizes JMX or OEManager queries to get PAS metrics </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Dustin Grau (dugrau@progress.com) </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Wed Apr 25 13:58:59 EDT 2018 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>Provides front-end methods to enable/disable features for </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>tracking metrics in a PASOE environment. For ABLObjects </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>the report must be requested at an application boundary, </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>meaning a point at the end of a request where all normal </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>cleanup has been performed and before the session is made </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>available for the next request. Depends on a configuration </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>file at CATALINA_BASE/bin/metrics_config.json to run the </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>necessary features. The name of this file is set in the </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>related metrics_setenv.[bat|sh] files which must also be </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>placed in the CATALINA_BASE/bin directory. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Purpose: </td></tr></tbody></table>
                 	</span>
                 	<br>
                 </div>
@@ -432,6 +432,60 @@
   </td>
   <td class="signature_col cell">
     <font>
+          <a href='#020010aLhTALkr+B2UOXJ9PJ6MUg=='> ProcessAccessLogs ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* WriteProfiler */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010M1Z5S9AdSSLDut6JJ1P/qg=='> ResetOutput ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* GetSessionID */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         LOGICAL <a href='#020010F6cSf2TXNkCL/qU5Faz4Kw=='> SendToCollector (character, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* ResetOutput */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
          LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a>
     </font>
   </td>
@@ -473,7 +527,7 @@
   </td>
   <td class="cell">
      
-/* WriteProfiler */ <br> <i>  </i>
+/* ProcessAccessLogs */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -584,6 +638,24 @@
 /* StartProfiler */ <br> <i>  </i>
   </td>
 </tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010d9D6eEi590MhRpIsLd330A=='> WriteSessionReports (integer, integer)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* SendToCollector */ <br> <i>  </i>
+  </td>
+</tr>
     
         </tbody>
     </table>
@@ -689,6 +761,57 @@
   </td>
 </tr>
 <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010loQ4t1nS9wY/z4dSzzsTnA=='> CollectorLogsURI</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010Ffn7mDQelYgLLARIbCztFw=='> CollectorMetricsURI</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010h//H+LvPAi/kfh0vMbgZzA=='> CollectorProfileURI</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
   <td align="left" valign="top" class="img_col cell cellleft STATIC">
   </td>
   <td align="left" valign="top" class="option_col cell">
@@ -699,6 +822,23 @@
   <td class="signature_col cell">
     <font>
          Spark.Diagnostic.Util.OEMetrics <a href='#020010XdrBzFbueY6iROPqXAW5vA=='> Instance</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010EJemepSU7dLXsM2ztFvt2g=='> MetricsOutput</a>
     </font>
   </td>
   <td class="cell">
@@ -1983,6 +2123,192 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010aLhTALkr+B2UOXJ9PJ6MUg==" href="#Top">Top</a>
+                <a name="  <a href='#020010aLhTALkr+B2UOXJ9PJ6MUg=='> ProcessAccessLogs ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010aLhTALkr+B2UOXJ9PJ6MUg=='> ProcessAccessLogs ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* WriteProfiler </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010M1Z5S9AdSSLDut6JJ1P/qg==" href="#Top">Top</a>
+                <a name="  <a href='#020010M1Z5S9AdSSLDut6JJ1P/qg=='> ResetOutput ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010M1Z5S9AdSSLDut6JJ1P/qg=='> ResetOutput ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* GetSessionID </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010F6cSf2TXNkCL/qU5Faz4Kw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010F6cSf2TXNkCL/qU5Faz4Kw=='> SendToCollector (character, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE LOGICAL <a href='#020010F6cSf2TXNkCL/qU5Faz4Kw=='> SendToCollector (character, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* ResetOutput </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcType</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      LOGICAL 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010uvuY2P1XqmgFI3d3hvgh/g==" href="#Top">Top</a>
                 <a name=" LOGICAL <a href='#020010uvuY2P1XqmgFI3d3hvgh/g=='> StartProfiler (character)</a>"></a>
             </font>
@@ -2180,7 +2506,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* WriteProfiler </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* ProcessAccessLogs </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   <!--
@@ -2697,6 +3023,84 @@
         </dl>
       </div>
     </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010d9D6eEi590MhRpIsLd330A==" href="#Top">Top</a>
+                <a name="  <a href='#020010d9D6eEi590MhRpIsLd330A=='> WriteSessionReports (integer, integer)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010d9D6eEi590MhRpIsLd330A=='> WriteSessionReports (integer, integer)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* SendToCollector </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>piAgentID</i>
+    </td>
+    <td>
+       INTEGER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>piSessionID</i>
+    </td>
+    <td>
+       INTEGER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
 </tr>
         </tbody>
     </table>
@@ -2863,6 +3267,192 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010loQ4t1nS9wY/z4dSzzsTnA==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010loQ4t1nS9wY/z4dSzzsTnA=='> CollectorLogsURI</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010loQ4t1nS9wY/z4dSzzsTnA=='> CollectorLogsURI</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Ffn7mDQelYgLLARIbCztFw==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010Ffn7mDQelYgLLARIbCztFw=='> CollectorMetricsURI</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010Ffn7mDQelYgLLARIbCztFw=='> CollectorMetricsURI</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010h//H+LvPAi/kfh0vMbgZzA==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010h//H+LvPAi/kfh0vMbgZzA=='> CollectorProfileURI</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010h//H+LvPAi/kfh0vMbgZzA=='> CollectorProfileURI</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010XdrBzFbueY6iROPqXAW5vA==" href="#Top">Top</a>
                 <a name=" <a href='Spark.Diagnostic.Util.OEMetrics.html'>Spark.Diagnostic.Util.OEMetrics</a> <a href='#020010XdrBzFbueY6iROPqXAW5vA=='> Instance</a>"></a>
             </font>
@@ -2904,6 +3494,68 @@
     </td>
     <td>
       <a href='Spark.Diagnostic.Util.OEMetrics.html'>Spark.Diagnostic.Util.OEMetrics</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010EJemepSU7dLXsM2ztFvt2g==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010EJemepSU7dLXsM2ztFvt2g=='> MetricsOutput</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE Progress.Json.ObjectModel.JsonObject <a href='#020010EJemepSU7dLXsM2ztFvt2g=='> MetricsOutput</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
     </td>
     <td>
     </td>
@@ -3423,6 +4075,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">03.05.2019 14:16:38</font>
+    <font class="footer_timestamp">06.11.2019 09:08:53</font>
     </BODY>
 </HTML>
