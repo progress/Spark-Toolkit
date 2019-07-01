@@ -65,19 +65,20 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 /* If a default name was provided by the config, use that. */
                 if (this-object:oConfig:DefaultAppName gt "") eq true then
                     assign ApplicationName = this-object:oConfig:DefaultAppName.
-
-                /**
-                 * If no default ABL Application was previously discovered,
-                 * then match the correct ABLApp based on the current AgentID.
-                 * This provides support for multiple ABL Applications in the
-                 * current PAS instance, and must rely on the current AgentID
-                 * to identify the correct one as currently accessed for this
-                 * request (since AgentID's are unique across the instance).
-                 */
-                if (ApplicationName gt "") ne true then do:
-                    define variable cNames as character no-undo extent.
-                    assign cNames = this-object:oConfig:ABLAppList:GetNames().
-                    assign ApplicationName = this-object:oRemoteMetrics:GetApplication(cNames, this-object:GetAgentID()).
+                else do:
+                    /**
+                     * If no available ABL Application was previously set/found,
+                     * then match the correct ABLApp based on the current AgentID.
+                     * This provides support for multiple ABL Applications in the
+                     * current PAS instance, and must rely on the unique AgentID
+                     * to identify the correct one currently used for this request
+                     * (since AgentID's are unique across the instance). This call
+                     * should pass the list of discovered ABL Applications via the
+                     * OEMetricsConfig class (discovered via openedge.properties).
+                     */
+                    assign ApplicationName = this-object:oRemoteMetrics
+                                                        :GetApplication(this-object:oConfig:ABLAppList:GetNames(),
+                                                                        this-object:GetAgentID()).
                 end.
             end. /* blank value */
 
@@ -920,7 +921,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     end method. /* GetABLObjects */
 
 
-    method public logical TrackAllAgents ( input plEnable as logical ):
+    method public logical TrackAllAgents ( input pcAppName as character,
+                                           input plEnable  as logical ):
         /**
          * Obtain a list of all available agents and make a request to each
          * to begin tracking ABLObjects. This can be time-consuming if there
@@ -935,8 +937,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         define variable iCount   as integer    no-undo.
         define variable lSuccess as logical    no-undo initial false.
 
-        /* Get the agents if object is not present. */
-        if not valid-object(RemoteMetrics:AgentList) then oRemoteMetrics:GetAgents(this-object:ApplicationName).
+        /* Get the latest list of agents. */
+        oRemoteMetrics:GetAgents(pcAppName).
 
         /* Make request to all agents of this ABLApp. */
         do iCount = 1 to RemoteMetrics:AgentList:Length:
@@ -945,7 +947,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             if valid-object(oAgent) and oAgent:Has("pid") then do:
                 /* Set the tracking option for this agent. */
                 assign cAgentID = oAgent:GetCharacter("pid").
-                if oRemoteMetrics:TrackABLObjects(this-object:ApplicationName, integer(cAgentID), plEnable) then
+                if oRemoteMetrics:TrackABLObjects(pcAppName, integer(cAgentID), plEnable) then
                     assign lSuccess = true.
             end. /* has agentId */
         end. /* do iCount */
@@ -954,7 +956,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     end method. /* TrackAllAgents */
 
 
-    method public logical GetAllABLObjectsReport ( ):
+    method public logical GetAllABLObjectsReport ( input pcAppName as character ):
         /**
          * Obtain a list of all available agents and make a request to each
          * to return the current ABLObjectsReport. This can be time-consuming
@@ -975,8 +977,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Update username/password for OEM, if enabled. */
         oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
-        /* Get the agents if object is not present. */
-        if not valid-object(RemoteMetrics:AgentList) then oRemoteMetrics:GetAgents(this-object:ApplicationName).
+        /* Get the latest list of agents. */
+        oRemoteMetrics:GetAgents(pcAppName).
 
         /* Make request to all agents of this ABLApp. */
         do iCount = 1 to RemoteMetrics:AgentList:Length:
@@ -988,7 +990,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 assign cAgentID = oAgent:GetCharacter("pid").
 
                 /* Request the ABL objects for this specific agent. */
-                if oRemoteMetrics:FilterABLObjectReport(input  this-object:ApplicationName,
+                if oRemoteMetrics:FilterABLObjectReport(input  pcAppName,
                                                         input  integer(cAgentID),
                                                         input  oConfig:ClassesExcluded,
                                                         output oObjReport) then do:
@@ -1031,7 +1033,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         define variable lReturn    as logical   no-undo initial false.
 
         /* Check if object reporting is allowed, based on flags and scheduled time. */
-        if not oConfig:AreObjectsEnabled("GetAllABLObjectsReport") then return false.
+        if not oConfig:AreObjectsEnabled("GetSessionABLObjects") then return false.
         if not oConfig:OnValidSchedule() then return false.
 
         /* Update username/password for OEM, if enabled. */
