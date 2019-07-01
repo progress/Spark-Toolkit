@@ -933,24 +933,22 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Update username/password for OEM, if enabled. */
         oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
-        define variable oAgent   as JsonObject no-undo.
-        define variable cAgentID as character  no-undo.
-        define variable iCount   as integer    no-undo.
-        define variable lSuccess as logical    no-undo initial false.
+        define variable cAgents  as character no-undo.
+        define variable iAgentID as integer   no-undo.
+        define variable iCount   as integer   no-undo.
+        define variable lSuccess as logical   no-undo initial false.
 
         /* Get the latest list of agents. */
         oRemoteMetrics:GetAgents(pcAppName).
 
         /* Make request to all agents of this ABLApp. */
-        do iCount = 1 to RemoteMetrics:AgentList:Length:
-            /* Set request with PAS instance name and specific Agent ID. */
-            assign oAgent = RemoteMetrics:AgentList:GetJsonObject(iCount).
-            if valid-object(oAgent) and oAgent:Has("pid") then do:
-                /* Set the tracking option for this agent. */
-                assign cAgentID = oAgent:GetCharacter("pid").
-                if oRemoteMetrics:TrackABLObjects(pcAppName, integer(cAgentID), plEnable) then
-                    assign lSuccess = true.
-            end. /* has agentId */
+        if RemoteMetrics:Applications:Has(pcAppName) then
+            assign cAgents = RemoteMetrics:Applications:GetCharacter(pcAppName).
+        do iCount = 1 to num-entries(cAgents):
+            /* Set the tracking option for this agent. */
+            assign iAgentID = integer(entry(iCount, cAgents)).
+            if oRemoteMetrics:TrackABLObjects(pcAppName, iAgentID, plEnable) then
+                assign lSuccess = true.
         end. /* do iCount */
 
         return lSuccess.
@@ -965,9 +963,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          */
 
         define variable oObjReport as JsonObject no-undo.
-        define variable oAgent     as JsonObject no-undo.
-        define variable cAgentID   as character  no-undo.
+        define variable cAgents    as character  no-undo.
         define variable cSessionID as character  no-undo extent.
+        define variable iAgentID   as integer    no-undo.
         define variable iCount     as integer    no-undo.
         define variable lReturn    as logical    no-undo initial false.
 
@@ -982,30 +980,27 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oRemoteMetrics:GetAgents(pcAppName).
 
         /* Make request to all agents of this ABLApp. */
-        do iCount = 1 to RemoteMetrics:AgentList:Length:
-            /* Set request with PAS instance name and specific Agent ID. */
-            assign oAgent = RemoteMetrics:AgentList:GetJsonObject(iCount).
-            if oAgent:Has("pid") then
-            do on error undo, throw:
-                /* Extract the current agent for examination. */
-                assign cAgentID = oAgent:GetCharacter("pid").
+        if RemoteMetrics:Applications:Has(pcAppName) then
+            assign cAgents = RemoteMetrics:Applications:GetCharacter(pcAppName).
+        do iCount = 1 to num-entries(cAgents):
+            /* Extract the current agent for examination. */
+            assign iAgentID = integer(entry(iCount, cAgents)).
 
-                /* Request the ABL objects for this specific agent. */
-                if oRemoteMetrics:FilterABLObjectReport(input  pcAppName,
-                                                        input  integer(cAgentID),
-                                                        input  oConfig:ClassesExcluded,
-                                                        output oObjReport) then do:
-                    /* Output a file for each session in the report. */
-                    assign cSessionID = oObjReport:GetNames().
-                    do iCount = 1 to extent(cSessionID):
-                        /* Output the report to a known location on disk for review/archival. */
-                        assign lReturn = oObjReport:GetJsonArray(cSessionID[iCount])
-                                                   :WriteFile(this-object:GetObjectsPath(integer(cAgentID),
-                                                                                         integer(cSessionID[iCount])),
-                                                                                         true).
-                    end. /* do iCount */
-                end. /* ParseABLObjectReport */
-            end. /* has agentId */
+            /* Request the ABL objects for this specific agent. */
+            if oRemoteMetrics:FilterABLObjectReport(input  pcAppName,
+                                                    input  iAgentID,
+                                                    input  oConfig:ClassesExcluded,
+                                                    output oObjReport) then do:
+                /* Output a file for each session in the report. */
+                assign cSessionID = oObjReport:GetNames().
+                do iCount = 1 to extent(cSessionID):
+                    /* Output the report to a known location on disk for review/archival. */
+                    assign lReturn = oObjReport:GetJsonArray(cSessionID[iCount])
+                                               :WriteFile(this-object:GetObjectsPath(iAgentID,
+                                                                                     integer(cSessionID[iCount])),
+                                                                                     true).
+                end. /* do iCount */
+            end. /* ParseABLObjectReport */
         end. /* do iCount */
 
         return lReturn.
