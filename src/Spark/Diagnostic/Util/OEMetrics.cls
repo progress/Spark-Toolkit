@@ -63,8 +63,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         get():
             if (ApplicationName gt "") ne true then do:
                 /* If a default name was provided by the config, use that. */
-                if (this-object:oConfig:DefaultAppName gt "") eq true then
+                if (this-object:oConfig:DefaultAppName gt "") eq true then do:
                     assign ApplicationName = this-object:oConfig:DefaultAppName.
+                end. /* DefaultAppName */
                 else do:
                     /**
                      * If no available ABL Application was previously set/found,
@@ -79,10 +80,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                     assign ApplicationName = this-object:oRemoteMetrics
                                                         :GetApplication(this-object:oConfig:ABLAppList:GetNames(),
                                                                         this-object:GetAgentID()).
-                end.
+                end. /* Discovered Name */
             end. /* blank value */
 
-            this-object:oLogger:Trace(substitute("Current ABL Application is '&1'.", ApplicationName)).
             return ApplicationName.
         end get.
         set.
@@ -426,7 +426,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         define variable lError  as logical    no-undo initial false.
 
         /* Note when this output is being generated. */
-        oMetricsLogger:Debug(substitute("Writing metrics for Agent '&1', Session '&2'.", piAgentID, piSessionID)).
+        oMetricsLogger:Debug(substitute("Writing metrics for ABLApp '&1'; Agent '&2', Session '&3'.",
+                                        this-object:ApplicationName, piAgentID, piSessionID)).
 
         /* Output the collected metrics to the remote collector. */
         if oConfig:CollectorType eq "remote" then do:

@@ -457,9 +457,10 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         srchBlk:
         do iX = 1 to extent(cAppNameList):
             /* First check the existing list of unique AgentID's for each ABL Application. */
-            if lookup(Applications:GetCharacter(cAppNameList[iX]), string(piAgentID)) gt 0 then do:
+            if lookup(string(piAgentID), Applications:GetCharacter(cAppNameList[iX])) gt 0 then do:
                 /* When the Agent PID exists in the list, return the current ABLApp name.  */
                 assign cAppNameMatch = cAppNameList[iX].
+                oLogger:Debug(substitute("Matched Agent PID #&1 to ABL Application '&2' [cached].", piAgentID, cAppNameMatch)).
                 leave srchBlk. /* Done here. */
             end. /* can-do */
         end. /* do iX */
@@ -480,6 +481,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                     /* If a PID matches the current ABL Application, set that as the name to return. */
                     if string(piAgentID) eq oAgent:GetCharacter("pid") then do:
                         assign cAppNameMatch = pcAppList[iX].
+                        oLogger:Debug(substitute("Matched Agent PID #&1 to ABL Application '&2' [remote].", piAgentID, cAppNameMatch)).
                         leave appBlk. /* Done here. */
                     end.
                 end. /* valid oAgent */
@@ -497,9 +499,6 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             undo, throw err.
         end catch.
         finally:
-            if (cAppNameMatch gt "") eq true then
-                oLogger:Debug(substitute("Matched Agent PID #&1 to ABL Application '&2'.", piAgentID, cAppNameMatch)).
-
             return cAppNameMatch.
         end finally.
     end method. /* GetApplication */
