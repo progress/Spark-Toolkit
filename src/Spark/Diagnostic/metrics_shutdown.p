@@ -18,11 +18,11 @@ block-level on error undo, throw.
 define variable iStart as integer no-undo.
 assign iStart = mtime.
 
-/* Stop the profiler for this session, if enabled. */
-Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler("session").
-
 /* Send Tomcat access logs to a remote collector, if enabled. */
 Spark.Diagnostic.Util.OEMetrics:Instance:ProcessAccessLogs().
+
+/* Stop the profiler for this session, if enabled. */
+Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler("session").
 
 if log-manager:logging-level ge 3 then
     message substitute("Elapsed: &1ms", (mtime - iStart)).

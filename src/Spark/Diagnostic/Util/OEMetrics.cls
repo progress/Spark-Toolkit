@@ -195,6 +195,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     destructor OEMetrics ( ):
         delete object oConfig no-error.
         delete object oLogger no-error.
+        delete object oMetricsLogger no-error.
         delete object oRemoteMetrics no-error.
         delete object Instance no-error.
     end destructor.
@@ -384,7 +385,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         end case.
 
         /* Prepare to send the metrics data as JSON to the endpoint. */
-        oMetricsLogger:Info(substitute("Sending &1 data to collector at &2", pcType, cRequestURI)).
+        oMetricsLogger:Info(substitute("Sending &1 data to collector at &2", caps(pcType), cRequestURI)).
         oHttpReq = RequestBuilder:Put(cRequestURI, pcData)
                                  :ContentType("application/json")
                                  :Request.
@@ -400,7 +401,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if valid-object(oBody) and oBody:Has("success") and oBody:GetType("success") eq JsonDataType:Boolean then do:
             if oBody:GetLogical("success") then do:
                 if oBody:Has("processed") and oBody:GetType("processed") eq JsonDataType:String then
-                    oLogger:Info(substitute("Collector processed &1 at &2", pcType, oBody:GetCharacter("processed"))).
+                    oMetricsLogger:Info(substitute("Collector processed &1 at &2", pcType, oBody:GetCharacter("processed"))).
             end. /* success */
             else
                 undo, throw new AppError("Unsuccessful response from collector.", 0).
@@ -409,7 +410,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         return false. /* Return false to indicate no errors during sending/processing. */
 
         catch err as Progress.Lang.Error:
-            oLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
+            oMetricsLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
             return true. /* Mark failure if any error occurs. */
         end catch.
         finally:
@@ -461,7 +462,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
                 else
-                    oLogger:Warn("ABLObjects missing Data or Filename.").
+                    oMetricsLogger:Warn("ABLObjects missing Data or Filename.").
             end. /* ABLObjects */
 
             if this-object:MetricsOutput:Has("Sessions") then do:
@@ -471,7 +472,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
                 else
-                    oLogger:Warn("Sessions missing Data or Filename.").
+                    oMetricsLogger:Warn("Sessions missing Data or Filename.").
             end. /* Sessions */
 
             if this-object:MetricsOutput:Has("Requests") then do:
@@ -481,7 +482,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
                 else
-                    oLogger:Warn("Requests missing Data or Filename.").
+                    oMetricsLogger:Warn("Requests missing Data or Filename.").
             end. /* Requests */
         end. /* file */
 
@@ -684,7 +685,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
                 catch err as Progress.Lang.Error:
                     /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
-                    oLogger:Error(substitute("Error sending profile data to collector: &1", err:GetMessage(1))).
+                    oMetricsLogger:Error(substitute("Error sending profile data to collector: &1", err:GetMessage(1))).
                 end catch.
                 finally:
                     assign lcProfile = ?.
@@ -727,46 +728,68 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oAccess:Add("AppName", this-object:ApplicationName).
         oAccess:Add("Instance", oConfig:InstanceURI).
 
-        /* @TODO: Prevent multiple sessions from sending the same log files. */
+        /* Prevents multiple agent-sessions from sending the same log files. */
+        define variable lIsSending as logical   no-undo initial false.
+        define variable cSendFlag  as character no-undo.
 
-        /* Look within the standard TC logs folder for access logs. */
-        assign cLogDir = substitute("&1\logs", this-object:CatalinaBase).
-        input from os-dir(cLogDir) no-echo.
-        repeat:
-            import cFileName cFullName cCodes.
+        /* Avoid making the call to the agent if we have previously marked this agent as tracking objects. */
+        assign cSendFlag = substitute("&1~/logs~/&2_log.sending", this-object:CatalinaBase, this-object:ApplicationName).
+        file-info:file-name = cSendFlag.
+        if file-info:full-pathname ne ? then
+            assign lIsSending = true. /* Flag exists, assume tracking is enabled. */
+        oMetricsLogger:Debug(substitute("Sending Logs for &1: &2", this-object:ApplicationName, lIsSending)).
 
-            if cFileName = "." or
-               cFileName = ".." then next.
+        /* If not sending the log file, claim ownership of the task for the application and do it. */
+        if not lIsSending then do:
+            /* Set the semaphore to declare the log is being sent via this application. */
+            output to value(cSendFlag).
+            /* No output, just touch file. */
+            output close.
 
-            if cFileName matches "localhost_access_log*" or
-               cFileName matches "localhost-access*.log" then
-                assign cLogFiles = trim(substitute("&1,&2", cLogFiles, cFullName), ",").
-        end.
-        input close.
+            /* Look within the standard TC logs folder for access logs. */
+            assign cLogDir = substitute("&1~/logs", this-object:CatalinaBase).
+            oMetricsLogger:Trace(substitute("Checking log directory '&1'.", cLogDir)).
+            input from os-dir(cLogDir) no-echo.
+            repeat:
+                import cFileName cFullName cCodes.
 
-        /* Add each access log into an array as longchar. */
-        assign oLogs = new JsonArray().
-        do iX = 1 to num-entries(cLogFiles, ","):
-            assign
-                lcLogData = ?
-                cFileName = entry(iX, cLogFiles)
-                .
-            copy-lob from file cFilename to lcLogData no-error.
-            oLogs:Add(lcLogData).
-        end. /* do iX */
-        oAccess:Add("Data", oLogs).
-        oLogger:Info(substitute("Located &1 access log file(s) for parsing.", oLogs:Length)).
+                if cFileName = "." or
+                   cFileName = ".." then next.
 
-        /* Send without regard for failure (since we have the file locally). */
-        this-object:SendToCollector("logs", oAccess).
+                if cFileName matches "localhost_access_log*" or
+                   cFileName matches "localhost-access*.log" then do:
+                    assign cLogFiles = trim(substitute("&1,&2", cLogFiles, cFullName), ",").
+                    oMetricsLogger:Trace(substitute("Found access log file '&1'.", cFileName)).
+                end.
+            end.
+            input close.
+
+            /* Add each access log into an array as longchar. */
+            assign oLogs = new JsonArray().
+            do iX = 1 to num-entries(cLogFiles, ","):
+                assign
+                    lcLogData = ?
+                    cFileName = entry(iX, cLogFiles)
+                    .
+                copy-lob from file cFilename to lcLogData no-error.
+                oLogs:Add(lcLogData).
+            end. /* do iX */
+            oAccess:Add("Data", oLogs).
+            oMetricsLogger:Info(substitute("Located &1 access log file(s) for parsing.", oLogs:Length)).
+
+            /* Send without regard for failure (since we have the file locally). */
+            this-object:SendToCollector("logs", oAccess).
+        end. /* not lIsSending */
 
         catch err as Progress.Lang.Error:
             /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
-            oLogger:Error(substitute("Error sending access log data to collector: &1", err:GetMessage(1))).
+            oMetricsLogger:Error(substitute("Error sending access log data to collector: &1", err:GetMessage(1))).
         end catch.
         finally:
             assign lcLogData = ?.
             delete object oAccess no-error.
+            if lIsSending then
+                os-delete value(cSendFlag) no-error.
         end finally.
     end method. /* ProcessAccessLogs */
 
@@ -815,10 +838,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Avoid making the call to the agent if we have previously marked this agent as tracking objects. */
         assign cTrackFlag = oConfig:GetTrackingFlag(piAgentID).
         file-info:file-name = cTrackFlag.
-        if file-info:full-pathname ne ? then do:
+        if file-info:full-pathname ne ? then
             assign lIsTracking = true. /* Flag exists, assume tracking is enabled. */
-            oMetricsLogger:Debug(substitute("Tracking Agent #&1: &2", piAgentID, lIsTracking)).
-        end. /* file exists */
+        oMetricsLogger:Debug(substitute("Tracking Agent #&1: &2", piAgentID, lIsTracking)).
 
         if not lIsTracking then do:
             /* Turn on tracking if not already enabled, and record the latest result. */
@@ -861,7 +883,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         assign cTrackFlag = oConfig:GetTrackingFlag(piAgentID).
         file-info:file-name = cTrackFlag.
         if file-info:full-pathname ne ? then
-            os-delete value(file-info:full-pathname).
+            os-delete value(file-info:full-pathname) no-error.
 
         /* Just immediately disable the object tracking for this agent. */
         return oRemoteMetrics:TrackABLObjects(this-object:ApplicationName, this-object:GetAgentID(), false).
