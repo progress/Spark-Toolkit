@@ -1,6 +1,10 @@
 #OpenEdge.Net.pl Overrides#
 
-**Updated: October 12th, 2018**
+**Updates: July 22th, 2019**
+
+Merged code changes from 12.0 which primarily included modifications to the Logging classes.
+
+**Updates: October 12th, 2018**
 
 This folder contains code from the forthcoming SP4 (11.7.4) and is considered pre-release code.
 However, it should be the code that is bound to ship for that release. All files contained within
