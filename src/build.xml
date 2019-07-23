@@ -122,6 +122,9 @@
 			<ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
 			<property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
 
+			<!-- Add the ANT-Contrib library to this environment (present in 11.7.4+ and 12.0+). -->
+			<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${dlcHome}/ant/lib/ant-contrib-0.6.jar"/>
+
 			<!-- Set properties for special directories. -->
 			<property name="build.out" value="${src.dir}/../dist/oe${oeMajor}"/>
 			<mkdir dir="${build.out}"/>
