@@ -27,7 +27,6 @@ using OpenEdge.BusinessLogic.QueryGroup.
 using OpenEdge.BusinessLogic.QueryOperatorHelper.
 using OpenEdge.BusinessLogic.QueryPredicate.
 using OpenEdge.BusinessLogic.QuerySortEntry.
-using OpenEdge.Core.String.
 using OpenEdge.Core.StringConstant.
 using Progress.Json.ObjectModel.JsonArray.
 using Progress.Json.ObjectModel.JsonConstruct.

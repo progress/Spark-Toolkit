@@ -1,5 +1,5 @@
 /* *************************************************************************************************************************
-Copyright (c) 2018 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
+Copyright (c) 2018-2019 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : QueryDefinition
@@ -57,11 +57,9 @@ class OpenEdge.BusinessLogic.QueryDefinition implements IQueryDefinition:
         define variable cnt as integer no-undo.
         define variable loop as integer no-undo.
 
-        assign cnt     = extent(this-object:QuerySort)
-               qrySort = '[':u
-               .
+        assign cnt = extent(this-object:QuerySort).
         do loop = 1 to cnt:
-            assign qrySort = qrySort + '],[':u.
+            assign qrySort = qrySort + '[':u.
             if valid-object(this-object:QuerySort[loop]) then
                 assign qrySort = qrySort + this-object:QuerySort[loop]:ToString().
             else
