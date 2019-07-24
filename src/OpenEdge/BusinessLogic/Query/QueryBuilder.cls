@@ -3,29 +3,49 @@ Copyright (c) 2019 by Progress Software Corporation and/or one of its subsidiari
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : QueryBuilder
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : pjudge & dugrau
     Created     : Thu May 10 12:38:00 EDT 2018
     Notes       : ADAS-101
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
-using Ccs.Common.Support.*.
 using Ccs.BusinessLogic.IGetDataRequest.
 using Ccs.BusinessLogic.JoinEnum.
 using Ccs.BusinessLogic.QueryOperatorEnum.
+using Ccs.Common.Support.ICharacterArrayHolder.
+using Ccs.Common.Support.ICharacterHolder.
+using Ccs.Common.Support.IDateArrayHolder.
+using Ccs.Common.Support.IDateHolder.
+using Ccs.Common.Support.IDateTimeArrayHolder.
+using Ccs.Common.Support.IDateTimeHolder.
+using Ccs.Common.Support.IDateTimeTzArrayHolder.
+using Ccs.Common.Support.IDateTimeTzHolder.
+using Ccs.Common.Support.IDecimalArrayHolder.
+using Ccs.Common.Support.IDecimalHolder.
+using Ccs.Common.Support.IInt64ArrayHolder.
+using Ccs.Common.Support.IInt64Holder.
+using Ccs.Common.Support.IIntegerArrayHolder.
+using Ccs.Common.Support.IIntegerHolder.
+using Ccs.Common.Support.ILogicalArrayHolder.
+using Ccs.Common.Support.ILogicalHolder.
+using Ccs.Common.Support.ILongcharArrayHolder.
+using Ccs.Common.Support.ILongcharHolder.
 using OpenEdge.BusinessLogic.GetDataTableRequest.
 using OpenEdge.BusinessLogic.QueryDefinition.
 using OpenEdge.BusinessLogic.QueryGroup.
 using OpenEdge.BusinessLogic.QueryPredicate.
 using OpenEdge.BusinessLogic.QuerySortEntry.
 
-class OpenEdge.BusinessLogic.Query.QueryBuilder: 
+class OpenEdge.BusinessLogic.Query.QueryBuilder:
 
-    /***** Begin Protected Methods *****/
+    /* Returns a table/buffer handle for a given name from an input schema
 
+       @param handle The input schema (dataset, buffer, table)
+       @param character The table name. Can be the 'real' name or the serialize-name
+       @return handle A buffer handle for the given name. */
     method protected handle GetTableBuffer (input phSchema    as handle,
                                             input pcTableName as character):
         define variable iBuffer as integer no-undo.
@@ -40,7 +60,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
             assign hTable= phSchema:get-buffer-handle(pcTableName). /* Get the requested table by name. */
             if valid-handle(hTable) then
                 return hTable. /* Return if found by actual table name. */
-            
+
             /* If still here, search by serialize-name of table. */
             do iBuffer = 1 to phSchema:num-buffers:
                 assign hTable= phSchema:get-buffer-handle(iBuffer).
@@ -52,6 +72,11 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return ?. /* No schema, no table name, no table found, just return unknown value. */
     end method. /* GetTableBuffer */
 
+    /* Returns a field handle for a given name from an input buffer
+
+       @param handle The input table/buffer
+       @param character The field name. Can be the 'real' name or the serialize-name
+       @return handle A buffer field handle for the given name. */
     method protected handle GetFieldBuffer (input phTable     as handle,
                                             input pcFieldName as character):
         define variable bhField as handle  no-undo.
@@ -59,12 +84,14 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
 
         /* Return the buffer for the field, if it exists in the table. */
         if valid-handle(phTable) then do:
+            assign bhField = phTable:buffer-field(pcFieldName).
+            if valid-handle(bhField) then
+                return bhField.
             do ix = 1 to phTable:num-fields:
                 assign bhField = phTable:buffer-field(ix) no-error.
                 /* Web-based field matches real name or serialized name. */
                 if valid-handle(bhField) then do:
-                    if bhField:name eq pcFieldName or
-                       bhField:serialize-name eq pcFieldName then
+                    if bhField:serialize-name eq pcFieldName then
                         return bhField.
                     else
                         delete object bhField no-error.
@@ -79,6 +106,11 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         end finally.
     end method. /* GetFieldBuffer */
 
+    /* Maps a query operator into a string template
+
+       @param QueryOperatorEnum The operator
+       @param character The the data type
+       @return character A templated operator map of the form "&1 eq &2" */
     method protected character MapOperator (input poOperator as QueryOperatorEnum,
                                             input pcDataType as character ):
         /* http://docs.telerik.com/kendo-ui/api/javascript/data/datasource#configuration-filter.operator */
@@ -116,6 +148,12 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return cTemplate.
     end method. /* MapOperator */
 
+    /* Creates a templated join phrase for a clause
+
+       @param character The current query string
+       @param character The query where clause that's being joined
+       @param JoinEnum The join to apply
+       @return character A new query string, including the join phrase */
     method protected character MapJoin (input pcQuery  as character,
                                         input pcClause as character,
                                         input poJoinAs as JoinEnum):
@@ -149,6 +187,11 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return pcQuery.
     end method. /* MapJoin */
 
+    /* Builds a query group string from a group
+
+       @param handle The table/buffer for which the group is being built
+       @param QueryGroup The group
+       @return character A group string */
     method protected character BuildGroup (input phTable as handle,
                                            input poGroup as QueryGroup):
         define variable cQueryString as character no-undo initial "".
@@ -184,6 +227,11 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return cQueryString.
     end method. /* BuildGroup */
 
+    /* Builds a WHERE clause for a table from a QueryPredicate
+
+       @param handle The table buffer handle
+       @param QueryPredicate The abstract query predicate
+       @return character A string representation of the where clause */
     method protected character BuildClause (input phTable  as handle,
                                             input poClause as QueryPredicate):
         define variable hField  as handle     no-undo.
@@ -197,7 +245,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
          * valid internal temp-table field. This may be a serialized name, though the resulting field
          * buffer should be used to extract the real field name. Additionally, it may be impossible to
          * determine the correct datatype without assistance from the field buffer, so that too will be
-         * used to convert the value appropriately for the resulting query phrase. 
+         * used to convert the value appropriately for the resulting query phrase.
          */
         assign hField = this-object:GetFieldBuffer(phTable, poClause:FieldName) no-error.
 
@@ -253,7 +301,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
                 when type-of(poClause:Value, ILogicalHolder) or
                 when type-of(poClause:Value, ILogicalArrayHolder) then
                     assign cType = "logical".
-            
+
                 otherwise
                     assign cType = "character".
             end case.
@@ -330,7 +378,6 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
         return cClause.
 
         catch err as Progress.Lang.Error:
-            message substitute("Error building query clause: &1", err:GetMessage(1)).
             return "". /* Return empty clause if an error is encountered. */
         end catch.
     end method. /* BuildClause */
@@ -340,9 +387,9 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
     /* Builds a query handle (object) from a IGetDataRequest object. This method maps
        the input names to the input handle's SERIALIZE-NAMEs and uses the 'real'
        names to build the where clause
-       
+
        @param IGetDataRequest A valid queryn definition
-       @param handle a Dataset or buffer (TT or DB) handle 
+       @param handle a Dataset or buffer (TT or DB) handle
        @return handle A valid QUERY handle */
     method public handle BuildQuery (input pFilter as IGetDataRequest,
                                      input pSchema as handle):
@@ -358,7 +405,7 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
 
     /* Builds a query string from a IGetDataRequest object. This method does
        no name conversions - just takes the names from the input object.
-       
+
        @param IGetDataRequest A valid queryn definition
        @return character A complete WHERE clause , with no name conversions */
     method public character BuildQueryString (input pFilter as IGetDataRequest):
@@ -375,9 +422,9 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
     /* Builds a query string from a IGetDataRequest object. This method maps
        the input names to the input handle's SERIALIZE-NAMEs and uses the 'real'
        names to build the where clause
-       
+
        @param IGetDataRequest A valid queryn definition
-       @param handle a Dataset or buffer (TT or DB) handle 
+       @param handle a Dataset or buffer (TT or DB) handle
        @return character A complete WHERE clause */
     method public character BuildQueryString (input pFilter as IGetDataRequest,
                                               input pSchema as handle):
@@ -466,5 +513,5 @@ class OpenEdge.BusinessLogic.Query.QueryBuilder:
             return trim(cQueryString).
         end finally.
     end method. /* BuildQueryString */
-    
+
 end class.
