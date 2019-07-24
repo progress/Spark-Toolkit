@@ -138,6 +138,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         define variable cMetricsConfig as character  no-undo.
         define variable cLine          as character  no-undo.
         define variable cAppName       as character  no-undo.
+        define variable cAppNames      as character  no-undo.
         define variable cWebApp        as character  no-undo.
         define variable cTransport     as character  no-undo.
         define variable lcConfigTemp   as longchar   no-undo.
@@ -188,7 +189,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                 end.
 
                 assign lcConfigTemp = ?. /* Reset the variable. */
-                oLogger:Trace("Completed discovery of catalina.properties").
+                oLogger:Trace(substitute("Completed discovery of catalina.properties [Instance: &1]", this-object:InstanceURI)).
             end. /* file updated */
         end. /* catalina.properties */
 
@@ -207,6 +208,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                 /* Read the file into a longchar value (avoids keeping the file open). */
                 copy-lob from file file-info:full-pathname to lcConfigTemp no-error.
 
+                /* Read each line of the properties file, looking for transports. */
                 assign iLines = num-entries(lcConfigTemp, "~n").
                 if iLines ge 1 then cfgblk:
                 do iLine = 1 to iLines:
@@ -246,13 +248,15 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                         /* Either update or add the list of WebApps. */
                         if ABLAppList:Has(cAppName) then
                             ABLAppList:Set(cAppname, oWebAppList).
-                        else
+                        else do:
                             ABLAppList:Add(cAppname, oWebAppList).
+                            cAppNames = substitute("&1,&2", cAppNames, cAppName).
+                        end.
                     end. /* transport */
                 end. /* do iLines */
 
                 assign lcConfigTemp = ?. /* Reset the variable. */
-                oLogger:Trace("Completed discovery of openedge.properties").
+                oLogger:Trace(substitute("Completed discovery of openedge.properties [ABL Apps: &1]", trim(cAppNames, ","))).
             end. /* file updated */
         end. /* openedge.properties */
 
@@ -311,7 +315,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                                 assign this-object:PollingStopTime = ?.
 
                             if this-object:PollingStartTime ne ? and this-object:PollingStopTime ne ? then
-                                oLogger:Debug(substitute("using polling schedule: &1 to &2",
+                                oLogger:Debug(substitute("Using polling schedule: &1 to &2",
                                                          this-object:PollingStartTime,
                                                          this-object:PollingStopTime)).
 
@@ -519,14 +523,21 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method public logical OnValidSchedule ():
+        define variable lValid as logical  no-undo initial true.
+        define variable tNow   as datetime no-undo.
+
         /* Determine if polling is controled by start/stop datetime values. */
+        assign tNow = now.
         if this-object:PollingStartTime ne ? and this-object:PollingStopTime ne ? then do:
             /* Do not allow polling outside of scheduled start/stop times. */
-            if now lt this-object:PollingStartTime then return false. /* Before Start */
-            if now gt this-object:PollingStopTime then return false. /* After Stop */
+            if tNow lt this-object:PollingStartTime then assign lValid = false. /* Before Start */
+            if tNow gt this-object:PollingStopTime then assign lValid = false. /* After Stop */
         end. /* has polling schedule */
 
-        return true. /* Assuming polling active if no specific timestamps present. */
+        if not lValid then /* Remark when current time is outside of the expected schedule. */
+            oLogger:Trace(substitute("Configured schedule prevents tracking metrics at this time (&1).", tNow)).
+
+        return lValid. /* Assuming polling active if no specific timestamps present. */
     end method. /* CheckSchedule */
 
 end class.
