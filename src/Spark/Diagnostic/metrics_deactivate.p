@@ -20,7 +20,7 @@ define variable oRequest as OERequestInfo no-undo.
 assign oRequest = cast(session:current-request-info, OERequestInfo).
 
 /* Only run if the request being run is NOT part of the metrics logic. */
-if not oRequest:ProcedureName begins "Spark/Diagnostic/Interface/" then
+if valid-object(oRequest) and not oRequest:ProcedureName begins "Spark/Diagnostic/Interface/" then
 do on error undo, throw:
     define variable iStart as integer no-undo.
     assign iStart = mtime.

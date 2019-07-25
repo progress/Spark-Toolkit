@@ -198,7 +198,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         /* Report which endpoint is being access, with verb and payload (if available). */
         oLogger:Debug(substitute("Invoking: &1 &2 &3", poHttpMethod:ToString(), pcRequestURI)).
         if valid-object(poRequestData) then
-            oLogger:Debug(substitute("Payload: &1", poRequestData:getJsonText())).
+            oLogger:Trace(substitute("Payload: &1", poRequestData:getJsonText())).
 
         /* Set credentials for HTTP basic using the specific realm. */
         assign oCredentials = new Credentials(this-object:ManagerRealm,
@@ -735,7 +735,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         end. /* oemanager */
 
         /* Report the result of the previous request. */
-        oLogger:Debug(substitute("trackABLObjects (&1): &2 = &3",
+        oLogger:Debug(substitute("TrackABLObjects (&1): &2 = &3",
                                  piAgentID, trim(string(plEnable, "enabled/disabled")), lSuccess)).
 
         return lSuccess. /* Return the value from the tracking request. */

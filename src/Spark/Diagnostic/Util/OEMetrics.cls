@@ -1175,6 +1175,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          * when we last output data, and whether it is time to do so again.
          */
 
+        oMetricsLogger:Trace("PrepareSessionReports called; Checking schedule, agent, and session...").
+
         /* Check if general reporting is allowed, based on scheduled time. */
         if not oConfig:OnValidSchedule() then return.
 
@@ -1249,7 +1251,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             this-object:GetSessionMetrics(piAgentID). /* Session Metrics, eg. Memory */
 
         if oConfig:AreRequestsEnabled("PrepareSessionReports") then
-            this-object:GetRequestMetrics(piAgentID). /* Last 1000 Requests */
+            this-object:GetRequestMetrics(piAgentID). /* Last 1000 Requests (or since last interval) */
 
         this-object:OutputTime = ?. /* Reset output timestamp. */
 
