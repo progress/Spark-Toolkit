@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v4.5.1)</TITLE>
+        <TITLE>Progress Spark Toolkit (v4.6.0)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -149,7 +149,11 @@
   </td>
   <td class="cell">
      
-/* BuildGroup */ <br> <i>  </i>
+/* Builds a WHERE clause for a table from a QueryPredicate
+
+@param handle The table buffer handle
+@param QueryPredicate The abstract query predicate
+@return character A string representation of the where clause */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -167,7 +171,11 @@
   </td>
   <td class="cell">
      
-/* MapJoin */ <br> <i>  </i>
+/* Builds a query group string from a group
+
+@param handle The table/buffer for which the group is being built
+@param QueryGroup The group
+@return character A group string */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -255,7 +263,11 @@ names to build the where clause
   </td>
   <td class="cell">
      
-/* GetTableBuffer */ <br> <i>  </i>
+/* Returns a field handle for a given name from an input buffer
+
+@param handle The input table/buffer
+@param character The field name. Can be the 'real' name or the serialize-name
+@return handle A buffer field handle for the given name. */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -273,7 +285,11 @@ names to build the where clause
   </td>
   <td class="cell">
      
-/***** Begin Protected Methods *****/ <br> <i>  </i>
+/* Returns a table/buffer handle for a given name from an input schema
+
+@param handle The input schema (dataset, buffer, table)
+@param character The table name. Can be the 'real' name or the serialize-name
+@return handle A buffer handle for the given name. */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -291,7 +307,12 @@ names to build the where clause
   </td>
   <td class="cell">
      
-/* MapOperator */ <br> <i>  </i>
+/* Creates a templated join phrase for a clause
+
+@param character The current query string
+@param character The query where clause that's being joined
+@param JoinEnum The join to apply
+@return character A new query string, including the join phrase */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -309,7 +330,11 @@ names to build the where clause
   </td>
   <td class="cell">
      
-/* GetFieldBuffer */ <br> <i>  </i>
+/* Maps a query operator into a string template
+
+@param QueryOperatorEnum The operator
+@param character The the data type
+@return character A templated operator map of the form "&1 eq &2" */ <br> <i>  </i>
   </td>
 </tr>
     
@@ -428,7 +453,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* BuildGroup </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Builds a WHERE clause for a table from a QueryPredicate </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -484,7 +509,7 @@ names to build the where clause
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        character A string representation of the where clause
     </td>
 </tr>
               </table>
@@ -522,7 +547,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* MapJoin </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Builds a query group string from a group </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -578,7 +603,7 @@ names to build the where clause
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        character A group string
     </td>
 </tr>
               </table>
@@ -631,7 +656,7 @@ names to build the where clause
         <i>pFilter</i>
     </td>
     <td>
-       <a href='Ccs.BusinessLogic.IGetDataRequest.html'>Ccs.BusinessLogic.IGetDataRequest</a>
+       Ccs.BusinessLogic.IGetDataRequest
     </td>
     <td>
     </td>
@@ -725,7 +750,7 @@ names to build the where clause
         <i>pFilter</i>
     </td>
     <td>
-       <a href='Ccs.BusinessLogic.IGetDataRequest.html'>Ccs.BusinessLogic.IGetDataRequest</a>
+       Ccs.BusinessLogic.IGetDataRequest
     </td>
     <td>
     </td>
@@ -803,7 +828,7 @@ names to build the where clause
         <i>pFilter</i>
     </td>
     <td>
-       <a href='Ccs.BusinessLogic.IGetDataRequest.html'>Ccs.BusinessLogic.IGetDataRequest</a>
+       Ccs.BusinessLogic.IGetDataRequest
     </td>
     <td>
     </td>
@@ -882,7 +907,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* GetTableBuffer </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns a field handle for a given name from an input buffer </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -938,7 +963,7 @@ names to build the where clause
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        handle A buffer field handle for the given name.
     </td>
 </tr>
               </table>
@@ -976,7 +1001,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns a table/buffer handle for a given name from an input schema </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1032,7 +1057,7 @@ names to build the where clause
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        handle A buffer handle for the given name.
     </td>
 </tr>
               </table>
@@ -1070,7 +1095,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* MapOperator </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Creates a templated join phrase for a clause </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1142,7 +1167,7 @@ names to build the where clause
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        character A new query string, including the join phrase
     </td>
 </tr>
               </table>
@@ -1180,7 +1205,7 @@ names to build the where clause
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* GetFieldBuffer </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Maps a query operator into a string template </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -1236,7 +1261,7 @@ names to build the where clause
     <td class="document_detail_parameter">
     </td>
     <td>
-        
+        character A templated operator map of the form "&1 eq &2"
     </td>
 </tr>
               </table>
@@ -1305,6 +1330,6 @@ names to build the where clause
     <br>
     <br>
     -->
-    <font class="footer_timestamp">06.11.2019 09:07:37</font>
+    <font class="footer_timestamp">08.06.2019 14:04:53</font>
     </BODY>
 </HTML>

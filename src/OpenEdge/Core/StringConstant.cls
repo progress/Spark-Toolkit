@@ -1,14 +1,14 @@
 /* *************************************************************************************************************************
-Copyright (c) 2016-2017 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
+Copyright (c) 2016-2018 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : StringConstant
-    Purpose     : Tilde-escaped string contstants 
-    Syntax      : 
-    Description : 
+    Purpose     : Tilde-escaped string contstants
+    Syntax      :
+    Description :
     Author(s)   : pjudge
     Created     : Wed Dec 07 10:25:16 EST 2016
-    Notes       :* Taken from the ~ Special character Help 
+    Notes       :* Taken from the ~ Special character Help
                  * abstract since it's a kinda-sort enum
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
@@ -30,7 +30,7 @@ class OpenEdge.Core.StringConstant abstract:
     define static public property BACK  as character no-undo initial '~b':u    get.
     // Form feed - octal 014
     define static public property FF    as character no-undo initial '~f':u    get.
-    
+
     // Escaped strings
     define static public property TILDE         as character no-undo initial '~~':u    get.
     define static public property SEMICOLON     as character no-undo initial '~;':u    get.
@@ -47,11 +47,11 @@ class OpenEdge.Core.StringConstant abstract:
     define static public property SPACE as character no-undo initial ' ':u get.
     // The unknown value
     define static public property UNKNOWN as character no-undo initial ? get.
-    
+
     /* Static constructor */
     constructor static StringConstant():
         // this MUST be lower-case "u" (ASC dec 117 / hex 75)
         assign StringConstant:UNICODE_ESC = StringConstant:TILDE + 'u':u.
     end constructor.
-    
+
 end class.

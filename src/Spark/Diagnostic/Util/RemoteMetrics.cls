@@ -25,34 +25,16 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
     /*** Static Properties ***/
 
-    define public static property AgentList as JsonArray no-undo get. private set.
+    /* Contains each ABL Applciation name as property and its Agent PID's as values. */
+    define public static property Applications as JsonObject no-undo get. private set.
 
-    /* Should obtain the Application Name from metrics_setenv.[bat|sh] */
-    define private property ApplicationName as character no-undo initial ""
-        get():
-            if ApplicationName eq "" then do:
-                assign ApplicationName = trim(os-getenv("ABLAPP_NAME")).
-                oLogger:Debug(substitute("Using ABLApp Name: &1", ApplicationName)).
-            end.
-            return ApplicationName.
-        end get.
-        set.
-
-    /* Default to OEJMX which should be available for development and production environments. */
-    define private property MetricSource as character no-undo initial "oejmx" get. set.
+    /* Default to OEManager which is the preferred means of accessing metrics. */
+    define private property MetricSource as character no-undo initial "oemanager" get. set.
 
     /*** OEManager Properties ***/
 
-    /* Should obtain an Instance URI from metrics_setenv.[bat|sh] */
-    define private property InstanceURI as character no-undo initial ""
-        get():
-            if InstanceURI eq "" then do:
-                assign InstanceURI = trim(os-getenv("INSTANCE_URI")).
-                oLogger:Debug(substitute("Using Instance URI: &1", InstanceURI)).
-            end.
-            return InstanceURI.
-        end get.
-        set.
+    /* Base URL for instance, where OEManager should reside. */
+    define public property InstanceURI as character no-undo initial "" get. set.
 
     /* Default used with OEManager. */
     define public property ManagerRealm as character no-undo initial "PASOE Manager Application" get. set.
@@ -171,6 +153,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                 assign this-object:MetricSource = "oejmx".
         end case.
         this-object:CheckTempPath().
+
+        Applications = new JsonObject(). /* Create new, empty object. */
     end constructor.
 
 
@@ -214,7 +198,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         /* Report which endpoint is being access, with verb and payload (if available). */
         oLogger:Debug(substitute("Invoking: &1 &2 &3", poHttpMethod:ToString(), pcRequestURI)).
         if valid-object(poRequestData) then
-            oLogger:Debug(substitute("Payload: &1", poRequestData:getJsonText())).
+            oLogger:Trace(substitute("Payload: &1", poRequestData:getJsonText())).
 
         /* Set credentials for HTTP basic using the specific realm. */
         assign oCredentials = new Credentials(this-object:ManagerRealm,
@@ -295,20 +279,23 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     end method. /* InvokeJMX */
 
 
-    method private character CreateTempQuery ( input pcQueryName as character ):
+    method private character CreateTempQuery ( input pcQueryName as character,
+                                               input pcABLApp    as character ):
         /* Pass through without an Agent ID. */
-        return this-object:CreateTempQuery(pcQueryName, 0, 0).
+        return this-object:CreateTempQuery(pcQueryName, pcABLApp, 0, 0).
     end method. /* CreateTempQuery */
 
 
     method private character CreateTempQuery ( input pcQueryName as character,
+                                               input pcABLApp    as character,
                                                input piAgentID   as integer ):
         /* Pass through without an Session ID. */
-        return this-object:CreateTempQuery(pcQueryName, piAgentID, 0).
+        return this-object:CreateTempQuery(pcQueryName, pcABLApp, piAgentID, 0).
     end method. /* CreateTempQuery */
 
 
     method private character CreateTempQuery ( input pcQueryName as character,
+                                               input pcABLApp    as character,
                                                input piAgentID   as integer,
                                                input piSessionID as integer ):
         /**
@@ -327,7 +314,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
         case pcQueryName:
             when "agents" then
-                assign cQueryString = substitute(this-object:AgentsQuery, this-object:ApplicationName).
+                assign cQueryString = substitute(this-object:AgentsQuery, pcABLApp).
             when "sessions" then
                 assign cQueryString = substitute(this-object:SessionsQuery, piAgentID).
             when "trackon" then
@@ -447,7 +434,62 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     /***** Public Methods *****/
 
 
-    method public void GetAgents ( ):
+    method public character GetApplication ( input pcAppList as character extent,
+                                             input piAgentID as integer ):
+        /**
+         * There exists an /applications endpoint for OEManager but no such query for the OEJMX.
+         * As such, it is not possible to get a list of appliations reliably from both sources,
+         * so instead we will rely on the openedge.properties file which should have all current
+         * ABL Application names gathered via the OEMetricsConfig. We will use that with a new
+         * request to GetAgents to determine which agents currently belong to which Application.
+         * This routine should build a list of available applications with their AgentID's so
+         * they can be matched up for subsequent requests.
+         */
+        define variable cAppNameList  as character  no-undo extent.
+        define variable cAppNameMatch as character  no-undo initial "".
+        define variable iX            as integer    no-undo.
+        define variable iY            as integer    no-undo.
+
+        /* Cycle through the current ABL Applications to find a matching AgentID. */
+        assign cAppNameList = Applications:GetNames().
+        srchBlk:
+        do iX = 1 to extent(cAppNameList):
+            /* First check the existing list of unique AgentID's for each ABL Application. */
+            if lookup(string(piAgentID), Applications:GetCharacter(cAppNameList[iX])) gt 0 then do:
+                /* When the Agent PID exists in the list, return the current ABLApp name.  */
+                assign cAppNameMatch = cAppNameList[iX].
+                oLogger:Debug(substitute("Matched Agent PID #&1 to ABL Application '&2' [cached].", piAgentID, cAppNameMatch)).
+                leave srchBlk. /* Done here. */
+            end. /* can-do */
+        end. /* do iX */
+
+        /* If nothing found, get the latest list of agents for each ABL Application. */
+        if (cAppNameMatch gt "") ne true and extent(pcAppList) ge 1 then
+        appBlk:
+        do iX = 1 to extent(pcAppList):
+            this-object:GetAgents(pcAppList[iX]). /* Get agents of this application name. */
+
+            /* If a PID matches the current ABL Application, set that as the name to return. */
+            if lookup(string(piAgentID), Applications:GetCharacter(pcAppList[iX])) gt 0 then do:
+                assign cAppNameMatch = pcAppList[iX].
+                oLogger:Debug(substitute("Matched Agent PID #&1 to ABL Application '&2' [remote].", piAgentID, cAppNameMatch)).
+                leave appBlk. /* Done here. */
+            end.
+        end. /* do iX */
+
+        catch err as Progress.Lang.Error:
+            oLogger:Error(substitute("Error in GetApplication: &1", err:GetMessage(1))).
+            undo, throw err.
+        end catch.
+        finally:
+            return cAppNameMatch.
+        end finally.
+    end method. /* GetApplication */
+
+
+    method public void GetAgents ( input pcABLApp as character ):
+        define variable oAgentList as JsonArray no-undo.
+
         if this-object:MetricSource eq "oejmx" then
         do on error undo, throw:
             define variable cOutPath as character         no-undo.
@@ -455,7 +497,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable oResults as JsonObject        no-undo.
 
             /* Create the query for obtaining agents, and invoke the JMX command. */
-            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("agents")).
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("agents", pcABLApp)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -470,7 +512,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
                 if valid-object(oResults) and oResults:Has("getAgents") then do:
                     if oResults:GetJsonObject("getAgents"):Has("agents") then
-                        AgentList = oResults:GetJsonObject("getAgents"):GetJsonArray("agents").
+                        assign oAgentList = oResults:GetJsonObject("getAgents"):GetJsonArray("agents").
                 end. /* Has Result */
             end. /* File Exists */
 
@@ -494,13 +536,13 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:GetAllAgentsURI).
 
             /* Set request with PAS instance name. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
             if valid-object(oRequest) and oRequest:Has("result") then do:
                 if oRequest:GetJsonObject("result"):Has("agents") then
-                    AgentList = oRequest:GetJsonObject("result"):GetJsonArray("agents").
+                    assign oAgentList = oRequest:GetJsonObject("result"):GetJsonArray("agents").
             end. /* Has Result */
 
             finally:
@@ -509,17 +551,41 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         end. /* oemanager */
 
         /* Log output results of request. */
-        if valid-object(AgentList) then
-            oLogger:Trace(substitute("Available Agents: &1", AgentList:Length)).
+        if valid-object(oAgentList) then do:
+            define variable iX as integer no-undo.
+
+            oLogger:Trace(substitute("Available Agents: &1", oAgentList:Length)).
+
+            if oAgentList:Length ge 1 then
+            do iX = 1 to oAgentList:Length:
+                define variable oAgent  as JsonObject no-undo.
+                define variable cAgents as character  no-undo initial "".
+
+                /* Add the PID to the list of agents for this ABL Application. */
+                assign oAgent = oAgentList:GetJsonObject(iX).
+                if valid-object(oAgent) and oAgent:Has("pid") then
+                    assign cAgents = trim(substitute("&1,&2", cAgents, oAgent:GetCharacter("pid")), ",").
+            end. /* do iY */
+
+            /* Update the requested application with a list of Agent PID's. */
+            if Applications:Has(pcABLApp) then
+                Applications:Set(pcABLApp, cAgents).
+            else
+                Applications:Add(pcABLApp, cAgents).
+        end. /* valid-object */
 
         catch err as Progress.Lang.Error:
             oLogger:Error(substitute("Error in GetAgents: &1", err:GetMessage(1))).
             undo, throw err.
         end catch.
+        finally:
+            delete object oAgentList no-error.
+        end finally.
     end method. /* GetAgents */
 
 
-    method public void GetSessions ( input  piAgentID  as integer,
+    method public void GetSessions ( input  pcABLApp   as character,
+                                     input  piAgentID  as integer,
                                      output poSessions as JsonArray ):
         if this-object:MetricSource eq "oejmx" then
         do on error undo, throw:
@@ -528,7 +594,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable oResults as JsonObject        no-undo.
 
             /* Create the query for obtaining agents, and invoke the JMX command. */
-            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("sessions", piAgentID)).
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("sessions", pcABLApp, piAgentID)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -567,7 +633,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:GetAgentSessionURI).
 
             /* Set request with PAS instance name. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp, piAgentID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
@@ -592,7 +658,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     end method. /* GetSessions */
 
 
-    method public logical TrackABLObjects ( input piAgentID as integer,
+    method public logical TrackABLObjects ( input pcABLApp  as character,
+                                            input piAgentID as integer,
                                             input plEnable  as logical ):
         define variable lSuccess as logical no-undo initial false.
 
@@ -607,7 +674,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
             /* Create the query for tracking objects, and invoke the JMX command. */
             assign cQueryName = if plEnable then "trackon" else "trackoff".
-            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery(cQueryName, piAgentID)).
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery(cQueryName, pcABLApp, piAgentID)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -645,7 +712,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:GetAgentURI, this-object:TrackObjects).
 
             /* Build the initial URL, to prepare to set the tracking flag for payload. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp, piAgentID).
             assign oData = new JsonObject().
             if plEnable then
                 /* Turn tracking on. */
@@ -668,7 +735,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         end. /* oemanager */
 
         /* Report the result of the previous request. */
-        oLogger:Debug(substitute("trackABLObjects (&1): &2 = &3",
+        oLogger:Debug(substitute("TrackABLObjects (&1): &2 = &3",
                                  piAgentID, trim(string(plEnable, "enabled/disabled")), lSuccess)).
 
         return lSuccess. /* Return the value from the tracking request. */
@@ -680,7 +747,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     end method. /* TrackABLObjects */
 
 
-    method public logical TrackingABLObjects ( input piAgentID as integer ):
+    method public logical TrackingABLObjects ( input pcABLApp  as character,
+                                               input piAgentID as integer ):
         define variable lSuccess as logical no-undo initial false.
 
         if piAgentID le 0 or piAgentID eq ? then return false.
@@ -692,7 +760,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable oResults as JsonObject        no-undo.
 
             /* Create the query for tracking objects, and invoke the JMX command. */
-            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("tracking", piAgentID)).
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("tracking", pcABLApp, piAgentID)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -730,7 +798,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:GetAgentURI, this-object:TrackObjects).
 
             /* Replace PAS instance name and specific Agent ID. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp, piAgentID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
@@ -755,7 +823,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     end method. /* TrackABLObjects */
 
 
-    method public logical GetRequestMetrics ( input  piAgentID  as integer,
+    method public logical GetRequestMetrics ( input  pcABLApp   as character,
+                                              input  piAgentID  as integer,
                                               output poRequests as JsonArray ):
         define variable oResult as JsonObject no-undo.
 
@@ -768,7 +837,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable oResults as JsonObject        no-undo.
 
             /* Create the query for tracking objects, and invoke the JMX command. */
-            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("requests", piAgentID)).
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("requests", pcABLApp, piAgentID)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -805,7 +874,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:InstanceURI, this-object:ManagerURI, this-object:GetRequestsURI).
 
             /* Replace PAS instance name and specific Agent ID. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp, piAgentID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
@@ -835,7 +904,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     end method. /* GetRequestMetrics */
 
 
-    method public logical FilterABLObjectReport ( input  piAgentID as integer,
+    method public logical FilterABLObjectReport ( input  pcABLApp  as character,
+                                                  input  piAgentID as integer,
                                                   input  pcExclude as character,
                                                   output poReport  as JsonObject ):
         define variable oABLOutput  as JsonObject no-undo.
@@ -859,7 +929,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
             define variable oResults as JsonObject        no-undo.
 
             /* Create the query for tracking objects, and invoke the JMX command. */
-            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("ablobjects", piAgentID)).
+            assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("ablobjects", pcABLApp, piAgentID)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -904,7 +974,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:GetAgentURI, this-object:GetObjectsReport).
 
             /* Replace PAS instance name and specific Agent ID. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp, piAgentID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).
@@ -960,7 +1030,8 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
     end method. /* FilterABLObjectReport */
 
 
-    method public logical FilterSessionABLObjectReport ( input  piAgentID   as integer,
+    method public logical FilterSessionABLObjectReport ( input  pcABLApp    as character,
+                                                         input  piAgentID   as integer,
                                                          input  piSessionID as integer,
                                                          input  pcExclude   as character,
                                                          output poReport    as JsonArray ):
@@ -982,7 +1053,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
 
             /* Create the query for tracking objects, and invoke the JMX command. */
             assign cOutPath = this-object:InvokeJMX(this-object:CreateTempQuery("ablsessionobjects",
-                                                                                piAgentID, piSessionID)).
+                                                                                pcABLApp, piAgentID, piSessionID)).
 
             /* Confirm output file exists, and parse the JSON payload. */
             file-info:file-name = cOutPath.
@@ -1026,7 +1097,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
                                             this-object:GetAgentURI, this-object:GetSessionObjectsReport).
 
             /* Replace PAS instance name and specific Agent ID. */
-            assign cRequestURI = substitute(cRequestURI, this-object:ApplicationName, piAgentID, piSessionID).
+            assign cRequestURI = substitute(cRequestURI, pcABLApp, piAgentID, piSessionID).
 
             /* Make the request to the endpoint and parse results. */
             assign oRequest = this-object:InvokeAPI(cRequestURI).

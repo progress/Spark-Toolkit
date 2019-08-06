@@ -59,6 +59,34 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     /* Property to allow sychronization of timestamps on output generation. */
     define private property OutputTime as datetime no-undo initial ? get. set.
 
+    define private property ApplicationName as character no-undo initial ""
+        get():
+            if (ApplicationName gt "") ne true then do:
+                /* If a default name was provided by the config, use that. */
+                if (this-object:oConfig:DefaultAppName gt "") eq true then do:
+                    assign ApplicationName = this-object:oConfig:DefaultAppName.
+                end. /* DefaultAppName */
+                else do:
+                    /**
+                     * If no available ABL Application was previously set/found,
+                     * then match the correct ABLApp based on the current AgentID.
+                     * This provides support for multiple ABL Applications in the
+                     * current PAS instance, and must rely on the unique AgentID
+                     * to identify the correct one currently used for this request
+                     * (since AgentID's are unique across the instance). This call
+                     * should pass the list of discovered ABL Applications via the
+                     * OEMetricsConfig class (discovered via openedge.properties).
+                     */
+                    assign ApplicationName = this-object:oRemoteMetrics
+                                                        :GetApplication(this-object:oConfig:ABLAppList:GetNames(),
+                                                                        this-object:GetAgentID()).
+                end. /* Discovered Name */
+            end. /* blank value */
+
+            return ApplicationName.
+        end get.
+        set.
+
     define private property RequestCount as integer no-undo initial 0 get. set.
 
     define private property RequestStart as datetime-tz no-undo initial ? get. set.
@@ -159,14 +187,15 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Create initial JSON object for output, supplying basic application information. */
         assign this-object:MetricsOutput = new JsonObject().
-        this-object:MetricsOutput:Add("AppName", trim(os-getenv("ABLAPP_NAME"))).
-        this-object:MetricsOutput:Add("Instance", trim(os-getenv("INSTANCE_URI"))).
+        this-object:MetricsOutput:Add("AppName", ""). /* Default to blank value initially. */
+        this-object:MetricsOutput:Add("Instance", oConfig:InstanceURI).
     end constructor.
 
 
     destructor OEMetrics ( ):
         delete object oConfig no-error.
         delete object oLogger no-error.
+        delete object oMetricsLogger no-error.
         delete object oRemoteMetrics no-error.
         delete object Instance no-error.
     end destructor.
@@ -356,7 +385,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         end case.
 
         /* Prepare to send the metrics data as JSON to the endpoint. */
-        oMetricsLogger:Info(substitute("Sending &1 data to collector at &2", pcType, cRequestURI)).
+        oMetricsLogger:Info(substitute("Sending &1 data to collector at &2", caps(pcType), cRequestURI)).
         oHttpReq = RequestBuilder:Put(cRequestURI, pcData)
                                  :ContentType("application/json")
                                  :Request.
@@ -372,7 +401,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if valid-object(oBody) and oBody:Has("success") and oBody:GetType("success") eq JsonDataType:Boolean then do:
             if oBody:GetLogical("success") then do:
                 if oBody:Has("processed") and oBody:GetType("processed") eq JsonDataType:String then
-                    oLogger:Info(substitute("Collector processed &1 at &2", pcType, oBody:GetCharacter("processed"))).
+                    oMetricsLogger:Info(substitute("Collector processed &1 at &2", pcType, oBody:GetCharacter("processed"))).
             end. /* success */
             else
                 undo, throw new AppError("Unsuccessful response from collector.", 0).
@@ -381,7 +410,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         return false. /* Return false to indicate no errors during sending/processing. */
 
         catch err as Progress.Lang.Error:
-            oLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
+            oMetricsLogger:Error(substitute("Error while sending to collector: &1", err:GetMessage(1))).
             return true. /* Mark failure if any error occurs. */
         end catch.
         finally:
@@ -398,10 +427,17 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         define variable lError  as logical    no-undo initial false.
 
         /* Note when this output is being generated. */
-        oMetricsLogger:Debug(substitute("Writing metrics for Agent '&1', Session '&2'.", piAgentID, piSessionID)).
+        oMetricsLogger:Debug(substitute("Writing metrics for ABLApp '&1'; Agent '&2', Session '&3'.",
+                                        this-object:ApplicationName, piAgentID, piSessionID)).
 
         /* Output the collected metrics to the remote collector. */
         if oConfig:CollectorType eq "remote" then do:
+            /* Make sure the ABL Application name is up to date before sending. */
+            if this-object:MetricsOutput:Has("AppName") then
+                this-object:MetricsOutput:Set("AppName", this-object:ApplicationName).
+            else
+                this-object:MetricsOutput:Add("AppName", this-object:ApplicationName).
+
             /* Use a common method to transport data, since the endpoints should be similar. */
             assign lError = this-object:SendToCollector("metrics", this-object:MetricsOutput).
 
@@ -426,7 +462,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
                 else
-                    oLogger:Warn("ABLObjects missing Data or Filename.").
+                    oMetricsLogger:Warn("ABLObjects missing Data or Filename.").
             end. /* ABLObjects */
 
             if this-object:MetricsOutput:Has("Sessions") then do:
@@ -436,7 +472,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
                 else
-                    oLogger:Warn("Sessions missing Data or Filename.").
+                    oMetricsLogger:Warn("Sessions missing Data or Filename.").
             end. /* Sessions */
 
             if this-object:MetricsOutput:Has("Requests") then do:
@@ -446,7 +482,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
                     oSubObj:GetJsonArray("Data"):WriteFile(oSubObj:GetCharacter("Filename"), true).
                 else
-                    oLogger:Warn("Requests missing Data or Filename.").
+                    oMetricsLogger:Warn("Requests missing Data or Filename.").
             end. /* Requests */
         end. /* file */
 
@@ -637,10 +673,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
                 /* Prepare the JSON data for the collector. */
                 assign oProfiler = new JsonObject().
-                oProfiler:Add("AppName", trim(os-getenv("ABLAPP_NAME"))).
-                oProfiler:Add("Instance", trim(os-getenv("INSTANCE_URI"))).
-                oProfiler:Add("Agent", this-object:GetAgentID()).
-                oProfiler:Add("Session", this-object:GetSessionID()).
+                oProfiler:Add("AppName", this-object:ApplicationName).
+                oProfiler:Add("Instance", oConfig:InstanceURI).
+                oProfiler:Add("AgentPID", this-object:GetAgentID()).
+                oProfiler:Add("ABLSessionID", this-object:GetSessionID()).
                 oProfiler:Add("Data", lcProfile).
 
                 /* Send the file and then delete if no error reported. */
@@ -649,7 +685,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
                 catch err as Progress.Lang.Error:
                     /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
-                    oLogger:Error(substitute("Error sending profile data to collector: &1", err:GetMessage(1))).
+                    oMetricsLogger:Error(substitute("Error sending profile data to collector: &1", err:GetMessage(1))).
                 end catch.
                 finally:
                     assign lcProfile = ?.
@@ -689,49 +725,71 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Prepare the JSON data for the collector. */
         assign oAccess = new JsonObject().
-        oAccess:Add("AppName", trim(os-getenv("ABLAPP_NAME"))).
-        oAccess:Add("Instance", trim(os-getenv("INSTANCE_URI"))).
+        oAccess:Add("AppName", this-object:ApplicationName).
+        oAccess:Add("Instance", oConfig:InstanceURI).
 
-        /* @TODO: Prevent multiple sessions from sending the same log files. */
+        /* Prevents multiple agent-sessions from sending the same log files. */
+        define variable lIsSending as logical   no-undo initial false.
+        define variable cSendFlag  as character no-undo.
 
-        /* Look within the standard TC logs folder for access logs. */
-        assign cLogDir = substitute("&1\logs", os-getenv("CATALINA_BASE")).
-        input from os-dir(cLogDir) no-echo.
-        repeat:
-            import cFileName cFullName cCodes.
+        /* Avoid making the call to the agent if we have previously marked this agent as tracking objects. */
+        assign cSendFlag = substitute("&1~/logs~/&2_log.sending", this-object:CatalinaBase, this-object:ApplicationName).
+        file-info:file-name = cSendFlag.
+        if file-info:full-pathname ne ? then
+            assign lIsSending = true. /* Flag exists, assume tracking is enabled. */
+        oMetricsLogger:Debug(substitute("Sending Logs for &1: &2", this-object:ApplicationName, lIsSending)).
 
-            if cFileName = "." or
-               cFileName = ".." then next.
+        /* If not sending the log file, claim ownership of the task for the application and do it. */
+        if not lIsSending then do:
+            /* Set the semaphore to declare the log is being sent via this application. */
+            output to value(cSendFlag).
+            /* No output, just touch file. */
+            output close.
 
-            if cFileName matches "localhost_access_log*" or
-               cFileName matches "localhost-access*.log" then
-                assign cLogFiles = trim(substitute("&1,&2", cLogFiles, cFullName), ",").
-        end.
-        input close.
+            /* Look within the standard TC logs folder for access logs. */
+            assign cLogDir = substitute("&1~/logs", this-object:CatalinaBase).
+            oMetricsLogger:Trace(substitute("Checking log directory '&1'.", cLogDir)).
+            input from os-dir(cLogDir) no-echo.
+            repeat:
+                import cFileName cFullName cCodes.
 
-        /* Add each access log into an array as longchar. */
-        assign oLogs = new JsonArray().
-        do iX = 1 to num-entries(cLogFiles, ","):
-            assign
-                lcLogData = ?
-                cFileName = entry(iX, cLogFiles)
-                .
-            copy-lob from file cFilename to lcLogData no-error.
-            oLogs:Add(lcLogData).
-        end. /* do iX */
-        oAccess:Add("Data", oLogs).
-        oLogger:Info(substitute("Located &1 access log file(s) for parsing.", oLogs:Length)).
+                if cFileName = "." or
+                   cFileName = ".." then next.
 
-        /* Send without regard for failure (since we have the file locally). */
-        this-object:SendToCollector("logs", oAccess).
+                if cFileName matches "localhost_access_log*" or
+                   cFileName matches "localhost-access*.log" then do:
+                    assign cLogFiles = trim(substitute("&1,&2", cLogFiles, cFullName), ",").
+                    oMetricsLogger:Trace(substitute("Found access log file '&1'.", cFileName)).
+                end.
+            end.
+            input close.
+
+            /* Add each access log into an array as longchar. */
+            assign oLogs = new JsonArray().
+            do iX = 1 to num-entries(cLogFiles, ","):
+                assign
+                    lcLogData = ?
+                    cFileName = entry(iX, cLogFiles)
+                    .
+                copy-lob from file cFilename to lcLogData no-error.
+                oLogs:Add(lcLogData).
+            end. /* do iX */
+            oAccess:Add("Data", oLogs).
+            oMetricsLogger:Info(substitute("Located &1 access log file(s) for parsing.", oLogs:Length)).
+
+            /* Send without regard for failure (since we have the file locally). */
+            this-object:SendToCollector("logs", oAccess).
+        end. /* not lIsSending */
 
         catch err as Progress.Lang.Error:
             /* Just report any errors, but don't throw further (code should be allowed to exit cleanly). */
-            oLogger:Error(substitute("Error sending access log data to collector: &1", err:GetMessage(1))).
+            oMetricsLogger:Error(substitute("Error sending access log data to collector: &1", err:GetMessage(1))).
         end catch.
         finally:
             assign lcLogData = ?.
             delete object oAccess no-error.
+            if lIsSending then
+                os-delete value(cSendFlag) no-error.
         end finally.
     end method. /* ProcessAccessLogs */
 
@@ -780,14 +838,13 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Avoid making the call to the agent if we have previously marked this agent as tracking objects. */
         assign cTrackFlag = oConfig:GetTrackingFlag(piAgentID).
         file-info:file-name = cTrackFlag.
-        if file-info:full-pathname ne ? then do:
+        if file-info:full-pathname ne ? then
             assign lIsTracking = true. /* Flag exists, assume tracking is enabled. */
-            oMetricsLogger:Debug(substitute("Tracking Agent #&1: &2", piAgentID, lIsTracking)).
-        end. /* file exists */
+        oMetricsLogger:Debug(substitute("Tracking Agent #&1: &2", piAgentID, lIsTracking)).
 
         if not lIsTracking then do:
             /* Turn on tracking if not already enabled, and record the latest result. */
-            assign lIsTracking = oRemoteMetrics:TrackABLObjects(piAgentID, true).
+            assign lIsTracking = oRemoteMetrics:TrackABLObjects(this-object:ApplicationName, piAgentID, true).
 
             /* Remember whether objects are being tracked for this agent. */
             if lIsTracking then do:
@@ -826,10 +883,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         assign cTrackFlag = oConfig:GetTrackingFlag(piAgentID).
         file-info:file-name = cTrackFlag.
         if file-info:full-pathname ne ? then
-            os-delete value(file-info:full-pathname).
+            os-delete value(file-info:full-pathname) no-error.
 
         /* Just immediately disable the object tracking for this agent. */
-        return oRemoteMetrics:TrackABLObjects(this-object:GetAgentID(), false).
+        return oRemoteMetrics:TrackABLObjects(this-object:ApplicationName, this-object:GetAgentID(), false).
     end method. /* StopTrackingObjects */
 
 
@@ -864,7 +921,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         assign iAgentID = this-object:GetAgentID(). /* Obtain the current AgentID. */
 
         /* Request the current ABLObjects report for this agent. */
-        if oRemoteMetrics:FilterABLObjectReport(input  iAgentID,
+        if oRemoteMetrics:FilterABLObjectReport(input  this-object:ApplicationName,
+                                                input  iAgentID,
                                                 input  oConfig:ClassesExcluded,
                                                 output oObjReport) then do:
             /* Output a file for each session in the report. */
@@ -886,7 +944,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
     end method. /* GetABLObjects */
 
 
-    method public logical TrackAllAgents ( input plEnable as logical ):
+    method public logical TrackAllAgents ( input pcAppName as character,
+                                           input plEnable  as logical ):
         /**
          * Obtain a list of all available agents and make a request to each
          * to begin tracking ABLObjects. This can be time-consuming if there
@@ -896,31 +955,29 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Update username/password for OEM, if enabled. */
         oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
-        define variable oAgent   as JsonObject no-undo.
-        define variable cAgentID as character  no-undo.
-        define variable iCount   as integer    no-undo.
-        define variable lSuccess as logical    no-undo initial false.
+        define variable cAgents  as character no-undo.
+        define variable iAgentID as integer   no-undo.
+        define variable iCount   as integer   no-undo.
+        define variable lSuccess as logical   no-undo initial false.
 
-        /* Get the agents if object is not present. */
-        if not valid-object(RemoteMetrics:AgentList) then oRemoteMetrics:GetAgents().
+        /* Get the latest list of agents. */
+        oRemoteMetrics:GetAgents(pcAppName).
 
         /* Make request to all agents of this ABLApp. */
-        do iCount = 1 to RemoteMetrics:AgentList:Length:
-            /* Set request with PAS instance name and specific Agent ID. */
-            assign oAgent = RemoteMetrics:AgentList:GetJsonObject(iCount).
-            if valid-object(oAgent) and oAgent:Has("pid") then do:
-                /* Set the tracking option for this agent. */
-                assign cAgentID = oAgent:GetCharacter("pid").
-                if oRemoteMetrics:TrackABLObjects(integer(cAgentID), plEnable) then
-                    assign lSuccess = true.
-            end. /* has agentId */
+        if RemoteMetrics:Applications:Has(pcAppName) then
+            assign cAgents = RemoteMetrics:Applications:GetCharacter(pcAppName).
+        do iCount = 1 to num-entries(cAgents):
+            /* Set the tracking option for this agent. */
+            assign iAgentID = integer(entry(iCount, cAgents)).
+            if oRemoteMetrics:TrackABLObjects(pcAppName, iAgentID, plEnable) then
+                assign lSuccess = true.
         end. /* do iCount */
 
         return lSuccess.
     end method. /* TrackAllAgents */
 
 
-    method public logical GetAllABLObjectsReport ( ):
+    method public logical GetAllABLObjectsReport ( input pcAppName as character ):
         /**
          * Obtain a list of all available agents and make a request to each
          * to return the current ABLObjectsReport. This can be time-consuming
@@ -928,9 +985,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          */
 
         define variable oObjReport as JsonObject no-undo.
-        define variable oAgent     as JsonObject no-undo.
-        define variable cAgentID   as character  no-undo.
+        define variable cAgents    as character  no-undo.
         define variable cSessionID as character  no-undo extent.
+        define variable iAgentID   as integer    no-undo.
         define variable iCount     as integer    no-undo.
         define variable lReturn    as logical    no-undo initial false.
 
@@ -941,33 +998,31 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         /* Update username/password for OEM, if enabled. */
         oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
-        /* Get the agents if object is not present. */
-        if not valid-object(RemoteMetrics:AgentList) then oRemoteMetrics:GetAgents().
+        /* Get the latest list of agents. */
+        oRemoteMetrics:GetAgents(pcAppName).
 
         /* Make request to all agents of this ABLApp. */
-        do iCount = 1 to RemoteMetrics:AgentList:Length:
-            /* Set request with PAS instance name and specific Agent ID. */
-            assign oAgent = RemoteMetrics:AgentList:GetJsonObject(iCount).
-            if oAgent:Has("pid") then
-            do on error undo, throw:
-                /* Extract the current agent for examination. */
-                assign cAgentID = oAgent:GetCharacter("pid").
+        if RemoteMetrics:Applications:Has(pcAppName) then
+            assign cAgents = RemoteMetrics:Applications:GetCharacter(pcAppName).
+        do iCount = 1 to num-entries(cAgents):
+            /* Extract the current agent for examination. */
+            assign iAgentID = integer(entry(iCount, cAgents)).
 
-                /* Request the ABL objects for this specific agent. */
-                if oRemoteMetrics:FilterABLObjectReport(input  integer(cAgentID),
-                                                        input  oConfig:ClassesExcluded,
-                                                        output oObjReport) then do:
-                    /* Output a file for each session in the report. */
-                    assign cSessionID = oObjReport:GetNames().
-                    do iCount = 1 to extent(cSessionID):
-                        /* Output the report to a known location on disk for review/archival. */
-                        assign lReturn = oObjReport:GetJsonArray(cSessionID[iCount])
-                                                   :WriteFile(this-object:GetObjectsPath(integer(cAgentID),
-                                                                                         integer(cSessionID[iCount])),
-                                                                                         true).
-                    end. /* do iCount */
-                end. /* ParseABLObjectReport */
-            end. /* has agentId */
+            /* Request the ABL objects for this specific agent. */
+            if oRemoteMetrics:FilterABLObjectReport(input  pcAppName,
+                                                    input  iAgentID,
+                                                    input  oConfig:ClassesExcluded,
+                                                    output oObjReport) then do:
+                /* Output a file for each session in the report. */
+                assign cSessionID = oObjReport:GetNames().
+                do iCount = 1 to extent(cSessionID):
+                    /* Output the report to a known location on disk for review/archival. */
+                    assign lReturn = oObjReport:GetJsonArray(cSessionID[iCount])
+                                               :WriteFile(this-object:GetObjectsPath(iAgentID,
+                                                                                     integer(cSessionID[iCount])),
+                                                                                     true).
+                end. /* do iCount */
+            end. /* ParseABLObjectReport */
         end. /* do iCount */
 
         return lReturn.
@@ -996,7 +1051,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         define variable lReturn    as logical   no-undo initial false.
 
         /* Check if object reporting is allowed, based on flags and scheduled time. */
-        if not oConfig:AreObjectsEnabled("GetAllABLObjectsReport") then return false.
+        if not oConfig:AreObjectsEnabled("GetSessionABLObjects") then return false.
         if not oConfig:OnValidSchedule() then return false.
 
         /* Update username/password for OEM, if enabled. */
@@ -1013,18 +1068,18 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         if piAgentID gt 0 and piSessionID gt 0 then do:
             /* Request the ABL objects for this specific agent and session. */
-            if oRemoteMetrics:FilterSessionABLObjectReport(input  piAgentID,
+            if oRemoteMetrics:FilterSessionABLObjectReport(input  this-object:ApplicationName,
+                                                           input  piAgentID,
                                                            input  piSessionID,
                                                            input  oConfig:ClassesExcluded,
                                                            output oObjReport) then do:
                 /* Output the report to the common JSON structure for tracking. */
                 this-object:MetricsOutput:Add("ABLObjects", new JsonObject()).
                 this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("Filename", this-object:GetObjectsPath(piAgentID, piSessionID)).
-                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("Agent", piAgentID).
-                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("Session", piSessionID).
+                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("AgentPID", piAgentID).
+                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("ABLSessionID", piSessionID).
                 this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("Data", cast(oObjReport:Clone(), JsonArray)).
                 assign lReturn = true.
-
             end.
         end. /* Has Agent/Session */
 
@@ -1053,7 +1108,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         /* Obtain the current list of sessions for this agent. */
-        oRemoteMetrics:GetRequestMetrics(input piAgentID, output oRequests).
+        oRemoteMetrics:GetRequestMetrics(input this-object:ApplicationName, input piAgentID, output oRequests).
 
         do iX = 1 to oRequests:Length:
             /* If a request occured prior to the last report from this session, delete the object. */
@@ -1069,7 +1124,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if valid-object(oRequests) and oRequests:Length gt 0 then do:
             this-object:MetricsOutput:Add("Requests", new JsonObject()).
             this-object:MetricsOutput:GetJsonObject("Requests"):Add("Filename", this-object:GetRequestPath(piAgentID)).
-            this-object:MetricsOutput:GetJsonObject("Requests"):Add("Agent", piAgentID).
+            this-object:MetricsOutput:GetJsonObject("Requests"):Add("AgentPID", piAgentID).
             this-object:MetricsOutput:GetJsonObject("Requests"):Add("Data", cast(oRequests:Clone(), JsonArray)).
         end.
 
@@ -1094,13 +1149,13 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oConfig:UpdateCredentialsOEM(oRemoteMetrics).
 
         /* Obtain the current list of sessions for this agent. */
-        oRemoteMetrics:GetSessions(input piAgentID, output oSessions).
+        oRemoteMetrics:GetSessions(input this-object:ApplicationName, input piAgentID, output oSessions).
 
         /* Output the report to the common JSON structure for tracking. */
         if valid-object(oSessions) and oSessions:Length gt 0 then do:
             this-object:MetricsOutput:Add("Sessions", new JsonObject()).
             this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Filename", this-object:GetSessionPath(piAgentID)).
-            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Agent", piAgentID).
+            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("AgentPID", piAgentID).
             this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Data", cast(oSessions:Clone(), JsonArray)).
         end.
 
@@ -1119,6 +1174,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
          * be able to just check a single value in this class instance to know
          * when we last output data, and whether it is time to do so again.
          */
+
+        oMetricsLogger:Trace("PrepareSessionReports called; Checking schedule, agent, and session...").
 
         /* Check if general reporting is allowed, based on scheduled time. */
         if not oConfig:OnValidSchedule() then return.
@@ -1158,6 +1215,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                                             this-object:GetAgentID(), this-object:GetSessionID(), err:GetMessage(1))).
             undo, throw err.
         end catch.
+        finally:
+            /* Always reset the current ABL Application name before the next request. */
+            assign this-object:ApplicationName = "".
+        end finally.
     end method. /* PrepareSessionReports */
 
 
@@ -1190,7 +1251,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             this-object:GetSessionMetrics(piAgentID). /* Session Metrics, eg. Memory */
 
         if oConfig:AreRequestsEnabled("PrepareSessionReports") then
-            this-object:GetRequestMetrics(piAgentID). /* Last 1000 Requests */
+            this-object:GetRequestMetrics(piAgentID). /* Last 1000 Requests (or since last interval) */
 
         this-object:OutputTime = ?. /* Reset output timestamp. */
 

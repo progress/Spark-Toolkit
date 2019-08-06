@@ -15,29 +15,48 @@ block-level on error undo, throw.
 
 class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPath use-widget-pool final:
 
-    /* Tracks the last time the config file was loaded from the file system. */
+    /* Tracks the last time the metrics config file was loaded from the file system. */
     define private variable dConfigLastLoaded as datetime no-undo initial ?.
+
+    /* Tracks the last time the CB props file was loaded from the file system. */
+    define private variable dCBPropsLastLoaded as datetime no-undo initial ?.
+
+    /* Tracks the last time the OE props file was loaded from the file system. */
+    define private variable dOEPropsLastLoaded as datetime no-undo initial ?.
 
     /*** Private Properties ***/
 
     define private property oLogger as ILogWriter no-undo get. set.
 
+    define private property OEManagerUser as character no-undo initial "" get. set.
+
+    define private property OEManagerPass as character no-undo initial "" get. set.
+
+    define private property MetricsConfigFile as character no-undo initial "metrics_config.json"
+        get. set.
+
     define private property MetricsConfigPath as character no-undo initial ""
         get():
             if MetricsConfigPath eq "" then do:
-                /* Determine the location of the config file for this feature. */
-                define variable cConfigName as character no-undo.
-                assign cConfigName = trim(os-getenv("METRICS_CONFIG")).
-                oLogger:Trace(substitute("Metrics Config Name: &1", cConfigName)).
+                /**
+                 * Determine the location of the config file for this feature. By default
+                 * the file should be called "metrics_config.json" and exist in either the
+                 * conf/ or bin/ or SESSION-TEMP folders. If the name of the config file
+                 * is custom, then it should be provided as a METRICS_CONFIG environment
+                 * variable.
+                 */
+                if (trim(os-getenv("METRICS_CONFIG")) gt "") eq true then
+                    this-object:MetricsConfigFile = trim(os-getenv("METRICS_CONFIG")).
+                oLogger:Trace(substitute("CFG: Metrics Config Name: &1", this-object:MetricsConfigFile)).
 
                 /* First, check the CATALINA_BASE/conf/ location. */
-                file-info:filename = substitute("&1/conf/&2", this-object:CatalinaBase, cConfigName).
+                file-info:filename = substitute("&1/conf/&2", this-object:CatalinaBase, this-object:MetricsConfigFile).
                 if file-info:full-pathname eq ? then do:
                     /* Next, check the CATALINA_BASE/bin/ location. */
-                    file-info:filename = substitute("&1/bin/&2", this-object:CatalinaBase, cConfigName).
+                    file-info:filename = substitute("&1/bin/&2", this-object:CatalinaBase, this-object:MetricsConfigFile).
                     if file-info:full-pathname eq ? then do:
                         /* Last, check the SESSION-TEMP location. */
-                        file-info:filename = substitute("&1/&2", this-object:TemporaryDir, cConfigName).
+                        file-info:filename = substitute("&1/&2", this-object:TemporaryDir, this-object:MetricsConfigFile).
                     end. /* not found in /bin/ */
                 end. /* not found in /conf/ */
 
@@ -48,7 +67,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                     assign MetricsConfigPath = "". /* Keep blank if not found. */
 
                 /* Provide context as to where we are getting our config options. */
-                oLogger:Info(substitute("Metrics Config Path: &1", MetricsConfigPath)).
+                oLogger:Info(substitute("CFG: Metrics Config Path: &1", MetricsConfigPath)).
             end. /* MetricsConfigPath eq "" */
 
             return MetricsConfigPath.
@@ -57,9 +76,10 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     /*** Public Properties ***/
 
-    define private property OEManagerUser as character no-undo initial "" get. set.
+    /* Tracks the list of ABL Applications and WebApps for this instance. */
+    define public property ABLAppList as JsonObject no-undo get. private set.
 
-    define private property OEManagerPass as character no-undo initial "" get. set.
+    define public property DefaultAppName as character no-undo initial "" get. private set.
 
     define public property PollingIgnoreList as character no-undo initial "" get. private set.
 
@@ -95,6 +115,8 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     define public property CollectorPort as integer no-undo initial ? get. private set.
 
+    define public property InstanceURI as character no-undo initial "" get. private set.
+
 
     /***** Constructor/Destructor *****/
 
@@ -103,11 +125,149 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         super().
 
         assign oLogger = poLogger. /* Use the logger from the calling class. */
+        assign ABLAppList = new JsonObject(). /* Create initial object. */
         this-object:RefreshConfig(). /* Obtain initial configuration options. */
     end constructor.
 
 
     /***** Private Methods *****/
+
+
+    method private void Discovery ( ):
+        define variable cCatalinaBase  as character  no-undo.
+        define variable cMetricsConfig as character  no-undo.
+        define variable cLine          as character  no-undo.
+        define variable cAppName       as character  no-undo.
+        define variable cAppNames      as character  no-undo.
+        define variable cWebApp        as character  no-undo.
+        define variable cTransport     as character  no-undo.
+        define variable lcConfigTemp   as longchar   no-undo.
+        define variable iLines         as integer    no-undo.
+        define variable iLine          as integer    no-undo.
+        define variable iX             as integer    no-undo.
+        define variable iHttpPort      as integer    no-undo.
+        define variable iHttpsPort     as integer    no-undo.
+        define variable lFound         as logical    no-undo.
+        define variable dLastDate      as datetime   no-undo.
+        define variable oWebAppList    as JsonArray  no-undo.
+
+        /* Examine the catalina.properties for info about the available ports. */
+        file-info:file-name = substitute("&1/conf/catalina.properties", this-object:CatalinaBase).
+        if file-info:full-pathname ne ? then do:
+            /* Get the current date/time that the file was last modified. */
+            assign dLastDate = datetime(file-info:file-mod-date, file-info:file-mod-time * 1000).
+
+            if dLastDate ne dCBPropsLastLoaded then do:
+                /* Mark down the current modified date/time for this file. */
+                assign dCBPropsLastLoaded = dLastDate.
+
+                /* Read the file into a longchar value (avoids keeping the file open). */
+                copy-lob from file file-info:full-pathname to lcConfigTemp no-error.
+
+                assign iLines = num-entries(lcConfigTemp, "~n").
+                if iLines ge 1 then cfgblk:
+                do iLine = 1 to iLines:
+                    assign cLine = trim(entry(iLine, lcConfigTemp, "~n")).
+
+                    case true:
+                        when cLine begins "psc.as.http.port=" then
+                            assign iHttpPort = integer(trim(entry(2, cLine, "="))).
+                        when cLine begins "psc.as.https.port=" then
+                            assign iHttpsPort = integer(trim(entry(2, cLine, "="))).
+                    end case.
+                end. /* do iLines */
+
+                /* Use a distinct INSTANCE_URI environment variable, if supplied. */
+                if (trim(os-getenv("INSTANCE_URI")) gt "") eq true then
+                    assign this-object:InstanceURI = trim(os-getenv("INSTANCE_URI")).
+                else do:
+                    /* Look to the same server at either the HTTP or HTTPS port for OEManager. */
+                    if iHttpPort gt 0 then
+                        this-object:InstanceURI = substitute("http://127.0.0.1:&1", iHttpPort).
+                    else if iHttpsPort gt 0 then
+                        this-object:InstanceURI = substitute("https://127.0.0.1:&1", iHttpsPort).
+                end.
+
+                assign lcConfigTemp = ?. /* Reset the variable. */
+                oLogger:Trace(substitute("CFG: Completed discovery of catalina.properties [Instance: &1]", this-object:InstanceURI)).
+            end. /* file updated */
+        end. /* catalina.properties */
+
+        /* Examine the openedge.properties for ABL Application and WebApp information. */
+        file-info:file-name = substitute("&1/conf/openedge.properties", this-object:CatalinaBase).
+        if file-info:full-pathname ne ? then do:
+            /* Get the current date/time that the file was last modified. */
+            assign dLastDate = datetime(file-info:file-mod-date, file-info:file-mod-time * 1000).
+
+            if dLastDate ne dOEPropsLastLoaded then do:
+                assign this-object:DefaultAppName = "". /* Clear the default ABL Application name. */
+
+                /* Mark down the current modified date/time for this file. */
+                assign dOEPropsLastLoaded = dLastDate.
+
+                /* Read the file into a longchar value (avoids keeping the file open). */
+                copy-lob from file file-info:full-pathname to lcConfigTemp no-error.
+
+                /* Read each line of the properties file, looking for transports. */
+                assign iLines = num-entries(lcConfigTemp, "~n").
+                if iLines ge 1 then cfgblk:
+                do iLine = 1 to iLines:
+                    assign cLine = trim(entry(iLine, lcConfigTemp, "~n")).
+
+                    if cLine matches "[*.*.APSV]" or
+                       cLine matches "[*.*.REST]" or
+                       cLine matches "[*.*.SOAP]" or
+                       cLine matches "[*.*.WEB]" then do:
+                        assign cLine = replace(cLine, "[", "").
+                        assign cLine = replace(cLine, "]", "").
+
+                        assign
+                            cAppName   = entry(1, cLine, ".")
+                            cWebApp    = entry(2, cLine, ".")
+                            cTransport = entry(3, cLine, ".")
+                            lFound     = false
+                            .
+
+                        if ABLAppList:Has(cAppName) then
+                            /* If an ABLApp exists it should have an array of WebApps. */
+                            assign oWebAppList = ABLAppList:GetJsonArray(cAppName).
+                        else
+                            /* If no ABLApp then create new list of WebApp names. */
+                            assign oWebAppList = new JsonArray().
+
+                        /* WebApp names across the PAS instance must be unique. */
+                        do iX = 1 to oWebAppList:Length:
+                            if oWebAppList:GetCharacter(iX) eq cWebApp then
+                                assign lFound = true.
+                        end.
+
+                        /* Add to list if not found. */
+                        if not lFound then
+                            oWebAppList:Add(cWebApp).
+
+                        /* Either update or add the list of WebApps. */
+                        if ABLAppList:Has(cAppName) then
+                            ABLAppList:Set(cAppname, oWebAppList).
+                        else do:
+                            ABLAppList:Add(cAppname, oWebAppList).
+                            cAppNames = substitute("&1,&2", cAppNames, cAppName).
+                        end.
+                    end. /* transport */
+                end. /* do iLines */
+
+                assign lcConfigTemp = ?. /* Reset the variable. */
+                oLogger:Trace(substitute("CFG: Completed discovery of openedge.properties [ABL Apps: &1]", trim(cAppNames, ","))).
+            end. /* file updated */
+        end. /* openedge.properties */
+
+        /* Check if only a single ABL Application exists. */
+        define variable cNames as character no-undo extent.
+        assign cNames = ABLAppList:GetNames().
+        if extent(cNames) eq 1 and this-object:DefaultAppName ne cNames[1] then do:
+            assign this-object:DefaultAppName = cNames[1]. /* Use the only name as the default application. */
+            oLogger:Trace(substitute("CFG: Using default ABL Application: &1", this-object:DefaultAppName)).
+        end.
+    end method. /* Discovery */
 
 
     method private void ParseConfig ( ):
@@ -135,6 +295,12 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                         if oConfig:Has("general") and oConfig:GetType("general") eq JsonDataType:Object then do:
                             assign oSubObj = oConfig:GetJsonObject("general").
 
+                            /* Use a default ABL Application name if specified either by config for ENV variable. */
+                            if oSubObj:Has("limitAppName") and oSubObj:GetType("limitAppName") eq JsonDataType:String then
+                                assign this-object:DefaultAppName = oSubObj:GetCharacter("limitAppName").
+                            else if (trim(os-getenv("ABLAPP_NAME")) gt "") eq true then
+                                assign this-object:DefaultAppName = trim(os-getenv("ABLAPP_NAME")).
+
                             if oSubObj:Has("pollIgnore") and oSubObj:GetType("pollIgnore") eq JsonDataType:String then
                                 assign this-object:PollingIgnoreList = oSubObj:GetCharacter("pollIgnore").
 
@@ -149,7 +315,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                                 assign this-object:PollingStopTime = ?.
 
                             if this-object:PollingStartTime ne ? and this-object:PollingStopTime ne ? then
-                                oLogger:Debug(substitute("Using polling schedule: &1 to &2",
+                                oLogger:Debug(substitute("CFG: Using polling schedule: &1 to &2",
                                                          this-object:PollingStartTime,
                                                          this-object:PollingStopTime)).
 
@@ -241,8 +407,10 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
             end. /* do ix */
         end. /* valid object */
 
+        oLogger:Trace(substitute("CFG: Completed parsing of &1", this-object:MetricsConfigPath)).
+
         catch err as Progress.Lang.Error:
-            oLogger:Error(substitute("Error parsing config file: &1", err:GetMessage(1))).
+            oLogger:Error(substitute("CFG: Error parsing config file: &1", err:GetMessage(1))).
             undo, throw err.
         end catch.
         finally:
@@ -264,16 +432,18 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         /* Cannot proceed if the configuration file is not present. */
         if (this-object:MetricsConfigPath gt "") ne true then return.
 
-        /* Load the config file path as previously discovered. */
+        this-object:Discovery(). /* Perform local discovery of server info. */
+
+        /* Load the metrics config file path as previously discovered. */
         file-info:file-name = this-object:MetricsConfigPath.
         if file-info:full-pathname ne ? then do:
             define variable dLastDate as datetime no-undo.
 
-            /* Get the current date/time . */
+            /* Get the current date/time this file was modified. */
             assign dLastDate = datetime(file-info:file-mod-date, file-info:file-mod-time * 1000).
 
             if dLastDate ne dConfigLastLoaded then do:
-                oLogger:Debug("Updating configuration options from file.").
+                oLogger:Debug(substitute("CFG: Updating metrics options from configuration file (&1).", this-object:MetricsConfigFile)).
 
                 /* Mark down the current modified date/time for this file. */
                 assign dConfigLastLoaded = dLastDate.
@@ -287,6 +457,8 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
     method public void UpdateCredentialsOEM ( input poRemoteMetrics as Spark.Diagnostic.Util.RemoteMetrics ):
         if can-do("oem,oemanager", this-object:RemoteSource) then do:
+            if (this-object:InstanceURI gt "") eq true then
+                assign poRemoteMetrics:InstanceURI = this-object:InstanceURI.
             if (this-object:OEManagerUser gt "") eq true then
                 assign poRemoteMetrics:ManagerUsername = this-object:OEManagerUser.
             if (this-object:OEManagerPass gt "") eq true then
@@ -306,7 +478,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         this-object:RefreshConfig(). /* Update configuration options. */
 
         if not this-object:TrackObjects then do:
-            oLogger:Debug(substitute("Objects disabled, leaving &1", pcMethodName)).
+            oLogger:Debug(substitute("CFG: Objects disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
 
@@ -318,7 +490,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         this-object:RefreshConfig(). /* Update configuration options. */
 
         if not this-object:TrackMemory then do:
-            oLogger:Debug(substitute("Sessions disabled, leaving &1", pcMethodName)).
+            oLogger:Debug(substitute("CFG: Sessions disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
 
@@ -330,7 +502,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         this-object:RefreshConfig(). /* Update configuration options. */
 
         if not this-object:TrackRequests then do:
-            oLogger:Debug(substitute("Requests disabled, leaving &1", pcMethodName)).
+            oLogger:Debug(substitute("CFG: Requests disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
 
@@ -342,7 +514,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         this-object:RefreshConfig(). /* Update configuration options. */
 
         if not this-object:ProfilerEnabled then do:
-            oLogger:Trace(substitute("Profiler disabled, leaving &1", pcMethodName)).
+            oLogger:Trace(substitute("CFG: Profiler disabled, leaving &1", pcMethodName)).
             return false.
         end. /* not enabled */
 
@@ -351,14 +523,21 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method public logical OnValidSchedule ():
+        define variable lValid as logical  no-undo initial true.
+        define variable tNow   as datetime no-undo.
+
         /* Determine if polling is controled by start/stop datetime values. */
+        assign tNow = now.
         if this-object:PollingStartTime ne ? and this-object:PollingStopTime ne ? then do:
             /* Do not allow polling outside of scheduled start/stop times. */
-            if now lt this-object:PollingStartTime then return false. /* Before Start */
-            if now gt this-object:PollingStopTime then return false. /* After Stop */
+            if tNow lt this-object:PollingStartTime then assign lValid = false. /* Before Start */
+            if tNow gt this-object:PollingStopTime then assign lValid = false. /* After Stop */
         end. /* has polling schedule */
 
-        return true. /* Assuming polling active if no specific timestamps present. */
+        if not lValid then /* Remark when current time is outside of the expected schedule. */
+            oLogger:Trace(substitute("CFG: Configured schedule prevents tracking metrics at this time (&1).", tNow)).
+
+        return lValid. /* Assumes polling is active if no specific timestamps present. */
     end method. /* CheckSchedule */
 
 end class.
