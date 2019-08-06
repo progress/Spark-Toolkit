@@ -4,7 +4,7 @@
 
 The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/CCS) reference implementation from Progress meant to aid in creating an ABL application which provides RESTful API's for microservices. This repository primarily contains ABL artifacts and was built specifically for the **Progress Application Server for OpenEdge** to provide the back-end (server-side) support for exposing ABL logic via HTTP/HTTP.
 
-**Latest Release:** v4.5.0 (March 2019) for OE 11.7.4+ and initial release for OE 12.0
+**Latest Release:** v4.6.0 (August 2019) for OE 11.7.4+ and OE 12.0+
 
 
 ## Requirements
@@ -14,12 +14,10 @@ Due to the inclusion of the CCS libraries within the OpenEdge product version **
 * /dist/oe11 - 11.7.4
 * /dist/oe12 - 12.0
 
-**Note:** Some new features appearing originally in the 4.4.0 release may still be used with 11.7.3 but would first require a recompile and build of a new PL file. It is recommended that you instead move to version 11.7.4 at minimum and upgrade your Spark-Toolkit library to version 4.6.0.
-
 
 ### Supporting Tools
 
-- Apache Ant 1.9.x+ (now included with OE 11.7+ at DLC/ant)
+- Apache Ant 1.9.x+ (now included with OE 11.7+ at DLC/ant) executed as `DLC/bin/proant`
 - Progress Compile Tools, aka. "PCT" (now included with OE 11.7.3 at DLC/pct/PCT.jar)
 
 
@@ -46,7 +44,7 @@ This repository should be ready to use as-is within **Progress Developer Studio 
 
 To create an updated distribution of the PL libraries, utilize the "ant" program from within the `/src/` directory. Running "ant" without options will display basic usage instructions. For example, to build the `Spark.pl` file you would use the target `build_spark_pl` which requires a variable `version` to be set. The following command would produce a new version of the PL in the `/dist/` folder, reflecting the format of "major.minor.revision":
 
-    ant build_spark_pl -Dversion=Ma.Ma.Rv
+    ant build_spark_pl -Dversion=Ma.Mi.Rv
 
 
 ## Documentation

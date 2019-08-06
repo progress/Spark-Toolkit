@@ -37,3 +37,14 @@ Note: You would expect this to be the classes directory, i.e. {$CATALINA_BASE}/w
 Note: This is located in the OERealmUserDetails bean.
 
 7. Restart the PAS instance to ensure that the configuration change is picked up.
+
+
+New for OE12:
+
+1. Copy the encoded password into the ABLDomainRegistry.csv replacing any existing key for the "spark" domain.
+
+2. Run the following command to generate the binary keystore file:
+
+DLC/bin/gendomreg ABLDomainRegistry.csv ABLDomainRegistry.keystore
+
+3. Copy the updated keystore file to the CATALINA_BASE/conf directory.
