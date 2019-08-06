@@ -6,14 +6,12 @@ The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/
 
 **Latest Release:** v4.6.0 (August 2019) for OE 11.7.4+ and OE 12.0+
 
-
 ## Requirements
 
 Due to the inclusion of the CCS libraries within the OpenEdge product version **11.7.4** or later is required, along with toolkit version **4.6.0** or later being highly recommended. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
 
 * /dist/oe11 - 11.7.4
 * /dist/oe12 - 12.0
-
 
 ### Supporting Tools
 
