@@ -60,7 +60,7 @@
                                     <span class="span_parentclass">Parent classes:</span>   
                                 </td>
                                 <td class="span_parentclass">
-                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.Lang.Object                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:1em; height:16px' class='parentclassesitem'>                                                            <table>                                                                <tr>                                                                    <td>                                                                        <div class='parentclassnode'></div>                                                                    </td>                                                                    <td>                                                                    <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a>                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:3em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='Spark.Core.Handler.StatusHandler.html'>Spark.Core.Handler.StatusHandler</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    OpenEdge.Web.WebHandler                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:2em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='Spark.Core.Handler.StatusHandler.html'>Spark.Core.Handler.StatusHandler</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
                                 </td>
                             </tr>
                             
@@ -69,7 +69,7 @@
                                     <span class="span_inherits">Inherits:</span>
                                 </td>
                                 <td class="unit_inherits">
-                                    <span class="span_inherits"><a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a></span>
+                                    <span class="span_inherits">OpenEdge.Web.WebHandler</span>
                                 </td>
                             </tr>
                             
@@ -144,104 +144,11 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010zkToxEOjqP/d1l87FlsAmQ=='> CanAcceptContentType (IWebRequest, character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Ensures that the request's Accept header and the operation's
-ContentType values are compatible, per https://tools.ietf.org/html/rfc7231#section-5.3.2
-
-ContentType must be a complete type/subtype.
-Accept may contain type/subtype, type/&lt;star&gt; or &lt;star&gt;/&lt;star&gt; values. If &lt;star&gt;/&lt;star&gt;
-values appear the we can service the request.
-
-@param IWebRequest The request that resulting in the exception
-@param character The MIME type we're wanting to return (usally from the operation)
-@return logical TRUE if the operation's ContentType is compatible with the request's Accept value */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010cbsmMIZZwRAi4QEH0rzORw=='> HandleDelete (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP DELETE method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010ao4APKamNr6ylSf1geDiQQ=='> HandleException (Error, IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Handles an exception that has been raised while dealing with the request
-
-@param Progress.Lang.Error The as-yet-unhandled exception
-@param IWebRequest The request that resulting in the exception
-@return integer A non-null status code use to deal with errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
          INTEGER <a href='#020010DSAtR4Go0G5/Kl8HDgaqeg=='> HandleGet (IWebRequest)</a>
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.WebHandler.html#HandleGet (IWebRequest)'>OpenEdge.Web.WebHandler:HandleGet (IWebRequest)</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010wP++T+g8w9O2prkqiSZ4lA=='> HandleHead (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP HEAD method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
+      <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -258,7 +165,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.WebHandler.html#HandleNotAllowedMethod (IWebRequest)'>OpenEdge.Web.WebHandler:HandleNotAllowedMethod (IWebRequest)</a> </i>
+      <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -275,160 +182,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     </font>
   </td>
   <td class="cell">
-      <br> <i> Overrides <a href='OpenEdge.Web.WebHandler.html#HandleNotImplemented (IWebRequest)'>OpenEdge.Web.WebHandler:HandleNotImplemented (IWebRequest)</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010GZhaY5al4n3FFTFm0lizvg=='> HandleOptions (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP OPTIONS method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010RyK+Jg0/6nhFJPy6Qk48Uw=='> HandlePatch (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP PATCH method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010Nanzv+zeiXsPhJLnpkuLnQ=='> HandlePost (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP POST method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010XBXmwEuhNl66nzpfU6gRAQ=='> HandlePut (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP PUT method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010U5ejN69zy9G3uPylomAlVQ=='> HandleRequest ()</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Handle request by calling the specific handler for the request method
-
-@return integer An HTTP status code. Zero means that the webhandler will take care of
-any errors. A non-zero value means that the PASOE webapp's error handling
-will return a standard page for the error */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         INTEGER <a href='#020010fIq+KbdH3LpnZxqzRShBYg=='> HandleTrace (IWebRequest)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Default handler for the HTTP TRACE method
-
-@param IWebRequest The request being serviced
-@return integer An optional status code. A zero or null value means this
-method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-          <a href='#020010n5QKuD83JwpJRNkLYXTiiQ=='> LogMessage (character, integer)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/** Logs a message
-
-@param character The message to log
-@param integer  The level this message should be logged at */ <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
+      <br> <i>  </i>
   </td>
 </tr>
     
@@ -481,7 +235,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
         </tbody>
     </table>
     -->
-    
+    <!--
     <br>
     <div class="TableHeadingColor">
         <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
@@ -500,27 +254,10 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
                 <th align="left">Name</th>
                 <th align="left">Purpose</th>
             </tr>
-            <tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         ILogWriter <a href='#020010jSTRsUNa4HT9PgS2TUGaHA=='> Logger</a>
-    </font>
-  </td>
-  <td class="cell">
-      <br> <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-  </td>
-</tr>
-    
+                
         </tbody>
     </table>
-    
+    -->
     <br>
     <br>
     
@@ -536,272 +273,6 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     <table border="0" class="table_content table_content_details method_detail">
         <tbody>
             <tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010zkToxEOjqP/d1l87FlsAmQ==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010zkToxEOjqP/d1l87FlsAmQ=='> CanAcceptContentType (IWebRequest, character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010zkToxEOjqP/d1l87FlsAmQ=='> CanAcceptContentType (IWebRequest, character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Ensures that the request's Accept header and the operation's </td></tr><td class='paramname'></td><td class='paramdesc'>ContentType values are compatible, per https://tools.ietf.org/html/rfc7231#section-5.3.2 </td></tr><td class='paramname'></td><td class='paramdesc'>ContentType must be a complete type/subtype. </td></tr><td class='paramname'></td><td class='paramdesc'>Accept may contain type/subtype, type/&lt;star&gt; or &lt;star&gt;/&lt;star&gt; values. If &lt;star&gt;/&lt;star&gt; </td></tr><td class='paramname'></td><td class='paramdesc'>values appear the we can service the request. </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pContentType</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      LOGICAL 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        logical TRUE if the operation's ContentType is compatible with the request's Accept value
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010cbsmMIZZwRAi4QEH0rzORw==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010cbsmMIZZwRAi4QEH0rzORw=='> HandleDelete (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010cbsmMIZZwRAi4QEH0rzORw=='> HandleDelete (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP DELETE method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010ao4APKamNr6ylSf1geDiQQ==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010ao4APKamNr6ylSf1geDiQQ=='> HandleException (Error, IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010ao4APKamNr6ylSf1geDiQQ=='> HandleException (Error, IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Handles an exception that has been raised while dealing with the request </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poError</i>
-    </td>
-    <td>
-       Progress.Lang.Error
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer A non-null status code use to deal with errors
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
@@ -826,7 +297,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
                 </td>
             </tr>
         </table>
-        <i> Overrides <a href='OpenEdge.Web.WebHandler.html#HandleGet (IWebRequest)'>OpenEdge.Web.WebHandler:HandleGet (IWebRequest)</a> </i>
+        <i>  </i>
         <div>
         <dl>
           <dd class="detail_comment">
@@ -845,7 +316,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
         <i>poRequest</i>
     </td>
     <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
+       OpenEdge.Web.IWebRequest
     </td>
     <td>
     </td>
@@ -871,84 +342,6 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     </td>
     <td>
         
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010wP++T+g8w9O2prkqiSZ4lA==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010wP++T+g8w9O2prkqiSZ4lA=='> HandleHead (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010wP++T+g8w9O2prkqiSZ4lA=='> HandleHead (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP HEAD method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
     </td>
 </tr>
               </table>
@@ -982,7 +375,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
                 </td>
             </tr>
         </table>
-        <i> Overrides <a href='OpenEdge.Web.WebHandler.html#HandleNotAllowedMethod (IWebRequest)'>OpenEdge.Web.WebHandler:HandleNotAllowedMethod (IWebRequest)</a> </i>
+        <i>  </i>
         <div>
         <dl>
           <dd class="detail_comment">
@@ -1001,7 +394,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
         <i>poRequest</i>
     </td>
     <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
+       OpenEdge.Web.IWebRequest
     </td>
     <td>
     </td>
@@ -1060,7 +453,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
                 </td>
             </tr>
         </table>
-        <i> Overrides <a href='OpenEdge.Web.WebHandler.html#HandleNotImplemented (IWebRequest)'>OpenEdge.Web.WebHandler:HandleNotImplemented (IWebRequest)</a> </i>
+        <i>  </i>
         <div>
         <dl>
           <dd class="detail_comment">
@@ -1079,7 +472,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
         <i>poRequest</i>
     </td>
     <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
+       OpenEdge.Web.IWebRequest
     </td>
     <td>
     </td>
@@ -1096,536 +489,6 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     </td>
     <td>
       INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010GZhaY5al4n3FFTFm0lizvg==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010GZhaY5al4n3FFTFm0lizvg=='> HandleOptions (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010GZhaY5al4n3FFTFm0lizvg=='> HandleOptions (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP OPTIONS method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010RyK+Jg0/6nhFJPy6Qk48Uw==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010RyK+Jg0/6nhFJPy6Qk48Uw=='> HandlePatch (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010RyK+Jg0/6nhFJPy6Qk48Uw=='> HandlePatch (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP PATCH method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010Nanzv+zeiXsPhJLnpkuLnQ==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010Nanzv+zeiXsPhJLnpkuLnQ=='> HandlePost (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010Nanzv+zeiXsPhJLnpkuLnQ=='> HandlePost (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP POST method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010XBXmwEuhNl66nzpfU6gRAQ==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010XBXmwEuhNl66nzpfU6gRAQ=='> HandlePut (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010XBXmwEuhNl66nzpfU6gRAQ=='> HandlePut (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP PUT method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010U5ejN69zy9G3uPylomAlVQ==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010U5ejN69zy9G3uPylomAlVQ=='> HandleRequest ()</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC INTEGER <a href='#020010U5ejN69zy9G3uPylomAlVQ=='> HandleRequest ()</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Handle request by calling the specific handler for the request method </td></tr><td class='paramname'></td><td class='paramdesc'>any errors. A non-zero value means that the PASOE webapp's error handling </td></tr><td class='paramname'></td><td class='paramdesc'>will return a standard page for the error </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  <!--
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  -->
-                  <tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An HTTP status code. Zero means that the webhandler will take care of
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010fIq+KbdH3LpnZxqzRShBYg==" href="#Top">Top</a>
-                <a name=" INTEGER <a href='#020010fIq+KbdH3LpnZxqzRShBYg=='> HandleTrace (IWebRequest)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED INTEGER <a href='#020010fIq+KbdH3LpnZxqzRShBYg=='> HandleTrace (IWebRequest)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default handler for the HTTP TRACE method </td></tr><td class='paramname'></td><td class='paramdesc'>method will deal with all errors </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>poRequest</i>
-    </td>
-    <td>
-       <a href='OpenEdge.Web.IWebRequest.html'>OpenEdge.Web.IWebRequest</a>
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      INTEGER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        integer An optional status code. A zero or null value means this
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010n5QKuD83JwpJRNkLYXTiiQ==" href="#Top">Top</a>
-                <a name="  <a href='#020010n5QKuD83JwpJRNkLYXTiiQ=='> LogMessage (character, integer)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010n5QKuD83JwpJRNkLYXTiiQ=='> LogMessage (character, integer)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>Logs a message </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcMessage</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>piLogLevel</i>
-    </td>
-    <td>
-       INTEGER
     </td>
     <td>
     </td>
@@ -1685,7 +548,7 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     <br>
     <br>
     -->
-    
+    <!--
     <div class="TableHeadingColor cell">
         <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
         </span>
@@ -1697,74 +560,12 @@ method will deal with all errors */ <br> <i> Inherited from <a href='OpenEdge.We
     </div>
     <table border="0" class="table_content property_detail">
         <tbody>
-            <tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010jSTRsUNa4HT9PgS2TUGaHA==" href="#Top">Top</a>
-                <a name=" ILogWriter <a href='#020010jSTRsUNa4HT9PgS2TUGaHA=='> Logger</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC ILogWriter <a href='#020010jSTRsUNa4HT9PgS2TUGaHA=='> Logger</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.Web.WebHandler.html'>OpenEdge.Web.WebHandler</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  <!--
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  -->
-                  <tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      ILogWriter 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr>
+            
         </tbody>
     </table>
     <br>
     <br>
-    
-    <font class="footer_timestamp">06.11.2019 11:22:52</font>
+    -->
+    <font class="footer_timestamp">08.06.2019 14:04:54</font>
     </BODY>
 </HTML>
