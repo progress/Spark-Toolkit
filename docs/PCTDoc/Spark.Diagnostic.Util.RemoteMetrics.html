@@ -162,7 +162,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#0200106BwU6oyZyHa3oi5DO/8xIA=='> CreateTempQuery (character)</a>
+         CHARACTER <a href='#020010OeevzMohHWXndC3zT6I2FA=='> CreateTempQuery (character, character)</a>
     </font>
   </td>
   <td class="cell">
@@ -180,7 +180,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010WvC88o8+lTf6B5tzqcFyLw=='> CreateTempQuery (character, integer)</a>
+         CHARACTER <a href='#0200106a6Ie7pus/zxaNLcsJpVwQ=='> CreateTempQuery (character, character, integer)</a>
     </font>
   </td>
   <td class="cell">
@@ -198,7 +198,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010x/ffuEHPE+ajgPL1pexT7A=='> CreateTempQuery (character, integer, integer)</a>
+         CHARACTER <a href='#020010jQbGEIbwO1SjUUa8HQ2p/w=='> CreateTempQuery (character, character, integer, integer)</a>
     </font>
   </td>
   <td class="cell">
@@ -216,7 +216,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010vxdl2lvttcJQQBeOIwyaiA=='> FilterABLObjectReport (integer, character, JsonObject)</a>
+         LOGICAL <a href='#020010TlBzEZa5oQWtONNZ8zqfzA=='> FilterABLObjectReport (character, integer, character, JsonObject)</a>
     </font>
   </td>
   <td class="cell">
@@ -252,7 +252,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#0200106AEhiRHd2ARTZoPBtiUOhQ=='> FilterSessionABLObjectReport (integer, integer, character, JsonArray)</a>
+         LOGICAL <a href='#0200104iD4J1LF3l9GXPzrvwkejw=='> FilterSessionABLObjectReport (character, integer, integer, character, JsonArray)</a>
     </font>
   </td>
   <td class="cell">
@@ -270,7 +270,25 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010MaoIlI7mzbVoCrgDk/ZQmQ=='> GetAgents ()</a>
+          <a href='#020010rYZ+1642TVFZpK6o5KaxwQ=='> GetAgents (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* GetApplication */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010BIQN/yyc5bApUencuTJ5yw=='> GetApplication (character[], integer)</a>
     </font>
   </td>
   <td class="cell">
@@ -288,7 +306,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010Dn9n93I/ZGejUaJ/R96v/g=='> GetRequestMetrics (integer, JsonArray)</a>
+         LOGICAL <a href='#020010HK/1tFfuxdkjHc7O9WD9/w=='> GetRequestMetrics (character, integer, JsonArray)</a>
     </font>
   </td>
   <td class="cell">
@@ -306,7 +324,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010Z86PSPlLqjPZWgSgmwH4cA=='> GetSessions (integer, JsonArray)</a>
+          <a href='#020010hjJuZbKlMZePRMmZ8FKgGQ=='> GetSessions (character, integer, JsonArray)</a>
     </font>
   </td>
   <td class="cell">
@@ -378,7 +396,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010LGad80/GIBATplk9xVy5JQ=='> TrackABLObjects (integer, logical)</a>
+         LOGICAL <a href='#020010x9UOQu6rJBX6eTYdZsUIbw=='> TrackABLObjects (character, integer, logical)</a>
     </font>
   </td>
   <td class="cell">
@@ -396,7 +414,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         LOGICAL <a href='#020010oVSZamnVy3NmgQl5raqZ0A=='> TrackingABLObjects (integer)</a>
+         LOGICAL <a href='#020010eOt+nfx6DlkoBqEJ0odcUQ=='> TrackingABLObjects (character, integer)</a>
     </font>
   </td>
   <td class="cell">
@@ -526,23 +544,6 @@
   </td>
 </tr>
 <tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft STATIC">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         Progress.Json.ObjectModel.JsonArray <a href='#020010wEbmKjTzTz91/6NYB7F3tg=='> AgentList</a>
-    </font>
-  </td>
-  <td class="cell">
-      <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
@@ -560,16 +561,16 @@
   </td>
 </tr>
 <tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>-</font>
+    <font>+</font>
     <font></font>
     <font></font>
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#0200108vwHBwxdpe9MaZkAiW3mJw=='> ApplicationName</a>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010GmQ2tueL1c+I+8AOdlRo9w=='> Applications</a>
     </font>
   </td>
   <td class="cell">
@@ -699,7 +700,7 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>-</font>
+    <font>+</font>
     <font></font>
     <font></font>
   </td>
@@ -1018,11 +1019,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200106BwU6oyZyHa3oi5DO/8xIA==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#0200106BwU6oyZyHa3oi5DO/8xIA=='> CreateTempQuery (character)</a>"></a>
+                <a name="020010OeevzMohHWXndC3zT6I2FA==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010OeevzMohHWXndC3zT6I2FA=='> CreateTempQuery (character, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#0200106BwU6oyZyHa3oi5DO/8xIA=='> CreateTempQuery (character)</a></h3>
+        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010OeevzMohHWXndC3zT6I2FA=='> CreateTempQuery (character, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1071,6 +1072,22 @@
     </td>
 </tr><tr>
     <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
         <i><b>Returns</b></i>
     </td>
     <td>
@@ -1096,11 +1113,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010WvC88o8+lTf6B5tzqcFyLw==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010WvC88o8+lTf6B5tzqcFyLw=='> CreateTempQuery (character, integer)</a>"></a>
+                <a name="0200106a6Ie7pus/zxaNLcsJpVwQ==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#0200106a6Ie7pus/zxaNLcsJpVwQ=='> CreateTempQuery (character, character, integer)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010WvC88o8+lTf6B5tzqcFyLw=='> CreateTempQuery (character, integer)</a></h3>
+        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#0200106a6Ie7pus/zxaNLcsJpVwQ=='> CreateTempQuery (character, character, integer)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1134,6 +1151,22 @@
                   <tr>
     <td class="document_detail_parameter">
         <i>pcQueryName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
     </td>
     <td>
        CHARACTER
@@ -1190,11 +1223,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010x/ffuEHPE+ajgPL1pexT7A==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010x/ffuEHPE+ajgPL1pexT7A=='> CreateTempQuery (character, integer, integer)</a>"></a>
+                <a name="020010jQbGEIbwO1SjUUa8HQ2p/w==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010jQbGEIbwO1SjUUa8HQ2p/w=='> CreateTempQuery (character, character, integer, integer)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010x/ffuEHPE+ajgPL1pexT7A=='> CreateTempQuery (character, integer, integer)</a></h3>
+        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010jQbGEIbwO1SjUUa8HQ2p/w=='> CreateTempQuery (character, character, integer, integer)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1228,6 +1261,22 @@
                   <tr>
     <td class="document_detail_parameter">
         <i>pcQueryName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
     </td>
     <td>
        CHARACTER
@@ -1300,11 +1349,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010vxdl2lvttcJQQBeOIwyaiA==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010vxdl2lvttcJQQBeOIwyaiA=='> FilterABLObjectReport (integer, character, JsonObject)</a>"></a>
+                <a name="020010TlBzEZa5oQWtONNZ8zqfzA==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010TlBzEZa5oQWtONNZ8zqfzA=='> FilterABLObjectReport (character, integer, character, JsonObject)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010vxdl2lvttcJQQBeOIwyaiA=='> FilterABLObjectReport (integer, character, JsonObject)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010TlBzEZa5oQWtONNZ8zqfzA=='> FilterABLObjectReport (character, integer, character, JsonObject)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1336,6 +1385,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piAgentID</i>
     </td>
@@ -1504,11 +1569,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200106AEhiRHd2ARTZoPBtiUOhQ==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#0200106AEhiRHd2ARTZoPBtiUOhQ=='> FilterSessionABLObjectReport (integer, integer, character, JsonArray)</a>"></a>
+                <a name="0200104iD4J1LF3l9GXPzrvwkejw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#0200104iD4J1LF3l9GXPzrvwkejw=='> FilterSessionABLObjectReport (character, integer, integer, character, JsonArray)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200106AEhiRHd2ARTZoPBtiUOhQ=='> FilterSessionABLObjectReport (integer, integer, character, JsonArray)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#0200104iD4J1LF3l9GXPzrvwkejw=='> FilterSessionABLObjectReport (character, integer, integer, character, JsonArray)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1540,6 +1605,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piAgentID</i>
     </td>
@@ -1630,11 +1711,73 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010MaoIlI7mzbVoCrgDk/ZQmQ==" href="#Top">Top</a>
-                <a name="  <a href='#020010MaoIlI7mzbVoCrgDk/ZQmQ=='> GetAgents ()</a>"></a>
+                <a name="020010rYZ+1642TVFZpK6o5KaxwQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010rYZ+1642TVFZpK6o5KaxwQ=='> GetAgents (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC  <a href='#020010MaoIlI7mzbVoCrgDk/ZQmQ=='> GetAgents ()</a></h3>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010rYZ+1642TVFZpK6o5KaxwQ=='> GetAgents (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* GetApplication </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010BIQN/yyc5bApUencuTJ5yw==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010BIQN/yyc5bApUencuTJ5yw=='> GetApplication (character[], integer)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010BIQN/yyc5bApUencuTJ5yw=='> GetApplication (character[], integer)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1658,14 +1801,62 @@
             <table><tbody class='commment_formater_table'></tbody></table>
             <dl>
               <table class="parameter_table">
-                  <!--
+                  
                   <tr>
                     <td colspan="2">
                       <b>Parameters:</b>           
                     </td>
                   </tr>
-                  -->
                   
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcAppList</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>piAgentID</i>
+    </td>
+    <td>
+       INTEGER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
               </table>
             </dl>
           </dd>
@@ -1676,11 +1867,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010Dn9n93I/ZGejUaJ/R96v/g==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010Dn9n93I/ZGejUaJ/R96v/g=='> GetRequestMetrics (integer, JsonArray)</a>"></a>
+                <a name="020010HK/1tFfuxdkjHc7O9WD9/w==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010HK/1tFfuxdkjHc7O9WD9/w=='> GetRequestMetrics (character, integer, JsonArray)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010Dn9n93I/ZGejUaJ/R96v/g=='> GetRequestMetrics (integer, JsonArray)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010HK/1tFfuxdkjHc7O9WD9/w=='> GetRequestMetrics (character, integer, JsonArray)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1712,6 +1903,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piAgentID</i>
     </td>
@@ -1770,11 +1977,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010Z86PSPlLqjPZWgSgmwH4cA==" href="#Top">Top</a>
-                <a name="  <a href='#020010Z86PSPlLqjPZWgSgmwH4cA=='> GetSessions (integer, JsonArray)</a>"></a>
+                <a name="020010hjJuZbKlMZePRMmZ8FKgGQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010hjJuZbKlMZePRMmZ8FKgGQ=='> GetSessions (character, integer, JsonArray)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC  <a href='#020010Z86PSPlLqjPZWgSgmwH4cA=='> GetSessions (integer, JsonArray)</a></h3>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010hjJuZbKlMZePRMmZ8FKgGQ=='> GetSessions (character, integer, JsonArray)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1806,6 +2013,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piAgentID</i>
     </td>
@@ -2114,11 +2337,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010LGad80/GIBATplk9xVy5JQ==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010LGad80/GIBATplk9xVy5JQ=='> TrackABLObjects (integer, logical)</a>"></a>
+                <a name="020010x9UOQu6rJBX6eTYdZsUIbw==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010x9UOQu6rJBX6eTYdZsUIbw=='> TrackABLObjects (character, integer, logical)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010LGad80/GIBATplk9xVy5JQ=='> TrackABLObjects (integer, logical)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010x9UOQu6rJBX6eTYdZsUIbw=='> TrackABLObjects (character, integer, logical)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2150,6 +2373,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piAgentID</i>
     </td>
@@ -2208,11 +2447,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010oVSZamnVy3NmgQl5raqZ0A==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010oVSZamnVy3NmgQl5raqZ0A=='> TrackingABLObjects (integer)</a>"></a>
+                <a name="020010eOt+nfx6DlkoBqEJ0odcUQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010eOt+nfx6DlkoBqEJ0odcUQ=='> TrackingABLObjects (character, integer)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010oVSZamnVy3NmgQl5raqZ0A=='> TrackingABLObjects (integer)</a></h3>
+        <h3 class="Signature_Font">PUBLIC LOGICAL <a href='#020010eOt+nfx6DlkoBqEJ0odcUQ=='> TrackingABLObjects (character, integer)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2244,6 +2483,22 @@
                   </tr>
                   
                   <tr>
+    <td class="document_detail_parameter">
+        <i>pcABLApp</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
     <td class="document_detail_parameter">
         <i>piAgentID</i>
     </td>
@@ -2526,68 +2781,6 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010wEbmKjTzTz91/6NYB7F3tg==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010wEbmKjTzTz91/6NYB7F3tg=='> AgentList</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonArray <a href='#020010wEbmKjTzTz91/6NYB7F3tg=='> AgentList</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_STATIC" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  <!--
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  -->
-                  <tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      Progress.Json.ObjectModel.JsonArray 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
                 <a name="020010tjGdztT456vALC0YjJcxEw==" href="#Top">Top</a>
                 <a name=" CHARACTER <a href='#020010tjGdztT456vALC0YjJcxEw=='> AgentsQuery</a>"></a>
             </font>
@@ -2650,15 +2843,15 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200108vwHBwxdpe9MaZkAiW3mJw==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#0200108vwHBwxdpe9MaZkAiW3mJw=='> ApplicationName</a>"></a>
+                <a name="020010GmQ2tueL1c+I+8AOdlRo9w==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010GmQ2tueL1c+I+8AOdlRo9w=='> Applications</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#0200108vwHBwxdpe9MaZkAiW3mJw=='> ApplicationName</a></h3>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010GmQ2tueL1c+I+8AOdlRo9w=='> Applications</a></h3>
         <table>
             <tr>
                 <td>
-                    <div class="img_" Title="Static">
+                    <div class="img_STATIC" Title="Static">
                     </div>
                 </td>
                 <td>
@@ -2690,7 +2883,7 @@
         <i><b>Returns</b></i>
     </td>
     <td>
-      CHARACTER 
+      Progress.Json.ObjectModel.JsonObject 
     </td>
     <td>
     </td>
@@ -3150,7 +3343,7 @@
                 <a name=" CHARACTER <a href='#020010P4wqzkMG85RKWUHmAfP9aQ=='> InstanceURI</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PRIVATE CHARACTER <a href='#020010P4wqzkMG85RKWUHmAfP9aQ=='> InstanceURI</a></h3>
+        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010P4wqzkMG85RKWUHmAfP9aQ=='> InstanceURI</a></h3>
         <table>
             <tr>
                 <td>
@@ -4078,6 +4271,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">06.11.2019 11:23:12</font>
+    <font class="footer_timestamp">08.06.2019 14:05:13</font>
     </BODY>
 </HTML>
