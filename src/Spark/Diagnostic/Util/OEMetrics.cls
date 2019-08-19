@@ -1111,8 +1111,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         oRemoteMetrics:GetRequestMetrics(input this-object:ApplicationName, input piAgentID, output oRequests).
 
         do iX = 1 to oRequests:Length:
-            /* If a request occured prior to the last report from this session, delete the object. */
-            if oRequests:GetJsonObject(iX):GetDatetime("StartTime") lt dLastReportOutput then
+            /* If a request ended prior to the last report from this session, delete the object. */
+            if oRequests:GetJsonObject(iX):GetDatetime("EndTime") le dLastReportOutput then
                 assign iCount = iX.
         end. /* do iX */
 
