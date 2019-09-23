@@ -8,18 +8,20 @@
    Notes       : Requires OpenEdge 11.7.3 or later!
  ----------------------------------------------------------------------*/
 
-using Progress.Lang.* from propath.
-using Progress.Json.ObjectModel.* from propath.
-using OpenEdge.Core.Assert from propath.
-using OpenEdge.Net.HTTP.Credentials from propath.
-using OpenEdge.Net.HTTP.HttpClient from propath.
-using OpenEdge.Net.HTTP.MethodEnum from propath.
-using OpenEdge.Net.HTTP.IHttpRequest from propath.
-using OpenEdge.Net.HTTP.IHttpResponse from propath.
-using OpenEdge.Net.HTTP.RequestBuilder from propath.
-using OpenEdge.Net.HTTP.IAuthenticatedRequest from propath.
 
 block-level on error undo, throw.
+
+using OpenEdge.Net.HTTP.Credentials from propath.
+using OpenEdge.Net.HTTP.HttpClient from propath.
+using OpenEdge.Net.HTTP.IHttpRequest from propath.
+using OpenEdge.Net.HTTP.IHttpResponse from propath.
+using OpenEdge.Net.HTTP.MethodEnum from propath.
+using OpenEdge.Net.HTTP.RequestBuilder from propath.
+using Progress.Json.ObjectModel.JsonArray from propath.
+using Progress.Json.ObjectModel.JsonDataType from propath.
+using Progress.Json.ObjectModel.JsonObject from propath.
+using Progress.Json.ObjectModel.ObjectModelParser from propath.
+using Progress.Lang.AppError from propath.
 
 class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger use-widget-pool final:
 
@@ -217,7 +219,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         oHttpResp = HttpClient:Instance():Execute(oHttpReq).
 
         if oHttpResp:StatusCode ne 200 then do:
-            oLogger:Error(substitute("Response Code was not HTTP/200: &1", string(oHttpResp:StatusCode))).
+            oLogger:Error(substitute("Response Code was not HTTP/200: &1", oHttpResp:StatusCode)).
             return ?.
         end. /* Response not HTTP/200 */
 
