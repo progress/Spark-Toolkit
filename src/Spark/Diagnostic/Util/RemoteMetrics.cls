@@ -200,7 +200,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         /* Report which endpoint is being access, with verb and payload (if available). */
         oLogger:Debug(substitute("Invoking: &1 &2 &3", poHttpMethod:ToString(), pcRequestURI)).
         if valid-object(poRequestData) then
-            oLogger:Trace(substitute("Payload: &1", poRequestData:getJsonText())).
+            oLogger:Trace(substitute("Invoke Payload: &1 bytes", length(poRequestData:getJsonText(), "raw"))).
 
         /* Set credentials for HTTP basic using the specific realm. */
         assign oCredentials = new Credentials(this-object:ManagerRealm,
