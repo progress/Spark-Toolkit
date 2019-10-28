@@ -8,18 +8,20 @@
    Notes       : Requires OpenEdge 11.7.3 or later!
  ----------------------------------------------------------------------*/
 
-using Progress.Lang.* from propath.
-using Progress.Json.ObjectModel.* from propath.
-using OpenEdge.Core.Assert from propath.
-using OpenEdge.Net.HTTP.Credentials from propath.
-using OpenEdge.Net.HTTP.HttpClient from propath.
-using OpenEdge.Net.HTTP.MethodEnum from propath.
-using OpenEdge.Net.HTTP.IHttpRequest from propath.
-using OpenEdge.Net.HTTP.IHttpResponse from propath.
-using OpenEdge.Net.HTTP.RequestBuilder from propath.
-using OpenEdge.Net.HTTP.IAuthenticatedRequest from propath.
 
 block-level on error undo, throw.
+
+using OpenEdge.Net.HTTP.Credentials from propath.
+using OpenEdge.Net.HTTP.HttpClient from propath.
+using OpenEdge.Net.HTTP.IHttpRequest from propath.
+using OpenEdge.Net.HTTP.IHttpResponse from propath.
+using OpenEdge.Net.HTTP.MethodEnum from propath.
+using OpenEdge.Net.HTTP.RequestBuilder from propath.
+using Progress.Json.ObjectModel.JsonArray from propath.
+using Progress.Json.ObjectModel.JsonDataType from propath.
+using Progress.Json.ObjectModel.JsonObject from propath.
+using Progress.Json.ObjectModel.ObjectModelParser from propath.
+using Progress.Lang.AppError from propath.
 
 class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger use-widget-pool final:
 
@@ -198,7 +200,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         /* Report which endpoint is being access, with verb and payload (if available). */
         oLogger:Debug(substitute("Invoking: &1 &2 &3", poHttpMethod:ToString(), pcRequestURI)).
         if valid-object(poRequestData) then
-            oLogger:Trace(substitute("Payload: &1", poRequestData:getJsonText())).
+            oLogger:Trace(substitute("Invoke Payload: &1 bytes", length(poRequestData:getJsonText(), "raw"))).
 
         /* Set credentials for HTTP basic using the specific realm. */
         assign oCredentials = new Credentials(this-object:ManagerRealm,
@@ -217,7 +219,7 @@ class Spark.Diagnostic.Util.RemoteMetrics inherits Spark.Diagnostic.Util.Logger 
         oHttpResp = HttpClient:Instance():Execute(oHttpReq).
 
         if oHttpResp:StatusCode ne 200 then do:
-            oLogger:Error(substitute("Response Code was not HTTP/200: &1", string(oHttpResp:StatusCode))).
+            oLogger:Error(substitute("Response Code was not HTTP/200: &1", oHttpResp:StatusCode)).
             return ?.
         end. /* Response not HTTP/200 */
 

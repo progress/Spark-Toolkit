@@ -29,3 +29,4 @@ catch err as Progress.Lang.Error:
     /* Catch and Release */
     message substitute("Metrics Shutdown Error: &1", err:GetMessage(1)).
 end catch.
+

@@ -134,22 +134,20 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
 
 
     method private void Discovery ( ):
-        define variable cCatalinaBase  as character  no-undo.
-        define variable cMetricsConfig as character  no-undo.
-        define variable cLine          as character  no-undo.
-        define variable cAppName       as character  no-undo.
-        define variable cAppNames      as character  no-undo.
-        define variable cWebApp        as character  no-undo.
-        define variable cTransport     as character  no-undo.
-        define variable lcConfigTemp   as longchar   no-undo.
-        define variable iLines         as integer    no-undo.
-        define variable iLine          as integer    no-undo.
-        define variable iX             as integer    no-undo.
-        define variable iHttpPort      as integer    no-undo.
-        define variable iHttpsPort     as integer    no-undo.
-        define variable lFound         as logical    no-undo.
-        define variable dLastDate      as datetime   no-undo.
-        define variable oWebAppList    as JsonArray  no-undo.
+        define variable cLine        as character  no-undo.
+        define variable cAppName     as character  no-undo.
+        define variable cAppNames    as character  no-undo.
+        define variable cWebApp      as character  no-undo.
+        define variable cTransport   as character  no-undo.
+        define variable lcConfigTemp as longchar   no-undo.
+        define variable iLines       as integer    no-undo.
+        define variable iLine        as integer    no-undo.
+        define variable iX           as integer    no-undo.
+        define variable iHttpPort    as integer    no-undo.
+        define variable iHttpsPort   as integer    no-undo.
+        define variable lFound       as logical    no-undo.
+        define variable dLastDate    as datetime   no-undo.
+        define variable oWebAppList  as JsonArray  no-undo.
 
         /* Examine the catalina.properties for info about the available ports. */
         file-info:file-name = substitute("&1/conf/catalina.properties", this-object:CatalinaBase).
