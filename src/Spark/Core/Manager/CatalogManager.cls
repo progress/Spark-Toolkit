@@ -32,13 +32,13 @@ block-level on error undo, throw.
 
 class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager implements ICatalogManager use-widget-pool:
 
-    define public property ApiVersion     as decimal   no-undo get. private set.
-    define public property IdProperty     as character no-undo get. private set.
-    define public property SeqProperty    as character no-undo get. private set.
-    define public property ReadFilter     as character no-undo get. private set.
-    define public property ServicePrefix  as character no-undo get. private set.
-    define public property CatalogService as character no-undo get. private set.
-    define public property UseRequestObj  as logical   no-undo get. private set.
+    define public property ApiVersion     as decimal   no-undo get. protected set.
+    define public property IdProperty     as character no-undo get. protected set.
+    define public property SeqProperty    as character no-undo get. protected set.
+    define public property ReadFilter     as character no-undo get. protected set.
+    define public property ServicePrefix  as character no-undo get. protected set.
+    define public property CatalogService as character no-undo get. protected set.
+    define public property UseRequestObj  as logical   no-undo get. protected set.
 
     define protected property oLoggingManager as ILoggingManager no-undo
         get:
@@ -56,12 +56,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         end get.
         set.
 
-    define private variable cPreLoader   as character  no-undo.
-    define private variable cDefaultURI  as character  no-undo.
-    define private variable lUseDebugs   as logical    no-undo.
-    define private variable oCatRegistry as JsonObject no-undo.
+    define protected variable cPreLoader   as character  no-undo.
+    define protected variable cDefaultURI  as character  no-undo.
+    define protected variable lUseDebugs   as logical    no-undo.
+    define protected variable oCatRegistry as JsonObject no-undo.
 
-    define private temp-table GeneralParam no-undo serialize-name "General"
+    define protected temp-table GeneralParam no-undo serialize-name "General"
         field ApiVersion     as decimal   /* Expected version to be used with all API's.              */
         field CatalogService as character /* Service class for delivering catalog output for clients. */
         field BusinessRoot   as character /* Starting location for reading all business entities.     */
@@ -74,7 +74,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         index idxEntity      is primary unique BusinessRoot
         .
 
-    define private temp-table ServiceList no-undo serialize-name "ServiceSource"
+    define protected temp-table ServiceList no-undo serialize-name "ServiceSource"
         field ServiceName     as character               /* Name of the service as exposed via the catalog.   */
         field ServiceURI      as character               /* Path for resources (relative to actual service).  */
         field ClassPath       as character               /* Class path of related business entity classes.    */
@@ -84,24 +84,24 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         index idxClassPath    is         unique ClassPath
         .
 
-    define private temp-table ResourceList no-undo serialize-name "ServiceResource"
+    define protected temp-table ResourceList no-undo serialize-name "ServiceResource"
         field ServiceName as character serialize-hidden        /* Name of the service as exposed via the catalog.              */
         field ClassPath   as character serialize-name "Object" /* Class package or procedure path or of this service resource. */
         index idxPrimary  is primary unique ClassPath
         .
 
-    define private dataset dsConfig serialize-name "Config" for GeneralParam, ServiceList, ResourceList
+    define protected dataset dsConfig serialize-name "Config" for GeneralParam, ServiceList, ResourceList
         data-relation ServiceResource for ServiceList, ResourceList relation-fields(ServiceName,ServiceName) nested
         .
 
-    define private temp-table ServiceInfo no-undo serialize-name "Service"
+    define protected temp-table ServiceInfo no-undo serialize-name "Service"
         field ServiceName as character serialize-name "Name"
         field ServiceURI  as character serialize-name "URI"
         index idxPrimary  is primary unique ServiceURI
         index idxName     is         unique ServiceName
         .
 
-    define private temp-table ResourceInfo no-undo serialize-name "Resource"
+    define protected temp-table ResourceInfo no-undo serialize-name "Resource"
         field ServiceURI  as character serialize-name "Service" /* Relative URI for service (as a path) for API resources.     */
         field ClassPath   as character serialize-name "Package" /* Actual class path (aka. resource name) for API operations.  */
         field PublicName  as character serialize-name "Name"    /* Public name for resource, as used by the catalog generator. */
@@ -117,7 +117,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         index idxPublic   is unique         ServiceURI PublicName
         .
 
-    define private temp-table MethodInfo no-undo serialize-name "Operation"
+    define protected temp-table MethodInfo no-undo serialize-name "Operation"
         field ServiceURI      as character serialize-name "Service"
         field ClassPath       as character serialize-name "Package"
         field MethodName      as character serialize-name "Method"
@@ -129,7 +129,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         index idxPublic       is unique         ServiceURI ClassPath PublicName
         .
 
-    define private temp-table ResourceProperty no-undo serialize-name "Annotation"
+    define protected temp-table ResourceProperty no-undo serialize-name "Annotation"
         field ServiceURI    as character serialize-name "Service"   /* Associated service URI for resource.     */
         field ClassPath     as character serialize-name "Package"   /* Full class path to business entity.      */
         field OperationType as character serialize-name "Operation" /* Type: create, read, update, delete, etc. */
@@ -139,14 +139,14 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         index idxPrimary    is primary unique ServiceURI ClassPath OperationType PropertyName
         .
 
-    define private temp-table EntityProperty no-undo serialize-name "Entity"
+    define protected temp-table EntityProperty no-undo serialize-name "Entity"
         field EntityName as character            serialize-name "Entity"     /* Name of entity (dataset). */
         field TableName  as character            serialize-name "Table"      /* Name of table to modify.  */
         field FieldData  as Progress.Lang.Object serialize-name "Attributes" /* Attributes as JsonObject. */
         index idxPrimary is primary unique EntityName TableName
         .
 
-    define private dataset dsResource serialize-name "Mapping"
+    define protected dataset dsResource serialize-name "Mapping"
         for ServiceInfo, ResourceInfo, MethodInfo, ResourceProperty
         data-relation Service for ServiceInfo, ResourceInfo
         relation-fields(ServiceURI, ServiceURI)
@@ -159,11 +159,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         nested foreign-key-hidden.
 
 
-    /**************************** Private Helper Methods *****************************/
+    /**************************** Protected Helper Methods *****************************/
 
 
-    method private void clearResourceMethods ( input pcServiceURI as character,
-                                               input pcClassPath  as character ):
+    method protected void clearResourceMethods ( input pcServiceURI as character,
+                                                 input pcClassPath  as character ):
         for each MethodInfo exclusive-lock
            where MethodInfo.ServiceURI eq pcServiceURI
              and MethodInfo.ClassPath eq pcClassPath:
@@ -172,7 +172,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* clearResourceMethods */
 
 
-    method private character getJsonType ( input pcABLType as character ):
+    method protected character getJsonType ( input pcABLType as character ):
         case pcABLType:
             when "DATE" or
             when "DATETIME" or
@@ -190,7 +190,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getJsonType */
 
 
-    method private character getAction ( input pcHttpMethod as character ):
+    method protected character getAction ( input pcHttpMethod as character ):
         case pcHttpMethod:
             when MethodEnum:get:toString() then
                 return OperationEnum:read:toString().
@@ -206,7 +206,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getAction */
 
 
-    method private character getVerb ( input pcAction as character ):
+    method protected character getVerb ( input pcAction as character ):
         case pcAction:
             when OperationEnum:read:toString() then
                 return MethodEnum:get:toString().
@@ -222,13 +222,13 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getVerb */
 
 
-    method private void getMethod ( input  pcServiceURI   as character,
-                                    input  pcResourceName as character,
-                                    input  pcMethodName   as character,
-                                    input  pcHttpMethod   as character,
-                                    output pcValidMethod  as character,
-                                    output phProcHandle   as handle,
-                                    output pcEntityName   as character ):
+    method protected void getMethod ( input  pcServiceURI   as character,
+                                      input  pcResourceName as character,
+                                      input  pcMethodName   as character,
+                                      input  pcHttpMethod   as character,
+                                      output pcValidMethod  as character,
+                                      output phProcHandle   as handle,
+                                      output pcEntityName   as character ):
         assign /* Obtain the actual method name from the descriptors table. */
             pcMethodName  = getMethodName(pcServiceURI, pcResourceName, pcMethodName, pcHttpMethod)
             pcValidMethod = ""
@@ -269,10 +269,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getMethod */
 
 
-    method private character getMethodName ( input pcServiceURI   as character,
-                                             input pcResourceName as character,
-                                             input pcMethodName   as character,
-                                             input pcHttpMethod   as character ):
+    method protected character getMethodName ( input pcServiceURI   as character,
+                                               input pcResourceName as character,
+                                               input pcMethodName   as character,
+                                               input pcHttpMethod   as character ):
         define variable cClassPath as character no-undo.
         assign cClassPath = getClassPath(pcServiceURI, pcResourceName).
 
@@ -306,9 +306,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getMethodName */
 
 
-    method private JsonArray getMethodSignature ( input pcServiceURI as character,
-                                                  input pcClassPath  as character,
-                                                  input pcMethodName as character ):
+    method protected JsonArray getMethodSignature ( input pcServiceURI as character,
+                                                    input pcClassPath  as character,
+                                                    input pcMethodName as character ):
         define variable oParser as ObjectModelParser no-undo.
 
         define buffer bMethod for MethodInfo.
@@ -331,8 +331,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getMethodSignature */
 
 
-    method private character getClassPath ( input pcServiceURI   as character,
-                                            input pcResourceName as character ):
+    method protected character getClassPath ( input pcServiceURI   as character,
+                                              input pcResourceName as character ):
         define buffer bResource for ResourceInfo.
 
         /* Locate classes by service URI and public name. */
@@ -353,8 +353,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getClassPath */
 
 
-    method private character getResourcePath ( input pcServiceURI   as character,
-                                               input pcResClassPath as character ):
+    method protected character getResourcePath ( input pcServiceURI   as character,
+                                                 input pcResClassPath as character ):
         define buffer bResource for ResourceInfo.
 
         for first bResource
@@ -367,8 +367,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getResourcePath */
 
 
-    method private void loadDynamicResource ( input pcServiceURI as character,
-                                              input pcClassPath  as character ):
+    method protected void loadDynamicResource ( input pcServiceURI as character,
+                                                input pcClassPath  as character ):
         define buffer bResource for ResourceInfo.
 
         /* Destroy any previous procedure handles. */
@@ -537,16 +537,16 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* loadDynamicResource */
 
 
-    method private void registerMethods ( input pcServiceURI   as character,
-                                          input pcResClassPath as character ):
+    method protected void registerMethods ( input pcServiceURI   as character,
+                                            input pcResClassPath as character ):
         /* Call method with blank list of operations. Typical for the Dynamicresource class. */
         this-object:registerMethods(pcServiceURI, pcResClassPath, "").
     end method. /* registerMethods */
 
 
-    method private void registerMethods ( input pcServiceURI   as character,
-                                          input pcResClassPath as character,
-                                          input pcOperations   as character ):
+    method protected void registerMethods ( input pcServiceURI   as character,
+                                            input pcResClassPath as character,
+                                            input pcOperations   as character ):
         define variable oParser   as ObjectModelParser no-undo.
         define variable oClassSig as JsonObject        no-undo.
         define variable oMethods  as JsonObject        no-undo.
@@ -633,9 +633,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* registerMethods */
 
 
-    method private void registerProcedures ( input pcServiceURI   as character,
-                                             input pcResourceName as character,
-                                             input phProcHandle   as handle ):
+    method protected void registerProcedures ( input pcServiceURI   as character,
+                                               input pcResourceName as character,
+                                               input phProcHandle   as handle ):
         define variable iCount           as integer   no-undo.
         define variable cMethodName      as character no-undo.
         define variable cInternalEntries as character no-undo.
@@ -662,7 +662,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* registerProcedures */
 
 
-    method private void runPreloader ( ):
+    method protected void runPreloader ( ):
         /* Special procedure for application startup. */
         if (cPreLoader gt "") eq true then do:
             file-info:file-name = cPreLoader. /* First try filename as-is, which should be a .p file. */
@@ -694,11 +694,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* runPreloader */
 
 
-    method private void setResourceMethod ( input pcServiceURI   as character,
-                                            input pcResourceName as character,
-                                            input pcMethodName   as character,
-                                            input pcEntityName   as character,
-                                            input poMethodParams as JsonArray ):
+    method protected void setResourceMethod ( input pcServiceURI   as character,
+                                              input pcResourceName as character,
+                                              input pcMethodName   as character,
+                                              input pcEntityName   as character,
+                                              input poMethodParams as JsonArray ):
         define variable oParamObj as JsonObject no-undo.
         define variable iParam    as integer    no-undo.
 
@@ -735,10 +735,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* setResourceMethod */
 
 
-    method private void setResourceProcedure ( input pcServiceURI      as character,
-                                               input pcResourceName    as character,
-                                               input pcMethodName      as character,
-                                               input pcMethodSignature as character ):
+    method protected void setResourceProcedure ( input pcServiceURI      as character,
+                                                 input pcResourceName    as character,
+                                                 input pcMethodName      as character,
+                                                 input pcMethodSignature as character ):
         define variable oParamArr as JsonArray  no-undo.
         define variable oParamObj as JsonObject no-undo.
         define variable iX        as integer    no-undo.
@@ -791,9 +791,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     /***************************** Catalog Helper Methods *****************************/
 
 
-    method private logical getBeforeImageFlag ( input pcServiceURI    as character,
-                                                input pcClassPath     as character,
-                                                input pcOperationType as character ):
+    method protected logical getBeforeImageFlag ( input pcServiceURI    as character,
+                                                  input pcClassPath     as character,
+                                                  input pcOperationType as character ):
         define buffer bResource for ResourceInfo.
         define buffer bProperty for ResourceProperty.
 
@@ -812,8 +812,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getBeforeImageFlag */
 
 
-    method private JsonArray getServices ( input pcServiceURI   as character,
-                                           input pcResourceName as character ):
+    method protected JsonArray getServices ( input pcServiceURI   as character,
+                                             input pcResourceName as character ):
         define variable serviceArr as JsonArray no-undo.
         assign serviceArr = new JsonArray().
 
@@ -858,8 +858,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getServices */
 
 
-    method private JsonArray getResources ( input pcServiceURI   as character,
-                                            input pcResourceName as character ):
+    method protected JsonArray getResources ( input pcServiceURI   as character,
+                                              input pcResourceName as character ):
         define variable resourceArr as JsonArray  no-undo.
         define variable resourceObj as JsonObject no-undo.
 
@@ -888,6 +888,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                 /* Add operations for resource. */
                 resourceObj:Add("operations", this-object:getOperations(pcServiceURI, bResInfo.ClassPath)).
+
                 /* Add data definitions for invoke operations. */
                 resourceObj:Add("dataDefinitions", this-object:getDataDefs(pcServiceURI, bResInfo.ClassPath)).
                 resourceArr:Add(resourceObj).
@@ -925,15 +926,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getResources */
 
 
-    method private JsonObject getSchema ( input pcServiceURI   as character,
-                                          input pcResClassPath as character ):
-        return this-object:getSchema(pcServiceURI, pcResClassPath, false).
-    end method. /* getSchema */
-
-
-    method private JsonObject getSchema ( input pcServiceURI    as character,
-                                          input pcResClassPath  as character,
-                                          input plPrimaryEntity as logical ):
+    method protected JsonObject getSchema ( input pcServiceURI    as character,
+                                            input pcResClassPath  as character,
+                                            input plPrimaryEntity as logical ):
         define variable oSchemaObj    as JsonObject no-undo.
         define variable oProperty     as JsonObject no-undo.
         define variable oParamArr     as JsonArray  no-undo.
@@ -951,7 +946,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         assign oSchemaObj = new JsonObject().
 
         if plPrimaryEntity then do:
-            /* Meant for obtaining the primary entity for this resource. */
+            /* Meant for obtaining the primary entity (READ operation) for this resource. */
             for first bMethod no-lock
                 where bMethod.ServiceURI eq pcServiceURI
                   and bMethod.ClassPath eq pcResClassPath
@@ -981,6 +976,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             end. /* for first */
         end. /* plPrimaryEntity */
         else do:
+            /* Obtain all non-primary schema (eg. INVOKE operation tables and datasets). */
             for each bMethod no-lock
                where bMethod.ServiceURI eq pcServiceURI
                  and bMethod.ClassPath eq pcResClassPath
@@ -1117,8 +1113,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getSchema */
 
 
-    method private JsonArray getRelations ( input pcServiceURI   as character,
-                                            input pcResClassPath as character ):
+    method protected JsonArray getRelations ( input pcServiceURI   as character,
+                                              input pcResClassPath as character ):
         define variable oRelationArr  as JsonArray  no-undo.
         define variable oRelationObj  as JsonObject no-undo.
         define variable oFieldArr     as JsonArray  no-undo.
@@ -1220,11 +1216,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getRelations */
 
 
-    method private JsonObject getTable ( input  pcDatasetName as character,
-                                         input  pcTableName   as character,
-                                         input  pcPrimaryKey  as character,
-                                         input  pcForeignKey  as character,
-                                         output pcSerialized  as character ):
+    method protected JsonObject getTable ( input  pcDatasetName as character,
+                                           input  pcTableName   as character,
+                                           input  pcPrimaryKey  as character,
+                                           input  pcForeignKey  as character,
+                                           output pcSerialized  as character ):
         define variable tableObj    as JsonObject no-undo.
         define variable fkArray     as JsonArray  no-undo.
         define variable pkArray     as JsonArray  no-undo.
@@ -1376,8 +1372,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getTable */
 
 
-    method private JsonArray getOperations ( input pcServiceURI   as character,
-                                             input pcResourceName as character ):
+    method protected JsonArray getOperations ( input pcServiceURI   as character,
+                                               input pcResourceName as character ):
         define variable operationArr as JsonArray  no-undo.
         define variable operationObj as JsonObject no-undo.
         define variable oParamArr    as JsonArray  no-undo.
@@ -1467,8 +1463,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                 operationObj:Add("path", substitute("/&1?&2=~{&2~}", bMethod.PublicName, this-object:ReadFilter)).
                             else
                                 operationObj:Add("path", substitute("?&1=~{&1~}", this-object:ReadFilter)).
-                            oParamObj:Set("type", "QUERY").
-                        end.
+                            oParamObj:Set("type", "QUERY"). /* Set any INPUT for a READ to use a Query Parameter. */
+                        end. /* INPUT + READ */
 
                         if oParamObj:GetCharacter("xType") eq "datetimetz" then
                             oParamObj:Set("xType", "datetime-tz").
@@ -1481,17 +1477,19 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     oParamObj:Remove("publicName").
                 end. /* Has publicName */
 
-                /* Reset the type property according to the mode of the parameter. */
+                /* Remove the "type" property if it exists, as this will be set according to the mode of the parameter. */
                 if oParamObj:Has("type") then
                     oParamObj:Remove("type").
+
+                /* Determine how a parameter should be obtained, based on the mode of the parameter and the operation verb. */
                 if oParamObj:GetCharacter("mode") eq "input" and bMethod.OperationVerb eq MethodEnum:get:toString() then
-                    oParamObj:Add("type", "QUERY").
+                    oParamObj:Add("type", "QUERY"). /* For INPUT on a GET, we should only obtain from the Query Parameters. */
                 else if oParamObj:GetCharacter("mode") eq "inputoutput" then
-                    oParamObj:Add("type", "REQUEST_BODY,RESPONSE_BODY").
+                    oParamObj:Add("type", "REQUEST_BODY,RESPONSE_BODY"). /* Any INPUT-OUTPUT should use the BODY by default. */
                 else if oParamObj:GetCharacter("mode") eq "input" then
-                    oParamObj:Add("type", "REQUEST_BODY").
+                    oParamObj:Add("type", "REQUEST_BODY"). /* For INPUT on a non-GET, assume the parameter to be in the BODY. */
                 else
-                    oParamObj:Add("type", "RESPONSE_BODY").
+                    oParamObj:Add("type", "RESPONSE_BODY"). /* Anything non-INPUT should be an OUTPUT, and returned via BODY. */
             end. /* iX */
 
             /* Add params to operation, and operation to array. */
@@ -1503,18 +1501,16 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getOperations */
 
 
-    method private JsonObject getDataDefs ( input pcServiceURI   as character,
-                                            input pcResClassPath as character):
-        define variable oSchema       as JsonObject        no-undo.
-        define variable definitionObj as JsonObject        no-undo.
+    method protected JsonObject getDataDefs ( input pcServiceURI   as character,
+                                              input pcResClassPath as character):
+        define variable oSchema as JsonObject no-undo.
 
-        assign oSchema = getSchema(pcServiceURI, pcResClassPath).
+        /* Obtain all non-primary schema (tables, datasets). */
+        assign oSchema = this-object:getSchema(pcServiceURI, pcResClassPath, false).
         if oSchema:Has("properties") then
-            assign definitionObj = oSchema:GetJsonObject("properties").
+            return oSchema:GetJsonObject("properties").
         else
-            assign definitionObj = new JsonObject().
-
-        return definitionObj.
+            return new JsonObject().
     end method. /* getDataDefs */
 
 
@@ -1603,7 +1599,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* dispose */
 
 
-    method private character stripFileExtensions ( input pcFileName as character ):
+    method protected character stripFileExtensions ( input pcFileName as character ):
         assign
             pcFileName = substring(pcFileName, 1, length(pcFileName) - 4) when pcFileName matches "*.cls"
             pcFileName = substring(pcFileName, 1, length(pcFileName) - 2) when pcFileName matches "*.p"
@@ -1613,7 +1609,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* stripFileExtension */
 
 
-    method private void checkForResources ( ):
+    method protected void checkForResources ( ):
         define variable ix         as integer   no-undo.
         define variable cClassPath as character no-undo.
         define variable cPath      as character no-undo.

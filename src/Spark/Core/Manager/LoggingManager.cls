@@ -8,10 +8,10 @@ block-level on error undo, throw.
  */
 class Spark.Core.Manager.LoggingManager inherits Spark.Core.Manager.Manager implements Spark.Core.Manager.ILoggingManager:
 
-    define private variable LastConfigDate as datetime no-undo.
-    define private variable ThisConfigDate as datetime no-undo.
+    define protected variable LastConfigDate as datetime no-undo.
+    define protected variable ThisConfigDate as datetime no-undo.
 
-    define private property LogConfigPath as character no-undo
+    define protected property LogConfigPath as character no-undo
         get:
             file-info:file-name = substitute("&1logging.json", Spark.Core.Util.OSTools:sparkConf).
             if file-info:full-pathname ne ? then do:

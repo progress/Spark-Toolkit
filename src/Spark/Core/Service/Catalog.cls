@@ -25,7 +25,7 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
     method public void dispose ( ):
     end method. /* dispose */
 
-    method private JsonObject getDataObjectServiceCatalogs ( ):
+    method protected JsonObject getDataObjectServiceCatalogs ( ):
         define variable oServices  as DataObjectService no-undo extent.
         define variable oOperation as MappedOperation   no-undo.
         define variable oSvcArray  as JsonArray         no-undo.

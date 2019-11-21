@@ -26,7 +26,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         set.
 
 
-    define private temp-table SchemaObject no-undo
+    define protected temp-table SchemaObject no-undo
         field ObjectParent  as character
         field ObjectName    as character
         field ObjectAltName as character
@@ -36,7 +36,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         index idxPrimary    is primary unique ObjectParent ObjectName
         .
 
-    define private temp-table ConfigDB no-undo serialize-name "Databases"
+    define protected temp-table ConfigDB no-undo serialize-name "Databases"
         field DatabaseName  as character /* Logical name of connected database. */
         field DomainMaster  as logical   /* Denotes that database is domain authority. */
         field Include       as logical   /* Denotes that database should be included. */
@@ -48,7 +48,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         index pkDBName      is primary unique DatabaseName
         .
 
-    define private temp-table ConfigTable no-undo serialize-name "Tables"
+    define protected temp-table ConfigTable no-undo serialize-name "Tables"
         field DatabaseName  as character /* Logical name of connected database. */
         field TableName     as character /* Standard name of target table. */
         field AltTableName  as character /* JSON-safe name of target table. */
@@ -60,7 +60,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         index pkDBTable     is primary unique DatabaseName TableName
         .
 
-    define private temp-table ConfigField no-undo serialize-name "Fields"
+    define protected temp-table ConfigField no-undo serialize-name "Fields"
         field DatabaseName   as character /* Logical name of connected database. */
         field TableName      as character /* Standard name of target table. */
         field FieldName      as character /* Standard name of target field. */
@@ -74,12 +74,12 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         index pkDBTableField is primary unique DatabaseName TableName FieldName
         .
 
-    define private dataset dsConfig serialize-name "Config"
+    define protected dataset dsConfig serialize-name "Config"
         for ConfigDB, ConfigTable, ConfigField.
 
 
-    method private logical addSchemaToSignature ( input pcObjectList      as character,
-                                                  input poMethodSignature as MethodSignature ):
+    method protected logical addSchemaToSignature ( input pcObjectList      as character,
+                                                    input poMethodSignature as MethodSignature ):
         define variable iCount        as integer  no-undo.
         define variable cObjectSchema as longchar no-undo.
 
@@ -94,7 +94,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
     end method.
 
 
-    method private void examineDatabases ( ):
+    method protected void examineDatabases ( ):
         define variable iDB as integer no-undo.
 
         DATABASEBLK:
@@ -116,15 +116,15 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
     end method. /* examineDatabases */
 
 
-    method private void examineTables ( input pcDatabaseName as character ):
+    method protected void examineTables ( input pcDatabaseName as character ):
         this-object:examineTables(pcDatabaseName, "", "", false).
     end method. /* examineTables */
 
 
-    method private void examineTables ( input pcDatabaseName  as character,
-                                        input pcIncludeTables as character,
-                                        input pcExcludeTables as character,
-                                        input plUseDebugs     as logical ):
+    method protected void examineTables ( input pcDatabaseName  as character,
+                                          input pcIncludeTables as character,
+                                          input pcExcludeTables as character,
+                                          input plUseDebugs     as logical ):
         define variable iExtent     as integer   no-undo.
         define variable iField      as integer   no-undo.
         define variable iKey        as integer   no-undo.
@@ -371,7 +371,7 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
     end method. /* examineTables */
 
 
-    method private void registerDatabases ( ):
+    method protected void registerDatabases ( ):
         define variable cFullCfgFileName as character no-undo.
         file-info:file-name = OSTools:sparkConf + "schema.json".
         cFullCfgFileName = file-info:full-pathname.

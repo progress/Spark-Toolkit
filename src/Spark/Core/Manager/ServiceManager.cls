@@ -77,8 +77,7 @@ class Spark.Core.Manager.ServiceManager inherits Spark.Core.Manager.Manager impl
                 iCnt = iCnt + 1.
                 create ttLifeCycleMapping.
                 buffer-copy ttLifeCycle to ttLifeCycleMapping
-            assign ttLifeCycleMapping.SearchOrder = iCnt.
-
+                assign ttLifeCycleMapping.SearchOrder = iCnt.
                 delete ttLifeCycle.
             end.
         end.
