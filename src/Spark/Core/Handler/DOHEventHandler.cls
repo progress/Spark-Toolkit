@@ -81,6 +81,14 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     constructor public DOHEventHandler():
         assign oCheat = this-object.
 
+        /* Ensure that the necessary OE.BL class is available, or otherwise leave a notice of what to do to fix this. */
+        define variable oType as Progress.Lang.Object no-undo.
+        assign oType = Progress.Lang.Class:GetClass("OpenEdge.BusinessLogic.BusinessEntity") no-error.
+        if not valid-object(oType) then do:
+            oLoggingManager:logMessage("WARNING: Spark-Toolkit is unable to find the required OpenEdge.BusinessLogic.BusinessEntity class.", "SPARK-STRT", 0).
+            oLoggingManager:logMessage("SOLUTION: Add OpenEdge.BusinessLogic.pl to your PROPATH, available in versions 11.7.5, 12.1, and later.", "SPARK-STRT", 0).
+        end. /* Unavailable Class */
+
         this-object:UpdateLogging(). /* Refresh logging options for Spark. */
 
         this-object:DefineEvents(). /* Subscribe to standard DOH events. */
