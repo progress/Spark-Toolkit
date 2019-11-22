@@ -58,7 +58,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
     define protected variable cPreLoader   as character  no-undo.
     define protected variable cDefaultURI  as character  no-undo.
-    define protected variable lUseDebugs   as logical    no-undo.
+    define protected variable lUseDebugs   as logical    no-undo initial false.
+    define protected variable lHasOEBLBE   as logical    no-undo initial true.
     define protected variable oCatRegistry as JsonObject no-undo.
 
     define protected temp-table GeneralParam no-undo serialize-name "General"
@@ -422,10 +423,15 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             define variable oResource  as IDynamicResource    no-undo.
             define variable phDataSet  as handle              no-undo.
 
-            /* Confirm that specified class is of type IDynamicEntity. */
+            /* Confirm whether the specified class is of type IDynamicEntity. */
             assign oImplement = Progress.Lang.Class:GetClass(pcClassPath) no-error.
-            if error-status:error then
-                undo, throw new AppError(GenTools:getAblError(), -500).
+            if error-status:error then do:
+                /* If error is specifically due to a missing super-class, and the OE.BL.BE is not available, then let's report that specifically. */
+                if error-status:get-number(1) eq 12932 and not lHasOEBLBE then
+                    undo, throw new AppError("- Missing super-class OpenEdge.BusinessLogic.BusinessEntity", -500).
+                else
+                    undo, throw new AppError(substitute("@ Implementation: &1", GenTools:getAblError()), -500).
+            end.
             else if not valid-object(oImplement) or
                  not (oImplement:IsA(get-class(IDynamicEntity)) or
                       oImplement:IsA(get-class(IDynamicResource))) then
@@ -441,6 +447,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     find current bResource exclusive-lock.
                     if (oEntity:resourceName gt "") ne true then do:
                         /* Do not keep resources that lack a public name. */
+                        oLoggingManager:logMessage(substitute("Removing resource '&1' due to missing public name.", bResource.ClassPath), "SPARK-LOAD", 3).
                         delete bResource.
                         leave.
                     end. /* No Resource Name */
@@ -498,6 +505,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     find current bResource exclusive-lock.
                     if (oResource:resourceName gt "") ne true then do:
                         /* Do not keep resources that lack a public name. */
+                        oLoggingManager:logMessage(substitute("Removing resource '&1' due to missing public name.", bResource.ClassPath), "SPARK-LOAD", 3).
                         delete bResource.
                         leave.
                     end. /* No Resource Name */
@@ -531,6 +539,13 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         end. /* Non-Procedure */
 
         catch err as Error:
+            /* Failure to load should mean removal from the list of resources. */
+            if available(bResource) then do:
+                find current bResource exclusive-lock.
+                oLoggingManager:logMessage(substitute("Removing resource '&1' due to loading error.", bResource.ClassPath), "SPARK-LOAD", 3).
+                delete bResource.
+            end. /* Available bResource */
+
             oLoggingManager:logError(substitute("Error loading resource '&1'", pcClassPath), err, "SPARK-ERR", 0).
             /* Do not throw error from this point, allow resource registration to fail with only logging. */
         end catch.
@@ -1768,6 +1783,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         empty temp-table ResourceInfo.
         empty temp-table ResourceProperty.
 
+        /* Confirm whether the necessary OE.BL.BE class exists for the current environment. */
+        define variable oBusinessEntity as Progress.Lang.Object no-undo.
+        assign oBusinessEntity = Progress.Lang.Class:GetClass("OpenEdge.BusinessLogic.BusinessEntity") no-error.
+        if not valid-object(oBusinessEntity) then
+            assign lHasOEBLBE = false. /* Signal that the required class was not found. */
+
         /* Before loading the (dynamic) resources, run a preloader if configured. */
         oLoggingManager:logMessage("Running Preloader...", "SPARK-LOAD", 4).
         runPreloader().
@@ -1792,6 +1813,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             dataset dsResource:write-json("file", substitute("&1/ResourceMetadata.json", right-trim(replace(session:temp-directory, "~\", "~/"), "~/")), true).
             oSchemaManager:dumpObjects().
         end. /* lUseDebugs */
+
+        finally:
+            if valid-object(oBusinessEntity) then
+                delete object oBusinessEntity no-error.
+        end finally.
     end method. /* loadResources */
 
 
@@ -2101,7 +2127,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 if bResource.IsClass then do:
                     /* If resource is a class, determine if used as a business entity. */
                     assign oResource = Progress.Lang.Class:GetClass(bResource.ClassPath).
-                    if valid-object(oResource) and oResource:IsA(get-class(OpenEdge.BusinessLogic.BusinessEntity)) then
+
+                    /* If the OE.BL.BE class is not present this will throw an error, hence we must also check if the class even exists. */
+                    if valid-object(oResource) and lHasOEBLBE and oResource:IsA(get-class(OpenEdge.BusinessLogic.BusinessEntity)) then
                         assign lIsEntity = true.
                 end. /* Is Class */
 
