@@ -49,7 +49,7 @@ class Spark.Core.Manager.ClientContext implements Spark.Core.Manager.IClientCont
         end get.
         set.
 
-    define private temp-table ttUserSessionProp no-undo before-table biUserSessionProp
+    define protected temp-table ttUserSessionProp no-undo before-table biUserSessionProp
         field PropName  as character
         field PropValue as character
         field PropClob  as clob
@@ -94,7 +94,7 @@ class Spark.Core.Manager.ClientContext implements Spark.Core.Manager.IClientCont
                     stateClassID = get-class(Spark.Core.Manager.ClientContext):TypeName.
             return stateClassID.
         end get.
-        private set.
+        protected set.
 
     constructor public ClientContext ( ):
 
@@ -166,7 +166,7 @@ class Spark.Core.Manager.ClientContext implements Spark.Core.Manager.IClientCont
 
     end method.
 
-    method private void initializeContext ( ):
+    method protected void initializeContext ( ):
 
         define variable cContext as longchar no-undo.
 
@@ -255,7 +255,7 @@ class Spark.Core.Manager.ClientContext implements Spark.Core.Manager.IClientCont
     /**
      * Write the CPO info into the user properties before serialization of the ClientContext object
      */
-    method private void prepareForSerializeContext ( ):
+    method protected void prepareForSerializeContext ( ):
 
         setUserProperty({&contextIDProperty},this-object:contextID).
         if valid-handle(this-object:clientPrincipal) then
@@ -373,7 +373,7 @@ class Spark.Core.Manager.ClientContext implements Spark.Core.Manager.IClientCont
 
     end method.
 
-    method private void setTrackingChangesOnUserProperties ( ):
+    method protected void setTrackingChangesOnUserProperties ( ):
 
         buffer biUserSessionProp:accept-changes ().
         temp-table ttUserSessionProp:tracking-changes = true.

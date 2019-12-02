@@ -8,8 +8,6 @@
                   Can only be used with 11.6.3 or later.
   ----------------------------------------------------------------------*/
 
-&GLOBAL-DEFINE MIN_VERSION_11_7_2 (lookup(substring(proversion(1), 1, 6), "11.6.0,11.6.1,11.6.2,11.6.2,11.6.3,11.6.4,11.6.5,11.6.6,11.7.0,11.7.1") = 0)
-
 block-level on error undo, throw.
 
 using Progress.Lang.* from propath.
@@ -93,11 +91,8 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:Invoking:Unsubscribe(this-object:InvokingHandler).
         DataObjectHandler:Invoked:Unsubscribe(this-object:InvokedHandler).
         DataObjectHandler:OperationError:Unsubscribe(this-object:OperationErrorHandler).
-        if {&MIN_VERSION_11_7_2} then do:
-            /* Only available for 11.7.2 and later. */
-            DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
-            DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
-        end.
+        DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
+        DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
     end destructor.
 
 
@@ -136,17 +131,24 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:Invoking:Subscribe(this-object:InvokingHandler).
         DataObjectHandler:Invoked:Subscribe(this-object:InvokedHandler).
         DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
-        if {&MIN_VERSION_11_7_2} then do:
-            /* Only available for 11.7.2 and later. */
-            DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
-            DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
-        end.
+        DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
+        DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
     end method. /* Define Events */
 
 
     method private void InitializeRegistries ( ):
         define variable dStart as datetime-tz no-undo.
         assign dStart = now. /* Mark start time. */
+
+        /* Confirm whether the necessary OE.BL.BE class exists for the current environment. */
+        define variable oBusinessEntity as Progress.Lang.Object no-undo.
+        assign oBusinessEntity = Progress.Lang.Class:GetClass("OpenEdge.BusinessLogic.BusinessEntity") no-error.
+        if not valid-object(oBusinessEntity) then do:
+            /* Provide warnings in the log now, as this event handler class should be common to any standard startup for the Spark Toolkit. */
+            oLoggingManager:logMessage("WARNING: Spark-Toolkit is unable to find the required OpenEdge.BusinessLogic.BusinessEntity class.", "SPARK-WARN", 0).
+            oLoggingManager:logMessage("WARNING: Any SparkEntity/DynamicEntity classes cannot be loaded without this required super-class.", "SPARK-WARN", 0).
+            oLoggingManager:logMessage("SOLUTION: Add OpenEdge.BusinessLogic.pl to PROPATH, available in versions 11.7.5, 12.1, and later.", "SPARK-WARN", 0).
+        end. /* not valid-object */
 
         /* Read business entities from disk and creates method signatures for API requests. */
         if valid-object(oCatalogManager) then do:
@@ -193,6 +195,11 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         /* Log the end of the initialization process with an elapsed time. */
         oLoggingManager:logMessage(substitute("Finshed Loading Resource Metadata in &1ms",
                                               interval(now, dStart, string(DateTimeAddIntervalEnum:Milliseconds))), "SPARK-STRT", 2).
+
+        finally:
+            if valid-object(oBusinessEntity) then
+                delete object oBusinessEntity no-error.
+        end finally.
     end method. /* InitializeRegistries */
 
 

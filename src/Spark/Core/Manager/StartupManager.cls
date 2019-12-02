@@ -152,6 +152,7 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
 
         if oManager:IsA(get-class(Ccs.Common.IManager)) then
         do on error undo, throw:
+            /* Run the standard class initialization method as dictated by the IManager interface. */
             cast(lbManager.ManagerInstance, Ccs.Common.IManager):initialize().
 
             catch err as Progress.Lang.Error:

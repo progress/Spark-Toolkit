@@ -22,7 +22,7 @@ class Spark.Core.Manager.ConnectionManager inherits Spark.Core.Manager.Manager i
         end get.
         set.
 
-    define private temp-table ttServer no-undo
+    define protected temp-table ttServer no-undo
         field ServerName         as character
         field ServerHandle       as handle
         field ServerContext      as character
@@ -36,14 +36,14 @@ class Spark.Core.Manager.ConnectionManager inherits Spark.Core.Manager.Manager i
         index ix1 as primary unique ServerName
         index ix2                   LifeCycleScope ServerName.
 
-    define private temp-table ttConnection no-undo serialize-name "Connection"
+    define protected temp-table ttConnection no-undo serialize-name "Connection"
         field ConnectName  as character serialize-name "Name"
         field ConnectType  as character serialize-name "Type"
         field ConnectParam as character serialize-name "Param"
         field LifeCycle    as character serialize-name "LifeCycle"
         index ix1 as primary unique ConnectName.
 
-    define private dataset dsConnection serialize-name "Config"
+    define protected dataset dsConnection serialize-name "Config"
         for ttConnection.
 
     constructor public ConnectionManager (  ):
