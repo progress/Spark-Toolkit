@@ -177,17 +177,23 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
             /* Register all known services for this application. */
             oCatalogManager:registerAllServices(ServiceRegistry:Registry).
 
-            /* Create a master catalog for all services (caches output). */
+            /* Create a master catalog for all services and cache the output. */
             oCatalogManager:getCatalog("", "").
         end. /* valid-object */
 
         /* Discover any file-based DOH services if ROOT.map exists. */
         define variable cServiceMapPath as character no-undo.
-        file-info:file-name = "ROOT.map". /* Look for a ROOT.map file on disk. */
-        if file-info:full-pathname ne ? then /* File is present, so obtain the base path of the file. */
-            assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - 8), "~\", "/").
+
+        file-info:file-name = "ROOT.map". /* Look initially for a ROOT.map file on disk. */
+
+        if file-info:full-pathname eq ? then /* File is not present, so try a different common file. */
+            file-info:file-name = "catalog.map". /* Try looking for a catalog.map file on disk. */
+
+        if file-info:full-pathname ne ? then /* When file is present, obtain the base path of the file. */
+            assign cServiceMapPath = replace(substring(file-info:full-pathname, 1, length(file-info:full-pathname) - length(file-info:file-name)), "~\", "/").
+
         if (cServiceMapPath gt "") eq true then do:
-            /* Use the base path of the ROOT.map file to know where to look for similar .MAP files. */
+            /* Use the base path of the ROOT.map file to know where to look for other available .MAP files. */
             oLoggingManager:logMessage(substitute("Loading Service Registry data from &1", cServiceMapPath), "SPARK-STRT", 3).
             OpenEdge.Web.DataObject.ServiceRegistry:RegisterAllFromFolder(cServiceMapPath).
         end. /* cServiceMapPath */
