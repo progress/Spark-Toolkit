@@ -17,13 +17,73 @@ using Spark.Core.Manager.ICatalogManager from propath.
 
 block-level on error undo, throw.
 
-class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
+class Spark.Core.Service.Catalog inherits Spark.Diagnostic.Util.OSPath implements Spark.Core.Service.ICatalog use-widget-pool:
+
+    /* Tracks the last time the CB props file was loaded from the file system. */
+    define protected variable dCBPropsLastLoaded as datetime no-undo initial ?.
+
+    /* Find a better default port in use with this instance. */
+    define protected variable iPort as integer no-undo.
 
     method public void initialize ( ):
+        this-object:Discovery(). /* Perform local discovery of server info. */
     end method. /* initialize */
 
     method public void dispose ( ):
     end method. /* dispose */
+
+    method protected void Discovery ( ):
+        define variable cLine        as character  no-undo.
+        define variable cAppName     as character  no-undo.
+        define variable cAppNames    as character  no-undo.
+        define variable cWebApp      as character  no-undo.
+        define variable cTransport   as character  no-undo.
+        define variable lcConfigTemp as longchar   no-undo.
+        define variable iLines       as integer    no-undo.
+        define variable iLine        as integer    no-undo.
+        define variable iX           as integer    no-undo.
+        define variable iHttpPort    as integer    no-undo.
+        define variable iHttpsPort   as integer    no-undo.
+        define variable lFound       as logical    no-undo.
+        define variable dLastDate    as datetime   no-undo.
+        define variable oWebAppList  as JsonArray  no-undo.
+
+        /* Examine the catalina.properties for info about the available ports. */
+        file-info:file-name = substitute("&1/conf/catalina.properties", this-object:CatalinaBase).
+        if file-info:full-pathname ne ? then do:
+            /* Get the current date/time that the file was last modified. */
+            assign dLastDate = datetime(file-info:file-mod-date, file-info:file-mod-time * 1000).
+
+            if dLastDate ne dCBPropsLastLoaded then do:
+                /* Mark down the current modified date/time for this file. */
+                assign dCBPropsLastLoaded = dLastDate.
+
+                /* Read the file into a longchar value (avoids keeping the file open). */
+                copy-lob from file file-info:full-pathname to lcConfigTemp no-error.
+
+                assign iLines = num-entries(lcConfigTemp, "~n").
+                if iLines ge 1 then cfgblk:
+                do iLine = 1 to iLines:
+                    assign cLine = trim(entry(iLine, lcConfigTemp, "~n")).
+
+                    case true:
+                        when cLine begins "psc.as.http.port=" then
+                            assign iHttpPort = integer(trim(entry(2, cLine, "="))).
+                        when cLine begins "psc.as.https.port=" then
+                            assign iHttpsPort = integer(trim(entry(2, cLine, "="))).
+                    end case.
+                end. /* do iLines */
+
+                /* Look to the same server at either the HTTP or HTTPS port for OEManager. */
+                if iHttpPort gt 0 then
+                    this-object:iPort = iHttpPort.
+                else if iHttpsPort gt 0 then
+                    this-object:iPort = iHttpsPort.
+
+                assign lcConfigTemp = ?. /* Reset the variable. */
+            end. /* file updated */
+        end. /* catalina.properties */
+    end method. /* Discovery */
 
     method protected JsonObject getDataObjectServiceCatalogs ( ):
         define variable oServices  as DataObjectService no-undo extent.
@@ -46,9 +106,10 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
                 assign oOperation = oServices[iX]:GetOperation("/", MethodEnum:Get).
                 if valid-object(oOperation) and oOperation:TargetName matches "*.json" then do:
                     assign
-                        cFilename = replace(oOperation:TargetName, "$CATALINA_BASE", os-getenv("CATALINA_BASE"))
+                        cFilename = replace(oOperation:TargetName, "$CATALINA_BASE", this-object:CatalinaBase)
                         cFilename = replace(cFilename, "$oepas-webapp", trim(web-context:get-cgi-value("env", "CONTEXT_PATH"), "/"))
                         .
+
                     file-info:file-name = cFilename.
                     if file-info:full-pathname ne ? then do:
                         define variable oParser as ObjectModelParser no-undo.
@@ -64,6 +125,7 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
                 end. /* Operation Not Available */
             end. /* No Catalog */
             else if oServices[iX]:Catalog:Has("services") then
+                /* Each service should only have one defined catalog for that service. */
                 oSvcArray:Add(oServices[iX]:Catalog:GetJsonArray("services"):GetJsonObject(1)).
         end. /* do ix */
 
@@ -82,6 +144,7 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
     end method. /* getDataObjectServiceCatalogs */
 
     method public void getOpenApiCatalog ( output catalog as JsonObject ):
+        /* Specialized method to return an Open API v3.0 formatted description of resource endpoints. */
         define variable oServiceWriter as OpenAPI30ServiceWriter no-undo.
         assign oServiceWriter = new OpenAPI30ServiceWriter().
         if valid-object(oServiceWriter) then do:
@@ -90,6 +153,16 @@ class Spark.Core.Service.Catalog implements Spark.Core.Service.ICatalog:
             oServiceWriter:close().
 
             assign catalog = cast(oServiceWriter:Value, JsonObject).
+            if valid-object(catalog) then do:
+                define variable oVars as JsonObject no-undo.
+
+                assign oVars = catalog:GetJsonArray("servers"):GetJsonObject(1):GetJsonObject("variables").
+                oVars:GetJsonObject("port"):Set("default", string(iPort)). /* Use the discovered port for the instance. */
+                oVars:GetJsonObject("basePath"):Set("default", "/api"). /* Use the default typically set for a Spark-based application. */
+
+                assign oVars = catalog:GetJsonArray("servers"):GetJsonObject(2):GetJsonObject("variables").
+                oVars:GetJsonObject("basePath"):Set("default", "/api"). /* Use the default typically set for a Spark-based application. */
+            end.
             delete object oServiceWriter no-error.
         end.
 

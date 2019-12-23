@@ -4,7 +4,10 @@
     Description :
     Author(s)   : Dustin Grau (dugrau@progress.com)
     Created     : Fri Dec 19 14:30:46 EST 2014
-    Notes       :
+    Notes       : Setting the logging-level for your ABL Application to at
+                  least 3 (verbose) will trigger additional messages in
+                  the logs as well as output multiple files in the session
+                  temp directory (eg. the service mapping files).
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.* from propath.
@@ -66,7 +69,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         field ApiVersion     as decimal   /* Expected version to be used with all API's.              */
         field CatalogService as character /* Service class for delivering catalog output for clients. */
         field BusinessRoot   as character /* Starting location for reading all business entities.     */
-        field EnableDebugs   as logical   /* Display additional info as resources are loaded.         */
         field IdProperty     as character /* Name of property to use for record ID purposes.          */
         field SeqProperty    as character /* Name of property to use for result sequence purposes.    */
         field PreLoader      as character /* Special procedure to run prior to loading resources.     */
@@ -115,7 +117,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         field ForeignKeys as character serialize-hidden         /* For business entities, denotes any foreign key fields.      */
         field ClassSig    as character serialize-hidden         /* For business entities, holds full signature of class.       */
         index idxPrimary  is primary unique ServiceURI ClassPath
-        index idxPublic   is unique         ServiceURI PublicName
+        index idxPublic   is         unique ServiceURI PublicName
         .
 
     define protected temp-table MethodInfo no-undo serialize-name "Operation"
@@ -127,7 +129,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         field OperationType   as character serialize-name "Operation"
         field OperationVerb   as character serialize-name "HttpVerb"
         index idxPrimary      is primary unique ServiceURI ClassPath MethodName
-        index idxPublic       is unique         ServiceURI ClassPath PublicName
+        index idxPublic       is         unique ServiceURI ClassPath PublicName
         .
 
     define protected temp-table ResourceProperty no-undo serialize-name "Annotation"
@@ -402,9 +404,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 assign bResource.ProcHandle = hProcHandle.
 
                 /* Load (or re-load) service procedure internal methods, as needed. */
-                registerProcedures( bResource.ServiceURI,
-                                    bResource.ClassPath,
-                                    bResource.ProcHandle ).
+                this-object:registerProcedures( bResource.ServiceURI,
+                                                bResource.ClassPath,
+                                                bResource.ProcHandle ).
 
                 if lUseDebugs and available(bResource) then
                     oLoggingManager:logMessage(substitute("Loaded &1 as '&2/&3'",
@@ -776,8 +778,15 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 cParam    = entry(iX, pcMethodSignature)
                 .
 
-            if num-entries(cParam, " ") eq 3 then do {&THROW}:
-                oParamObj:Add("mode", lc(replace(entry(1, cParam, " "), "-", ""))).
+            if num-entries(cParam, " ") ge 3 then do {&THROW}:
+                case entry(1, cParam, " "):
+                    when "input" then
+                        oParamObj:Add("mode", "Input").
+                    when "input-output" then
+                        oParamObj:Add("mode", "InputOutput").
+                    when "output" then
+                        oParamObj:Add("mode", "Output").
+                end case.
 
                 if entry(2, cParam, " ") eq "table" or entry(2, cParam, " ") eq "table-handle" or
                    entry(2, cParam, " ") eq "dataset" or entry(2, cParam, " ") eq "dataset-handle" then do:
@@ -787,7 +796,17 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 else do:
                     oParamObj:Add("name", entry(2, cParam, " ")).
                     oParamObj:Add("type", lc(entry(3, cParam, " "))).
-                end. /* other */
+
+                    if num-entries(cParam, " ") ge 4 and lc(entry(4, cParam, " ")) eq "extent" then do:
+                        /* Extent is present, determine if variable or fixed. */
+                        if num-entries(cParam, " ") ge 5 and entry(5, cParam, " ") gt "" then
+                            oParamObj:Add("extent", integer(entry(5, cParam, " "))).
+                        else
+                            oParamObj:AddNull("extent").
+                    end.
+                    else
+                        oParamObj:Add("extent", 0). /* Default is an extent of 0. */
+                end. /* other primitive */
 
                 oParamArr:Add(oParamObj).
             end. /* num-entries */
@@ -849,7 +868,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 serviceObj:Add("name", bService.ServiceName).
                 serviceObj:Add("address", bService.ServiceURI).
 
-                /** Optional Properties
+                /**
+                 * Optional Properties - Not typically used in existing patterns.
                  * serviceObj:Add("tenantId", "").
                  * serviceObj:Add("appId", "").
                  */
@@ -883,7 +903,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         /* Create resources for service. */
         assign resourceArr = new JsonArray().
         if (pcResourceName gt "") eq true then
-            for first bResInfo
+            for first bResInfo no-lock
                 where bResInfo.ServiceURI eq pcServiceURI
                   and bResInfo.PublicName eq pcResourceName:
                 /* Break on unique resource name. */
@@ -901,7 +921,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 resourceObj:Add("schema", this-object:getSchema(pcServiceURI, bResInfo.ClassPath, true)).
                 resourceObj:Add("relations", this-object:getRelations(pcServiceURI, bResInfo.ClassPath)).
 
-                /* Add operations for resource. */
+                /* Add operations for the resource. */
                 resourceObj:Add("operations", this-object:getOperations(pcServiceURI, bResInfo.ClassPath)).
 
                 /* Add data definitions for invoke operations. */
@@ -909,7 +929,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 resourceArr:Add(resourceObj).
             end. /* for first bResInfo (exact) */
         else
-            for each bResInfo
+            for each bResInfo no-lock
                where bResInfo.ServiceURI eq pcServiceURI
                break by bResInfo.PublicName:
                 if first-of(bResInfo.PublicName) then do:
@@ -928,7 +948,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     resourceObj:Add("schema", this-object:getSchema(pcServiceURI, bResInfo.ClassPath, true)).
                     resourceObj:Add("relations", this-object:getRelations(pcServiceURI, bResInfo.ClassPath)).
 
-                    /* Add operations for resource. */
+                    /* Add operations for the resource. */
                     resourceObj:Add("operations", this-object:getOperations(pcServiceURI, bResInfo.ClassPath)).
 
                     /* Add data definitions for invoke operations. */
@@ -1413,13 +1433,14 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             end. /* Invoke/Submit */
             else do:
                 operationObj:Add("name", bMethod.OperationType).
-                operationObj:Add("path", ""). /* Supply default property. */
+                operationObj:AddNull("path"). /* Supply a null property, as we'll update this next. */
             end. /* CRUD */
 
             /* Supply default property for special methods. */
             if can-do("create,update,delete,submit,invoke", bMethod.OperationType) then
                 operationObj:Add("useBeforeImage", false).
 
+            /* Look for additional properties to provide on this operation. */
             for each bProperty no-lock
                where bProperty.ServiceURI eq pcServiceURI
                  and bProperty.ClassPath eq pcResourceName
@@ -1445,12 +1466,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             operationObj:Add("type", lc(bMethod.OperationType)).
             operationObj:Add("verb", lc(bMethod.OperationVerb)).
 
-            /* Obtain parameters for operation (cloned to prevent altering of the original signature. */
+            /* Obtain the true (ABL) parameters for operation (cloned to prevent altering of the original signature. */
             assign oParamArr = cast(this-object:getMethodSignature( pcServiceURI,
                                                                     bMethod.ClassPath,
                                                                     bMethod.MethodName ):Clone(), JsonArray).
 
-            /* Add parameters for operation. */
+            /* Add parameters for operation, altering as necessary for the catalog format. */
             if valid-object(oParamArr) then
             do iX = 1 to oParamArr:Length:
                 assign oParamObj = oParamArr:GetJsonObject(iX).
@@ -1473,16 +1494,15 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         /* Apply path property as needed. */
                         if oParamObj:GetCharacter("mode") eq "input" and
                            oParamObj:GetCharacter("name") eq this-object:ReadFilter then do:
-                            operationObj:Remove("path"). /* Remove previous property. */
                             if bMethod.OperationType eq OperationEnum:invoke:toString() then
-                                operationObj:Add("path", substitute("/&1?&2=~{&2~}", bMethod.PublicName, this-object:ReadFilter)).
+                                operationObj:Set("path", substitute("/&1?&2=~{&2~}", bMethod.PublicName, this-object:ReadFilter)).
                             else
-                                operationObj:Add("path", substitute("?&1=~{&1~}", this-object:ReadFilter)).
-                            oParamObj:Set("type", "QUERY"). /* Set any INPUT for a READ to use a Query Parameter. */
+                                operationObj:Set("path", substitute("?&1=~{&1~}", this-object:ReadFilter)).
+                            oParamObj:Set("type", "QUERY"). /* Set any INPUT for a READ to use the Query parameter type. */
                         end. /* INPUT + READ */
 
                         if oParamObj:GetCharacter("xType") eq "datetimetz" then
-                            oParamObj:Set("xType", "datetime-tz").
+                            oParamObj:Set("xType", "datetime-tz"). /* Correct the name of the ABL datatype for datetime-tz. */
                     end.
                 end case.
 
@@ -1492,19 +1512,19 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     oParamObj:Remove("publicName").
                 end. /* Has publicName */
 
-                /* Remove the "type" property if it exists, as this will be set according to the mode of the parameter. */
-                if oParamObj:Has("type") then
-                    oParamObj:Remove("type").
+                /* Add a default "type" property if it doesn't exist, as this will be updated according to the mode of the parameter. */
+                if not oParamObj:Has("type") then
+                    oParamObj:AddNull("type").
 
                 /* Determine how a parameter should be obtained, based on the mode of the parameter and the operation verb. */
                 if oParamObj:GetCharacter("mode") eq "input" and bMethod.OperationVerb eq MethodEnum:get:toString() then
-                    oParamObj:Add("type", "QUERY"). /* For INPUT on a GET, we should only obtain from the Query Parameters. */
+                    oParamObj:Set("type", "QUERY"). /* For INPUT on a GET, we should only obtain from the Query Parameters. */
                 else if oParamObj:GetCharacter("mode") eq "inputoutput" then
-                    oParamObj:Add("type", "REQUEST_BODY,RESPONSE_BODY"). /* Any INPUT-OUTPUT should use the BODY by default. */
+                    oParamObj:Set("type", "REQUEST_BODY,RESPONSE_BODY"). /* Any INPUT-OUTPUT should use the BODY by default. */
                 else if oParamObj:GetCharacter("mode") eq "input" then
-                    oParamObj:Add("type", "REQUEST_BODY"). /* For INPUT on a non-GET, assume the parameter to be in the BODY. */
+                    oParamObj:Set("type", "REQUEST_BODY"). /* For INPUT on a non-GET, assume the parameter to be in the BODY. */
                 else
-                    oParamObj:Add("type", "RESPONSE_BODY"). /* Anything non-INPUT should be an OUTPUT, and returned via BODY. */
+                    oParamObj:Set("type", "RESPONSE_BODY"). /* Anything non-INPUT should be an OUTPUT, and returned via BODY. */
             end. /* iX */
 
             /* Add params to operation, and operation to array. */
@@ -1542,6 +1562,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         else
             undo, throw new AppError(substitute("Catalog config file [catalog.json] not found in [&1]", OSTools:sparkConf), -500).
 
+        assign lUseDebugs = log-manager:logging-level ge 3.
+
         for first GeneralParam:
             /* First attempt to gather defaults from the catalog config file. */
             this-object:ApiVersion = GeneralParam.ApiVersion.
@@ -1557,7 +1579,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
             assign /* Obtain defaults for general operation. */
                 cPreLoader = GeneralParam.PreLoader /* Executes code prior to anything else. */
-                lUseDebugs = (GeneralParam.EnableDebugs eq true) or log-manager:logging-level ge 4
                 .
         end. /* for first */
 
@@ -2051,7 +2072,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define buffer bService for ServiceList.
 
         for each bService no-lock:
-            /* Register each known service for this application. */
+            /**
+             * Register each known service configured for this application.
+             * Uses any discovered classes/procedures from loadResources().
+             */
             this-object:registerService(poRegistry, lc(bService.ServiceName), SemanticVersion:Parse("")).
         end. /* for each bService */
     end method. /* registerAllServices */
@@ -2103,7 +2127,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             /* Register the service using the name and version discovered. */
             assign oService = poRegistry:RegisterService(pcServiceName, poServiceVersion, ?, ?).
 
-            /* Store the catalog data within the DOS instance. */
+            /* Store the Progress-default Cloud Data Object catalog data within the DOS instance. */
             oService:Catalog = this-object:getCatalog(bService.ServiceURI, "").
 
             for each bResource no-lock
@@ -2114,12 +2138,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 /* Prepare the common values for this operation mapping. */
                 assign
                     cServiceURI  = (if (bMethod.PublicName gt "") eq true then substitute("&1/&2", bResource.PublicName, bMethod.PublicName) else bResource.PublicName)
-                    oHttpMethod  = MethodEnum:GetEnum(bMethod.OperationVerb)
+                    oHttpMethod  = MethodEnum:GetEnum(bMethod.OperationVerb) /* The HTTP verb to be used for URI access. */
                     cTargetType  = (if bResource.IsClass then TargetTypeEnum:Class:ToString() else TargetTypeEnum:Procedure:ToString())
                     cTargetName  = (if bResource.IsClass then bMethod.ClassPath else bResource.SourcePath)
                     cEntityType  = (if bResource.IsClass then "Progress.Lang.Object" else ?)
-                    cFuncMethod  = bMethod.MethodName
-                    iStatusCode  = integer(StatusCodeEnum:ok)
+                    cFuncMethod  = bMethod.MethodName /* The class method or internal procedure to be run. */
+                    iStatusCode  = integer(StatusCodeEnum:ok) /* Default to HTTP-200/OK */
                     lIsEntity    = false
                     dExecTime[1] = now
                     .
@@ -2135,7 +2159,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                 /* Just use name of the resource for CRUD operations. */
                 if lIsEntity and can-do("Create,Read,Update,Delete", bMethod.OperationType) then
-                    assign cServiceURI = bResource.PublicName. /* Should just be "/<resource>" */
+                    assign cServiceURI = bResource.PublicName. /* Should just be "/<resource>" with no method in the URI. */
 
                 /* Denote start of operation mapping. */
                 oLoggingManager:logMessage(substitute("Mapping &1 &2/&3 to &4:&5",
@@ -2149,6 +2173,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 /* Set any options for the current operation. */
                 assign oOperOpts = new OperationOptions().
                 oOperOpts:WriteBI = lIsEntity. /* Should be true for entities, otherwise false. */
+                oOperOpts:HasErrorEnvelope = false. /* Default is false. */
+                oOperOpts:HasRequestEnvelope = false. /* Default is false. */
+                oOperOpts:HasResponseEnvelope = false. /* Default is false. */
 
                 /* Create a new mapped operation for this service. */
                 assign oOperation = new MappedOperation( cServiceURI,
@@ -2160,6 +2187,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                          cFuncMethod,
                                                          oOperOpts,
                                                          iStatusCode ).
+
+                /* Supply a public name for this operation. */
+                oOperation:name = bMethod.PublicName.
 
                 /* Obtain the method signature for this resource. */
                 assign oParamArr = this-object:getMethodSignature( bResource.ServiceURI,
@@ -2195,6 +2225,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                             assign cParamType = substitute("class &1", cParamType).
                     end case.
 
+                    /* Obtain the schema for a dataset parameter. */
                     if cParamType eq "dataset" then do:
                         if lIsEntity and cParamName ne bResource.EntityName then
                             assign cParamName = bResource.EntityName.
@@ -2202,7 +2233,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         if not oService:HasSchema(cParamName) then do:
                             oSchemaManager:getDataset(cParamName, dataset-handle hSchema by-reference).
                             if valid-handle(hSchema) then do:
-                                oService:PutSchema(cParamName, hSchema). /* Add schema to service. Do not delete hSchema handle!. */
+                                oService:PutSchema(cParamName, hSchema). /* Add schema to service. Do not delete the hSchema handle! */
                                 oLoggingManager:logMessage(substitute("| Schema: &1 as dataset", cParamName), "SPARK-SVC", 4).
                             end. /* valid-handle */
                             else
@@ -2210,11 +2241,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         end. /* not HasSchema */
                     end. /* dataset */
 
+                    /* Obtain the schema for a table parameter. */
                     if cParamType eq "table" then do:
                         if not oService:HasSchema(cParamName) then do:
                             oSchemaManager:getTempTable(cParamName, table-handle hSchema by-reference).
                             if valid-handle(hSchema) then do:
-                                oService:PutSchema(cParamName, hSchema). /* Add schema to service. Do not delete hSchema handle!. */
+                                oService:PutSchema(cParamName, hSchema). /* Add schema to service. Do not delete the hSchema handle! */
                                 oLoggingManager:logMessage(substitute("| Schema: &1 as table", cParamName), "SPARK-SVC", 4).
                             end. /* valid-handle */
                             else
@@ -2222,8 +2254,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         end. /* not HasSchema */
                     end. /* table */
 
+                    /* If the param has an unknown or non-zero extent, then the datatype should be treated as an extent/array. */
+                    if oParamObj:Has("extent") and oParamObj:GetInteger("extent") ne 0 then
+                        assign cParamType = substitute("&1 extent", cParamType).
+
                     /* Create the parameter for this method. */
-                    assign oParam = new OperationParameter( IOModeEnum:GetEnum(cParamMode), cParamType, cParamName ).
+                    assign oParam = new OperationParameter(IOModeEnum:GetEnum(cParamMode), cParamType, cParamName).
 
                     /* Assign message elements based on the parameter IO mode. */
 
@@ -2283,7 +2319,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     end finally.
                 end. /* do iX */
 
-                /* Add a mapped operation to the current service. */
+                /* Add the new mapped operation to the current service. */
                 oService:PutOperation(oOperation).
 
                 /* Denote end of operation mapping. */
@@ -2314,6 +2350,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     assign oServiceImpl = Ccs.Common.Application:ServiceManager:getService(oServiceClass) no-error.
 
                 if valid-object(oServiceImpl) then do:
+                    /* This will use a common method to access the catalog data from the Data Object Servics. */
                     assign oOperation = new MappedOperation( "/",
                                                              MethodEnum:GET,
                                                              "application/json",
@@ -2347,7 +2384,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         end. /* not avaialble bService */
 
         /* Debug the current service by dumping to a JSON file when logging level is verbose. */
-        if log-manager:logging-level ge 3 and valid-object(oService) then do on error undo, leave:
+        if lUseDebugs and valid-object(oService) then do on error undo, leave:
             define variable oSvcWriter as MappingFileServiceWriter no-undo.
 
             assign oSvcWriter = new MappingFileServiceWriter().

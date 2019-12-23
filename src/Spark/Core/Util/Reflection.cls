@@ -54,10 +54,9 @@ class Spark.Core.Util.Reflection final:
 
                 assign oParamSig = new Progress.Json.ObjectModel.JsonObject().
                 oParamSig:Add("mode", oParamInt:Mode:toString()).
-                oParamSig:Add("type", cDataType).
                 oParamSig:Add("name", oParamInt:Name).
-                if oParamInt:Extent gt 0 then
-                    oParamSig:Add("extent", oParamInt:Extent).
+                oParamSig:Add("type", cDataType).
+                oParamSig:Add("extent", oParamInt:Extent).
 
                 oParamArr:Add(oParamSig).
             end. /* oParamExt */
@@ -109,8 +108,7 @@ class Spark.Core.Util.Reflection final:
             oElementSig:Add("readable", oPropsInt:CanRead).
             oElementSig:Add("writable", oPropsInt:CanWrite).
             oElementSig:Add("type", cDataType).
-            if oPropsInt:Extent gt 0 then
-                oElementSig:Add("extent", oPropsInt:Extent).
+            oElementSig:Add("extent", oPropsInt:Extent).
 
             oProperties:Add(oPropsInt:Name, oElementSig).
         end. /* oPropsExt */
@@ -154,8 +152,8 @@ class Spark.Core.Util.Reflection final:
             oElementSig:Add("mode", oVarsInt:AccessMode:toString()).
             oElementSig:Add("static", oVarsInt:IsStatic).
             oElementSig:Add("type", cDataType).
-            if oVarsInt:Extent gt 0 then
-                oElementSig:Add("extent", oVarsInt:Extent).
+            oElementSig:Add("extent", oVarsInt:Extent).
+
             oVariables:Add(oVarsInt:Name, oElementSig).
         end. /* oVarsExt */
 
@@ -229,8 +227,7 @@ class Spark.Core.Util.Reflection final:
                 oParamSig:Add("mode", oParamInt:Mode:toString()).
                 oParamSig:Add("name", oParamInt:Name).
                 oParamSig:Add("type", cDataType).
-                if oParamInt:Extent gt 0 then
-                    oParamSig:Add("extent", oParamInt:Extent).
+                oParamSig:Add("extent", oParamInt:Extent).
 
                 oParamArr:Add(oParamSig).
             end. /* oParamExt */
@@ -239,9 +236,10 @@ class Spark.Core.Util.Reflection final:
             oElementSig:Add("origin", oMethodInt:OriginatingClass:TypeName).
             oElementSig:Add("defined", oMethodInt:DeclaringClass:TypeName).
             oElementSig:Add("return", cReturnType).
-            oElementSig:Add("params", oParamArr).
-            if oMethodInt:ReturnExtent gt 0 then
+            if cReturnType ne "void" then
                 oElementSig:Add("extent", oMethodInt:ReturnExtent).
+            oElementSig:Add("params", oParamArr).
+
             oMethods:Add(oMethodInt:name, oElementSig).
         end. /* oMethodExt */
 
