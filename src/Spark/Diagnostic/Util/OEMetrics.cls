@@ -99,6 +99,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
      * {
      *   AppName: "",
      *   Instance: "",
+     *   TestRun: "",
      *   ABLObjects: {
      *     Filename: "",
      *     Agent: 0,
@@ -189,6 +190,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         assign this-object:MetricsOutput = new JsonObject().
         this-object:MetricsOutput:Add("AppName", ""). /* Default to blank value initially. */
         this-object:MetricsOutput:Add("Instance", oConfig:InstanceURI).
+        this-object:MetricsOutput:Add("TestRun", "").
     end constructor.
 
 
@@ -350,6 +352,25 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
             delete object oRequestInfo no-error.
         end finally.
     end method. /* GetSessionID */
+
+
+    method private character GetRequestID ( ):
+        define variable oRequestInfo as OERequestInfo no-undo.
+        define variable cRequestID   as character     no-undo.
+
+        assign oRequestInfo = this-object:GetRequestInfo().
+        if valid-object(oRequestInfo) then
+            assign cRequestID = oRequestInfo:RequestId.
+
+        /* Don't return an unknown value. */
+        if (cRequestID gt "") ne true then assign cRequestID = "".
+
+        return cRequestID.
+
+        finally:
+            delete object oRequestInfo no-error.
+        end finally.
+    end method. /* GetRequestID */
 
 
     method private void ResetOutput ( ):
@@ -677,6 +698,7 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 oProfiler:Add("Instance", oConfig:InstanceURI).
                 oProfiler:Add("AgentPID", this-object:GetAgentID()).
                 oProfiler:Add("ABLSessionID", this-object:GetSessionID()).
+                oProfiler:Add("RequestID", this-object:GetRequestID()).
                 oProfiler:Add("Data", lcProfile).
 
                 /* Send the file and then delete if no error reported. */

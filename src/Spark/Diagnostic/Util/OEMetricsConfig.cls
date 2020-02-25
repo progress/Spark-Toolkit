@@ -139,6 +139,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
         define variable cAppNames    as character  no-undo.
         define variable cWebApp      as character  no-undo.
         define variable cTransport   as character  no-undo.
+        define variable cIPAddress   as character  no-undo.
         define variable lcConfigTemp as longchar   no-undo.
         define variable iLines       as integer    no-undo.
         define variable iLine        as integer    no-undo.
@@ -179,12 +180,16 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                 if (trim(os-getenv("INSTANCE_URI")) gt "") eq true then
                     assign this-object:InstanceURI = trim(os-getenv("INSTANCE_URI")).
                 else do:
+                    assign cIPAddress = trim(os-getenv("PUBLIC_IP")).
+                    if (cIPAddress gt "") ne true then
+                        assign cIPAddress = "127.0.0.1". /* Defaul to loopback address. */
+
                     /* Look to the same server at either the HTTP or HTTPS port for OEManager. */
                     if iHttpPort gt 0 then
-                        this-object:InstanceURI = substitute("http://127.0.0.1:&1", iHttpPort).
+                        this-object:InstanceURI = substitute("http://&1:&2", cIPAddress, iHttpPort).
                     else if iHttpsPort gt 0 then
-                        this-object:InstanceURI = substitute("https://127.0.0.1:&1", iHttpsPort).
-                end.
+                        this-object:InstanceURI = substitute("https://&1:&2", cIPAddress, iHttpsPort).
+                end. /* Assembled URL */
 
                 assign lcConfigTemp = ?. /* Reset the variable. */
                 oLogger:Trace(substitute("CFG: Completed discovery of catalina.properties [Instance: &1]", this-object:InstanceURI)).
