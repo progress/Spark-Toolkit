@@ -181,7 +181,7 @@ class Spark.Diagnostic.Util.OEMetricsConfig inherits Spark.Diagnostic.Util.OSPat
                     assign this-object:InstanceURI = trim(os-getenv("INSTANCE_URI")).
                 else do:
                     assign cIPAddress = trim(os-getenv("PUBLIC_IP")).
-                    if (cIPAddress gt "") ne true then
+                    if (cIPAddress gt "") ne true or not (cIPAddress matches "*.*.*.*") then
                         assign cIPAddress = "127.0.0.1". /* Defaul to loopback address. */
 
                     /* Look to the same server at either the HTTP or HTTPS port for OEManager. */

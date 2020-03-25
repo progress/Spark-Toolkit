@@ -104,6 +104,12 @@ class Spark.Core.Manager.LoggingManager inherits Spark.Core.Manager.Manager impl
 
         if oLogConfig:Has("logEntryTypes") and oLogConfig:GetType("logEntryTypes") eq JsonDataType:string then do:
             assign cNewTypes = oLogConfig:GetCharacter("logEntryTypes").
+
+            if session:client-type eq "4GLCLIENT" and can-do(cNewTypes, "ASPlumbing") then do:
+                /* Remove the ASPlumbing type if working with a 4GLClient session (eg. ABLUnit). */
+                assign cNewTypes = trim(replace(replace(cNewTypes, "ASPlumbing", ""), ",,", ","), ",").
+            end. /* session:client-type */
+
             if log-manager:log-entry-types ne cNewTypes then do:
                 logMessage(substitute("Changing user-defined log entry types from '&1' to '&2'.",
                                       log-manager:log-entry-types, cNewTypes), "SPARK-LOG", 0).
