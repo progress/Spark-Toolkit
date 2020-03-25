@@ -355,9 +355,11 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
         this-object:validateData(input "Create", input-output dataset-handle phDataSet by-reference).
         this-object:preCommitLogic(input "Create", input-output dataset-handle phDataSet by-reference).
-        if not phDataset:error then /* Do not attempt to proceed with modification if an error exists. */
+        if not phDataset:error then do:
+            /* Do not attempt to proceed with modification if an error exists. */
             super:CreateData(input-output dataset-handle phDataSet by-reference).
-        this-object:postCommitLogic(input "Create", input-output dataset-handle phDataSet by-reference).
+            this-object:postCommitLogic(input "Create", input-output dataset-handle phDataSet by-reference).
+        end. /* no error on dataset */
 
         finally:
             delete object phDataSet no-error.
@@ -370,9 +372,11 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
         this-object:validateData(input "Update", input-output dataset-handle phDataSet by-reference).
         this-object:preCommitLogic(input "Update", input-output dataset-handle phDataSet by-reference).
-        if not phDataset:error then /* Do not attempt to proceed with modification if an error exists. */
+        if not phDataset:error then do:
+            /* Do not attempt to proceed with modification if an error exists. */
             super:UpdateData(input-output dataset-handle phDataSet by-reference).
-        this-object:postCommitLogic(input "Update", input-output dataset-handle phDataSet by-reference).
+            this-object:postCommitLogic(input "Update", input-output dataset-handle phDataSet by-reference).
+        end. /* no error on dataset */
 
         finally:
             delete object phDataSet no-error.
@@ -385,9 +389,11 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
         this-object:validateData(input "Delete", input-output dataset-handle phDataSet by-reference).
         this-object:preCommitLogic(input "Delete", input-output dataset-handle phDataSet by-reference).
-        if not phDataset:error then /* Do not attempt to proceed with modification if an error exists. */
+        if not phDataset:error then do:
+            /* Do not attempt to proceed with modification if an error exists. */
             super:DeleteData(input-output dataset-handle phDataSet by-reference).
-        this-object:postCommitLogic(input "Delete", input-output dataset-handle phDataSet by-reference).
+            this-object:postCommitLogic(input "Delete", input-output dataset-handle phDataSet by-reference).
+        end. /* no error on dataset */
 
         finally:
             delete object phDataSet no-error.
@@ -560,9 +566,12 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
          * being determined by the dataset's before/after data.
          */
         preCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
-        if not phDataset:error then /* Do not attempt to proceed with modification if an error exists. */
+
+        if not phDataset:error then do:
+            /* Do not attempt to proceed with modification if an error exists. */
             super:Submit(input-output dataset-handle phDataSet by-reference).
-        postCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
+            postCommitLogic(input "Submit", input-output dataset-handle phDataSet by-reference).
+        end. /* no error on dataset */
 
         /* The return value may be any valid Progress object. */
         define variable oResponse as Progress.Lang.Object no-undo.

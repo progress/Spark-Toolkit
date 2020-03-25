@@ -595,8 +595,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                 profiler:profiling    = true
                 profiler:file-name    = cOutPath
                 profiler:description  = "Profiler Output"
-                profiler:trace-filter = "*":u
-                profiler:tracing      = "":u
+                /* As of OE 12.2 you cannot enable tracing without the -zproftmpf startup flag. */
+                /*profiler:trace-filter = "":u*/
+                /*profiler:tracing      = "":u*/
                 profiler:coverage     = true
                 profiler:statistics   = true
                 .
