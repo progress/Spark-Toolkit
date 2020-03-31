@@ -15,14 +15,14 @@ Due to the inclusion of the CCS libraries and new Business Logic features within
 
 **Previous Release Requirements:**
 
-v4.4.0 through 4.6.x for OE 11.7.4+ or OE 12.0+
+OE 11.7.4+ or OE 12.0+ for v4.4.0 through 4.6.x 
 
-v4.3.0 (deprecated) for OE 11.7.3+
+OE 11.7.3+ for v4.3.0 (deprecated, upgrade recommended)
 
 ### Supporting Tools
 
-- Apache Ant 1.9.x+ (now included with OE 11.7+ at DLC/ant) executed as `DLC/bin/proant`
-- Progress Compile Tools, aka. "PCT" (now included with OE 11.7.3 at DLC/pct/PCT.jar)
+- Apache Ant 1.9.x+ (included with OE 11.7+/12.0+ at DLC/ant) executed as `DLC/bin/proant`
+- Progress Compile Tools, aka. "PCT" (included as of OE 11.7.3/12.0+ at DLC/pct/PCT.jar)
 
 
 ## Project Usage
@@ -36,7 +36,7 @@ As previously mentioned, the Progress Spark Toolkit library is intended for use 
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.
 6. If intending to utilize OERealm security, copy the `/cfg/Realm/SparkRealm.json` file to `CATALINA_BASE/conf/spark/` and `/cfg/Realm/SparkRealm.cp` to `CATALINA_BASE/common/lib/`.
 
-**CCS Note:** As of release **4.6.0** the inclusion of the CCS source code and Ccs.pl has been discontinued and all related source is removed from this repository. As of **OpenEdge 11.7.4 / 12.0** all CCS class interfaces are already included within the product and were utilized to build the Spark.pl library. Therefore, it is no longer necessary to include this PL file within your PROPATH or included as part of your code promotion processes.
+**CCS Note:** As of release **4.6.0** the inclusion of the CCS source code and Ccs.pl has been discontinued and all related source is removed from this repository. As of **OpenEdge 11.7.4 / 12.0** all CCS class interfaces are already included within the product and are utilized to build the Spark.pl library. Therefore, it is no longer necessary to include this PL file within your PROPATH or included as part of your code promotion processes.
 
 
 ## Contributions / Changes
