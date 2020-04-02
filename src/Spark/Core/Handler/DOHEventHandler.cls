@@ -109,10 +109,11 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
     method private character GetStatusReason ( input piStatusCode as integer ).
         define variable cReason as character no-undo.
 
-        case piStatusCode: /* Provide standard or custom reasons for an HTTP status. */
+        case piStatusCode: /* Provide known reasons for common HTTP status codes. */
             when 200 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:OK).
             when 201 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:Created).
             when 204 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:NoContent).
+            when 400 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:BadRequest).
             when 404 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:NotFound).
             when 409 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:Conflict).
             when 418 then cReason = "I'm a teapot". /* Legit status, per RFC2324 ;) */
@@ -120,6 +121,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
             when 500 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:InternalServerError).
             when 502 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:BadGateway).
             when 503 then cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:ServiceUnavailable).
+            otherwise cReason = StatusCodeHelper:GetMessage(StatusCodeEnum:Unknown).
         end case.
 
         return cReason.
@@ -324,7 +326,8 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
                 assign oServiceClass = Progress.Lang.Class:GetClass(poEventArgs:Operation:TargetName) no-error.
                 if valid-object(oServiceClass) then do:
                     /* Start and obtain a service class instance from the local CCS ServiceManager implementation. */
-                    assign poEventArgs:BusinessEntity = Ccs.Common.Application:ServiceManager:getService(oServiceClass).
+                    /* DO NOT use an "assign" here as that causes a syntax error with the dynamic-new declaration. */
+                    poEventArgs:BusinessEntity = Ccs.Common.Application:ServiceManager:getService(oServiceClass).
 
                     /* Leave a log message that the DOH event handler has been loaded. */
                     oLogger:Debug(substitute("DOH-LOAD - Located Class Entity '&1'", oServiceClass:TypeName)).
@@ -523,25 +526,14 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
      */
     method private void OperationErrorHandler ( input poSender    as Progress.Lang.Object,
                                                 input poEventArgs as HandlerErrorEventArgs ):
-        oLogger:Error(substitute("OP-ERROR - &1: &2", poEventArgs:Operation:TargetName, poEventArgs:Error:GetMessage(1))).
+        oLogger:Error(substitute("OP-ERROR - &1: &2", poEventArgs:Operation:TargetName,
+                      if valid-object(poEventArgs:OperationError) then poEventArgs:OperationError:GetMessage(1)
+                      else "-no valid error object-")).
 
-        define variable iCode as integer no-undo.
-        assign iCode = poEventArgs:Error:GetMessageNum(1).
-        if iCode lt 0 then
-            assign iCode = iCode * -1. /* Flip negative numbers. */
-
-        if iCode ge 200 and iCode le 599 then do:
-            /* Use code as HTTP response code. */
-            poEventArgs:Response:StatusCode = iCode.
-            poEventArgs:Response:StatusReason = this-object:GetStatusReason(iCode).
-        end.
-        else do:
-            /* Default to an HTTP 500/Error. */
-            poEventArgs:Response:StatusCode = integer(StatusCodeEnum:InternalServerError).
-            poEventArgs:Response:StatusReason = StatusCodeHelper:GetMessage(StatusCodeEnum:InternalServerError).
-        end.
-        poEventArgs:ReturnStatusCode = 0. /* Use event args as response. */
-
+        catch err as Progress.Lang.Error:
+            /* Just provide a message, but don't throw this as an error (we want to focus on what the entity threw). */
+            oLogger:Error(substitute("An error occurred while handling an Operation Error: &1", err:GetMessage(1))).
+        end catch.
         finally:
             this-object:SessionCleanup(). /* Perform any necessary cleanup. */
         end finally.
@@ -558,17 +550,17 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         define variable oTargetType as TargetTypeEnum no-undo.
         assign oTargetType = TargetTypeEnum:GetEnum(poEventArgs:Operation:TargetType).
 
-        /* Directly destroy the WidgetHandle class around any procedures (auto-destroys procedure handle). */
         if oTargetType eq TargetTypeEnum:Procedure then do:
+            /* Directly destroy the WidgetHandle class around any procedures (auto-destroys procedure handle). */
             delete object poEventArgs:BusinessEntity no-error.
             assign poEventArgs:BusinessEntity = ?.
-        end.
+        end. /* procedure */
 
         /* Stop all services with a "request" lifetime. */
         Ccs.Common.Application:ServiceManager:stopServices(ServiceLifeCycleEnum:request).
 
         /* Leave a log message that the DOH event handler has been loaded. */
-        oLogger:Debug(substitute("DOH-UNLD - &1", poEventArgs:Operation:TargetName)).
+        oLogger:Debug(substitute("DOH-UNLD - Unloading Entity '&1'", poEventArgs:Operation:TargetName)).
     end method. /* UnloadEntityHandler */
 
 end class.

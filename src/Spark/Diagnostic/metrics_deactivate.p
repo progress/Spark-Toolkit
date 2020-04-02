@@ -23,11 +23,11 @@ do on error undo, throw:
     define variable iStart as integer no-undo.
     assign iStart = mtime.
 
-    /* Stop the profiler for this request, if enabled. */
-    Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler("request").
-
     /* Output the current ABLObjects report for this agent/session. */
     Spark.Diagnostic.Util.OEMetrics:Instance:PrepareSessionReports().
+
+    /* Stop the profiler for this request, if enabled. */
+    Spark.Diagnostic.Util.OEMetrics:Instance:WriteProfiler("request").
 
     if log-manager:logging-level ge 3 then
         message substitute("Elapsed: &1ms", (mtime - iStart)).

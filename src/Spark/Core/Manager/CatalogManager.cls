@@ -1632,6 +1632,15 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             oCatRegistry:Remove(cCat[iX]). /* Remove cached catalog. */
         end. /* do iX */
         delete object oCatRegistry no-error. /* Clear the catalog registry. */
+
+        empty temp-table GeneralParam.
+        empty temp-table ServiceList.
+        empty temp-table ResourceList.
+        empty temp-table ServiceInfo.
+        empty temp-table ResourceInfo.
+        empty temp-table MethodInfo.
+        empty temp-table ResourceProperty.
+        empty temp-table EntityProperty.
     end method. /* dispose */
 
 
@@ -1656,8 +1665,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define buffer bResource for ResourceInfo.
         define buffer bService  for ServiceList.
         define buffer bSrvcRes  for ResourceList.
-
-        empty temp-table bResource.
 
         for first bGenParam no-lock:
             assign cRoot = "".
