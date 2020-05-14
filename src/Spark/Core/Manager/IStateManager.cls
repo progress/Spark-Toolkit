@@ -1,12 +1,10 @@
-using Progress.Lang.* from propath.
-using Ccs.Common.IManager from propath.
 using Spark.Core.Manager.StateLifeCycleEnum from propath.
 
 /**
  * State Manager Interface
  * Responsible for reading and writing the session context data to and from a persistent store (i.e. a database)
  */
-interface Spark.Core.Manager.IStateManager inherits IManager:
+interface Spark.Core.Manager.IStateManager inherits Ccs.Common.IManager:
 
    method public longchar readContextFromStore( input pcClassID as character,
                                                 input pcSessionContextID as character ).

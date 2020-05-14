@@ -1,4 +1,3 @@
-using Progress.Lang.AppError from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.IStateManager from propath.
 using Spark.Core.Util.ApplicationError from propath.

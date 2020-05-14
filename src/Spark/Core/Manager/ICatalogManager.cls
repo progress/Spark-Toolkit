@@ -7,12 +7,10 @@
     Notes       :
   ----------------------------------------------------------------------*/
 
-using Progress.Lang.* from propath.
-using Progress.Json.ObjectModel.* from propath.
+using Progress.Json.ObjectModel.JsonObject from propath.
 using OpenEdge.Web.DataObject.DataObjectService from propath.
-using Ccs.Common.IManager from propath.
 
-interface Spark.Core.Manager.ICatalogManager inherits IManager:
+interface Spark.Core.Manager.ICatalogManager inherits Ccs.Common.IManager:
 
     define public property ApiVersion    as decimal   no-undo get.
     define public property IdProperty    as character no-undo get.
@@ -39,7 +37,7 @@ interface Spark.Core.Manager.ICatalogManager inherits IManager:
                                         input pcTableName  as character,
                                         input poFieldData  as JsonObject ).
 
-    method public void describeResource ( input pcServiceURI  as character,
+    method public void describeResource ( input pcServiceURI    as character,
                                           input pcResourceName  as character,
                                           input pcMethodName    as character,
                                           input pcPublicName    as character,

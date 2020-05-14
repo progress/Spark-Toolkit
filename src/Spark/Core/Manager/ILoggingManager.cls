@@ -1,10 +1,7 @@
-using Ccs.Common.IManager from propath.
-using Spark.Core.Util.ErrorTypeEnum from propath.
-
 /**
  * Logging Manager Interface
  */
-interface Spark.Core.Manager.ILoggingManager inherits IManager:
+interface Spark.Core.Manager.ILoggingManager inherits Ccs.Common.IManager:
 
     define public property oLogConfig as Progress.Json.ObjectModel.JsonObject no-undo get. set.
 

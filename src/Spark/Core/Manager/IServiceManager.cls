@@ -12,9 +12,13 @@ using Spark.Core.Message.IAbstractMessage.
 
 interface Spark.Core.Manager.IServiceManager inherits Ccs.Common.IServiceManager:
 
-    method public void callServiceFunction( input poServiceClass as Progress.Lang.Class, input pcFunction as character, input poRequest as IAbstractMessage, input poResponse as IAbstractMessage ).
+    method public void callServiceFunction( input poServiceClass as Progress.Lang.Class,
+                                            input pcFunction     as character,
+                                            input poRequest      as IAbstractMessage,
+                                            input poResponse     as IAbstractMessage ).
 
-    method public void callServiceFunction( input poServiceClass as Progress.Lang.Class, input pcFunction as character ).
+    method public void callServiceFunction( input poServiceClass as Progress.Lang.Class,
+                                            input pcFunction     as character ).
 
     method public Progress.Lang.Class getServiceImplementation( input poService as Progress.Lang.Class ).
 
