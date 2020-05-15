@@ -1965,7 +1965,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                 operationObj:Set("path", substitute("&1?&2=~{&2~}", bMethod.MethodURI, this-object:ReadFilter)).
                             else
                                 operationObj:Set("path", substitute("?&1=~{&1~}", this-object:ReadFilter)).
-                            oParamObj:Set("type", "query"). /* Set any INPUT for a READ to use the Query parameter type. */
+                            oParamObj:Set("type", "QUERY"). /* Set any INPUT for a READ to use the Query parameter type. */
                         end. /* INPUT + READ */
 
                         if oParamObj:GetCharacter("xType") eq "datetimetz" then
@@ -1975,7 +1975,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                 /* Determine how a parameter should be obtained, based on the mode of the parameter and the operation verb. */
                 if oParamObj:GetCharacter("mode") eq "input" and bMethod.OperationVerb eq MethodEnum:get:toString() then
-                    oParamObj:Set("type", "query"). /* For INPUT on a GET, we should only obtain from the Query Parameters. */
+                    oParamObj:Set("type", "QUERY"). /* For INPUT on a GET, we should only obtain from the Query Parameters. */
                 else if oParamObj:GetCharacter("mode") eq "input-output" then
                     oParamObj:Set("type", "REQUEST_BODY,RESPONSE_BODY"). /* Any INPUT-OUTPUT should use the BODY by default. */
                 else if oParamObj:GetCharacter("mode") eq "input" then
