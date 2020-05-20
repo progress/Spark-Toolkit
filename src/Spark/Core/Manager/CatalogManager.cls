@@ -8,6 +8,22 @@
                   least 3 (verbose) will trigger additional messages in
                   the logs as well as output multiple files in the session
                   temp directory (eg. the service mapping files).
+
+    This class provides 3 distinct functions at present:
+        1) Discover any classes/procedures to be exposed as RESTful endpoints
+            Performed by loadResources()
+        2) Create a JSDO-compatible DataObject Catalog for public consumption
+            Performed by getCatalog()
+        3) Register all ABL resources as DataObjectServices for internal use
+            Performed by registerService() via registerAllServices()
+
+    In respect to the DataObject Catalog and the DataObjectServices these
+    provide similar but limited sets of data about the exposed resources.
+    While they draw upon the same sources of information, the artifacts
+    describe this data differently for each of their intended purposes.
+    Therefore, a "source of truth" is provided in the form of ProDatasets
+    within this class which contains all necessary information gathered
+    during the resource discovery process (stored in dsResource). 
   ----------------------------------------------------------------------*/
 
 using Progress.Lang.* from propath.
@@ -31,6 +47,7 @@ using Spark.Core.Util.Reflection from propath.
 block-level on error undo, throw.
 
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
+&GLOBAL-DEFINE ANNOTATIONS_FILE annotations.json
 
 class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager implements Spark.Core.Manager.ICatalogManager use-widget-pool:
 
@@ -69,8 +86,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     define protected property Annotations as JsonObject no-undo
         get():
             if not valid-object(Annotations) then do:
-                /* Look for a central annotations.json file and parse this for use throughout the life of the CatalogManager. */
-                file-info:filename = substitute("&1/annotations.json", right-trim(OSTools:sparkConf, "/")).
+                /* Look for a central annotations JSON file and parse this for use throughout the life of the CatalogManager. */
+                file-info:filename = substitute("&1/&2", right-trim(OSTools:sparkConf, "/"), "{&ANNOTATIONS_FILE}").
                 if file-info:full-pathname ne ? then do on error undo, throw:
                     define variable oParser as ObjectModelParser no-undo.
 
@@ -139,15 +156,18 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         .
 
     /**
-     * ServiceList is our primary service table, but because tables cannot exist in more than 1 dataset,
-     * we use this as a dummy for associating the ResourceInfo table and its children.
+     * ServiceList is our initial "service listing", but because tables cannot exist in more than
+     * 1 dataset we use this as a clone for associating the ResourceInfo table and its children.
      */
     define protected temp-table ServiceInfo no-undo serialize-name "Service"
-        field ServiceName as character serialize-name "Name"
-        field ServiceURI  as character serialize-name "URI"
-        field ServiceUUID as character serialize-hidden
-        index idxPrimary  is primary unique ServiceURI
-        index idxName     is         unique ServiceName
+        field ServiceUUID     as character serialize-hidden
+        field ServiceName     as character serialize-name "Name"
+        field ServiceURI      as character serialize-name "URI"
+        field ClassPath       as character
+        field SendOnlyChanges as logical   initial false
+        field UseRequest      as logical   initial false
+        index idxPrimary      is primary unique ServiceName ServiceURI
+        index idxName         is         unique ClassPath
         .
 
     define protected temp-table ResourceInfo no-undo serialize-name "Resource"
@@ -235,14 +255,18 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected void clearResourceMethods ( input pcResourceUUID as character ):
-        for each MethodInfo exclusive-lock
-           where MethodInfo.ResourceUUID eq pcResourceUUID:
-            assign MethodInfo.MethodSignature = "".
-        end. /* for each */
+        /* Resource Discovery Process */
+        define buffer bMethod for MethodInfo.
+
+        for each bMethod exclusive-lock
+           where bMethod.ResourceUUID eq pcResourceUUID:
+            assign bMethod.MethodSignature = "".
+        end. /* for each bMethod */
     end method. /* clearResourceMethods */
 
 
     method protected character getJsonType ( input pcABLType as character ):
+        /* DataObject Catalog Method */
         case pcABLType:
             when "DATE" or
             when "DATETIME" or
@@ -260,165 +284,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getJsonType */
 
 
-    method protected character getAction ( input pcHttpMethod as character ):
-        case pcHttpMethod:
-            when MethodEnum:get:toString() then
-                return OperationEnum:read:toString().
-            when MethodEnum:post:toString() then
-                return OperationEnum:create:toString().
-            when MethodEnum:put:toString() then
-                return OperationEnum:update:toString().
-            when MethodEnum:delete:toString() then
-                return OperationEnum:delete:toString().
-            otherwise
-                return "".
-        end case.
-    end method. /* getAction */
-
-
-    method protected character getVerb ( input pcAction as character ):
-        case pcAction:
-            when OperationEnum:read:toString() then
-                return MethodEnum:get:toString().
-            when OperationEnum:create:toString() then
-                return MethodEnum:post:toString().
-            when OperationEnum:update:toString() then
-                return MethodEnum:put:toString().
-            when OperationEnum:delete:toString() then
-                return MethodEnum:delete:toString().
-            otherwise
-                return "".
-        end case.
-    end method. /* getVerb */
-
-
-    method protected void getMethod ( input  pcServiceUUID  as character,
-                                      input  pcResourceName as character,
-                                      input  pcMethodName   as character,
-                                      input  pcHttpMethod   as character,
-                                      output pcValidMethod  as character,
-                                      output phProcHandle   as handle,
-                                      output pcEntityName   as character ):
-        assign /* Obtain the actual method name from the descriptors table. */
-            pcMethodName  = getMethodName(pcServiceUUID, pcResourceName, pcMethodName, pcHttpMethod)
-            pcValidMethod = ""
-            phProcHandle  = ?
-            pcEntityName  = ""
-            .
-        if (pcMethodName gt "") ne true then return.
-
-        define buffer bResource for ResourceInfo.
-
-        find first bResource
-             where not bResource.IsClass
-               and bResource.ServiceUUID eq pcServiceUUID
-               and bResource.ClassPath eq pcResourceName
-               and valid-handle(bResource.ProcHandle) no-error.
-        if available(bResource) then do:
-            define variable cInternalMethods as character no-undo.
-            assign cInternalMethods = bResource.ProcHandle:internal-entries.
-
-            /* Confirm that the requested method exists within procedure. */
-            if can-do(cInternalMethods, pcMethodName) then
-                assign
-                    pcValidMethod = pcMethodName
-                    phProcHandle  = bResource.ProcHandle
-                    .
-        end. /* Procedure */
-        else do:
-            find first bResource
-                 where bResource.ServiceUUID eq pcServiceUUID
-                   and bResource.PublicName eq pcResourceName
-                   and bResource.ValidClass no-error.
-            if available(bResource) then
-                assign
-                    pcValidMethod = pcMethodName
-                    pcEntityName  = bResource.EntityName
-                    .
-        end. /* Class */
-    end method. /* getMethod */
-
-
-    method protected character getMethodName ( input pcServiceUUID  as character,
-                                               input pcResourceName as character,
-                                               input pcMethodName   as character,
-                                               input pcHttpMethod   as character ):
-        define variable cResourceUUID as character no-undo.
-        define variable cClassPath    as character no-undo.
-        this-object:getClassPath(pcServiceUUID, pcResourceName, output cResourceUUID, cClassPath).
-
-        define buffer bMethod for MethodInfo.
-
-        find first bMethod /* Find by public name and verb. */
-             where bMethod.ResourceUUID eq cResourceUUID
-               and bMethod.PublicName eq pcMethodName
-               and bMethod.OperationVerb eq pcHttpMethod no-error.
-        if available(bMethod) then
-            return bMethod.MethodName.
-
-        find first bMethod /* Find by actual name and verb. */
-             where bMethod.ResourceUUID eq cResourceUUID
-               and bMethod.MethodName eq pcMethodName
-               and bMethod.OperationVerb eq pcHttpMethod no-error.
-        if available(bMethod) then
-            return bMethod.MethodName.
-
-        find first bMethod /* Find by operation type and verb. */
-             where bMethod.ResourceUUID eq cResourceUUID
-               and bMethod.OperationType eq pcMethodName
-               and bMethod.OperationVerb eq pcHttpMethod no-error.
-        if available(bMethod) then
-            return bMethod.MethodName.
-
-        return "".
-    end method. /* getMethodName */
-
-
-    method protected void getClassPath ( input  pcServiceUUID  as character,
-                                         input  pcResourceName as character,
-                                         output pcResourceUUID as character,
-                                         output pcClassPath    as character ):
-        define buffer bResource for ResourceInfo.
-
-        /* Locate classes by service URI and public name. */
-        for first bResource
-            where bResource.ServiceUUID eq pcServiceUUID
-              and bResource.PublicName eq pcResourceName:
-            assign
-                pcResourceUUID = bResource.ResourceUUID
-                pcClassPath    = bResource.ClassPath
-                .
-        end.
-
-        /* Locate procedure by service URI and full path. */
-        for first bResource
-            where bResource.ServiceUUID eq pcServiceUUID
-              and bResource.SourcePath eq pcResourceName:
-            assign
-                pcResourceUUID = bResource.ResourceUUID
-                pcClassPath    = bResource.ClassPath
-                .
-        end.
-    end method. /* getClassPath */
-
-
-    method protected character getResourcePath ( input pcServiceUUID  as character,
-                                                 input pcResClassPath as character ):
-        define buffer bResource for ResourceInfo.
-
-        for first bResource
-            where bResource.ServiceUUID eq pcServiceUUID
-              and bResource.ClassPath eq pcResClassPath:
-            return bResource.SourcePath.
-        end.
-
-        return "".
-    end method. /* getResourcePath */
-
-
     method protected void processAnnotations ( input pcResourceUUID as character,
                                                input pcClassPath    as character,
                                                input pcSourcePath   as character ):
+        /* Resource Discovery Process */
         define variable cAnnoName    as character no-undo.
         define variable cPublicName  as character no-undo.
         define variable cResourceURI as character no-undo.
@@ -443,6 +312,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         do on error undo, throw:
             define variable oAnnotation       as JsonObject         no-undo.
             define variable oProgram          as JsonObject         no-undo.
+            define variable oData             as JsonObject         no-undo.
             define variable oMethods          as JsonObject         no-undo.
             define variable oMethod           as JsonObject         no-undo.
             define variable oSubArr           as JsonArray          no-undo.
@@ -450,11 +320,13 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             define variable cMethodName       as character          no-undo.
             define variable cMethods          as character extent   no-undo.
             define variable cAnnoNames        as character extent   no-undo.
+            define variable cFields           as character          no-undo.
             define variable cName             as character          no-undo.
             define variable cNewServiceURI    as character          no-undo.
             define variable cNewServiceName   as character          no-undo.
             define variable cNewServiceUUID   as character          no-undo.
             define variable cResourceSecurity as character          no-undo.
+            define variable cSchemaName       as character          no-undo.
             define variable iVersion          as integer   extent 3 no-undo.
             define variable iX                as integer            no-undo.
             define variable iY                as integer            no-undo.
@@ -476,6 +348,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 assign
                     cPublicName  = oSubObj:GetCharacter("name") when oSubObj:Has("name")
                     cResourceURI = oSubObj:GetCharacter("URI") when oSubObj:Has("URI")
+                    cSchemaName  = oSubObj:GetCharacter("schemaName") when oSubObj:Has("schemaName")
                     .
             end. /* progress.service.resource FILE */
 
@@ -505,6 +378,169 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                 assign oSemVersion = new SemanticVersion(iVersion[1], iVersion[2], iVersion[3]).
             end. /* openapi.openedge.resource.version */
+
+            if oAnnotation:Has("data") and oAnnotation:GetType("data") eq JsonDataType:object then
+            do on error undo, throw:
+                extent(cAnnoNames) = ?.
+                assign
+                    oData      = oAnnotation:GetJsonObject("data")
+                    cAnnoNames = oData:GetNames()
+                    .
+
+                do iX = 1 to extent(cAnnoNames):
+                    case cAnnoNames[iX]:
+                        when "openapi.openedge.entity.primarykey" then do:
+                            if (cSchemaName gt "") eq true then do:
+                                assign
+                                    oSubObj = oData:GetJsonObject(cAnnoNames[iX])
+                                    cFields = ""
+                                    .
+
+                                if oSubObj:Has("fields") and oSubObj:GetType("fields") eq JsonDataType:Array then do:
+                                    assign oSubArr = oSubObj:GetJsonArray("fields").
+                                    do iY = 1 to oSubArr:Length:
+                                        /* Turn the array of fields into a comma-delimited list. */
+                                        assign cFields = trim(substitute("&1,&2", cFields, oSubArr:GetCharacter(iY)), ",").
+                                    end.
+                                end.
+                                else if oSubObj:Has("fields") and oSubObj:GetType("fields") eq JsonDataType:String then
+                                    assign cFields = oSubObj:GetCharacter("fields").
+
+                                if (cFields gt "") eq true then
+                                    for first bResource exclusive-lock
+                                        where bResource.ResourceUUID eq pcResourceUUID:
+                                        assign
+                                            bResource.EntityName = cSchemaName
+                                            bResource.EntityKeys = cFields
+                                            .
+                                    end. /* for first bResource */
+                            end. /* cSchemaName */
+                        end. /* openapi.openedge.entity.primarykey */
+
+                        when "openapi.openedge.entity.foreignkey" then do:
+                            if (cSchemaName gt "") eq true then do:
+                                define variable oFKeys as JsonArray  no-undo.
+                                define variable oFKey  as JsonObject no-undo.
+
+                                assign
+                                    oSubObj = oData:GetJsonObject(cAnnoNames[iX])
+                                    oFKeys  = new JsonArray()
+                                    oFKey   = new JsonObject()
+                                    .
+
+                                /* Create an FK array as expected by the CatalogManager from Spark.Core.Util.ForeignKey. */
+                                if oSubObj:Has("name") and oSubObj:GetType("name") eq JsonDataType:String then do:
+                                    oFKey:Add("name", oSubObj:GetCharacter("name")).
+                                    oFKey:Add("fields", new JsonArray()).
+                                    oFKey:Add("parent", new JsonObject()).
+    
+                                    if oSubObj:Has("fields") and oSubObj:GetType("fields") eq JsonDataType:Array then do:
+                                        assign oSubArr = oSubObj:GetJsonArray("fields").
+                                        do iY = 1 to oSubArr:Length:
+                                            oFKey:GetJsonArray("fields"):Add(oSubArr:GetCharacter(iY)).
+                                        end.
+                                    end.
+                                    else if oSubObj:Has("fields") and oSubObj:GetType("fields") eq JsonDataType:String then
+                                        oFKey:GetJsonArray("fields"):Add(oSubObj:GetCharacter("fields")).
+    
+                                    if oSubObj:Has("parent") and oSubObj:GetType("parent") eq JsonDataType:String then
+                                        oFKey:GetJsonObject("parent"):Add("name", oSubObj:GetCharacter("parent")).
+    
+                                    oFKey:GetJsonObject("parent"):Add("fields", new JsonArray()).
+                                    if oSubObj:Has("parentFields") and oSubObj:GetType("parentFields") eq JsonDataType:Array then do:
+                                        assign oSubArr = oSubObj:GetJsonArray("parentFields").
+                                        do iY = 1 to oSubArr:Length:
+                                            oFKey:GetJsonObject("parent"):GetJsonArray("fields"):Add(oSubArr:GetCharacter(iY)).
+                                        end.
+                                    end.
+                                    else if oSubObj:Has("parentFields") and oSubObj:GetType("parentFields") eq JsonDataType:String then
+                                        oFKey:GetJsonObject("parent"):GetJsonArray("fields"):Add(oSubObj:GetCharacter("parentFields")).
+    
+                                    oFKeys:Add(oFKey).
+                                    for first bResource exclusive-lock
+                                        where bResource.ResourceUUID eq pcResourceUUID:
+                                        assign
+                                            bResource.EntityName  = cSchemaName
+                                            bResource.ForeignKeys = string(oFKeys:GetJsonText())
+                                            .
+                                    end. /* for first bResource */
+                                end.
+
+                                delete object oFKeys no-error.
+                                delete object oFKey no-error.
+                            end. /* cSchemaName */
+                        end. /* openapi.openedge.entity.foreignkey */
+
+                        when "openapi.openedge.entity.field.property" then do:
+                            define variable oProps  as JsonObject no-undo.
+                            define variable cTables as character  no-undo extent.
+                            define variable cTable  as character  no-undo.
+                            define variable cField  as character  no-undo.
+                            define variable cValue  as character  no-undo.
+
+                            assign oProps = new JsonObject().
+
+                            if oData:GetType(cAnnoNames[iX]) eq JsonDataType:Object then do:
+                                assign
+                                    oSubObj = oData:GetJsonObject(cAnnoNames[iX])
+                                    cTable  = ""
+                                    cField  = ""
+                                    cName   = ""
+                                    cValue  = ""
+                                    .
+
+                                assign
+                                    cTable  = oSubObj:GetCharacter("table") when oSubObj:Has("table")
+                                    cField  = oSubObj:GetCharacter("field") when oSubObj:Has("field")
+                                    cName   = oSubObj:GetCharacter("name") when oSubObj:Has("name")
+                                    cValue  = oSubObj:GetCharacter("value") when oSubObj:Has("value")
+                                    .
+
+                                if (cTable gt "") eq true then do:
+                                    if not oProps:Has(cTable) then
+                                        oProps:Add(cTable, new JsonObject()).
+                                    oProps:GetJsonObject(cTable):Add(cField, new JsonObject()).
+                                    oProps:GetJsonObject(cTable):GetJsonObject(cField):Add(cName, cValue).
+                                end.
+                            end. /* Annotation Object */
+                            else if oData:GetType(cAnnoNames[iX]) eq JsonDataType:Array then do:
+                                assign oSubArr = oData:GetJsonArray(cAnnoNames[iX]).
+                                do iY = 1 to oSubArr:Length:
+                                    assign
+                                        oSubObj = oSubArr:GetJsonObject(iY)
+                                        cTable  = ""
+                                        cField  = ""
+                                        cName   = ""
+                                        cValue  = ""
+                                        .
+    
+                                    assign
+                                        cTable  = oSubObj:GetCharacter("table") when oSubObj:Has("table")
+                                        cField  = oSubObj:GetCharacter("field") when oSubObj:Has("field")
+                                        cName   = oSubObj:GetCharacter("name") when oSubObj:Has("name")
+                                        cValue  = oSubObj:GetCharacter("value") when oSubObj:Has("value")
+                                        .
+
+                                    if (cTable gt "") eq true then do:
+                                        if not oProps:Has(cTable) then
+                                            oProps:Add(cTable, new JsonObject()).
+                                        oProps:GetJsonObject(cTable):Add(cField, new JsonObject()).
+                                        oProps:GetJsonObject(cTable):GetJsonObject(cField):Add(cName, cValue).
+                                    end.
+                                end. /* Annotation Array */
+                            end.
+
+                            extent(cTables) = ?.
+                            assign cTables = oProps:GetNames().
+                            do iZ = 1 to extent(cTables):
+                                this-object:describeFields(cSchemaName, cTable, oProps:GetJsonObject(cTable)).
+                            end.
+
+                            delete object oProps no-error.
+                        end. /* openapi.openedge.entity.field.property */
+                    end case.
+                end. /* do iX cAnnoNames */
+            end. /* has data */
 
             /* Methods and Procedures should be mutually exclusive, but the annotation parsing is the same. */
             if (oAnnotation:Has("method") and oAnnotation:GetType("method") eq JsonDataType:object) or
@@ -627,7 +663,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 for first bResource exclusive-lock
                     where bResource.ResourceUUID eq pcResourceUUID:
 
-                    /* Check if there has been a change in service, and modify accordingly. */
+                    /* Check if there has been a change in service, and modify related records accordingly. */
                     if (cNewServiceUUID gt "") eq true then do:
                         if lIsClass then
                             for first bSrvcRes exclusive-lock
@@ -651,7 +687,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         assign bResource.ServiceUUID = cNewServiceUUID.
                     end. /* cNewServiceUUID */
 
-                    /* Make sure the service resource is updated with any changes discovered above. */
                     assign
                         bResource.PublicName  = cPublicName
                         bResource.ResourceURI = cResourceURI
@@ -663,6 +698,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 delete object oSemVersion no-error.
                 delete object oAnnotation no-error.
                 delete object oProgram no-error.
+                delete object oData no-error.
                 delete object oMethods no-error.
                 delete object oMethod no-error.
                 delete object oSubArr no-error.
@@ -678,6 +714,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected void loadDynamicResource ( input pcResourceUUID as character ):
+        /* Resource Discovery Process */
         define variable cClassPath   as character       no-undo.
         define variable cSourcePath  as character       no-undo.
         define variable cServiceUUID as character       no-undo.
@@ -944,41 +981,40 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected void registerMethods ( input pcServiceUUID  as character ):
-        /* Call method with blank list of operations. Typical for the Dynamicresource class. */
+        /* Call method with blank list of operations. Typical for the DynamicResource class. */
         this-object:registerMethods(pcServiceUUID, "").
     end method. /* registerMethods */
 
 
     method protected void registerMethods ( input pcResourceUUID as character,
                                             input pcOperations   as character ):
-        define variable oParser   as ObjectModelParser no-undo.
-        define variable oClassSig as JsonObject        no-undo.
-        define variable oMethods  as JsonObject        no-undo.
-        define variable cSigPath  as character         no-undo.
-        define variable cMethods  as character         no-undo extent.
-        define variable ix        as integer           no-undo.
-
-        oParser = new ObjectModelParser().
-
-        /* Remove previous method signatures. */
-        this-object:clearResourceMethods(pcResourceUUID).
+        /* Resource Discovery Process */
+        define variable oClassSig as JsonObject no-undo.
+        define variable oMethods  as JsonObject no-undo.
+        define variable cSigPath  as character  no-undo.
+        define variable cMethods  as character  no-undo extent.
+        define variable ix        as integer    no-undo.
 
         define buffer bResource for ResourceInfo.
+
+        /* Remove any previous class method signatures. */
+        this-object:clearResourceMethods(pcResourceUUID).
 
         /* Register methods according to the Spark.Core.Service.IDynamicEntity class. */
         find first bResource
              where bResource.ResourceUUID eq pcResourceUUID no-error.
         if available(bResource) then do:
             /* Generate class signature (in JSON) using reflection. */
-            oClassSig = Reflection:getClassSignature(bResource.ClassPath).
+            assign oClassSig = Reflection:getClassSignature(bResource.ClassPath).
 
             if lUseDebugs then do:
+                /* Output the full class reflection data to a file for debugging purposes. */
                 assign cSigPath = substitute("&1/signatures", right-trim(OSTools:sparkConf, "/")).
                 file-info:file-name = cSigPath.
                 if file-info:full-pathname eq ? then
                     os-create-dir value(cSigPath).
                 oClassSig:WriteFile(substitute("&1/&2.json", cSigPath, bResource.ClassPath), true).
-            end.
+            end. /* lUseDebugs */
 
             /* Extract the specific class signature from the file. */
             if oClassSig:Has(bResource.ClassPath) then
@@ -1030,7 +1066,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             undo, throw err.
         end catch.
         finally:
-            delete object oParser   no-error.
             delete object oClassSig no-error.
             delete object oMethods  no-error.
         end finally.
@@ -1040,11 +1075,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     method protected void registerProcedures ( input pcResourceUUID as character,
                                                input pcResourceName as character,
                                                input phProcHandle   as handle ):
+        /* Resource Discovery Process */
         define variable iCount           as integer   no-undo.
         define variable cMethodName      as character no-undo.
         define variable cInternalEntries as character no-undo.
 
-        /* Remove previous method signatures. */
+        /* Remove previous internal procedure signatures. */
         this-object:clearResourceMethods(pcResourceUUID).
 
         cInternalEntries = phProcHandle:internal-entries.
@@ -1066,7 +1102,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected void runPreloader ( ):
-        /* Special procedure for application startup. */
+        /* Resource Discovery Process - Special procedure for application startup. */
         if (cPreLoader gt "") eq true then do:
             file-info:file-name = cPreLoader. /* First try filename as-is, which should be a .p file. */
             if file-info:full-pathname eq ? then
@@ -1101,6 +1137,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                               input pcMethodName   as character,
                                               input pcEntityName   as character,
                                               input poMethodParams as JsonArray ):
+        /* Resource Discovery Process */
         define variable oParamObj  as JsonObject no-undo.
         define variable cParamName as character no-undo.
         define variable iTotal     as integer    no-undo.
@@ -1319,7 +1356,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             end. /* num-entries */
         end. /* iX */
 
-        /* Write the signature back to the method table using a format similar to class reflection. */
+        /**
+         * Write the procedure signatures back to the method table using a format similar to what
+         * is generated for class reflection, just to maintain some consistency within this field.
+         */
         if oParamArr:Length gt 0 then
             for first bMethod exclusive-lock
                 where bMethod.ResourceUUID eq pcResourceUUID
@@ -1353,10 +1393,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
     method protected JsonArray getServices ( input pcServiceUUID  as character,
                                              input pcResourceName as character ):
+        /* DataObject Catalog Method */
         define variable serviceArr as JsonArray no-undo.
         assign serviceArr = new JsonArray().
 
-        define buffer bService for ServiceList.
+        define buffer bService for ServiceInfo.
 
         for each bService no-lock:
             /* If no service given (is blank) return all services for this webapp. */
@@ -1400,6 +1441,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
     method protected JsonArray getResources ( input pcServiceUUID  as character,
                                               input pcResourceName as character ):
+        /* DataObject Catalog Method */
         define variable resourceArr as JsonArray  no-undo.
         define variable resourceObj as JsonObject no-undo.
 
@@ -1468,6 +1510,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
     method protected JsonObject getSchema ( input pcResourceUUID  as character,
                                             input plPrimaryEntity as logical ):
+        /* DataObject Catalog Method */
         define variable oSchemaObj    as JsonObject no-undo.
         define variable oProperty     as JsonObject no-undo.
         define variable cDatasetNames as character  no-undo.
@@ -1630,6 +1673,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected JsonArray getRelations ( input pcResourceUUID as character ):
+        /* DataObject Catalog Method */
         define variable oRelationArr  as JsonArray  no-undo.
         define variable oRelationObj  as JsonObject no-undo.
         define variable oFieldArr     as JsonArray  no-undo.
@@ -1726,6 +1770,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                            input  pcPrimaryKey  as character,
                                            input  pcForeignKey  as character,
                                            output pcSerialized  as character ):
+        /* DataObject Catalog Method */
         define variable tableObj    as JsonObject no-undo.
         define variable fkArray     as JsonArray  no-undo.
         define variable pkArray     as JsonArray  no-undo.
@@ -1878,6 +1923,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected JsonArray getOperations ( input pcResourceUUID as character ):
+        /* DataObject Catalog Method */
         define variable operationArr as JsonArray  no-undo.
         define variable operationObj as JsonObject no-undo.
         define variable oParamArr    as JsonArray  no-undo.
@@ -1996,6 +2042,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected JsonObject getDataDefs ( input pcResourceUUID as character ):
+        /* DataObject Catalog Method */
         define variable oSchema as JsonObject no-undo.
 
         /* Obtain all non-primary schema (tables, datasets). */
@@ -2119,6 +2166,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method protected void checkForResources ( ):
+        /* Resource Discovery Process */
         define variable ix         as integer   no-undo.
         define variable cClassPath as character no-undo.
         define variable cPath      as character no-undo.
@@ -2189,7 +2237,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     leave. /* Found our root, so leave. */
                 end.
             end. /* Physical Folders */
-        end. /* for first */
+        end. /* for first bGenParam */
 
         /* Go down the rabbit hole, Alice... */
         if (cRoot gt "") eq true then do:
@@ -2302,6 +2350,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method public void loadResources ( ):
+        /* Resource Discovery Process */
+        empty temp-table ServiceInfo.
         empty temp-table ResourceInfo.
         empty temp-table MethodInfo.
         empty temp-table ParameterInfo.
@@ -2318,7 +2368,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         oLoggingManager:logMessage("Running Preloader...", "SPARK-LOAD", 4).
         this-object:runPreloader().
 
-        /* Look for any available entity classes at the expected location(s). */
+        /* Look for any available classes/procedures at the expected location(s), including PL files. */
         oLoggingManager:logMessage("Checking Resources...", "SPARK-LOAD", 4).
         this-object:checkForResources().
 
@@ -2326,18 +2376,15 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         for each ResourceInfo:
             oLoggingManager:logMessage(substitute("Loading Resource: '&1'", ResourceInfo.ClassPath), "SPARK-LOAD", 4).
             this-object:loadDynamicResource(ResourceInfo.ResourceUUID).
-        end.
+        end. /* for each ResourceInfo */
+
+        /* Update the ServiceInfo table (for dsResource) using the original config table ServiceList. */
+        for each ServiceList no-lock:
+            create ServiceInfo. /* Dummy table record incoming. */
+            buffer-copy ServiceList to ServiceInfo no-error.
+        end. /* for each ServiceList */
 
         if lUseDebugs then do:
-            /* Populate the ServiceInfo table with select data frmo the ServiceList. */
-            empty temp-table ServiceInfo.
-
-            /* We do this to keep this table up to date before nesting the resource data. */
-            for each ServiceList:
-                create ServiceInfo. /* Dummy table record incoming. */
-                buffer-copy ServiceList to ServiceInfo no-error.
-            end. /* for each ServiceList */
-
             /* Write out our internal datsets for further debugging/confirmation. */
             dataset dsConfig:write-json("file", substitute("&1/CatalogDetail.json", this-object:TemporaryDir), true).
             dataset dsResource:write-json("file", substitute("&1/ResourceMetadata.json", this-object:TemporaryDir), true).
@@ -2357,6 +2404,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                      input pcPropertyName  as character,
                                      input pcPropertyType  as character,
                                      input pcPropertyValue as character ):
+        /* Resource Discovery Process */
         define buffer bService  for ServiceList.
         define buffer bResource for ResourceInfo.
         define buffer bMethod   for MethodInfo.
@@ -2403,6 +2451,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                         input pcEntityName   as character,
                                         input pcPrimaryKeys  as character,
                                         input pcForeignKeys  as character ):
+        /* Resource Discovery Process */
+
         /* Use default service if none provided. */
         if (pcServiceUUID gt "") ne true then pcServiceUUID = cDefaultUUID.
 
@@ -2421,6 +2471,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     method public void describeFields ( input pcEntityName as character,
                                         input pcTableName  as character,
                                         input poFieldData  as JsonObject ):
+        /* Resource Discovery Process */
         define buffer bEntity for EntityProperty.
 
         if (pcEntityName gt "") eq true and (pcTableName gt "") eq true then do:
@@ -2450,6 +2501,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                           input pcPublicName    as character,
                                           input pcOperationType as character,
                                           input pcOperationVerb as character ):
+        /* Resource Discovery Process */
         define buffer bService  for ServiceList.
         define buffer bResource for ResourceInfo.
         define buffer bMethod   for MethodInfo.
@@ -2548,12 +2600,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
     method public JsonObject getCatalog ( input pcServiceURI   as character,
                                           input pcResourceName as character ):
+        /* DataObject Catalog Method */
         define variable cHash as character no-undo.
 
-        define buffer bService for ServiceList.
-
-        find first bService no-lock
-             where bService.ServiceURI eq pcServiceURI no-error.
+        define buffer bService for ServiceInfo.
 
         /* Use a simple hash to identify this combination of URI and Resource Name. */
         assign cHash = encode(pcServiceURI + pcResourceName).
@@ -2565,6 +2615,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
              * requested. Therefore we should be able to cache this data for speed.
              */
             define variable oCatalog as JsonObject no-undo.
+
+            /* Check if service exists for the given URI. */
+            find first bService no-lock
+                 where bService.ServiceURI eq pcServiceURI no-error.
 
             assign oCatalog = new JsonObject().
             oCatalog:Add("version", 1.5).
@@ -2598,7 +2652,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
 
     method public void registerAllServices ( input poRegistry as IServiceRegistry ):
-        define buffer bService for ServiceList.
+        /* DataObjectService Registration */
+        define buffer bService for ServiceInfo.
 
         for each bService no-lock:
             /**
@@ -2613,6 +2668,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     method public DataObjectService registerService ( input poRegistry       as IServiceRegistry,
                                                       input pcServiceName    as character,
                                                       input poServiceVersion as SemanticVersion ):
+        /* DataObjectService Registration */
         define variable cServiceURI  as character           no-undo.
         define variable cContentType as character           no-undo.
         define variable cTargetType  as character           no-undo.
@@ -2638,7 +2694,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define variable oParam       as OperationParameter  no-undo.
         define variable oSvcJson     as JsonObject          no-undo.
 
-        define buffer bService  for ServiceList.
+        define buffer bService  for ServiceInfo.
         define buffer bResource for ResourceInfo.
         define buffer bMethod   for MethodInfo.
         define buffer bParam    for ParameterInfo.
