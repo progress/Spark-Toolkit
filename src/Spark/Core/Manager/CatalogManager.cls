@@ -37,6 +37,8 @@ using OpenEdge.Web.DataObject.* from propath.
 using OpenEdge.Web.DataObject.Writer.* from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.ISchemaManager from propath.
+using Spark.Core.Service.Service from propath.
+using Spark.Core.Service.ISparkEntity from propath.
 using Spark.Core.Service.IDynamicEntity from propath.
 using Spark.Core.Service.IDynamicResource from propath.
 using Spark.Core.Util.GenTools from propath.
@@ -218,7 +220,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         index pukOrder        is primary unique ParamUUID /* Must keep these in order of discovery. */
         .
 
-    define protected temp-table ResourceProperty no-undo serialize-name "Annotation"
+    define protected temp-table ResourceProperty no-undo serialize-name "Property"
         field ResourceUUID  as character serialize-hidden
         field OperationType as character serialize-name "Operation" /* Type: create, read, update, delete, etc. */
         field PropertyName  as character serialize-name "Property"  /* Resource annotation property name.       */
@@ -291,8 +293,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define variable cAnnoName    as character no-undo.
         define variable cPublicName  as character no-undo.
         define variable cResourceURI as character no-undo.
-        define variable cExecMode    as character no-undo.
-        define variable lUseReturn   as logical   no-undo.
         define variable lWriteBI     as logical   no-undo.
         define variable lIsClass     as logical   no-undo.
 
@@ -325,6 +325,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             define variable cAnnoNames        as character extent   no-undo.
             define variable cFields           as character          no-undo.
             define variable cName             as character          no-undo.
+            define variable cOldServiceURI    as character          no-undo.
             define variable cNewServiceURI    as character          no-undo.
             define variable cNewServiceName   as character          no-undo.
             define variable cNewServiceUUID   as character          no-undo.
@@ -342,21 +343,20 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             else
                 return. /* There are no annotations for this resource. */
 
+            for first bResource no-lock
+                where bResource.ResourceUUID eq pcResourceUUID,
+                first bService no-lock
+                where bService.ServiceUUID eq bResource.ServiceUUID:
+                assign cOldServiceURI = bService.ServiceURI.
+            end. /* first bResource, bService */
+
             /* Look for a valid "program" grouping of annotations, which might be in the "user" grouping. */
             if oAnnotation:Has("program") and oAnnotation:GetType("program") eq JsonDataType:Object then
                 assign oProgram = oAnnotation:GetJsonObject("program").
 
-            if valid-object(oProgram) and oProgram:Has("openapi.openedge.export FILE") then do:
-                assign oSubObj = oProgram:GetJsonObject("openapi.openedge.export FILE").
-                assign
-                    cExecMode  = oSubObj:GetCharacter("executionMode") when oSubObj:Has("executionMode")
-                    lUseReturn = can-do("true,yes,1", oSubObj:GetCharacter("useReturnValue")) when oSubObj:Has("useReturnValue")
-                    lWriteBI   = can-do("true,yes,1", oSubObj:GetCharacter("writeDataSetBeforeImage")) when oSubObj:Has("writeDataSetBeforeImage")
-                    .
-            end. /* openapi.openedge.export FILE */
-
             /* Parse annotations for this resource (program). */
-            if valid-object(oProgram) and oProgram:Has("progress.service.resource FILE") then do:
+            if valid-object(oProgram) and oProgram:Has("progress.service.resource FILE")
+               and oProgram:GetType("progress.service.resource FILE") eq JsonDataType:Object then do:
                 assign oSubObj = oProgram:GetJsonObject("progress.service.resource FILE").
                 assign
                     cPublicName  = oSubObj:GetCharacter("name") when oSubObj:Has("name")
@@ -365,7 +365,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     .
             end. /* progress.service.resource FILE */
 
-            if valid-object(oProgram) and oProgram:Has("openapi.openedge.service") then do:
+            if valid-object(oProgram) and oProgram:Has("openapi.openedge.service")
+               and oProgram:GetType("openapi.openedge.service") eq JsonDataType:Object then do:
                 assign oSubObj = oProgram:GetJsonObject("openapi.openedge.service").
                 assign cNewServiceURI = oSubObj:GetCharacter("URI") when oSubObj:Has("URI").
                 find first bService no-lock
@@ -377,11 +378,13 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         .
             end. /* openapi.openedge.service */
 
-            if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.security") then do:
+            if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.security")
+               and oProgram:GetType("openapi.openedge.resource.security") eq JsonDataType:Object then do:
                 assign cResourceSecurity = string(oProgram:GetJsonObject("openapi.openedge.resource.security"):GetJsonText()).
             end. /* openapi.openedge.resource.security */
 
-            if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.version") then do:
+            if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.version")
+               and oProgram:GetType("openapi.openedge.resource.version") eq JsonDataType:Object then do:
                 assign oSubObj = oProgram:GetJsonObject("openapi.openedge.resource.version").
                 assign
                     iVersion[1] = integer(oSubObj:GetCharacter("major")) when oSubObj:Has("major")
@@ -528,9 +531,18 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                 if (cTable gt "") eq true then do:
                                     if not oProps:Has(cTable) then
                                         oProps:Add(cTable, new JsonObject()).
-                                    oProps:GetJsonObject(cTable):Add(cField, new JsonObject()).
-                                    oProps:GetJsonObject(cTable):GetJsonObject(cField):Add(cName, cValue).
-                                end.
+                                    if not oProps:GetJsonObject(cTable):Has(cField) then
+                                        oProps:GetJsonObject(cTable):Add(cField, new JsonObject()).
+
+                                    if cName eq "validation" and cValue eq "required" then do:
+                                        oProps:GetJsonObject(cTable):GetJsonObject(cField):Add("validation", new JsonObject()).
+                                        oProps:GetJsonObject(cTable):GetJsonObject(cField):GetJsonObject("validation"):Add("required", true).
+                                    end.
+                                    else if can-do("true,false", cValue) then
+                                        oProps:GetJsonObject(cTable):GetJsonObject(cField):Add(cName, (cValue eq "true")).
+                                    else
+                                        oProps:GetJsonObject(cTable):GetJsonObject(cField):Add(cName, cValue).
+                                end. /* Table Name Present */
                             end. /* do iY */
 
                             extent(cTables) = ?.
@@ -576,7 +588,13 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         assign
                             oMethod    = oMethods:GetJsonObject(cMethods[iX])
                             cAnnoNames = oMethod:GetNames()
+                            lWriteBI   = false /* Default for each method. */
                             .
+
+                        if oMethod:Has("openapi.openedge.export") and oMethod:GetType("openapi.openedge.export") eq JsonDataType:Object then do:
+                            assign oSubObj = oMethod:GetJsonObject("openapi.openedge.export").
+                            assign lWriteBI = can-do("true,yes,1", oSubObj:GetCharacter("writeDataSetBeforeImage")) when oSubObj:Has("writeDataSetBeforeImage").
+                        end. /* openapi.openedge.export */
 
                         do iY = 1 to extent(cAnnoNames):
                             case cAnnoNames[iY]:
@@ -590,7 +608,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                             bMethod.ContentType   = oSubObj:GetCharacter("mediaType") when oSubObj:Has("mediaType")
                                             .
 
-                                    /* Set default attributes for certain operations. */
+                                    /* Override method attributes for certain operations. */
                                     case bMethod.OperationType:
                                         when "read" then
                                             assign
@@ -626,7 +644,19 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                             assign /* Assume invoke for any other operations. */
                                                 bMethod.OperationVerb = lc(MethodEnum:put:toString())
                                                 .
-                                    end case.
+                                    end case. /* bMethod.OperationType */
+
+                                    if lWriteBI and can-do("read,create,update,delete,submit", bMethod.OperationType) then do:
+                                        if (cNewServiceURI gt "") then
+                                            find first bService no-lock
+                                                 where bService.ServiceURI eq cNewServiceURI no-error.
+                                        else
+                                            find first bService no-lock
+                                                 where bService.ServiceURI eq cOldServiceURI no-error.
+
+                                        if available(bService) then
+                                            this-object:addProperty(bService.ServiceURI, pcClassPath, bMethod.OperationType, "useBeforeImage", "logical", "true").
+                                    end.
                                 end. /* progress.service.resourceMapping */
 
                                 when "openapi.openedge.method.security" then do:
@@ -651,7 +681,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                 end. /* openapi.openedge.method.property */
 
                                 when "openapi.openedge.method.parameter" then do:
-                                    if oMethod:GetType(cAnnoNames[iX]) eq JsonDataType:Object then do:
+                                    if oMethod:GetType(cAnnoNames[iY]) eq JsonDataType:Object then do:
                                         assign oSubArr = new JsonArray().
                                         oSubArr:Add(oMethod:GetJsonObject(cAnnoNames[iY])).
                                     end.
@@ -724,7 +754,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         assign bResource.ServiceUUID = cNewServiceUUID.
                     end. /* cNewServiceUUID */
 
-                    assign
+                    assign /* Update properties for this resource. */
                         bResource.PublicName  = cPublicName
                         bResource.ResourceURI = cResourceURI
                         bResource.ApiVersion  = oSemVersion:ToString()
@@ -828,7 +858,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 end. /* for first bResource */
 
                 if lUseDebugs then
-                    oLoggingManager:logMessage(substitute("Loaded &1 as '&2&3'",
+                    oLoggingManager:logMessage(substitute("Loaded Procedure &1 as '&2&3'",
                                                           cSourcePath,
                                                           cServiceURI,
                                                           cResourceURI), "SPARK-LOAD", 3).
@@ -839,13 +869,15 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         else
         do on error undo, throw
            on stop  undo, retry:
-            define variable oImplement as Progress.Lang.Class no-undo.
-            define variable oEntity    as IDynamicEntity      no-undo.
-            define variable oResource  as IDynamicResource    no-undo.
-            define variable phDataSet  as handle              no-undo.
+            define variable oImplement   as Progress.Lang.Class no-undo.
+            define variable oService     as Service             no-undo.
+            define variable oEntity      as ISparkEntity        no-undo.
+            define variable oDynEntity   as IDynamicEntity      no-undo.
+            define variable oDynResource as IDynamicResource    no-undo.
+            define variable phDataSet    as handle              no-undo.
 
-            /* Confirm whether the specified class is of type IDynamicEntity. */
-            assign oImplement = Progress.Lang.Class:GetClass(cClassPath) no-error.
+            /* Create a valid implementation of the advertised class, which really should be an OE.BL.BusinessEntity class. */
+            assign oImplement = Progress.Lang.Class:GetClass(cClassPath) no-error. /* Must keep this no-error. */
             if error-status:error then do:
                 /* If error is due to a missing super-class, and the OE.BL.BE is not available, then let's report that specifically. */
                 if error-status:get-number(1) eq 12932 and not lHasOEBLBE then
@@ -853,13 +885,33 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 else
                     undo, throw new AppError(substitute("@ Implementation: &1", GenTools:getAblError()), -500).
             end.
-            else if not valid-object(oImplement) or
-                 not (oImplement:IsA(get-class(IDynamicEntity)) or
-                      oImplement:IsA(get-class(IDynamicResource))) then do:
+            else if not valid-object(oImplement) then
+                undo, throw new AppError(substitute("- Invalid Implementation: &1", cClassPath), -500).
+
+            /* Confirm whether the specified class is of type ISparkEntity, IDynamicEntity, or IDynamicResource. */
+            if not (oImplement:IsA(get-class(IDynamicEntity)) or
+                    oImplement:IsA(get-class(IDynamicResource))) then do:
+                /* When an known entity class has been provided, register and check for a dataset. */
+                if oImplement:IsA(get-class(ISparkEntity)) then do:
+                    oEntity = cast(oImplement:New(), ISparkEntity) no-error.
+                    if error-status:error then
+                        undo, throw new AppError(GenTools:getAblError(), -500).
+
+                    /* Get the dataset handle which should be available via this helper method in SparkEntity. */
+                    oEntity:getDataset(output dataset-handle phDataSet) no-error. /* Must keep this no-error. */
+                    if error-status:error then
+                        oLoggingManager:logMessage(substitute("Error obtaining dataset schema for class '&1': &2",
+                                                              oImplement:TypeName,
+                                                              error-status:get-message(1)), "SPARK-LOAD", 0).
+                    if valid-handle(phDataSet) and phDataSet:type eq "dataset" then
+                        oSchemaManager:registerDataset(input phDataSet).
+                end. /* IsA SparkEntity */
+
                 /**
                  * Load (or re-load) service class internal methods, using default assumptions:
                  * - All exposed methods will be of "invoke" type and use the "PUT" verb.
                  * - All names of methods and parameters will be used as-is from code.
+                 * - Any Business Entity (CRUD+Submit) operation defaults will be set.
                  */
                 this-object:registerMethods(pcResourceUUID).
 
@@ -885,21 +937,30 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     end. /* for first bService */
                 end. /* for first bResource */
 
+                /* If class implements the Service class, then run the expected initialize method. */
+                if oImplement:IsA(get-class(Service)) then do:
+                    if valid-object(oEntity) then
+                        oEntity:initialize(). /* Entities inherit Service, so just run initialize. */
+                    else do:
+                        oService = cast(oImplement:New(), Service) no-error.
+                        if not error-status:error then
+                            oService:initialize(). /* Run any code which may register datasets, etc. */
+                    end. /* Service */
+                end. /* Initialize Service */
+
                 if lUseDebugs then
-                    oLoggingManager:logMessage(substitute("Loaded Resource &1 as '&2&3'",
+                    oLoggingManager:logMessage(substitute("Loaded Class &1 as '&2&3'",
                                                           cClassPath, cServiceURI, cResourceURI), "SPARK-LOAD", 3).
+            end. /* Explicitly NOT a Dynamic* Class */
 
-                return. /* Do not proceed further, as we don't have a valid Spark-based class type to process. */
-            end.
-
-            /* Create new class instance and run initialization method. */
-            if oImplement:IsA(get-class(IDynamicEntity)) then do:
-                assign oEntity = cast(oImplement:New(), IDynamicEntity) no-error.
+            /* For the Dynamic* classes, create new class instance and run the built-in initialize method. */
+            else if oImplement:IsA(get-class(IDynamicEntity)) then do:
+                oDynEntity = cast(oImplement:New(), IDynamicEntity) no-error.
                 if error-status:error then
                     undo, throw new AppError(GenTools:getAblError(), -500).
 
-                if valid-object(oEntity) then do:
-                    if (oEntity:resourceName gt "") ne true then do:
+                if valid-object(oDynEntity) then do:
+                    if (oDynEntity:resourceName gt "") ne true then do:
                         /* Do not keep resources that lack a public name. */
                         oLoggingManager:logMessage(substitute("Removing resource '&1' due to missing public name.", cClassPath), "SPARK-LOAD", 3).
                         for first bResource exclusive-lock
@@ -913,42 +974,43 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     for first bResource exclusive-lock
                         where bResource.ResourceUUID eq pcResourceUUID:
                         assign
-                            bResource.PublicName  = oEntity:resourceName
-                            bResource.ResourceURI = "/" + oEntity:resourceName
+                            bResource.PublicName  = oDynEntity:resourceName
+                            bResource.ResourceURI = "/" + oDynEntity:resourceName
                             bResource.ValidClass  = true
                             .
                     end. /* for first bResource */
 
                     /* When an entity name has been provided, register and check for a dataset. */
-                    if (oEntity:entityName gt "") eq true then do:
-                        this-object:describeEntity(pcResourceUUID, cClassPath, oEntity:entityName, oEntity:primaryKeys, oEntity:foreignKeys).
+                    if (oDynEntity:entityName gt "") eq true then do:
+                        /* Since we should know the entity and keys, register this information against this resource/class combination. */
+                        this-object:describeEntity(pcResourceUUID, cClassPath, oDynEntity:EntityName, oDynEntity:primaryKeys, oDynEntity:foreignKeys).
 
-                        oEntity:getDataset(output dataset-handle phDataSet) no-error.
+                        oDynEntity:getDataset(output dataset-handle phDataSet) no-error. /* Must keep this no-error. */
                         if error-status:error then
-                            oLoggingManager:logMessage(substitute("Error obtaining dataset schema for '&1': &2",
-                                                                  oEntity:entityName,
+                            oLoggingManager:logMessage(substitute("Error obtaining dataset schema for entity '&1': &2",
+                                                                  oDynEntity:EntityName,
                                                                   error-status:get-message(1)), "SPARK-LOAD", 0).
                         if valid-handle(phDataSet) and phDataSet:type eq "dataset" then
                             oSchemaManager:registerDataset(input phDataSet).
                     end. /* entityName */
 
                     /* Load (or re-load) service class internal methods, as needed. */
-                    this-object:registerMethods(pcResourceUUID, oEntity:operations).
+                    this-object:registerMethods(pcResourceUUID, oDynEntity:Operations).
 
                     /* Apply properties for the read operation, when they are present. */
-                    if (oEntity:mappingType gt "") eq true then do:
+                    if (oDynEntity:mappingType gt "") eq true then do:
                         /* Provide the name of the plugin to be used with the JSDO, aka the Mapping Type. */
-                        this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "mappingType", "character", oEntity:mappingType).
+                        this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "mappingType", "character", oDynEntity:mappingType).
 
                         /* Only when a mapping type is present, check if server-side capabilities exist. */
-                        if (oEntity:capabilities gt "") eq true then
-                            this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "capabilities", "character", oEntity:capabilities).
+                        if (oDynEntity:capabilities gt "") eq true then
+                            this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "capabilities", "character", oDynEntity:capabilities).
                         else
                             this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "capabilities", "character", "").
                     end. /* mappingType */
 
                     /* Load annotations and other prerequisite data through initialize method. */
-                    oEntity:initialize().
+                    oDynEntity:initialize().
 
                     if lUseDebugs then
                         oLoggingManager:logMessage(substitute("Loaded Entity &1 as '&2&3'",
@@ -956,12 +1018,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 end. /* valid-object */
             end. /* IDynamicEntity */
             else if oImplement:IsA(get-class(IDynamicResource)) then do:
-                assign oResource = cast(oImplement:New(), IDynamicResource) no-error.
+                oDynResource = cast(oImplement:New(), IDynamicResource) no-error.
                 if error-status:error then
                     undo, throw new AppError(GenTools:getAblError(), -500).
 
-                if valid-object(oResource) then do:
-                    if (oResource:resourceName gt "") ne true then do:
+                if valid-object(oDynResource) then do:
+                    if (oDynResource:resourceName gt "") ne true then do:
                         /* Do not keep resources that lack a public name. */
                         oLoggingManager:logMessage(substitute("Removing resource '&1' due to missing public name.", cClassPath), "SPARK-LOAD", 3).
                         for first bResource exclusive-lock
@@ -975,8 +1037,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     for first bResource exclusive-lock
                         where bResource.ResourceUUID eq pcResourceUUID:
                         assign
-                            bResource.PublicName  = oResource:resourceName
-                            bResource.ResourceURI = "/" + oResource:resourceName
+                            bResource.PublicName  = oDynResource:resourceName
+                            bResource.ResourceURI = "/" + oDynResource:resourceName
                             bResource.ValidClass  = true
                             .
                     end. /* for first bResource */
@@ -985,7 +1047,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     this-object:registerMethods(pcResourceUUID, cClassPath).
 
                     /* Load annotations and other prerequisite data. */
-                    oResource:initialize().
+                    oDynResource:initialize().
 
                     if lUseDebugs then
                         oLoggingManager:logMessage(substitute("Loaded Resource &1 as '&2&3'",
@@ -994,10 +1056,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             end. /* IDynamicResource */
 
             finally:
-                delete object phDataSet  no-error.
-                delete object oImplement no-error.
-                delete object oEntity    no-error.
-                delete object oResource  no-error.
+                delete object phDataSet    no-error.
+                delete object oImplement   no-error.
+                delete object oService     no-error.
+                delete object oEntity      no-error.
+                delete object oDynEntity   no-error.
+                delete object oDynResource no-error.
             end finally.
         end. /* Non-Procedure */
 
@@ -1991,8 +2055,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             end. /* CRUD */
 
             /* Supply default property for special methods. */
-            if can-do("create,update,delete,submit,invoke", bMethod.OperationType) then
-                operationObj:Add("useBeforeImage", false).
+            if can-do("read,create,update,delete,submit,invoke,count", bMethod.OperationType) then
+                operationObj:Add("useBeforeImage", this-object:getBeforeImageFlag(bMethod.ResourceUUID, bMethod.OperationType)).
 
             /* Look for additional properties to provide on this operation. */
             for each bProperty no-lock
@@ -2627,9 +2691,12 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 bMethod.OperationType = lc(pcOperationType) when (pcOperationType gt "")
                 bMethod.OperationVerb = lc(pcOperationVerb) when (pcOperationVerb gt "")
                 .
-            
+
             if pcOperationType eq "read" then
                 assign bMethod.MethodURI = "?filter=~{filter~}".
+
+            if can-do("read,create,update,delete,submit", bMethod.OperationType) then
+                this-object:addProperty(bService.ServiceURI, bResource.ClassPath, bMethod.OperationType, "useBeforeImage", "logical", "true").
 
             release bMethod no-error.
         end. /* available */
@@ -2803,10 +2870,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                 /* Set any options for the current operation. */
                 assign oOperOpts = new OperationOptions().
-                oOperOpts:WriteBI = lIsEntity. /* Should be true for entities, otherwise false. */
-                oOperOpts:HasErrorEnvelope = false. /* Default is false for this implementation. */
-                oOperOpts:HasRequestEnvelope = false. /* Default is false for this implementation. */
-                oOperOpts:HasResponseEnvelope = false. /* Default is false for this implementation. */
+                oOperOpts:WriteBI = this-object:getBeforeImageFlag(bMethod.ResourceUUID, bMethod.OperationType).
+                oOperOpts:HasErrorEnvelope = false. /* Default is false for the Spark implementation. */
+                oOperOpts:HasRequestEnvelope = false. /* Default is false for the Spark implementation. */
+                oOperOpts:HasResponseEnvelope = false. /* Default is false for the Spark implementation. */
 
                 /* Create a new mapped operation for this service. */
                 assign oOperation = new MappedOperation( cServiceURI,
