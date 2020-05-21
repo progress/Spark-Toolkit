@@ -394,9 +394,12 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
          *  OEClientPrincipalFilter.anonymous=true
          *  OEClientPrincipalFilter.sealAnonymous=true
          *  OEClientPrincipalFilter.passthru=true
+         *
+         * No principal token will be available without the above settings present.
          */
         assign oPrincipal = OpenEdge.Security.Principal:Import(session:current-request-info).
-        Ccs.Common.Application:SessionManager:establishRequestEnvironment(oPrincipal:Token).
+        if valid-object(oPrincipal) then
+            Ccs.Common.Application:SessionManager:establishRequestEnvironment(oPrincipal:Token).
 
         catch err as Progress.Lang.Error:
             assign poEventArgs:Error = err.

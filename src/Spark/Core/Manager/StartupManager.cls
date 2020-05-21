@@ -159,6 +159,8 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
 
             catch err as Progress.Lang.Error:
                 message substitute("Error while initializing manager '&1': &2", pcManager, err:GetMessage(1)).
+                if session:error-stack-trace then
+                    message err:CallStack.
             end catch.
         end. /* IsA Ccs.Common.IManager */
 

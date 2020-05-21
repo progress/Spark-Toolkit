@@ -169,6 +169,12 @@ class Spark.Core.Service.Catalog inherits Spark.Diagnostic.Util.OSPath implement
         /* Return an empty object if catalog object is invalid. */
         if not valid-object(catalog) then
             assign catalog = new Progress.Json.ObjectModel.JsonObject().
+
+        catch err as Progress.Lang.Error:
+            message err:GetMessage(1).
+            if session:error-stack-trace then
+                message err:CallStack.
+        end catch.
     end method. /* getOpenApiCatalog */
 
     method public void getCatalog ( output catalog as JsonObject ):
@@ -194,6 +200,12 @@ class Spark.Core.Service.Catalog inherits Spark.Diagnostic.Util.OSPath implement
 
         if log-manager:logging-level ge 3 then
             catalog:WriteFile(substitute("&1/catalog.json", session:temp-directory), true).
+
+        catch err as Progress.Lang.Error:
+            message err:GetMessage(1).
+            if session:error-stack-trace then
+                message err:CallStack.
+        end catch.
     end method. /* getCatalog */
 
 end class.
