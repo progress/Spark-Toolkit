@@ -414,7 +414,7 @@ class Spark.Core.Util.Strings use-widget-pool:
                     when JsonDataType:String then
                         poOriginalObj:Set(cNames[iX], poNewMergeObj:GetCharacter(cNames[iX])).
                     when JsonDataType:Number then
-                        poOriginalObj:Set(cNames[iX], poNewMergeObj:GetCharacter(cNames[iX])).
+                        poOriginalObj:SetNumber(cNames[iX], poNewMergeObj:GetCharacter(cNames[iX])).
                     when JsonDataType:Null then
                         poOriginalObj:SetNull(cNames[iX]).
                 end case.
@@ -430,7 +430,7 @@ class Spark.Core.Util.Strings use-widget-pool:
                     when JsonDataType:String then
                         poOriginalObj:Add(cNames[iX], poNewMergeObj:GetCharacter(cNames[iX])).
                     when JsonDataType:Number then
-                        poOriginalObj:Add(cNames[iX], poNewMergeObj:GetCharacter(cNames[iX])).
+                        poOriginalObj:AddNumber(cNames[iX], poNewMergeObj:GetCharacter(cNames[iX])).
                     when JsonDataType:Null then
                         poOriginalObj:AddNull(cNames[iX]).
                 end case.
