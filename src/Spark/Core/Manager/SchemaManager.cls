@@ -383,8 +383,8 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
                 this-object:examineDatabases().
         end. /* has config */
         else if log-manager:logging-level ge 3 then
-            /* It is not necessary to have a config for this manager, but let's output a warning when logging level elevated. */
-            message substitute("Warning: Schema config file [schema.json] not found in [&1]", OSTools:sparkConf).
+            /* It is not necessary to have a config for this manager, but let's output a notice when logging level is elevated. */
+            message substitute("Notice: Schema config file [schema.json] not found in [&1], using defaults.", OSTools:sparkConf).
     end method. /* registerDatabases */
 
 
