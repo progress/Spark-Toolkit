@@ -16,9 +16,6 @@
             "Manager": "Spark.Core.Manager.ICatalogManager",
             "Implementation": "Spark.Core.Manager.CatalogManager"
         }, {
-            "Manager": "Spark.Core.Manager.IConnectionManager",
-            "Implementation": "Spark.Core.Manager.ConnectionManager"
-        }, {
             "Manager": "Spark.Core.Manager.ITranslationManager",
             "Implementation": "Spark.Core.Manager.TranslationManager"
         }, {
