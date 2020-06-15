@@ -187,7 +187,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         field EntityKeys   as character serialize-hidden         /* For business entities, denotes any primary key fields.      */
         field ForeignKeys  as character serialize-hidden         /* For business entities, denotes any foreign key fields.      */
         field ClassSig     as character serialize-hidden         /* For business entities, holds full signature of class.       */
-        field Security     as character serialize-hidden         /* Experimental Feature: Stores info about URI security.       */
+        field Security     as Progress.Lang.Object serialize-hidden /* Experimental Feature: Stores info about URI security.    */
         index idxPrimary   is primary unique ResourceUUID
         index idxPublic    is         unique ServiceUUID ClassPath
         index idxResource  is         unique ServiceUUID PublicName
@@ -202,7 +202,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         field OperationType   as character serialize-name "Operation"
         field OperationVerb   as character serialize-name "HttpVerb"
         field ContentType     as character serialize-name "MediaType" initial "application/json"
-        field Security        as character serialize-hidden
+        field Security        as Progress.Lang.Object serialize-hidden
         index idxPrimary      is primary unique ResourceUUID MethodName
         index idxPublic       is         unique ResourceUUID PublicName
         .
@@ -320,6 +320,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             define variable oMethod           as JsonObject         no-undo.
             define variable oSubArr           as JsonArray          no-undo.
             define variable oSubObj           as JsonObject         no-undo.
+            define variable oResourceSecurity as JsonObject         no-undo.
             define variable cMethodName       as character          no-undo.
             define variable cMethods          as character extent   no-undo.
             define variable cAnnoNames        as character extent   no-undo.
@@ -329,7 +330,6 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             define variable cNewServiceURI    as character          no-undo.
             define variable cNewServiceName   as character          no-undo.
             define variable cNewServiceUUID   as character          no-undo.
-            define variable cResourceSecurity as character          no-undo.
             define variable cSchemaName       as character          no-undo.
             define variable iVersion          as integer   extent 3 no-undo.
             define variable iX                as integer            no-undo.
@@ -378,10 +378,10 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         .
             end. /* openapi.openedge.service */
 
-            if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.security")
-               and oProgram:GetType("openapi.openedge.resource.security") eq JsonDataType:Object then do:
-                assign cResourceSecurity = string(oProgram:GetJsonObject("openapi.openedge.resource.security"):GetJsonText()).
-            end. /* openapi.openedge.resource.security */
+            if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.access")
+               and oProgram:GetType("openapi.openedge.resource.access") eq JsonDataType:Object then do:
+                assign oResourceSecurity = oProgram:GetJsonObject("openapi.openedge.resource.access").
+            end. /* openapi.openedge.resource.access */
 
             if valid-object(oProgram) and oProgram:Has("openapi.openedge.resource.version")
                and oProgram:GetType("openapi.openedge.resource.version") eq JsonDataType:Object then do:
@@ -659,10 +659,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                     end.
                                 end. /* progress.service.resourceMapping */
 
-                                when "openapi.openedge.method.security" then do:
-                                    assign oSubObj = oMethod:GetJsonObject(cAnnoNames[iY]).
-                                    assign bMethod.Security = string(oSubObj:GetJsonText()).
-                                end. /* openapi.openedge.method.security */
+                                when "openapi.openedge.method.access" then do:
+                                    /* Store the annotation as an object when a "role" property is present. */
+                                    if oMethod:GetJsonObject(cAnnoNames[iY]):Has("role") then
+                                        assign bMethod.Security = oMethod:GetJsonObject(cAnnoNames[iY]).
+                                end. /* openapi.openedge.method.access */
 
                                 when "openapi.openedge.method.property" then do:
                                     if oMethod:GetType(cAnnoNames[iY]) eq JsonDataType:Object then do:
@@ -759,10 +760,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         bResource.ResourceURI = cResourceURI
                         bResource.ApiVersion  = oSemVersion:ToString()
                         bResource.EntityName  = cSchemaName when cSchemaName gt "" /* Assign the entity name, if there was schema declared. */
-                        bResource.Security    = cResourceSecurity.
+                        bResource.Security    = cast(oResourceSecurity:Clone(), JsonObject) when valid-object(oResourceSecurity)
                         .
                 end. /* for first bResource */
 
+                delete object oResourceSecurity no-error.
                 delete object oSemVersion no-error.
                 delete object oAnnotation no-error.
                 delete object oProgram no-error.
@@ -2805,6 +2807,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define variable oOperOpts    as OperationOptions    no-undo.
         define variable oParam       as OperationParameter  no-undo.
         define variable oSvcJson     as JsonObject          no-undo.
+        define variable oRoleArray   as JsonArray           no-undo.
+        define variable cRoleVal     as character           no-undo.
+        define variable cRoleExt     as character extent    no-undo.
 
         define buffer bService  for ServiceInfo.
         define buffer bResource for ResourceInfo.
@@ -2887,7 +2892,40 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                          iStatusCode ).
 
                 /* Supply a public name for this operation. */
-                oOperation:name = bMethod.PublicName.
+                oOperation:Name = bMethod.PublicName.
+
+                /* If method security is present, set the access control for the operation. */
+                if valid-object(bMethod.Security) then
+                do on error undo, throw:
+                    if cast(bMethod.Security, JsonObject):GetType("role") eq JsonDataType:Array then do:
+                        /* Use a JSON array as the entries for the access list. */
+                        oRoleArray = cast(bMethod.Security, JsonObject):GetJsonArray("role").
+
+                        if valid-object(oRoleArray) then do:
+                            extent(cRoleExt) = oRoleArray:Length.
+                            do iX = 1 to oRoleArray:Length:
+                                cRoleExt[iX] = oRoleArray:GetCharacter(iX).
+                            end.
+                        end. /* valid role array */
+                    end. /* array */
+                    else if cast(bMethod.Security, JsonObject):GetType("role") eq JsonDataType:String then do:
+                        /* Use a comma-delimited list as the entries for the access list. */
+                        assign cRoleVal = cast(bMethod.Security, JsonObject):GetCharacter("role").
+                        extent(cRoleExt) = num-entries(cRoleVal).
+
+                        do iX = 1 to num-entries(cRoleVal):
+                            cRoleExt[iX] = entry(iX, cRoleVal).
+                        end.
+                    end. /* string */
+
+                    if extent(cRoleExt) ne ? then
+                        oOperation:AccessControl = cRoleExt.
+
+                    finally:
+                        delete object oRoleArray no-error.
+                        extent(cRoleExt) = ?.
+                    end finally.
+                end. /* Has Security Object */
 
                 for each bParam no-lock
                    where bParam.ResourceUUID eq bResource.ResourceUUID
@@ -3026,7 +3064,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                              "application/json",
                                                              TargetTypeEnum:Class:ToString(),
                                                              oServiceImpl:GetClass():TypeName,
-                                                             "Progress.Lang.Object",
+                                                             "Progress.Lang.Object", /* Must use the most basic type. */
                                                              "getCatalog", /* Should be a known method in ICatalog. */
                                                              ?, /* No operation options required for this endpoint. */
                                                              integer(StatusCodeEnum:ok) ).
