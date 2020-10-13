@@ -16,6 +16,8 @@ using Ccs.BusinessLogic.* from propath.
 using OpenEdge.BusinessLogic.* from propath.
 using OpenEdge.BusinessLogic.Filter.* from propath.
 using OpenEdge.BusinessLogic.Query.* from propath.
+using Progress.Reflect.Method from propath.
+using Progress.Lang.ParameterList from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
@@ -25,7 +27,6 @@ using Spark.Core.Util.* from propath.
 block-level on error undo, throw.
 
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
-&GLOBAL-DEFINE NOT_OE_124 integer(entry(1, proversion, ".")) le 11 or (integer(entry(1, proversion, ".")) ge 12 and integer(entry(2, proversion, ".")) lt 4)
 
 class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEntity implements Spark.Core.Service.ISparkEntity use-widget-pool abstract:
 
@@ -421,11 +422,13 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     method public IGetDataResponse getData ( input  poRequest as IGetDataRequest,
                                              output dataset-handle phDataSet ):
-        define variable hDBBuffer     as handle       no-undo extent.
-        define variable hTTBuffer     as handle       no-undo extent.
-        define variable cQueryString  as character    no-undo.
-        define variable oQueryBuilder as QueryBuilder no-undo.
-        define variable ix            as integer      no-undo.
+        define variable hDBBuffer     as handle        no-undo extent.
+        define variable hTTBuffer     as handle        no-undo extent.
+        define variable cQueryString  as character     no-undo.
+        define variable oMethod       as Method        no-undo.
+        define variable oParams       as ParameterList no-undo.
+        define variable oQueryBuilder as QueryBuilder  no-undo.
+        define variable ix            as integer       no-undo.
 
         assign iSeq = 0. /* Reset record sequence on read operation. */
 
@@ -458,18 +461,26 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         /* If no valid first temp-table buffer, just leave. */
         if not valid-handle(hTTBuffer[1]) then return ?.
 
-        /**
-         * Confirm whether a particular class exists in the current environment.
-         * This is used to indicate if the new Business Logic classes are present,
-         * which support enhanced QueryBuilder methods for query string creation.
-         */
-        &scoped-define hasQED valid-object(Progress.Lang.Class:GetClass("OpenEdge.BusinessLogic.IO.QueryEntryDeserializer"))
+        /* Set parameters for a BuildQueryString method with appropriate datatypes/values. */
+        oParams = new ParameterList(4).
+        oParams:SetParameter(1, "class Ccs.BusinessLogic.IGetDataTableRequest", "input", ?).
+        oParams:SetParameter(2, "logical", "input", true).
+        oParams:SetParameter(3, "logical", "input", true).
+        oParams:SetParameter(4, "handle", "input", ?).
 
-        /* Use the query builder to convert the request object into a valid "where" phrases. */
+        /**
+         * Attempt to obtain a particular method via class reflection, which will indicate
+         * if a newer QueryBuilder class is present which supports enhanced methods.
+         */
+        assign oMethod = get-class(QueryBuilder):GetMethod("BuildQueryString", oParams).
+
+        /* Prepare a QueryBuilder class to convert the request object into a valid "where" phrases. */
         assign oQueryBuilder = new QueryBuilder().
 
         /* Needs to be called once prior to filling the where-string on each data source. */
-        assign cQueryString = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
+        /* Only necessary if the newer 4-parameter BuildQueryString method isn't present. */
+        if not valid-object(oMethod) then
+            assign cQueryString = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
 
         /* Prepare to fill Dataset via where phrase from the table request. */
         extent(hDBBuffer) = extent(ProDataSource).
@@ -479,21 +490,24 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             if extent(poRequest:TableRequests) ge ix and
                valid-object(poRequest:TableRequests[ix]) and
                valid-object(hTTBuffer[ix]) then do:
-                &IF {&NOT_OE_124} &THEN
-                /* Use the older method, which uses the pre-built QueryString for each TableRequest. */
-                if poRequest:TableRequests[ix]:QueryString gt "" then
-                    ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
-                else if cQueryString begins "each" and cQueryString matches "*where*" then
-                    ProDataSource[ix]:fill-where-string = substring(cQueryString, index(cQueryString, "where")).
-                else
-                    ProDataSource[ix]:fill-where-string = cQueryString.
-                &ELSE
-                /**
-                 * Newer method, which more intelligently builds a query string for the given table request and buffer.
-                 * This combines the natural query for child tables with a data-relation together with the user's query. 
-                 */
-                ProDataSource[ix]:fill-where-string = oQueryBuilder:BuildQueryString(poRequest:TableRequests[ix], true, true, hTTBuffer[ix]).
-                &ENDIF
+                if valid-object(oMethod) then do:
+                    /**
+                     * Newer method, which more intelligently builds a query string for the given table request and buffer.
+                     * This combines the natural query for child tables with a data-relation together with the user's query. 
+                     */
+                    oParams:SetParameter(1, "class Ccs.BusinessLogic.IGetDataTableRequest", "input", poRequest:TableRequests[ix]).
+                    oParams:SetParameter(4, "handle", "input", hTTBuffer[ix]).
+                    ProDataSource[ix]:fill-where-string = oMethod:Invoke(oQueryBuilder, oParams).
+                end.
+                else do:
+                    /* Use the older method, which uses a pre-built QueryString for the Pro-Dataset. */
+                    if poRequest:TableRequests[ix]:QueryString gt "" then
+                        ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
+                    else if cQueryString begins "each" and cQueryString matches "*where*" then
+                        ProDataSource[ix]:fill-where-string = substring(cQueryString, index(cQueryString, "where")).
+                    else
+                        ProDataSource[ix]:fill-where-string = cQueryString.
+                end.
  
                 /* Set batch size and max rows to return, or use paging context if available. */
                 if poRequest:TableRequests[ix]:NumRecords gt 0 then
