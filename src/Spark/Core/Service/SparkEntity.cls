@@ -466,10 +466,9 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
         /* Use the query builder to convert the request object into a valid "where" phrases. */
         assign oQueryBuilder = new QueryBuilder().
-        &if integer(entry(1, proversion, ".")) eq 11 or (integer(entry(1, proversion, ".")) ge 12 and integer(entry(2, proversion, ".")) lt 4) &then
+
         /* Needs to be called once prior to filling the where-string on each data source. */
         assign cQueryString = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
-        &endif
 
         /* Prepare to fill Dataset via where phrase from the table request. */
         extent(hDBBuffer) = extent(ProDataSource).
@@ -485,6 +484,8 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
                     ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
                 else if cQueryString begins "each" and cQueryString matches "*where*" then
                     ProDataSource[ix]:fill-where-string = substring(cQueryString, index(cQueryString, "where")).
+                else
+                    ProDataSource[ix]:fill-where-string = cQueryString.
                 &else
                 /**
                  * Newer method, which more intelligently builds a query string for the given table request and buffer.
