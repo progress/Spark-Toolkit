@@ -25,6 +25,7 @@ using Spark.Core.Util.* from propath.
 block-level on error undo, throw.
 
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
+&GLOBAL-DEFINE NOT_OE_124 integer(entry(1, proversion, ".")) le 11 or (integer(entry(1, proversion, ".")) ge 12 and integer(entry(2, proversion, ".")) lt 4)
 
 class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEntity implements Spark.Core.Service.ISparkEntity use-widget-pool abstract:
 
@@ -478,7 +479,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             if extent(poRequest:TableRequests) ge ix and
                valid-object(poRequest:TableRequests[ix]) and
                valid-object(hTTBuffer[ix]) then do:
-                &if integer(entry(1, proversion, ".")) eq 11 or (integer(entry(1, proversion, ".")) ge 12 and integer(entry(2, proversion, ".")) lt 4) &then
+                &IF {&NOT_OE_124} &THEN
                 /* Use the older method, which uses the pre-built QueryString for each TableRequest. */
                 if poRequest:TableRequests[ix]:QueryString gt "" then
                     ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
@@ -486,13 +487,13 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
                     ProDataSource[ix]:fill-where-string = substring(cQueryString, index(cQueryString, "where")).
                 else
                     ProDataSource[ix]:fill-where-string = cQueryString.
-                &else
+                &ELSE
                 /**
                  * Newer method, which more intelligently builds a query string for the given table request and buffer.
                  * This combines the natural query for child tables with a data-relation together with the user's query. 
                  */
                 ProDataSource[ix]:fill-where-string = oQueryBuilder:BuildQueryString(poRequest:TableRequests[ix], true, true, hTTBuffer[ix]).
-                &endif
+                &ENDIF
  
                 /* Set batch size and max rows to return, or use paging context if available. */
                 if poRequest:TableRequests[ix]:NumRecords gt 0 then
