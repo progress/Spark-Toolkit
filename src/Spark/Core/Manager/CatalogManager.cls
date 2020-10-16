@@ -999,20 +999,21 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     /* Load (or re-load) service class internal methods, as needed. */
                     this-object:registerMethods(pcResourceUUID, oDynEntity:Operations).
 
+                    /* Load annotations and other prerequisite data through initialize method. */
+                    /* MUST do this after registering methods, as it can alter which will be treated as the READ operation. */
+                    oDynEntity:initialize().
+
                     /* Apply properties for the read operation, when they are present. */
                     if (oDynEntity:mappingType gt "") eq true then do:
                         /* Provide the name of the plugin to be used with the JSDO, aka the Mapping Type. */
-                        this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "mappingType", "character", oDynEntity:mappingType).
+                        this-object:addProperty(cServiceURI, cClassPath, OperationEnum:read:toString(), "mappingType", "character", oDynEntity:mappingType).
 
                         /* Only when a mapping type is present, check if server-side capabilities exist. */
                         if (oDynEntity:capabilities gt "") eq true then
-                            this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "capabilities", "character", oDynEntity:capabilities).
+                            this-object:addProperty(cServiceURI, cClassPath, OperationEnum:read:toString(), "capabilities", "character", oDynEntity:capabilities).
                         else
-                            this-object:addProperty(pcResourceUUID, cClassPath, OperationEnum:read:toString(), "capabilities", "character", "").
+                            this-object:addProperty(cServiceURI, cClassPath, OperationEnum:read:toString(), "capabilities", "character", "").
                     end. /* mappingType */
-
-                    /* Load annotations and other prerequisite data through initialize method. */
-                    oDynEntity:initialize().
 
                     if lUseDebugs then
                         oLoggingManager:logMessage(substitute("Loaded Entity &1 as '&2&3'",
@@ -1084,9 +1085,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* loadDynamicResource */
 
 
-    method protected void registerMethods ( input pcServiceUUID  as character ):
+    method protected void registerMethods ( input pcResourceUUID  as character ):
         /* Call method with blank list of operations. Typical for the DynamicResource class. */
-        this-object:registerMethods(pcServiceUUID, "").
+        this-object:registerMethods(pcResourceUUID, "").
     end method. /* registerMethods */
 
 
