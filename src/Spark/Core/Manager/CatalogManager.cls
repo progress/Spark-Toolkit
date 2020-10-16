@@ -286,6 +286,23 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
     end method. /* getJsonType */
 
 
+    method protected character getList ( input poJsonArray as JsonArray ):
+        define variable cString as character no-undo.
+        define variable iCount  as integer   no-undo.
+        define variable iX      as integer   no-undo.
+
+        if valid-object(poJsonArray) then
+            assign iCount = poJsonArray:length.
+
+        do iX = 1 to iCount:
+            if poJsonArray:GetType(iX) eq JsonDataType:String then
+                assign cString = substitute("&1,&2", cString, poJsonArray:GetCharacter(iX)).
+        end.
+
+        return trim(cString, ",").
+    end method. /* getList */
+
+
     method protected void processAnnotations ( input pcResourceUUID as character,
                                                input pcClassPath    as character,
                                                input pcSourcePath   as character ):
@@ -331,6 +348,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             define variable cNewServiceName   as character          no-undo.
             define variable cNewServiceUUID   as character          no-undo.
             define variable cSchemaName       as character          no-undo.
+            define variable cMappingType      as character          no-undo.
+            define variable cCapabilities     as character          no-undo.
             define variable iVersion          as integer   extent 3 no-undo.
             define variable iX                as integer            no-undo.
             define variable iY                as integer            no-undo.
@@ -586,9 +605,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                     if available(bMethod) then do:
                         extent(cAnnoNames) = ?.
                         assign
-                            oMethod    = oMethods:GetJsonObject(cMethods[iX])
-                            cAnnoNames = oMethod:GetNames()
-                            lWriteBI   = false /* Default for each method. */
+                            oMethod       = oMethods:GetJsonObject(cMethods[iX])
+                            cAnnoNames    = oMethod:GetNames()
+                            cMappingType  = "" /* Reset for each method. */
+                            cCapabilities = "" /* Reset for each method. */
+                            lWriteBI      = false /* Default for each method. */
                             .
 
                         if oMethod:Has("openapi.openedge.export") and oMethod:GetType("openapi.openedge.export") eq JsonDataType:Object then do:
@@ -610,35 +631,36 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
 
                                     /* Override method attributes for certain operations. */
                                     case bMethod.OperationType:
-                                        when "read" then
+                                        when OperationEnum:read:toString() then
                                             assign
                                                 bMethod.PublicName    = bMethod.OperationType
                                                 bMethod.OperationVerb = lc(MethodEnum:get:toString())
                                                 .
-                                        when "create" then
+                                        when OperationEnum:create:toString() then
                                             assign
                                                 bMethod.PublicName    = bMethod.OperationType
                                                 bMethod.OperationVerb = lc(MethodEnum:post:toString())
                                                 .
-                                        when "update" then
+                                        when OperationEnum:update:toString() then
                                             assign
                                                 bMethod.PublicName    = bMethod.OperationType
                                                 bMethod.OperationVerb = lc(MethodEnum:put:toString())
                                                 .
-                                        when "delete" then
+                                        when OperationEnum:delete:toString() then
                                             assign
                                                 bMethod.PublicName    = bMethod.OperationType
                                                 bMethod.OperationVerb = lc(MethodEnum:delete:toString())
                                                 .
-                                        when "submit" then
+                                        when OperationEnum:submit:toString() then
                                             assign
                                                 bMethod.PublicName    = bMethod.OperationType
                                                 bMethod.OperationVerb = lc(MethodEnum:put:toString())
                                                 .
-                                        when "count" then
+                                        when OperationEnum:count:toString() then
                                             assign
                                                 bMethod.PublicName    = bMethod.OperationType
-                                                bMethod.OperationVerb = lc(MethodEnum:put:toString())
+                                                bMethod.MethodURI     = "/" + OperationEnum:count:toString()
+                                                bMethod.OperationVerb = lc(MethodEnum:get:toString())
                                                 .
                                         otherwise
                                             assign /* Assume invoke for any other operations. */
@@ -668,15 +690,29 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                 when "openapi.openedge.method.property" then do:
                                     if oMethod:GetType(cAnnoNames[iY]) eq JsonDataType:Object then do:
                                         assign oSubObj = oMethod:GetJsonObject(cAnnoNames[iY]).
-                                        if oSubObj:GetCharacter("name") eq "verb" then
-                                            assign bMethod.OperationVerb = lc(oSubObj:GetCharacter("value")) when oSubObj:Has("value").
+                                        case oSubObj:GetCharacter("name"):
+                                            when "verb" then
+                                                assign bMethod.OperationVerb = lc(oSubObj:GetCharacter("value")) when oSubObj:Has("value").
+                                            when "mappingType" then
+                                                assign cMappingType = oSubObj:GetCharacter("value").
+                                            when "capabilities" then do:
+                                                assign cCapabilities = this-object:getList(oSubObj:GetJsonArray("value")).
+                                            end.
+                                        end case.
                                     end. /* Annotation Object */
                                     else if oMethod:GetType(cAnnoNames[iY]) eq JsonDataType:Array then do:
                                         assign oSubArr = oMethod:GetJsonArray(cAnnoNames[iY]).
                                         do iZ = 1 to oSubArr:length:
                                             assign oSubObj = oSubArr:GetJsonObject(iZ).
-                                            if oSubObj:GetCharacter("name") eq "verb" then
-                                                assign bMethod.OperationVerb = lc(oSubObj:GetCharacter("value")) when oSubObj:Has("value").
+                                            case oSubObj:GetCharacter("name"):
+                                                when "verb" then
+                                                    assign bMethod.OperationVerb = lc(oSubObj:GetCharacter("value")) when oSubObj:Has("value").
+                                                when "mappingType" then
+                                                    assign cMappingType = oSubObj:GetCharacter("value").
+                                                when "capabilities" then do:
+                                                    assign cCapabilities = this-object:getList(oSubObj:GetJsonArray("value")).
+                                                end.
+                                            end case.
                                         end. /* do iZ oSubArr */
                                     end. /* Annotation Array */
                                 end. /* openapi.openedge.method.property */
@@ -712,6 +748,22 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                             end case. /* cAnnoNames */
                         end. /* do iY cAnnoNames */
                     end. /* available(bMethod) */
+
+                    if (cMappingType gt "") eq true then do:
+                        if (cNewServiceURI gt "") then
+                            find first bService no-lock
+                                 where bService.ServiceURI eq cNewServiceURI no-error.
+                        else
+                            find first bService no-lock
+                                 where bService.ServiceURI eq cOldServiceURI no-error.
+    
+                        if available(bService) then do:
+                            this-object:addProperty(bService.ServiceURI, pcClassPath, OperationEnum:read:toString(), "mappingType", "character", cMappingType).
+
+                            if (cCapabilities gt "") eq true then
+                                this-object:addProperty(bService.ServiceURI, pcClassPath, OperationEnum:read:toString(), "capabilities", "character", cCapabilities).
+                        end.
+                    end.
 
                     release bMethod no-error.
                 end. /* do iX cMethods */
@@ -2115,6 +2167,8 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                            oParamObj:GetCharacter("name") eq this-object:ReadFilter then do:
                             if bMethod.OperationType eq OperationEnum:invoke:toString() then
                                 operationObj:Set("path", substitute("&1?&2=~{&2~}", bMethod.MethodURI, this-object:ReadFilter)).
+                            else if bMethod.OperationType eq OperationEnum:count:toString() then
+                                operationObj:Set("path", substitute("&1?&2=~{&2~}", bMethod.MethodURI, this-object:ReadFilter)).
                             else
                                 operationObj:Set("path", substitute("?&1=~{&1~}", this-object:ReadFilter)).
                             oParamObj:Set("type", "QUERY"). /* Set any INPUT for a READ to use the Query parameter type. */
@@ -2695,8 +2749,11 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                 bMethod.OperationVerb = lc(pcOperationVerb) when (pcOperationVerb gt "")
                 .
 
-            if pcOperationType eq "read" then
+            if pcOperationType eq OperationEnum:read:toString() then
                 assign bMethod.MethodURI = "?filter=~{filter~}".
+
+            if pcOperationType eq OperationEnum:count:toString() then
+                assign bMethod.MethodURI = "/count?filter=~{filter~}".
 
             if can-do("read,create,update,delete,submit", bMethod.OperationType) then
                 this-object:addProperty(bService.ServiceURI, bResource.ClassPath, bMethod.OperationType, "useBeforeImage", "logical", "true").

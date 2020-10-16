@@ -18,6 +18,7 @@ enum Spark.Core.Util.OperationEnum:
                 delete
                 submit
                 invoke
+                count
                 .
 
 end enum.
