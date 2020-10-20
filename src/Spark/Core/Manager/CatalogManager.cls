@@ -1072,6 +1072,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                                                               cClassPath, cServiceURI, cResourceURI), "SPARK-LOAD", 3).
                 end. /* valid-object */
             end. /* IDynamicEntity */
+
             else if oImplement:IsA(get-class(IDynamicResource)) then do:
                 oDynResource = cast(oImplement:New(), IDynamicResource) no-error.
                 if error-status:error then
@@ -1083,7 +1084,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         oLoggingManager:logMessage(substitute("Removing resource '&1' due to missing public name.", cClassPath), "SPARK-LOAD", 3).
                         for first bResource exclusive-lock
                             where bResource.ResourceUUID eq pcResourceUUID:
-                            delete bResource.
+                            delete bResource no-error.
                         end. /* for first bResource */
                         leave.
                     end. /* No Resource Name */
@@ -1111,12 +1112,23 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
             end. /* IDynamicResource */
 
             finally:
-                delete object phDataSet    no-error.
-                delete object oImplement   no-error.
-                delete object oService     no-error.
-                delete object oEntity      no-error.
-                delete object oDynEntity   no-error.
-                delete object oDynResource no-error.
+                if valid-object(phDataSet) then
+                    delete object phDataSet no-error.
+
+                if valid-object(oImplement) then
+                    delete object oImplement no-error.
+
+                if valid-object(oService) then
+                    delete object oService no-error.
+
+                if valid-object(oEntity) then
+                    delete object oEntity no-error.
+
+                if valid-object(oDynEntity) then
+                    delete object oDynEntity no-error.
+
+                if valid-object(oDynResource) then
+                    delete object oDynResource no-error.
             end finally.
         end. /* Non-Procedure */
 
@@ -1910,8 +1922,9 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
                         delete object hRelation no-error.
                     end.
                 end. /* valid-handle */
-                delete object hDataset no-error.
+
                 assign hDataset = ?. /* Re-initialize for next dataset. */
+                delete object hDataset no-error.
 
                 catch err as Progress.Lang.Error:
                     message substitute("Unable to get relation data for dataset &1: &2", entry(iX, cDatasetNames), err:GetMessage(1)).

@@ -116,7 +116,8 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         return new JsonObject(). /* Return an empty JSON object. */
 
         finally:
-            delete object oParser no-error.
+            if valid-object(oParser) then
+                delete object oParser no-error.
         end finally.
     end method. /* getFilter */
 
@@ -184,13 +185,17 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         finally:
             define variable iCount as int64 no-undo initial 0.
 
-            if valid-object(oCountResponse) then
+            if valid-object(oCountResponse) then do:
                 assign iCount = if valid-object(oCountResponse:ResultCounts[1])
                                 then oCountResponse:ResultCounts[1]:NumResults else 0.
+                delete object oCountResponse no-error.
+            end.
 
-            delete object oCountResponse no-error.
-            delete object oDataRequest no-error.
-            delete object oFilter no-error.
+            if valid-object(oDataRequest) then
+                delete object oDataRequest no-error.
+
+            if valid-object(oFilter) then
+                delete object oFilter no-error.
 
             return iCount. /* Always return the count, whether on success or failure. */
         end finally.
@@ -270,10 +275,10 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         assign iCount = hQuery:num-results.
 
         finally:
-            if valid-handle(hQuery) then
+            if valid-handle(hQuery) then do:
                 hQuery:query-close().
-
-            delete object hQuery no-error.
+                delete object hQuery no-error.
+            end.
 
             return iCount.
         end finally.
@@ -305,10 +310,12 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         if extent(DataSourceArray) ne ? and
            extent(DataSourceArray) ge 1 then
         do ix = 1 to extent(DataSourceArray):
-            delete object DataSourceArray[ix] no-error.
+            if valid-object(DataSourceArray[ix]) then
+                delete object DataSourceArray[ix] no-error.
         end.
 
-        delete object ProDataSet no-error.
+        if valid-object(ProDataSet) then
+            delete object ProDataSet no-error.
     end method. /* dispose */
 
     /******* Public | Helper Methods *******/

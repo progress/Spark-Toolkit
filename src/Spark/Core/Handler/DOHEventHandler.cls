@@ -203,7 +203,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         end. /* cServiceMapPath */
 
         /* Log the end of the initialization process with an elapsed time. */
-        oLoggingManager:logMessage(substitute("Finshed Loading Resource Metadata in &1ms",
+        oLoggingManager:logMessage(substitute("Finished Loading Resource Metadata in &1ms",
                                               interval(now, dStart, string(DateTimeAddIntervalEnum:Milliseconds))), "SPARK-STRT", 2).
 
         finally:
