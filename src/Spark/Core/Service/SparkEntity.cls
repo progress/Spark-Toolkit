@@ -16,6 +16,8 @@ using Ccs.BusinessLogic.* from propath.
 using OpenEdge.BusinessLogic.* from propath.
 using OpenEdge.BusinessLogic.Filter.* from propath.
 using OpenEdge.BusinessLogic.Query.* from propath.
+using Progress.Reflect.Method from propath.
+using Progress.Lang.ParameterList from propath.
 using Spark.Core.Manager.IClientContext from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
@@ -23,6 +25,7 @@ using Spark.Core.Message.IContextMessage from propath.
 using Spark.Core.Util.* from propath.
 
 block-level on error undo, throw.
+
 &GLOBAL-DEFINE THROW ON ERROR UNDO, THROW
 
 class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEntity implements Spark.Core.Service.ISparkEntity use-widget-pool abstract:
@@ -113,7 +116,8 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         return new JsonObject(). /* Return an empty JSON object. */
 
         finally:
-            delete object oParser no-error.
+            if valid-object(oParser) then
+                delete object oParser no-error.
         end finally.
     end method. /* getFilter */
 
@@ -181,13 +185,17 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         finally:
             define variable iCount as int64 no-undo initial 0.
 
-            if valid-object(oCountResponse) then
+            if valid-object(oCountResponse) then do:
                 assign iCount = if valid-object(oCountResponse:ResultCounts[1])
                                 then oCountResponse:ResultCounts[1]:NumResults else 0.
+                delete object oCountResponse no-error.
+            end.
 
-            delete object oCountResponse no-error.
-            delete object oDataRequest no-error.
-            delete object oFilter no-error.
+            if valid-object(oDataRequest) then
+                delete object oDataRequest no-error.
+
+            if valid-object(oFilter) then
+                delete object oFilter no-error.
 
             return iCount. /* Always return the count, whether on success or failure. */
         end finally.
@@ -267,10 +275,10 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         assign iCount = hQuery:num-results.
 
         finally:
-            if valid-handle(hQuery) then
+            if valid-handle(hQuery) then do:
                 hQuery:query-close().
-
-            delete object hQuery no-error.
+                delete object hQuery no-error.
+            end.
 
             return iCount.
         end finally.
@@ -302,10 +310,12 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         if extent(DataSourceArray) ne ? and
            extent(DataSourceArray) ge 1 then
         do ix = 1 to extent(DataSourceArray):
-            delete object DataSourceArray[ix] no-error.
+            if valid-object(DataSourceArray[ix]) then
+                delete object DataSourceArray[ix] no-error.
         end.
 
-        delete object ProDataSet no-error.
+        if valid-object(ProDataSet) then
+            delete object ProDataSet no-error.
     end method. /* dispose */
 
     /******* Public | Helper Methods *******/
@@ -419,11 +429,13 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
 
     method public IGetDataResponse getData ( input  poRequest as IGetDataRequest,
                                              output dataset-handle phDataSet ):
-        define variable hDBBuffer     as handle       no-undo extent.
-        define variable hTTBuffer     as handle       no-undo extent.
-        define variable cQueryString  as character    no-undo.
-        define variable oQueryBuilder as QueryBuilder no-undo.
-        define variable ix            as integer      no-undo.
+        define variable hDBBuffer     as handle        no-undo extent.
+        define variable hTTBuffer     as handle        no-undo extent.
+        define variable cQueryString  as character     no-undo.
+        define variable oMethod       as Method        no-undo.
+        define variable oParams       as ParameterList no-undo.
+        define variable oQueryBuilder as QueryBuilder  no-undo.
+        define variable ix            as integer       no-undo.
 
         assign iSeq = 0. /* Reset record sequence on read operation. */
 
@@ -442,9 +454,7 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
         this-object:ValidateDataSources().
         DataSetTools:emptyDataSet(ProDataSet).
 
-        /* Use the query builder to convert the request object into a valid "where" phrases. */
-        assign oQueryBuilder = new QueryBuilder().
-        assign cQueryString = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
+        /* Attach data sources for each table buffer. */
         extent(hTTBuffer) = ProDataSet:num-buffers.
         do ix = 1 to ProDataSet:num-buffers:
             assign hTTBuffer[ix] = ProDataSet:get-buffer-handle(ix) no-error.
@@ -452,24 +462,32 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             if valid-handle(hTTBuffer[ix]) then do:
                 hTTBuffer[ix]:empty-temp-table().
                 hTTBuffer[ix]:attach-data-source(ProDataSource[ix]).
-
-                if extent(poRequest:TableRequests) ge ix and
-                   valid-object(poRequest:TableRequests[ix]) then do:
-                    /* Set batch size per max rows to return, or use paging context if available. */
-                    if poRequest:TableRequests[ix]:NumRecords gt 0 then
-                        hTTBuffer[ix]:batch-size = integer(poRequest:TableRequests[ix]:NumRecords).
-                    else do:
-                        if (poRequest:TableRequests[ix]:PagingContext gt "") eq true then
-                            hTTBuffer[ix]:batch-size = 1.
-                        else
-                            hTTBuffer[ix]:batch-size = 0.
-                    end. /* NumRecords = 0 */
-                end. /* valid-object (TableRequests) */
             end.
         end. /* ProDataSet */
 
         /* If no valid first temp-table buffer, just leave. */
         if not valid-handle(hTTBuffer[1]) then return ?.
+
+        /* Set parameters for a BuildQueryString method with appropriate datatypes/values. */
+        oParams = new ParameterList(4).
+        oParams:SetParameter(1, "class Ccs.BusinessLogic.IGetDataTableRequest", "input", ?).
+        oParams:SetParameter(2, "logical", "input", true).
+        oParams:SetParameter(3, "logical", "input", true).
+        oParams:SetParameter(4, "handle", "input", ?).
+
+        /**
+         * Attempt to obtain a particular method via class reflection, which will indicate
+         * if a newer QueryBuilder class is present which supports enhanced methods.
+         */
+        assign oMethod = get-class(QueryBuilder):GetMethod("BuildQueryString", oParams).
+
+        /* Prepare a QueryBuilder class to convert the request object into a valid "where" phrases. */
+        assign oQueryBuilder = new QueryBuilder().
+
+        /* Needs to be called once prior to filling the where-string on each data source. */
+        /* Only necessary if the newer 4-parameter BuildQueryString method isn't present. */
+        if not valid-object(oMethod) then
+            assign cQueryString = oQueryBuilder:BuildQueryString(poRequest, ProDataSet).
 
         /* Prepare to fill Dataset via where phrase from the table request. */
         extent(hDBBuffer) = extent(ProDataSource).
@@ -477,8 +495,36 @@ class Spark.Core.Service.SparkEntity inherits OpenEdge.BusinessLogic.BusinessEnt
             assign hDBBuffer[ix] = ProDataSource[ix]:get-source-buffer(1) no-error.
 
             if extent(poRequest:TableRequests) ge ix and
-               valid-object(poRequest:TableRequests[ix]) then do:
-                ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
+               valid-object(poRequest:TableRequests[ix]) and
+               valid-object(hTTBuffer[ix]) then do:
+                if valid-object(oMethod) then do:
+                    /**
+                     * Newer method, which more intelligently builds a query string for the given table request and buffer.
+                     * This combines the natural query for child tables with a data-relation together with the user's query. 
+                     */
+                    oParams:SetParameter(1, "class Ccs.BusinessLogic.IGetDataTableRequest", "input", poRequest:TableRequests[ix]).
+                    oParams:SetParameter(4, "handle", "input", hTTBuffer[ix]).
+                    ProDataSource[ix]:fill-where-string = oMethod:Invoke(oQueryBuilder, oParams).
+                end.
+                else do:
+                    /* Use the older method, which uses a pre-built QueryString for the Pro-Dataset. */
+                    if poRequest:TableRequests[ix]:QueryString gt "" then
+                        ProDataSource[ix]:fill-where-string = poRequest:TableRequests[ix]:QueryString.
+                    else if cQueryString begins "each" and cQueryString matches "*where*" then
+                        ProDataSource[ix]:fill-where-string = substring(cQueryString, index(cQueryString, "where")).
+                    else
+                        ProDataSource[ix]:fill-where-string = cQueryString.
+                end.
+ 
+                /* Set batch size and max rows to return, or use paging context if available. */
+                if poRequest:TableRequests[ix]:NumRecords gt 0 then
+                    hTTBuffer[ix]:batch-size = integer(poRequest:TableRequests[ix]:NumRecords).
+                else do:
+                    if (poRequest:TableRequests[ix]:PagingContext gt "") eq true then
+                        hTTBuffer[ix]:batch-size = 1.
+                    else
+                        hTTBuffer[ix]:batch-size = 0.
+                end. /* NumRecords = 0 */
 
                 /* Echo the current query phrase to the log if debugging is enabled. */
                 oLoggingManager:logMessage(substitute("Query: &1", ProDataSource[ix]:fill-where-string), "ENTITY-DBG", 3).

@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------
+    File        : SessionManager
+    Purpose     : Primary manager for framework startup
+    Description : Session Startup Manager
+    Author(s)   : rosmith
+    Created     : Nov 02 2016
+    Notes       :
+  ----------------------------------------------------------------------*/
+
 using Progress.Lang.* from propath.
 using Progress.Json.ObjectModel.* from propath.
 using OpenEdge.DataAdmin.* from propath.
@@ -6,9 +15,9 @@ using OpenEdge.DataAdmin.Lang.Collections.* from propath.
 using Spark.Core.Util.GenTools from propath.
 using Spark.Core.Util.OSTools from propath.
 using Spark.Core.Manager.IClientContext from propath.
-using Spark.Core.Manager.SessionAttributeEnum from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.IServiceManager from propath.
+using Spark.Core.Manager.SessionAttributeEnum from propath.
 
 block-level on error undo, throw.
 

@@ -96,8 +96,7 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
         checkManagerIsListed(get-class(Spark.Core.Manager.IServiceManager):TypeName, get-class(Spark.Core.Manager.ServiceManager):TypeName).
         checkManagerIsListed(get-class(Spark.Core.Manager.ISessionManager):TypeName, get-class(Spark.Core.Manager.SessionManager):TypeName).
 
-        /* Application Managers (Required by default, unless set as optional) */
-        checkManagerIsListed(get-class(Spark.Core.Manager.IConnectionManager):TypeName, get-class(Spark.Core.Manager.ConnectionManager):TypeName).
+        /* Application Managers (Required by default, unless only dependent on another manager) */
         checkManagerIsListed(get-class(Spark.Core.Manager.ILoggingManager):TypeName, get-class(Spark.Core.Manager.LoggingManager):TypeName).
         checkManagerIsListed(get-class(Spark.Core.Manager.IStateManager):TypeName, get-class(Spark.Core.Manager.StateManager):TypeName).
         checkManagerIsListed(get-class(Spark.Core.Manager.ITranslationManager):TypeName, get-class(Spark.Core.Manager.TranslationManager):TypeName).
@@ -105,10 +104,13 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
             /* If the CatalogManager is present, then make sure the supporting SchemaManager is listed as well. */
             checkManagerIsListed(get-class(Spark.Core.Manager.ISchemaManager):TypeName, get-class(Spark.Core.Manager.SchemaManager):TypeName).
         end. /* CatalogManager Listed */
+
+        /* Optional Managers (Must not be a dependency in any capacity by the managers above.) */
+        checkManagerIsListed(get-class(Spark.Core.Manager.IConnectionManager):TypeName, get-class(Spark.Core.Manager.ConnectionManager):TypeName, false).
     end method.
 
     method private logical checkManagerIsListed ( input pcManager        as character,
-                                               input pcImplementation as character ):
+                                                  input pcImplementation as character ):
         /* Check if manager is listed, otherwise create as required by default. */
         return this-object:checkManagerIsListed(pcManager, pcImplementation, true).
     end method.
@@ -157,6 +159,8 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
 
             catch err as Progress.Lang.Error:
                 message substitute("Error while initializing manager '&1': &2", pcManager, err:GetMessage(1)).
+                if session:error-stack-trace then
+                    message err:CallStack.
             end catch.
         end. /* IsA Ccs.Common.IManager */
 
@@ -218,10 +222,11 @@ class Spark.Core.Manager.StartupManager inherits Spark.Core.Manager.Manager impl
     /* Purpose: Stop all non-essential application managers. */
     method public void stopManagers ( ):
         stopManager(get-class(Spark.Core.Manager.ICatalogManager):TypeName).
-        stopManager(get-class(Spark.Core.Manager.IConnectionManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.ISchemaManager):TypeName).
+        stopManager(get-class(Spark.Core.Manager.IConnectionManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.IStateManager):TypeName).
         stopManager(get-class(Spark.Core.Manager.ITranslationManager):TypeName).
+        /* Stop this last, as it may be used by other managers above. */
         stopManager(get-class(Spark.Core.Manager.ILoggingManager):TypeName).
     end method.
 

@@ -1,5 +1,4 @@
-using Progress.Lang.* from propath.
-using Spark.Core.Manager.* from propath.
+using Spark.Core.Manager.StateLifeCycleEnum from propath.
 
 block-level on error undo, throw.
 
@@ -7,7 +6,7 @@ block-level on error undo, throw.
  * Session State Manager
  * Responsible for reading and writing the session context data to and from a persistent store (i.e. a database)
  */
-class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implements IStateManager:
+class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implements Spark.Core.Manager.IStateManager:
 
     constructor public StateManager (  ):
         super ().
@@ -28,7 +27,7 @@ class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implem
      * @param pcSessionContextID The unique Session Context ID used to store the context data under
      * @return The context data
      */
-    method public longchar readContextFromStore( input pcClassID as character, input pcSessionContextID as character ):
+    method public longchar readContextFromStore ( input pcClassID as character, input pcSessionContextID as character ):
 
         define variable cContext as longchar no-undo.
 
@@ -52,7 +51,7 @@ class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implem
      * @param pcSessionContextID The unique Session Context ID used to store the context data under
      * @return The context data
      */
-    method public longchar readContextFromStoreAndLock( input pcClassID as character, input pcSessionContextID as character ):
+    method public longchar readContextFromStoreAndLock ( input pcClassID as character, input pcSessionContextID as character ):
 
         define variable cContext as longchar no-undo.
 
@@ -77,7 +76,10 @@ class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implem
      * @param pcClassID A Unique ID to save the context data under
      * @param pcSessionContextID The unique Session Context ID used to store the context data under
      */
-    method public void writeContextToStore( input pcData as longchar, input poLifeCycle as StateLifeCycleEnum, input pcClassID as character, input pcSessionContextID as character ):
+    method public void writeContextToStore ( input pcData             as longchar,
+                                             input poLifeCycle        as StateLifeCycleEnum,
+                                             input pcClassID          as character,
+                                             input pcSessionContextID as character ):
 
         /* This should go in the DB. */
         output to value(session:temp-directory + pcClassID + "." + pcSessionContextID).
@@ -94,7 +96,10 @@ class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implem
      * @param pcClassID A Unique ID to save the context data under
      * @param pcSessionContextID The unique Session Context ID used to store the context data under
      */
-    method public void writeContextToStore( input pcData as longchar, input ptExpire as datetime-tz, input pcClassID as character, input pcSessionContextID as character ):
+    method public void writeContextToStore ( input pcData             as longchar,
+                                             input ptExpire           as datetime-tz,
+                                             input pcClassID          as character,
+                                             input pcSessionContextID as character ):
 
         /* This should go in the DB. */
         output to value(session:temp-directory + pcClassID + "." + pcSessionContextID).
@@ -109,7 +114,7 @@ class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implem
      * @param pcClassID A Unique ID to save the context data under
      * @param pcSessionContextID The unique Session Context ID used to store the context data under
      */
-    method public void updateLastUsed(input pcClassID as character, input pcSessionContextID as character ):
+    method public void updateLastUsed ( input pcClassID as character, input pcSessionContextID as character ):
 
     end.
 
@@ -119,13 +124,13 @@ class Spark.Core.Manager.StateManager inherits Spark.Core.Manager.Manager implem
      * @param pcClassID A Unique ID to save the context data under
      * @param pcSessionContextID The unique Session Context ID used to store the context data under
      */
-    method public void removeContextFromStore( pcClassID as character, input pcSessionContextID as character ):
+    method public void removeContextFromStore ( pcClassID as character, input pcSessionContextID as character ):
 
         os-delete value(session:temp-directory + pcClassID + "." + pcSessionContextID) no-error.
 
     end method.
 
-    method public logical cleanOldContextData( input piDays as integer ):
+    method public logical cleanOldContextData ( input piDays as integer ):
 
         /**
          * This will turn on the context file cleanup feature, which does use

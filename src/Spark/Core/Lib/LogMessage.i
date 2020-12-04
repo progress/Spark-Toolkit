@@ -59,7 +59,8 @@ function logMessage returns logical {&FunctionPrivate}
     end. /* No Agent/Session */
 
     finally:
-        delete object oRequest no-error.
+        if valid-object(oRequest) then
+            delete object oRequest no-error.
     end finally.
 &if ({&IsClass} eq true) &then
 end method.

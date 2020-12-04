@@ -1,3 +1,12 @@
+/*------------------------------------------------------------------------
+    File        : ServiceManager
+    Purpose     : Primary manager for framework startup
+    Description : Service Startup Manager
+    Author(s)   : rosmith
+    Created     : Nov 02 2016
+    Notes       :
+  ----------------------------------------------------------------------*/
+
 using Progress.Lang.* from propath.
 using Ccs.Common.IService from propath.
 using Ccs.ServiceManager.ILifecycleScope from propath.

@@ -93,6 +93,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:OperationError:Unsubscribe(this-object:OperationErrorHandler).
         DataObjectHandler:DiscoverService:Unsubscribe(this-object:DiscoverServiceHandler).
         DataObjectHandler:UnloadEntity:Unsubscribe(this-object:UnloadEntityHandler).
+        DataObjectHandler:AuthorizeOperation:Unsubscribe(this-object:AuthorizeOperationHandler).
     end destructor.
 
 
@@ -135,6 +136,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         DataObjectHandler:OperationError:Subscribe(this-object:OperationErrorHandler).
         DataObjectHandler:DiscoverService:Subscribe(this-object:DiscoverServiceHandler).
         DataObjectHandler:UnloadEntity:Subscribe(this-object:UnloadEntityHandler).
+        DataObjectHandler:AuthorizeOperation:Subscribe(this-object:AuthorizeOperationHandler).
     end method. /* Define Events */
 
 
@@ -201,7 +203,7 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
         end. /* cServiceMapPath */
 
         /* Log the end of the initialization process with an elapsed time. */
-        oLoggingManager:logMessage(substitute("Finshed Loading Resource Metadata in &1ms",
+        oLoggingManager:logMessage(substitute("Finished Loading Resource Metadata in &1ms",
                                               interval(now, dStart, string(DateTimeAddIntervalEnum:Milliseconds))), "SPARK-STRT", 2).
 
         finally:
@@ -224,6 +226,29 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
 
 
     /***** Event Methods *****/
+
+
+    /* Event published to perform a security check before running an entity.
+     * @param Progress.Lang.Object The handler publishing the event
+     * @param ServiceDiscoveryEventArgs Event args for this event
+     */
+    method private void AuthorizeOperationHandler ( input poSender    as Progress.Lang.Object,
+                                                    input poEventArgs as AuthorizeOperationEventArgs):
+        /* Operation is an object of type "MappedOperation" representing the current operation. */
+        if extent(poEventArgs:Operation:AccessControl) ne ? then do:
+            oLogger:Debug(substitute("Operation target '&1:&2' has ACL roles [&3]",
+                                     poEventArgs:Operation:TargetName,
+                                     poEventArgs:Operation:TargetFunction,
+                                     String:Join(poEventArgs:Operation:AccessControl, ",":u))).
+
+            /* User should be an object of type "Principal" obtained via the session:current-request-info. */
+            if valid-object(poEventArgs:User) and valid-handle(poEventArgs:User:Token) then
+                oLogger:Debug(substitute("Found user information for '&1@&2' with roles '&3'",
+                                         poEventArgs:User:Token:user-id,
+                                         poEventArgs:User:Token:domain-name,
+                                         poEventArgs:User:Token:roles)).
+        end. /* Has AccessControl */
+    end method. /* AuthorizeOperationHandler */
 
 
     /* Event published to discover information about an available service.
@@ -394,9 +419,12 @@ class Spark.Core.Handler.DOHEventHandler use-widget-pool final:
          *  OEClientPrincipalFilter.anonymous=true
          *  OEClientPrincipalFilter.sealAnonymous=true
          *  OEClientPrincipalFilter.passthru=true
+         *
+         * No principal token will be available without the above settings present.
          */
         assign oPrincipal = OpenEdge.Security.Principal:Import(session:current-request-info).
-        Ccs.Common.Application:SessionManager:establishRequestEnvironment(oPrincipal:Token).
+        if valid-object(oPrincipal) then
+            Ccs.Common.Application:SessionManager:establishRequestEnvironment(oPrincipal:Token).
 
         catch err as Progress.Lang.Error:
             assign poEventArgs:Error = err.

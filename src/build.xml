@@ -1,19 +1,19 @@
 <project name="FrameworkTools" basedir="." default="usage">
 
-	<!-- Provide tasks to build the Spark (Core) and Diagnotic procedure library files. -->
+    <!-- Provide tasks to build the Spark (Core) and Diagnotic procedure library files. -->
 
     <target name="usage">
         <echo message="Usage Instructions:"/>
-		<echo message="${line.separator}Builds:"/>
+        <echo message="${line.separator}Builds:"/>
         <echo message="ant build_spark_pl - Create PL archive for Spark classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
         <echo message="ant build_diag_pl - Create PL archive for diagnostic tools"/>
         <echo message="${line.separator}Documentation:"/>
-		<echo message="ant build_ablduck - Generate ABLDuck output for Spark"/>
+        <echo message="ant build_ablduck - Generate ABLDuck output for Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
         <echo message="ant build_pctdoc - Generate PCTDoc output for Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
-	</target>
+    </target>
 
     <macrodef name="require">
         <attribute name="file"/>
@@ -22,9 +22,9 @@
         <sequential>
             <fail message="@{message}">
                 <condition>
-					<not>
-						<available file="@{file}" type="file"/>
-					</not>
+                    <not>
+                        <available file="@{file}" type="file"/>
+                    </not>
                 </condition>
             </fail>
         </sequential>
@@ -36,127 +36,127 @@
         <sequential>
             <fail message="@{message}">
                 <condition>
-					<not>
-						<isset property="version"/>
-					</not>
+                    <not>
+                        <isset property="version"/>
+                    </not>
                 </condition>
             </fail>
 
-			<!-- Prepare info about this release/build. -->
-			<property name="release.version" value="${version}"/>
-			<tstamp>
-				<format property="release.date" pattern="yyyy.MM.dd.hhmmss"/>
-			</tstamp>
-			<echo message="Build: v${release.version} (${release.date})"/>
-		</sequential>
+            <!-- Prepare info about this release/build. -->
+            <property name="release.version" value="${version}"/>
+            <tstamp>
+                <format property="release.date" pattern="yyyy.MM.dd.hhmmss"/>
+            </tstamp>
+            <echo message="Build: v${release.version} (${release.date})"/>
+        </sequential>
     </macrodef>
 
     <macrodef name="init_env">
         <sequential>
-			<property environment="env"/>
+            <property environment="env"/>
 
-			<!-- Set a property if environment is Windows. -->
-			<condition property="isWin32">
-				<os family="windows"/>
-			</condition>
+            <!-- Set a property if environment is Windows. -->
+            <condition property="isWin32">
+                <os family="windows"/>
+            </condition>
 
-			<!-- Set a property if environment is Unix. -->
-			<condition property="isUnix">
-				<os family="unix"/>
-			</condition>
+            <!-- Set a property if environment is Unix. -->
+            <condition property="isUnix">
+                <os family="unix"/>
+            </condition>
 
-			<!-- Set a property if environment is 32bit. -->
-			<condition property="is32bit">
-				<or>
-					<os arch="x86"/>
-					<os arch="i386"/>
-				</or>
-			</condition>
+            <!-- Set a property if environment is 32bit. -->
+            <condition property="is32bit">
+                <or>
+                    <os arch="x86"/>
+                    <os arch="i386"/>
+                </or>
+            </condition>
 
-			<!-- Set a property if environment is 64bit. -->
-			<condition property="is64bit">
-				<not>
-					<or>
-						<os arch="x86"/>
-						<os arch="i386"/>
-					</or>
-				</not>
-			</condition>
+            <!-- Set a property if environment is 64bit. -->
+            <condition property="is64bit">
+                <not>
+                    <or>
+                        <os arch="x86"/>
+                        <os arch="i386"/>
+                    </or>
+                </not>
+            </condition>
 
-			<!-- Set properties for special directories. -->
-			<property name="src.dir" value="${basedir}"/>
-			<property name="build.tmp" value="${src.dir}/build"/>
-			<property name="doc.out" value="${src.dir}/../docs"/>
-			<property name="doc.tmp" value="${src.dir}/doctemp"/>
-			<property name="preprocess" value="${src.dir}/preprocess"/>
-		</sequential>
+            <!-- Set properties for special directories. -->
+            <property name="src.dir" value="${basedir}"/>
+            <property name="build.tmp" value="${src.dir}/build"/>
+            <property name="doc.out" value="${src.dir}/../docs"/>
+            <property name="doc.tmp" value="${src.dir}/doctemp"/>
+            <property name="preprocess" value="${src.dir}/preprocess"/>
+        </sequential>
     </macrodef>
 
-	<macrodef name="init_oe">
+    <macrodef name="init_oe">
         <sequential>
-			<init_env/>
+            <init_env/>
 
-			<fail message="Environment is not 64-bit">
-				<condition>
-					<not>
-						<isset property="is64bit"/>
-					</not>
-				</condition>
-			</fail>
+            <fail message="Environment is not 64-bit">
+                <condition>
+                    <not>
+                        <isset property="is64bit"/>
+                    </not>
+                </condition>
+            </fail>
 
-			<!-- Check if DLC is set as an environment variable. -->
-			<fail message="DLC Home path is not set">
-				<condition>
-					<and>
-						<not><isset property="dlcHome"/></not>
-						<not><isset property="env.DLC"/></not>
-					</and>
-				</condition>
-			</fail>
-			<property name="dlcHome" value="${env.DLC}"/>
+            <!-- Check if DLC is set as an environment variable. -->
+            <fail message="DLC Home path is not set">
+                <condition>
+                    <and>
+                        <not><isset property="dlcHome"/></not>
+                        <not><isset property="env.DLC"/></not>
+                    </and>
+                </condition>
+            </fail>
+            <property name="dlcHome" value="${env.DLC}"/>
 
-			<!-- Load the current PCT library from DLC. -->
-			<taskdef resource="PCT.properties" classpath="${dlcHome}/pct/PCT.jar"/>
+            <!-- Load the current PCT library from DLC. -->
+            <taskdef resource="PCT.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
-			<!-- Access the OE version info, and read into a property. -->
-			<ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
-			<property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
+            <!-- Access the OE version info, and read into a property. -->
+            <ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
+            <property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
 
-			<!-- Add the ANT-Contrib library to this environment (present in 11.7.4+ and 12.0+). -->
-			<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${dlcHome}/ant/lib/ant-contrib-0.6.jar"/>
+            <!-- Add the ANT-Contrib library to this environment (present in 11.7.4+ and 12.0+). -->
+            <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${dlcHome}/ant/lib/ant-contrib-0.6.jar"/>
 
-			<!-- Set properties for special directories. -->
-			<property name="build.out" value="${src.dir}/../dist/oe${oeMajor}"/>
-			<mkdir dir="${build.out}"/>
-		</sequential>
+            <!-- Set properties for special directories. -->
+            <property name="build.out" value="${src.dir}/../dist/oe${oeMajor}"/>
+            <mkdir dir="${build.out}"/>
+        </sequential>
     </macrodef>
 
-	<macrodef name="report_oe_vars">
+    <macrodef name="report_oe_vars">
         <sequential>
-			<!-- Report standard variables for build process. -->
-			<PCTVersion/>
-			<echo message="DLC Home: ${dlcHome}"/>
-			<echo message="OpenEdge Version: ${oe.version}"/>
-		</sequential>
+            <!-- Report standard variables for build process. -->
+            <PCTVersion/>
+            <echo message="DLC Home: ${dlcHome}"/>
+            <echo message="OpenEdge Version: ${oe.version}"/>
+        </sequential>
     </macrodef>
 
     <target name="compile_spark_core">
-		<init_oe/>
+        <init_oe/>
 
-		<delete dir="${preprocess}/OpenEdge" quiet="true"/>
-		<delete dir="${preprocess}/Spark/Core" quiet="true"/>
+        <delete dir="${preprocess}/OpenEdge" quiet="true"/>
+        <delete dir="${preprocess}/Spark/Core" quiet="true"/>
 
-		<report_oe_vars/>
+        <report_oe_vars/>
 
         <!-- Write the current release version to a specific file, for inclusion in the compiled code. -->
-		<requireVersion/> <!-- Must include a version property when task is executed. -->
+        <requireVersion/> <!-- Must include a version property when task is executed. -->
         <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION ${release.version}-${release.date} (${oe.version})"/>
 
         <!-- Code compiles without need for a database. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
-				<pathelement path="${src.dir}"/>
-				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${src.dir}"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
             </propath>
             <fileset dir="${src.dir}">
@@ -168,31 +168,31 @@
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
                 <pathelement path="${src.dir}/Spark"/>
-				<pathelement path="${build.tmp}"/>
-				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${build.tmp}"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
             </propath>
             <fileset dir="${src.dir}">
-				<include name="Spark/Core/**/*.cls"/>
+                <include name="Spark/Core/**/*.cls"/>
                 <include name="Spark/Core/**/*.p"/>
-				<include name="Spark/*.p"/>
+                <include name="Spark/*.p"/>
             </fileset>
         </PCTCompile>
     </target>
 
     <target name="compile_spark_diag">
-		<init_oe/>
+        <init_oe/>
 
         <delete dir="${preprocess}/Spark/Diagnostic" quiet="true"/>
 
-		<report_oe_vars/>
+        <report_oe_vars/>
 
         <!-- Code compiles without need for a database. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
-				<pathelement path="${src.dir}"/>
-				<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                <pathelement path="${src.dir}"/>
+                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
             </propath>
             <fileset dir="${src.dir}">
@@ -200,43 +200,43 @@
             </fileset>
         </PCTCompile>
 
-		<!-- Code compiles without need for a database, but uses some extra libs. -->
+        <!-- Code compiles without need for a database, but uses some extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
-				<pathelement path="${src.dir}/Spark"/>
-				<pathelement path="${build.tmp}"/>
+                <pathelement path="${src.dir}/Spark"/>
+                <pathelement path="${build.tmp}"/>
                 <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
             </propath>
             <fileset dir="${src.dir}">
                 <include name="Spark/Diagnostic/Util/*.cls"/>
-				<include name="Spark/Diagnostic/Interface/*.p"/>
-				<include name="Spark/Diagnostic/*.p"/>
+                <include name="Spark/Diagnostic/Interface/*.p"/>
+                <include name="Spark/Diagnostic/*.p"/>
             </fileset>
         </PCTCompile>
-	</target>
+    </target>
 
-	<target name="clean">
-		<init_env/>
-		<delete dir="${preprocess}" quiet="true"/>
-		<delete dir="${build.tmp}" quiet="true"/>
-		<delete dir="${doc.tmp}" quiet="true"/>
+    <target name="clean">
+        <init_env/>
+        <delete dir="${preprocess}" quiet="true"/>
+        <delete dir="${build.tmp}" quiet="true"/>
+        <delete dir="${doc.tmp}" quiet="true"/>
 
-		<delete quiet="true">
+        <delete quiet="true">
             <fileset dir="${src.dir}" includes="**/*.r"/>
         </delete>
-	</target>
+    </target>
 
     <target name="build_abldoc" depends="clean">
-		<requireVersion/> <!-- Must include a version property when task is executed. -->
+        <requireVersion/> <!-- Must include a version property when task is executed. -->
 
-		<init_oe/>
+        <init_oe/>
 
         <property name="abldoc.home" value="${dlcHome}/oeide/eclipse/plugins/com.progress.openedge.pdt.abldoc.core_${oe.version}.00"/>
         <property name="abldoc.lib" value="${abldoc.home}/lib"/>
         <property name="artifacts" value="${abldoc.home}/abldoc-artifacts"/>
         <property name="abldocs.title" value="Progress Spark Toolkit v${release.version}"/>
-		<property name="abldocs.output" value="${doc.out}/ABLDoc"/>
+        <property name="abldocs.output" value="${doc.out}/ABLDoc"/>
 
         <delete dir="${abldocs.output}" quiet="true"/>
 
@@ -267,29 +267,29 @@
     </target>
 
     <target name="build_ablduck" depends="clean">
-		<requireVersion/> <!-- Must include a version property when task is executed. -->
+        <requireVersion/> <!-- Must include a version property when task is executed. -->
 
-		<init_oe/>
+        <init_oe/>
 
         <!-- Required for PCT for ABLDuck task. -->
-		<!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
-		<typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
+        <!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
+        <typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
         <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
         <!-- Compile all code. -->
         <antcall target="compile_spark_core"/>
-		<antcall target="compile_spark_diag"/>
+        <antcall target="compile_spark_diag"/>
 
         <!-- Prepare directories for output. -->
-		<property name="ablduck.output" value="${doc.out}/ABLDuck"/>
+        <property name="ablduck.output" value="${doc.out}/ABLDuck"/>
         <delete dir="${ablduck.output}" quiet="true"/>
         <mkdir dir="${doc.tmp}"/>
         <mkdir dir="${ablduck.output}"/>
 
-		<ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="Progress Spark Toolkit (v${release.version})">
+        <ABLDuck destDir="${ablduck.output}" dlcHome="${dlcHome}" title="Progress Spark Toolkit (v${release.version})">
             <fileset dir="${preprocess}">
                 <include name="**/*.cls"/>
-				<include name="**/*.p"/>
+                <include name="**/*.p"/>
             </fileset>
             <propath>
                 <pathelement path="${src.dir}/Spark"/>
@@ -301,22 +301,22 @@
     </target>
 
     <target name="build_pctdoc" depends="clean">
-		<requireVersion/> <!-- Must include a version property when task is executed. -->
+        <requireVersion/> <!-- Must include a version property when task is executed. -->
 
-		<init_oe/>
+        <init_oe/>
 
         <!-- Required for PCT for ClassDocumentation task. -->
-		<!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
+        <!-- Note: See https://github.com/Riverside-Software/pct/wiki/ClassDocumentation#115-to-117 -->
         <typedef resource="types.properties" classpath="${dlcHome}/pct/PCT.jar"/>
         <taskdef resource="extras115.properties" classpath="${dlcHome}/pct/PCT.jar"/>
 
         <!-- Compile all code. -->
         <antcall target="compile_spark_core"/>
-		<antcall target="compile_spark_diag"/>
+        <antcall target="compile_spark_diag"/>
 
         <!-- Prepare directories for output. -->
-		<property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
-		<delete dir="${pctdocs.output}" quiet="true"/>
+        <property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
+        <delete dir="${pctdocs.output}" quiet="true"/>
         <mkdir dir="${doc.tmp}"/>
         <mkdir dir="${pctdocs.output}"/>
 
@@ -349,7 +349,7 @@
         <!-- Convert the above output (XML) into HTML documents. -->
         <HTMLDocumentation sourceDir="${doc.tmp}" destDir="${pctdocs.output}" dlcHome="${dlcHome}"
                            treeViewOverview="true" title="Progress Spark Toolkit (v${release.version})">
-		    <propath>
+            <propath>
                 <pathelement path="${src.dir}/Spark"/>
                 <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
                 <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
@@ -359,13 +359,13 @@
     </target>
 
     <target name="build_spark_pl" depends="clean">
-		<init_oe/>
+        <init_oe/>
 
         <!-- First, compile the necessary code. -->
-		<antcall target="compile_spark_core"/>
+        <antcall target="compile_spark_core"/>
 
         <!-- Next, remove old/temporary files. -->
-		<delete file="${build.out}/Spark.pl" quiet="true"/>
+        <delete file="${build.out}/Spark.pl" quiet="true"/>
         <delete dir="${build.tmp}/.pct" quiet="true"/>
         <delete dir="${build.tmp}/Core" quiet="true"/>
 
@@ -373,19 +373,19 @@
         <PCTLibrary destfile="${build.out}/Spark.pl" dlcHome="${dlcHome}">
             <fileset dir="${build.tmp}">
                 <include name="Spark/**/*.r"/>
-				<include name="OpenEdge/**/*.r"/>
+                <include name="OpenEdge/**/*.r"/>
             </fileset>
         </PCTLibrary>
     </target>
 
     <target name="build_diag_pl" depends="clean">
-		<init_oe/>
+        <init_oe/>
 
         <!-- First, compile the necessary code. -->
-		<antcall target="compile_spark_diag"/>
+        <antcall target="compile_spark_diag"/>
 
         <!-- Next, remove old/temporary files. -->
-		<delete file="${build.out}/Diagnostic.pl" quiet="true"/>
+        <delete file="${build.out}/Diagnostic.pl" quiet="true"/>
         <delete dir="${build.tmp}/.pct" quiet="true"/>
 
         <!-- Finally, build PL file with R-code. -->

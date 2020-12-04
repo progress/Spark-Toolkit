@@ -1,9 +1,8 @@
-using Spark.Core.Util.EnumMember from propath.
 using Spark.Core.Manager.StateLifeCycleEnum from propath.
 
 block-level on error undo, throw.
 
-class Spark.Core.Manager.StateLifeCycleEnum inherits EnumMember final:
+class Spark.Core.Manager.StateLifeCycleEnum inherits Spark.Core.Util.EnumMember final:
 
     define static public property application as StateLifeCycleEnum no-undo get. private set.
     define static public property session as StateLifeCycleEnum no-undo get. private set.

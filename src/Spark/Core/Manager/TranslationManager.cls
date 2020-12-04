@@ -1,12 +1,9 @@
-using Spark.Core.Manager.ITranslationManager from propath.
-using Spark.Core.Manager.Manager from propath.
-
 block-level on error undo, throw.
 
 /**
  * Translation Manager
  */
-class Spark.Core.Manager.TranslationManager inherits Spark.Core.Manager.Manager implements ITranslationManager:
+class Spark.Core.Manager.TranslationManager inherits Spark.Core.Manager.Manager implements Spark.Core.Manager.ITranslationManager:
 
     constructor public TranslationManager (  ):
         super ().

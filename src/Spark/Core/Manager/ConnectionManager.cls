@@ -1,6 +1,4 @@
-using Progress.Lang.AppError from propath.
 using Ccs.ServiceManager.ILifecycleScope from propath.
-using Spark.Core.Manager.IConnectionManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.ServiceLifeCycleEnum from propath.
 using Spark.Core.Util.ApplicationError from propath.
@@ -12,7 +10,7 @@ block-level on error undo, throw.
  * Connection Manager
  * Starts up and manager all connections to other servers.  e.g. other Progress appservers or extenal web services.
  */
-class Spark.Core.Manager.ConnectionManager inherits Spark.Core.Manager.Manager implements IConnectionManager use-widget-pool:
+class Spark.Core.Manager.ConnectionManager inherits Spark.Core.Manager.Manager implements Spark.Core.Manager.IConnectionManager use-widget-pool:
 
     define protected property oLoggingManager as ILoggingManager no-undo
         get:
@@ -69,7 +67,7 @@ class Spark.Core.Manager.ConnectionManager inherits Spark.Core.Manager.Manager i
         if cFullCfgFileName ne ? then
             dataset dsConnection:read-json("file", cFullCfgFileName, "empty").
         else
-            undo, throw new AppError(substitute("Connection config file [&1] not found in [&2]", cCfgFileName, OSTools:sparkConf), 0).
+            undo, throw new ApplicationError(substitute("Connection config file [&1] not found in [&2]", cCfgFileName, OSTools:sparkConf), 0).
 
         find first ttConnection
              where ttConnection.ConnectName eq "Session" no-error.

@@ -99,22 +99,24 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
      * {
      *   AppName: "",
      *   Instance: "",
-     *   TestRun: "",
-     *   ABLObjects: {
-     *     Filename: "",
-     *     Agent: 0,
-     *     Session: 0,
-     *     Data: []
-     *   },
-     *   Sessions: {
-     *     Filename: "",
-     *     Agent: 0,
-     *     Data: []
-     *   },
-     *   Requests: {
-     *     Filename: "",
-     *     Agent: 0,
-     *     Data: []
+     *   SampleName: "",
+     *   Data: {
+     *     ABLObjects: {
+     *       Filename: "",
+     *       Agent: 0,
+     *       Session: 0,
+     *       Data: []
+     *     },
+     *     Sessions: {
+     *       Filename: "",
+     *       Agent: 0,
+     *       Data: []
+     *     },
+     *     Requests: {
+     *       Filename: "",
+     *       Agent: 0,
+     *       Data: []
+     *     }
      *   }
      * }
      *
@@ -190,7 +192,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         assign this-object:MetricsOutput = new JsonObject().
         this-object:MetricsOutput:Add("AppName", ""). /* Default to blank value initially. */
         this-object:MetricsOutput:Add("Instance", oConfig:InstanceURI).
-        this-object:MetricsOutput:Add("TestRun", "").
+        this-object:MetricsOutput:Add("SampleName", "").
+        this-object:MetricsOutput:Add("Data", new JsonObject()).
     end constructor.
 
 
@@ -375,9 +378,9 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
     method private void ResetOutput ( ):
         /* Clean up any old metrics if they exist in the output object. */
-        if this-object:MetricsOutput:Has("ABLObjects") then this-object:MetricsOutput:Remove("ABLObjects").
-        if this-object:MetricsOutput:Has("Sessions") then this-object:MetricsOutput:Remove("Sessions").
-        if this-object:MetricsOutput:Has("Requests") then this-object:MetricsOutput:Remove("Requests").
+        if this-object:MetricsOutput:GetJsonObject("Data"):Has("ABLObjects") then this-object:MetricsOutput:GetJsonObject("Data"):Remove("ABLObjects").
+        if this-object:MetricsOutput:GetJsonObject("Data"):Has("Sessions") then this-object:MetricsOutput:GetJsonObject("Data"):Remove("Sessions").
+        if this-object:MetricsOutput:GetJsonObject("Data"):Has("Requests") then this-object:MetricsOutput:GetJsonObject("Data"):Remove("Requests").
     end method. /* ResetOutput */
 
 
@@ -476,8 +479,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
         if oConfig:CollectorType eq "file" or lError then do:
             oMetricsLogger:Debug("Writing metrics to local files.").
 
-            if this-object:MetricsOutput:Has("ABLObjects") then do:
-                assign oSubObj = this-object:MetricsOutput:GetJsonObject("ABLObjects").
+            if this-object:MetricsOutput:GetJsonObject("Data"):Has("ABLObjects") then do:
+                assign oSubObj = this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("ABLObjects").
 
                 if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
@@ -486,8 +489,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                     oMetricsLogger:Warn("ABLObjects missing Data or Filename.").
             end. /* ABLObjects */
 
-            if this-object:MetricsOutput:Has("Sessions") then do:
-                assign oSubObj = this-object:MetricsOutput:GetJsonObject("Sessions").
+            if this-object:MetricsOutput:GetJsonObject("Data"):Has("Sessions") then do:
+                assign oSubObj = this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Sessions").
 
                 if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
@@ -496,8 +499,8 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                     oMetricsLogger:Warn("Sessions missing Data or Filename.").
             end. /* Sessions */
 
-            if this-object:MetricsOutput:Has("Requests") then do:
-                assign oSubObj = this-object:MetricsOutput:GetJsonObject("Requests").
+            if this-object:MetricsOutput:GetJsonObject("Data"):Has("Requests") then do:
+                assign oSubObj = this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Requests").
 
                 if oSubObj:Has("Data") and oSubObj:GetType("Data") eq JsonDataType:Array and
                    oSubObj:Has("Filename") and oSubObj:GetType("Filename") eq JsonDataType:String then
@@ -1097,11 +1100,11 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
                                                            input  oConfig:ClassesExcluded,
                                                            output oObjReport) then do:
                 /* Output the report to the common JSON structure for tracking. */
-                this-object:MetricsOutput:Add("ABLObjects", new JsonObject()).
-                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("Filename", this-object:GetObjectsPath(piAgentID, piSessionID)).
-                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("AgentPID", piAgentID).
-                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("ABLSessionID", piSessionID).
-                this-object:MetricsOutput:GetJsonObject("ABLObjects"):Add("Data", cast(oObjReport:Clone(), JsonArray)).
+                this-object:MetricsOutput:GetJsonObject("Data"):Add("ABLObjects", new JsonObject()).
+                this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("ABLObjects"):Add("Filename", this-object:GetObjectsPath(piAgentID, piSessionID)).
+                this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("ABLObjects"):Add("AgentPID", piAgentID).
+                this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("ABLObjects"):Add("ABLSessionID", piSessionID).
+                this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("ABLObjects"):Add("Data", cast(oObjReport:Clone(), JsonArray)).
                 assign lReturn = true.
             end.
         end. /* Has Agent/Session */
@@ -1145,10 +1148,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Output the report to the common JSON structure for tracking. */
         if valid-object(oRequests) and oRequests:Length gt 0 then do:
-            this-object:MetricsOutput:Add("Requests", new JsonObject()).
-            this-object:MetricsOutput:GetJsonObject("Requests"):Add("Filename", this-object:GetRequestPath(piAgentID)).
-            this-object:MetricsOutput:GetJsonObject("Requests"):Add("AgentPID", piAgentID).
-            this-object:MetricsOutput:GetJsonObject("Requests"):Add("Data", cast(oRequests:Clone(), JsonArray)).
+            this-object:MetricsOutput:GetJsonObject("Data"):Add("Requests", new JsonObject()).
+            this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Requests"):Add("Filename", this-object:GetRequestPath(piAgentID)).
+            this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Requests"):Add("AgentPID", piAgentID).
+            this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Requests"):Add("Data", cast(oRequests:Clone(), JsonArray)).
         end.
 
         finally:
@@ -1176,10 +1179,10 @@ class Spark.Diagnostic.Util.OEMetrics inherits Spark.Diagnostic.Util.Logger use-
 
         /* Output the report to the common JSON structure for tracking. */
         if valid-object(oSessions) and oSessions:Length gt 0 then do:
-            this-object:MetricsOutput:Add("Sessions", new JsonObject()).
-            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Filename", this-object:GetSessionPath(piAgentID)).
-            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("AgentPID", piAgentID).
-            this-object:MetricsOutput:GetJsonObject("Sessions"):Add("Data", cast(oSessions:Clone(), JsonArray)).
+            this-object:MetricsOutput:GetJsonObject("Data"):Add("Sessions", new JsonObject()).
+            this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Sessions"):Add("Filename", this-object:GetSessionPath(piAgentID)).
+            this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Sessions"):Add("AgentPID", piAgentID).
+            this-object:MetricsOutput:GetJsonObject("Data"):GetJsonObject("Sessions"):Add("Data", cast(oSessions:Clone(), JsonArray)).
         end.
 
         finally:

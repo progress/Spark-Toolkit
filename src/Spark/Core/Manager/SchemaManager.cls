@@ -375,14 +375,16 @@ class Spark.Core.Manager.SchemaManager inherits Spark.Core.Manager.Manager imple
         define variable cFullCfgFileName as character no-undo.
         file-info:file-name = OSTools:sparkConf + "schema.json".
         cFullCfgFileName = file-info:full-pathname.
-        if cFullCfgFileName ne ? then
+        if cFullCfgFileName ne ? then do:
             dataset dsConfig:read-json("FILE", cFullCfgFileName, "EMPTY").
-        else
-            undo, throw new AppError(substitute("Schema config file [schema.json] not found in [&1]", OSTools:sparkConf), 0).
 
-        /* Register all databases according to the config file. */
-        if num-dbs ge 1 and can-find(first ConfigDB no-lock) then
-            this-object:examineDatabases().
+            /* Register all databases according to the config file. */
+            if num-dbs ge 1 and can-find(first ConfigDB no-lock) then
+                this-object:examineDatabases().
+        end. /* has config */
+        else if log-manager:logging-level ge 3 then
+            /* It is not necessary to have a config for this manager, but let's output a notice when logging level is elevated. */
+            message substitute("Notice: Schema config file [schema.json] not found in [&1], using defaults.", OSTools:sparkConf).
     end method. /* registerDatabases */
 
 

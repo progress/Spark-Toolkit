@@ -14,6 +14,8 @@ interface Spark.Core.Service.ISparkEntity inherits Ccs.BusinessLogic.IUpdatableB
 
     define public property LastCount as int64 no-undo get.
 
+    method public void getDataset ( output dataset-handle phDataset ).
+
     method public void postRowFill ( input dataset-handle phDataset ).
 
     method public void readData ( input  filter  as character,

@@ -1,9 +1,7 @@
-using Ccs.Common.IManager from propath.
-
 /**
  * Translation Manager Interface
  */
-interface Spark.Core.Manager.ITranslationManager inherits IManager:
+interface Spark.Core.Manager.ITranslationManager inherits Ccs.Common.IManager:
 
     method public character getTranslatedMessage( input pcMsgGroup as character, input piMsgNumber as integer).
 
