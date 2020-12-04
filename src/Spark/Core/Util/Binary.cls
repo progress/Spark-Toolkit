@@ -14,10 +14,10 @@ block-level on error undo, throw.
 
 class Spark.Core.Util.Binary use-widget-pool:
 
-    method public static integer BinaryAND ( input piOperand1 as integer,
-                                             input piOperand2 as integer ):
+    method public static int64 BinaryAND ( input piOperand1 as int64,
+                                           input piOperand2 as int64 ):
         define variable iByteLoop  as integer no-undo.
-        define variable iResult    as integer no-undo.
+        define variable iResult    as int64   no-undo.
         define variable lFirstBit  as logical no-undo.
         define variable lSecondBit as logical no-undo.
 

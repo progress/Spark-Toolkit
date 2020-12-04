@@ -163,7 +163,7 @@ class Spark.Core.Security.HMAC use-widget-pool final:
     method public static integer TruncateHMAC ( input pcHexHMAC as character ):
         /* Completes the standard for HOTP calculation per RFC 4226. */
         define variable cHexArray as character no-undo extent.
-        define variable iIntArray as integer   no-undo extent.
+        define variable iIntArray as int64     no-undo extent.
         define variable iOffset   as integer   no-undo.
         define variable iOutput   as integer   no-undo.
         define variable iByte     as integer   no-undo extent 4.
