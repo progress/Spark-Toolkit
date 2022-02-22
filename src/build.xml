@@ -126,7 +126,7 @@
             <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${dlcHome}/ant/lib/ant-contrib-0.6.jar"/>
 
             <!-- Set properties for special directories. -->
-            <property name="build.out" value="${src.dir}/../dist/oe${oeMajor}"/>
+            <property name="build.out" value="${src.dir}/../dist/oe${oeMajor}${oeMinor}"/>
             <mkdir dir="${build.out}"/>
         </sequential>
     </macrodef>
@@ -137,6 +137,22 @@
             <PCTVersion/>
             <echo message="DLC Home: ${dlcHome}"/>
             <echo message="OpenEdge Version: ${oe.version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="compile_openedge">
+        <sequential>
+            <!-- Code compiles without need for a database. -->
+            <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+                <propath>
+                    <pathelement path="${src.dir}"/>
+                    <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                    <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                </propath>
+                <fileset dir="${src.dir}">
+                    <include name="OpenEdge/**/*.cls"/>
+                </fileset>
+            </PCTCompile>
         </sequential>
     </macrodef>
 
@@ -152,19 +168,28 @@
         <requireVersion/> <!-- Must include a version property when task is executed. -->
         <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION ${release.version}-${release.date} (${oe.version})"/>
 
-        <!-- Code compiles without need for a database. -->
-        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-            <propath>
-                <pathelement path="${src.dir}"/>
-                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-            </propath>
-            <fileset dir="${src.dir}">
-                <include name="OpenEdge/**/*.cls"/>
-            </fileset>
-        </PCTCompile>
+        <if>
+            <equals arg1="${oeMajor}" arg2="11"/>
+            <then>
+                <!-- OpenEdge 11.7.x -->
+                <compile_openedge/>
+            </then>
+            <else>
+                <!-- OpenEdge 12.x -->
+                <if>
+                    <equals arg1="${oeMinor}" arg2="5"/>
+                    <then>
+                        <!-- OpenEdge 12.5 - Not Required -->
+                    </then>
+                    <else>
+                        <!-- OpenEdge >12.0 or <12.5 -->
+                        <compile_openedge/>
+                    </else>
+                </if>
+            </else>
+        </if>
 
-        <!-- Code compiles without need for a database, but uses Ccs (from OE 11.7.4+) and any extra libs. -->
+        <!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
             <propath>
                 <pathelement path="${src.dir}/Spark"/>
@@ -184,21 +209,13 @@
     <target name="compile_spark_diag">
         <init_oe/>
 
+        <delete dir="${preprocess}/OpenEdge" quiet="true"/>
+        <delete dir="${preprocess}/Spark/Core" quiet="true"/>
         <delete dir="${preprocess}/Spark/Diagnostic" quiet="true"/>
 
         <report_oe_vars/>
 
-        <!-- Code compiles without need for a database. -->
-        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-            <propath>
-                <pathelement path="${src.dir}"/>
-                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-            </propath>
-            <fileset dir="${src.dir}">
-                <include name="OpenEdge/**/*.cls"/>
-            </fileset>
-        </PCTCompile>
+        <compile_openedge/>
 
         <!-- Code compiles without need for a database, but uses some extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">

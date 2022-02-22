@@ -53,8 +53,6 @@ class OpenEdge.BusinessLogic.UpdateDataRequest implements IUpdateDataRequest, IJ
        @param JsonConstruct This object represented as JSON */
     method public void FromJson(input pJson as JsonConstruct):
         define variable data as JsonObject no-undo.
-        define variable serialisedData as JsonConstruct no-undo.
-        define variable customType as Progress.Lang.Class no-undo.
         
         if    not valid-object(pJson)
            or not type-of(pJson, JsonObject)
@@ -69,7 +67,13 @@ class OpenEdge.BusinessLogic.UpdateDataRequest implements IUpdateDataRequest, IJ
         
         // CUSTOM REQUEST
         if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:customRequest), JsonDataType:OBJECT) then
-            assign this-object:CustomRequest = JsonSerializer:Deserialize(data:GetJsonObject(string(JsonPropertyNameEnum:customRequest))).
+        do:
+            assign data                      = data:GetJsonObject(string(JsonPropertyNameEnum:customRequest))
+                   this-object:CustomRequest = JsonSerializer:Deserialize(data)
+                   .
+            if not valid-object(this-object:CustomRequest) then
+                assign this-object:CustomRequest = data.
+        end.
     end method.
     
 end class.

@@ -4,10 +4,14 @@ using Spark.Core.Util.OSTools from propath.
 
 block-level on error undo, throw.
 
+{Spark/version.i} /* Allow framework version to be set as a preprocessor. */
+
 /**
  * A static class with OS helper methods
  */
 class Spark.Core.Util.OSTools:
+
+    define public static variable CurrentVersion as character no-undo initial "{&SPARK_VERSION}".
 
     define private static temp-table ttDirStruct no-undo
         field ParentDir  as character

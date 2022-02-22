@@ -1,14 +1,14 @@
 /* *************************************************************************************************************************
-Copyright (c) 2018-2020 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
+Copyright (c) 2018-2021 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : QueryPredicate
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : pjudge
     Created     : 2018-06-15
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
@@ -30,22 +30,28 @@ using Progress.Json.ObjectModel.JsonObject.
 class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSerializer:
 
     /* Returns the name of the field for this query predicate */
-    define public property FieldName as character no-undo 
+    define public property FieldName as character no-undo
         get.
-        private set. 
+        private set.
     
     /* Returns the operator for this query predicate */
-    define public property Join as JoinEnum no-undo get. set. 
+    define public property Join as JoinEnum no-undo
+        get.
+        set(input pJoin as JoinEnum):
+            Assert:NotNull(pJoin, 'Join operator').
+            
+            assign this-object:Join = pJoin.
+        end set.
     
     /* Returns the operator for this query predicate */
     define public property Operator as QueryOperatorEnum no-undo
         get.
-        private set. 
+        private set.
     
     /* Returns a single value for this query predicate */
-    define public property Value as IPrimitiveHolder no-undo 
+    define public property Value as IPrimitiveHolder no-undo
         get.
-        private set. 
+        private set.
     
     /* Returns a list of values for this query predicate */
     define public property Values as IPrimitiveArrayHolder no-undo
@@ -54,16 +60,18 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSer
     
     /* Default constructor - for JSON deserialization only */
     constructor public QueryPredicate():
-    end method.
+        super().
+    end constructor.
     
     /* Constructor
        
-       @param character (mandatory) The field name 
-       @param QueryOperatorEnum The operator 
+       @param character (mandatory) The field name
+       @param QueryOperatorEnum The operator
        @param IPrimitiveHolder The predicate value */
     constructor public QueryPredicate (input pFieldName as character,
                                        input pOperator as QueryOperatorEnum,
                                        input pValue as IPrimitiveHolder):
+        this-object().
         Assert:NotNullOrEmpty(pFieldName, 'Predicate field name').
         Assert:NotNull(pValue, 'Predicate value holder ').
         
@@ -82,12 +90,13 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSer
     
     /* Constructor
        
-       @param character (mandatory) The field name 
-       @param QueryOperatorEnum The operator 
+       @param character (mandatory) The field name
+       @param QueryOperatorEnum The operator
        @param IPrimitiveArrayHolder The predicate value */
     constructor public QueryPredicate (input pFieldName as character,
                                        input pOperator as QueryOperatorEnum,
                                        input pValues as IPrimitiveArrayHolder):
+        this-object().
         Assert:NotNullOrEmpty(pFieldName, 'Predicate field name').
         Assert:NotNull(pValues, 'Predicate values holder ').
         
@@ -104,15 +113,22 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSer
     end constructor.
     
     method override public character ToString():
-        return trim(substitute('&1 &2 &3 &4',
+        define variable strVal as character no-undo.
+        
+        assign strVal = trim(substitute('&1 &2 &3':u,
                                this-object:FieldName,
-                               this-object:Operator:ToString(),
-                               (if valid-object(this-object:Value) then this-object:Value:ToString() else if valid-object(this-object:Values) then this-object:Values:ToString() else ?),
-                               (if valid-object(this-object:Join) then this-object:Join:ToString() else '':u))).
+                               string(this-object:Operator),
+                               (if valid-object(this-object:Value) then string(this-object:Value) else string(this-object:Values)))).
+        // optionally, prefix this predicate with its join
+        if valid-object(this-object:Join)
+        and not this-object:Join eq JoinEnum:None
+        then
+            assign strVal = string(this-object:Join) + ' ':u + strVal.
+        
+        return strVal.
     end method.
- 
- 
-    /* SERIALIZATION METHOD:returns a JsonConstruct (JsonDataType:OBJECT or JsonDataType:ARRAY) representation 
+     
+    /* SERIALIZATION METHOD:returns a JsonConstruct (JsonDataType:OBJECT or JsonDataType:ARRAY) representation
        of this object.
        
        @return JsonConstruct A JSON representation of this object. May be unknown (JsonDataType:NULL). */
@@ -126,7 +142,7 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSer
         data:Add(string(JsonPropertyNameEnum:operator),  string(this-object:Operator)).
         
         if valid-object(this-object:Values) then
-            data:Add(string(JsonPropertyNameEnum:value), JsonConverter:ToArray(this-object:Values)). 
+            data:Add(string(JsonPropertyNameEnum:value), JsonConverter:ToArray(this-object:Values)).
         else
             JsonConverter:AddToObject(JsonPropertyNameEnum:value, this-object:Value, data).
         
@@ -140,7 +156,7 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSer
         define variable data as JsonObject no-undo.
         
         if    not valid-object(pJson)
-           or not type-of(pJson, JsonObject) 
+           or not type-of(pJson, JsonObject)
         then
             return.
         
@@ -161,13 +177,13 @@ class OpenEdge.BusinessLogic.QueryPredicate implements IQueryPredicate, IJsonSer
         // VALUE(S)
         if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:value), JsonDataType:ARRAY) then
             assign this-object:Values = JsonConverter:ToPrimitiveArray(data:GetJsonArray(string(JsonPropertyNameEnum:value)))
-                   this-object:Value = ? 
+                   this-object:Value = ?
                    .
         else
         if not JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:value), JsonDataType:NULL) then
             assign this-object:Value  = JsonConverter:ToScalar(data, string(JsonPropertyNameEnum:value))
-                   this-object:Values = ?  
-                   . 
+                   this-object:Values = ?
+                   .
         
     end method.
 end class

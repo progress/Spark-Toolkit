@@ -57,7 +57,6 @@ class OpenEdge.BusinessLogic.QueryDefinition implements IQueryDefinition, IJsonS
                                        input pSort as IQuerySortEntry extent):
         this-object(pEntry).
         
-        Assert:HasDeterminateExtent(pSort, 'Query sort entries').
         assign this-object:QuerySort = pSort.
     end constructor.
     
