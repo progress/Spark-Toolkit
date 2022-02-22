@@ -1,14 +1,14 @@
 /* *************************************************************************************************************************
-Copyright (c) 2018-2020 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
+Copyright (c) 2018-2021 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : QueryGroup
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : pjudge
     Created     : 2018-06-15
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
@@ -25,6 +25,7 @@ using Progress.Json.ObjectModel.JsonArray.
 using Progress.Json.ObjectModel.JsonConstruct.
 using Progress.Json.ObjectModel.JsonDataType.
 using Progress.Json.ObjectModel.JsonObject.
+using OpenEdge.Core.StringConstant.
 
 class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup, IJsonSerializer:
     
@@ -44,37 +45,46 @@ class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup, IJsonSerializer:
     constructor public QueryGroup():
         super().
         // set a default value
-        assign this-object:Join = JoinEnum:None. 
+        assign this-object:Join = JoinEnum:None.
     end constructor.
     
     /* Constructor
        
        @param integer The number of query entries in this group */
     constructor public QueryGroup(input pNumEntries as integer):
-        super ().
+        this-object().
         
-        Assert:IsPositive(pNumEntries, 'Num query entries '). 
+        Assert:IsPositive(pNumEntries, 'Num query entries ').
         assign extent(Entries) = pNumEntries.
     end constructor.
-
+    
     method override public character ToString():
         define variable queryString as character no-undo.
         define variable cnt as integer no-undo.
         define variable loop as integer no-undo.
+        define variable delim as character no-undo.
         
-        assign cnt = extent(this-object:Entries).
-        
+        assign queryString = '(':u
+               cnt         = extent(this-object:Entries)
+               delim       =  '':u
+               .
         do loop = 1 to cnt:
-            queryString = substitute('&1 &2 (&3)',
-                                     trim(queryString),
-                                     if queryString eq "" then "" else this-object:Join:ToString(),
-                                     trim(this-object:Entries[loop]:ToString())).
+            assign queryString = substitute('&1&2&3':u, queryString, delim, string(this-object:Entries[loop]))
+                   delim       = StringConstant:SPACE
+                   .
         end.
-    
-        return trim(queryString).
+        assign queryString = queryString + ')':u.
+        
+        // optionally, prefix this group with its join
+        if valid-object(this-object:Join)
+        and not this-object:Join eq JoinEnum:None
+        then
+            assign queryString = string(this-object:Join) + ' ':u + queryString.
+        
+        return queryString.
     end method.
     
-    /* SERIALIZATION METHOD:returns a JsonConstruct (JsonDataType:OBJECT or JsonDataType:ARRAY) representation 
+    /* SERIALIZATION METHOD:returns a JsonConstruct (JsonDataType:OBJECT or JsonDataType:ARRAY) representation
        of this object.
        
        @return JsonConstruct A JSON representation of this object. May be unknown (JsonDataType:NULL). */
@@ -84,7 +94,7 @@ class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup, IJsonSerializer:
         assign data = new JsonObject().
             
         data:Add(string(JsonPropertyNameEnum:entries), JsonConverter:ToArray(this-object:Entries)).
-        data:Add(string(JsonPropertyNameEnum:join),    string(this-object:Join)). 
+        data:Add(string(JsonPropertyNameEnum:join),    string(this-object:Join)).
         
         return data.
     end method.
@@ -99,7 +109,7 @@ class OpenEdge.BusinessLogic.QueryGroup implements IQueryGroup, IJsonSerializer:
         define variable cnt as integer no-undo.
         
         if    not valid-object(pJson)
-           or not type-of(pJson, JsonObject) 
+           or not type-of(pJson, JsonObject)
         then
             return.
         

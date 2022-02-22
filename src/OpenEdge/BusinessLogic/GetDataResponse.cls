@@ -94,8 +94,14 @@ class OpenEdge.BusinessLogic.GetDataResponse implements IGetDataResponse, IJsonS
         end.
         
         // the custom response
-        if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:customResponse), JsonDataType:OBJECT) then 
-            assign this-object:CustomResponse = JsonSerializer:Deserialize(data:GetJsonObject(string(JsonPropertyNameEnum:customResponse))).
+        if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:customResponse), JsonDataType:OBJECT) then
+        do: 
+            assign data                       = data:GetJsonObject(string(JsonPropertyNameEnum:customResponse))
+                   this-object:CustomResponse = JsonSerializer:Deserialize(data)
+                   .
+            if not valid-object(this-object:CustomResponse) then
+                assign this-object:CustomResponse = data.
+        end.
     end method.
     
     /* Serializes this object to JSON

@@ -3,10 +3,10 @@ Copyright (c) 2018-2020 by Progress Software Corporation and/or one of its subsi
 ************************************************************************************************************************** */
  /*------------------------------------------------------------------------
     File        : GetTableResultCountResponse
-    Description : 
+    Description :
     Author(s)   : pjudge
     Created     : 2018-06-15
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
@@ -19,12 +19,12 @@ using Progress.Json.ObjectModel.JsonConstruct.
 using Progress.Json.ObjectModel.JsonDataType.
 using Progress.Json.ObjectModel.JsonObject.
 
-class OpenEdge.BusinessLogic.GetTableResultCountResponse implements IGetTableResultCountResponse, IJsonSerializer: 
+class OpenEdge.BusinessLogic.GetTableResultCountResponse implements IGetTableResultCountResponse, IJsonSerializer:
     /* Returns is the result is exact (TRUE) or Guessed or Cached (FALSE) */
-    define public property Exact as logical no-undo get. set. 
+    define public property Exact as logical no-undo get. set.
     
     /* Returns the number of results for this table */
-    define public property NumResults as int64 no-undo get. set. 
+    define public property NumResults as int64 no-undo get. set.
     
     /* Returns the name of the table this result belongs to */
     define public property TableName as character no-undo
@@ -33,6 +33,7 @@ class OpenEdge.BusinessLogic.GetTableResultCountResponse implements IGetTableRes
     
     /* Default constructor */
     constructor public GetTableResultCountResponse():
+        super().
     end constructor.
     
     /* Constructor
@@ -92,13 +93,13 @@ class OpenEdge.BusinessLogic.GetTableResultCountResponse implements IGetTableRes
         assign data = cast(pData, JsonObject).
         
         if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:tableName), JsonDataType:STRING) then
-            assign TableName = data:GetCharacter(string(JsonPropertyNameEnum:tableName)). 
+            assign TableName = data:GetCharacter(string(JsonPropertyNameEnum:tableName)).
         
         if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:exact), JsonDataType:BOOLEAN) then
-            assign Exact = data:GetLogical(string(JsonPropertyNameEnum:exact)). 
+            assign Exact = data:GetLogical(string(JsonPropertyNameEnum:exact)).
         
         if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:numResults), JsonDataType:NUMBER) then
-            assign NumResults = data:GetInt64(string(JsonPropertyNameEnum:numResults)). 
+            assign NumResults = data:GetInt64(string(JsonPropertyNameEnum:numResults)).
     end method.
     
 end class.

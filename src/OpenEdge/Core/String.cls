@@ -229,15 +229,21 @@ class OpenEdge.Core.String serializable
             return cArray.
 
         if iMax eq 0 then
+            {&_proparse_ prolint-nowarn(overflow)}
             assign extent(cArray) = 1
                    // this should only happen of value and delimiter are empty
                    cArray[1]      = pcValue
                    .
         else
-            assign
-                extent(cArray) = iMax
+            assign extent(cArray) = iMax.
+        if iMax eq 0 then
+            {&_proparse_ prolint-nowarn(overflow)}
+            assign extent(cArray) = 1
+                   // this should only happen of value and delimiter are empty
+                   cArray[1]      = pcValue
                 .
-
+        else
+            assign extent(cArray) = iMax.
         do iLoop = 1 to iMax:
             assign cArray[iLoop] = entry(iLoop, pcValue, pcDelimiter).
         end.
@@ -314,6 +320,7 @@ class OpenEdge.Core.String serializable
         if this-object:Size ge 30000 then
             assign cValue = substring(this-object:Value, 1, 29985) + ' <<...MORE...>>':u.
         else
+            {&_proparse_ prolint-nowarn(overflow)}
             assign cValue = this-object:Value.
 
         return cValue.

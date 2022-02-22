@@ -115,7 +115,13 @@ class OpenEdge.BusinessLogic.GetDataRequest implements IGetDataRequest, IJsonSer
         
         // CUSTOM PARAMETER
         if JsonPropertyHelper:HasTypedProperty(data, string(JsonPropertyNameEnum:customParameter), JsonDataType:OBJECT) then
-            assign this-object:CustomParameter = JsonSerializer:Deserialize(data:GetJsonObject(string(JsonPropertyNameEnum:customParameter))).
+        do:
+            assign data                        = data:GetJsonObject(string(JsonPropertyNameEnum:customParameter))
+                   this-object:CustomParameter = JsonSerializer:Deserialize(data)
+                   .
+            if not valid-object(this-object:CustomParameter) then
+                assign this-object:CustomParameter = data.
+        end.
     end method.
     
     /* Serializes this object to JSON
