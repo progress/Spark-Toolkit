@@ -635,7 +635,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
        @param character The expression to evaluate
        @return logical TRUE if the expression contains at least one * or .; FALSE otherwise */
     method private logical IsMatchesExpression(input pExpr as character):
-        var integer pos.
+        define variable pos as integer.
         
         if pExpr eq ?
         or pExpr eq '':u

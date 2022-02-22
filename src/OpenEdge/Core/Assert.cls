@@ -48,7 +48,7 @@ class OpenEdge.Core.Assert:
         /* Use a longchar for the message, so that substitute is working entirely on longchar variables. */
         define variable subMessage as longchar no-undo initial "Expected: &1 but was: &2":u.
         if not a = b then
-            return error new AssertionFailedError(substitute(subMessage, a, b), 0).
+            return error new AssertionFailedError(string(substitute(subMessage, a, b)), 0).
     end method.
     
     method public static void Equals(input a as decimal, input b as decimal):
@@ -120,7 +120,7 @@ class OpenEdge.Core.Assert:
         /* Use a longchar for the message, so that substitute is working entirely on longchar variables. */
         define variable subMessage as longchar no-undo initial "&1 and &2 are equal":u.
         if a eq b then
-            return error new AssertionFailedError(substitute(subMessage, a, b), 0).
+            return error new AssertionFailedError(string(substitute(subMessage, a, b)), 0).
     end method.
 
     method public static void NotEqual(input a as Object, input b as Object):
@@ -1107,7 +1107,7 @@ class OpenEdge.Core.Assert:
             /* Combine any character substitutions first, then longchar substitutions. */
             define variable subMessage as longchar no-undo.
             assign subMessage = substitute('&1 ("&2") is not in the list: &3':u, pName, pValue, '&1':u).
-            undo, throw new AssertionFailedError(substitute(subMessage, pList), 0).
+            undo, throw new AssertionFailedError(string(substitute(subMessage, pList)), 0).
         end.
     end method.
 
@@ -1145,7 +1145,7 @@ class OpenEdge.Core.Assert:
             /* Combine any character substitutions first, then longchar substitutions. */
             define variable subMessage as longchar no-undo.
             assign subMessage = substitute('&1 ("&2") is in the list: &3':u, pName, pValue, '&1':u).
-            undo, throw new AssertionFailedError(substitute(subMessage, pList), 0).
+            undo, throw new AssertionFailedError(string(substitute(subMessage, pList)), 0).
         end.
     end method.
     

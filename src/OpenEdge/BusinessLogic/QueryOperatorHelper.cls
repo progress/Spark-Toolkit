@@ -18,7 +18,7 @@ using OpenEdge.BusinessLogic.QueryOperatorHelper.
 class OpenEdge.BusinessLogic.QueryOperatorHelper:
 
     {&_proparse_ prolint-nowarn(varusage)}
-    var static private character mOperatorNames.
+    define static private variable mOperatorNames as character.
     
     /* Static constructor */
     constructor static QueryOperatorHelper():
