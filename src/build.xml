@@ -1,6 +1,8 @@
 <project name="FrameworkTools" basedir="." default="usage">
 
     <!-- Provide tasks to build the Spark (Core) and Diagnotic procedure library files. -->
+	<!-- Note: For ABLDuck and PCTDoc it may be necessary to copy ast.jar and
+               ast-dependencies.jar from DLC/java/ant-libs/ to DLC/ant/libs -->
 
     <target name="usage">
         <echo message="Usage Instructions:"/>
@@ -225,20 +227,16 @@
                 </if>
             </else>
         </if>
-
-		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
     </target>
 
     <target name="compile_spark_diag">
         <init_oe/>
 
-        <delete dir="${preprocess}/OpenEdge" quiet="true"/>
-        <delete dir="${preprocess}/Spark/Core" quiet="true"/>
         <delete dir="${preprocess}/Spark/Diagnostic" quiet="true"/>
 
         <report_oe_vars/>
 
-        <compile_openedge/>
+        <compile_with_openedge/>
 
         <!-- Code compiles without need for a database, but uses some extra libs. -->
         <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
@@ -338,6 +336,8 @@
                 <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
             </propath>
         </ABLDuck>
+
+		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
     </target>
 
     <target name="build_pctdoc" depends="clean">
@@ -396,6 +396,8 @@
                 <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
             </propath>
         </HTMLDocumentation>
+
+		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
     </target>
 
     <target name="build_spark_pl" depends="clean">
@@ -416,6 +418,8 @@
                 <include name="OpenEdge/**/*.r"/>
             </fileset>
         </PCTLibrary>
+
+		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
     </target>
 
     <target name="build_diag_pl" depends="clean">
