@@ -4,12 +4,12 @@ Copyright (c) 2020 by Progress Software Corporation and/or one of its subsidiari
 /*------------------------------------------------------------------------
     File        : QueryEntryDeserializer
     Purpose     : Helper class to deserialize a JSON object into an instance of
-                  IQueryEntry - either a IQueryGroup or IQueryPredicate 
-    Syntax      : 
-    Description : 
+                  IQueryEntry - either a IQueryGroup or IQueryPredicate
+    Syntax      :
+    Description :
     Author(s)   : pjudge
     Created     : 2020-09-17
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
@@ -25,10 +25,11 @@ using Progress.Json.ObjectModel.JsonObject.
 class OpenEdge.BusinessLogic.IO.QueryEntryDeserializer:
     
     /* Default constructor is private to avoid instantiation */
-    constructor private QueryEntryDeserializer(): 
+    constructor private QueryEntryDeserializer():
+        /* Default constructor is private to avoid instantiation */
     end constructor.
     
-    /* Attempts to convert a JSON object into a IQueryEntry (either an IQueryGroup or IQueryPredicate). 
+    /* Attempts to convert a JSON object into a IQueryEntry (either an IQueryGroup or IQueryPredicate).
        
        @param JsonObject The serialised JSON data. May be null/unknown.
        @return IQueryEntry The query entry representing that JSON. Either an IQueryGroup or IQueryPredicate. Always
@@ -41,7 +42,7 @@ class OpenEdge.BusinessLogic.IO.QueryEntryDeserializer:
                                                     get-class(IQueryGroup),
                                                     get-class(QueryGroup)),
                          IQueryEntry).
-        if valid-object(qe) 
+        if valid-object(qe)
         and type-of(qe, IQueryGroup)
         then
         do:

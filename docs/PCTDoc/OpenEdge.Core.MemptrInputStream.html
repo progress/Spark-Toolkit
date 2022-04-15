@@ -1,0 +1,1182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>Progress Spark Toolkit (v6.0.2)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="OpenEdge.Core.package.html">OpenEdge.Core<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Class&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">MemptrInputStream</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.IO.InputStream                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:2em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='OpenEdge.Core.MemptrInputStream.html'>OpenEdge.Core.MemptrInputStream</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits">Progress.IO.InputStream</span>
+                                </td>
+                            </tr>
+                            
+                            <!--
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"></span> 
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2019-2020 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>MemptrInputStream </td></tr><tr><td class='unitcommentparam'>Description:</td><td class='unitcommentdesc'>An InputStream implementation that holds data in-memory. This is </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>legacy code that now acts as a wrapper to the Progress.IO.MemoryInputStream </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>and should not be used </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>2019-03-27 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>* This should be replaced in 12.0.0+ with the Progress.IO.MemoryInputStream, for performance reasons </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* The current/last-read byte in the stream </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010fNpnqK5ouWKl5JGZnZpb5w=='> Close ()</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INT64 <a href='#020010wpBaWoaBDoxTZsWzrQhztQ=='> Read (character, character)</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INT64 <a href='#020010QOsuXQKZTiVsQ38hCT42Dg=='> Read (character, longchar)</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INT64 <a href='#0200109zKFK82JerQArZwhtV9UCw=='> Read (memptr, int64, int64)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/** ABSTRACT INT64 Read(INPUT pmData AS MEMPTR,  INPUT offset AS INT64, INPUT len AS INT64).
+Description:
+When overridden in a derived class, reads &#226;&#8364;&#732;len&#226;&#8364;&#8482; bytes of data from the current input
+stream into a specified MEMPTR variable starting at offset &#226;&#8364;&#732;offset&#226;&#8364;&#8482; and returns number
+of bytes read.  */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INT64 <a href='#020010ztoICHnFjTa+ERGtStKQ6A=='> SkipBytes (int64)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Skips over and discards n btyes from the current input stream.
+
+@param int64 The number of bytes to skip. + skips forward (toward Data:Size); - skips toward 1.
+@return int64 Returns number of bytes skipped. Returns 0, if we already at the end of the stream. */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010S1btXtXcr4OFEeEmcLqwKQ=='> MemptrInputStream ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Default constructor */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010bNgpjRU013otK4EmWVgaew=='> MemptrInputStream (Memptr)</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010fl3pLKJWQ2UeTVsvV2l8LA=='> MemptrInputStream (memptr)</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Core.Memptr <a href='#0200106K8+jFlt2OkGpzvJtP1l5Q=='> Data</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INT64 <a href='#020010websgUoZZQoyzx5BQg+h+w=='> Position</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010fNpnqK5ouWKl5JGZnZpb5w==" href="#Top">Top</a>
+                <a name="  <a href='#020010fNpnqK5ouWKl5JGZnZpb5w=='> Close ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010fNpnqK5ouWKl5JGZnZpb5w=='> Close ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010wpBaWoaBDoxTZsWzrQhztQ==" href="#Top">Top</a>
+                <a name=" INT64 <a href='#020010wpBaWoaBDoxTZsWzrQhztQ=='> Read (character, character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC INT64 <a href='#020010wpBaWoaBDoxTZsWzrQhztQ=='> Read (character, character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pDelim</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pTarget</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INT64 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010QOsuXQKZTiVsQ38hCT42Dg==" href="#Top">Top</a>
+                <a name=" INT64 <a href='#020010QOsuXQKZTiVsQ38hCT42Dg=='> Read (character, longchar)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC INT64 <a href='#020010QOsuXQKZTiVsQ38hCT42Dg=='> Read (character, longchar)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pDelim</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pTarget</i>
+    </td>
+    <td>
+       LONGCHAR
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INT64 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200109zKFK82JerQArZwhtV9UCw==" href="#Top">Top</a>
+                <a name=" INT64 <a href='#0200109zKFK82JerQArZwhtV9UCw=='> Read (memptr, int64, int64)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC INT64 <a href='#0200109zKFK82JerQArZwhtV9UCw=='> Read (memptr, int64, int64)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><tr><td class='paramname'>Purpose: </td><td class='paramdesc'>ABSTRACT INT64 Read(INPUT pmData AS MEMPTR,  INPUT offset AS INT64, INPUT len AS INT64). </td></tr><tr><td class='paramname'>Description: </td><td class='paramdesc'> </td></tr><td class='paramname'></td><td class='paramdesc'>When overridden in a derived class, reads &#226;&#8364;&#732;len&#226;&#8364;&#8482; bytes of data from the current input </td></tr><td class='paramname'></td><td class='paramdesc'>stream into a specified MEMPTR variable starting at offset &#226;&#8364;&#732;offset&#226;&#8364;&#8482; and returns number </td></tr><td class='paramname'></td><td class='paramdesc'>of bytes read. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTarget</i>
+    </td>
+    <td>
+       OpenEdge.Core.Memptr
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pOffset</i>
+    </td>
+    <td>
+       INT64
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pLength</i>
+    </td>
+    <td>
+       INT64
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INT64 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010ztoICHnFjTa+ERGtStKQ6A==" href="#Top">Top</a>
+                <a name=" INT64 <a href='#020010ztoICHnFjTa+ERGtStKQ6A=='> SkipBytes (int64)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC INT64 <a href='#020010ztoICHnFjTa+ERGtStKQ6A=='> SkipBytes (int64)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Skips over and discards n btyes from the current input stream. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pSkip</i>
+    </td>
+    <td>
+       INT64
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INT64 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        int64 Returns number of bytes skipped. Returns 0, if we already at the end of the stream.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010S1btXtXcr4OFEeEmcLqwKQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010S1btXtXcr4OFEeEmcLqwKQ=='> MemptrInputStream ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010S1btXtXcr4OFEeEmcLqwKQ=='> MemptrInputStream ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default constructor </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010bNgpjRU013otK4EmWVgaew==" href="#Top">Top</a>
+                <a name="  <a href='#020010bNgpjRU013otK4EmWVgaew=='> MemptrInputStream (Memptr)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010bNgpjRU013otK4EmWVgaew=='> MemptrInputStream (Memptr)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pData</i>
+    </td>
+    <td>
+       OpenEdge.Core.Memptr
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010fl3pLKJWQ2UeTVsvV2l8LA==" href="#Top">Top</a>
+                <a name="  <a href='#020010fl3pLKJWQ2UeTVsvV2l8LA=='> MemptrInputStream (memptr)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010fl3pLKJWQ2UeTVsvV2l8LA=='> MemptrInputStream (memptr)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pData</i>
+    </td>
+    <td>
+       OpenEdge.Core.Memptr
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200106K8+jFlt2OkGpzvJtP1l5Q==" href="#Top">Top</a>
+                <a name=" OpenEdge.Core.Memptr <a href='#0200106K8+jFlt2OkGpzvJtP1l5Q=='> Data</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC OpenEdge.Core.Memptr <a href='#0200106K8+jFlt2OkGpzvJtP1l5Q=='> Data</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      OpenEdge.Core.Memptr 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010websgUoZZQoyzx5BQg+h+w==" href="#Top">Top</a>
+                <a name=" INT64 <a href='#020010websgUoZZQoyzx5BQg+h+w=='> Position</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC INT64 <a href='#020010websgUoZZQoyzx5BQg+h+w=='> Position</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INT64 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <font class="footer_timestamp">04.15.2022 11:51:57</font>
+    </BODY>
+</HTML>

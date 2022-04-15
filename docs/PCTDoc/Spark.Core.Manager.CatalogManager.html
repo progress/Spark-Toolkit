@@ -2,7 +2,7 @@
 <HTML>
     <HEAD>
         <meta http-equiv="expires" content="86400">
-        <TITLE>Progress Spark Toolkit (v5.0.0)</TITLE>
+        <TITLE>Progress Spark Toolkit (v6.0.2)</TITLE>
         <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
         <SCRIPT src="resources/jquery.js"></SCRIPT>
         <SCRIPT src="resources/functions.js"></SCRIPT>
@@ -101,7 +101,7 @@
                     </table>
                 	<br>
                 	<span class="unit_comment">
-                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>CatalogManager </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Dustin Grau (dugrau@progress.com) </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Fri Dec 19 14:30:46 EST 2014 </td></tr></tbody></table>
+                	<table><tbody class='unit_commment_table'><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>CatalogManager </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>Dustin Grau (dugrau@progress.com) </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>Fri Dec 19 14:30:46 EST 2014 </td></tr><tr><td class='unitcommentparam'>Notes:</td><td class='unitcommentdesc'>Setting the logging-level for your ABL Application to at </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>least 3 (verbose) will trigger additional messages in </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>the logs as well as output multiple files in the session </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>temp directory (eg. the service mapping files). </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>This class provides 3 distinct functions at present: </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>1) Discover any classes/procedures to be exposed as RESTful endpoints </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Performed by loadResources() </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>2) Create a JSDO-compatible DataObject Catalog for public consumption </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Performed by getCatalog() </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>3) Register all ABL resources as DataObjectServices for internal use </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Performed by registerService() via registerAllServices() </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>In respect to the DataObject Catalog and the DataObjectServices these </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>provide similar but limited sets of data about the exposed resources. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>While they draw upon the same sources of information, the artifacts </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>describe this data differently for each of their intended purposes. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Therefore, a "source of truth" is provided in the form of ProDatasets </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>within this class which contains all necessary information gathered </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>during the resource discovery process (stored in dsResource). </td></tr></tbody></table>
                 	</span>
                 	<br>
                 </div>
@@ -180,7 +180,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010E2ebSKiXbOCzN9OW/sc+bg=='> clearResourceMethods (character, character)</a>
+          <a href='#020010fkJryaxhBNL27QvFvwv4xg=='> clearResourceMethods (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -270,25 +270,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010YQxCXA+ap37MdGrHvHbM6A=='> getAction (character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getJsonType */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         LOGICAL <a href='#020010Jk1ZwFn8h+yMD8WVPAOmFg=='> getBeforeImageFlag (character, character, character)</a>
+         LOGICAL <a href='#020010mjiGKwx03Qv3ZGUaG0AtAQ=='> getBeforeImageFlag (character, character)</a>
     </font>
   </td>
   <td class="cell">
@@ -324,25 +306,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010fDdnwD/CTwqDmx7/jrLnZA=='> getClassPath (character, character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getMethodSignature */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         Progress.Json.ObjectModel.JsonObject <a href='#020010fKu6/psGxIEOZN9w3fkX0w=='> getDataDefs (character, character)</a>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010H2c5CE+VZrt0bmudMksXFw=='> getDataDefs (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -378,12 +342,12 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010xi8dh9qrmf7+OCL5DERdfA=='> getMethod (character, character, character, character, character, handle, character)</a>
+         CHARACTER <a href='#020010Bo4umlZZOmXONf/4ND4Xrw=='> getList (JsonArray)</a>
     </font>
   </td>
   <td class="cell">
      
-/* getVerb */ <br> <i>  </i>
+/* getJsonType */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -396,43 +360,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         CHARACTER <a href='#020010MYsZGn8yexFln+gV/lc3GQ=='> getMethodName (character, character, character, character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getMethod */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         Progress.Json.ObjectModel.JsonArray <a href='#020010YsivpBJI3Dy9HyDNV697hg=='> getMethodSignature (character, character, character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getMethodName */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         Progress.Json.ObjectModel.JsonArray <a href='#020010ExLeJ26wTIei/wpo9JuYpA=='> getOperations (character, character)</a>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010EVdK5+mYps2W57LNALaTVA=='> getOperations (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -450,30 +378,12 @@
   </td>
   <td class="signature_col cell">
     <font>
-         Progress.Json.ObjectModel.JsonArray <a href='#020010Q8vUOLS6MLENgK0TYnco7w=='> getRelations (character, character)</a>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010IBGGVFa0CJsLDXoDcvjPUg=='> getRelations (character)</a>
     </font>
   </td>
   <td class="cell">
      
 /* getSchema */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         CHARACTER <a href='#020010Pu8szDVQHT1kKKwTNFkSUg=='> getResourcePath (character, character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getClassPath */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -504,7 +414,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-         Progress.Json.ObjectModel.JsonObject <a href='#020010LNHak5+BWhqMyCN6FnDmpg=='> getSchema (character, character, logical)</a>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010MTOe7HdJnWxhWLj7ckKRaQ=='> getSchema (character, logical)</a>
     </font>
   </td>
   <td class="cell">
@@ -552,24 +462,6 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         CHARACTER <a href='#020010fHSikralkliufdR/Y9slBA=='> getVerb (character)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* getAction */ <br> <i>  </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
     <font>+</font>
     <font></font>
     <font></font>
@@ -594,12 +486,12 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#0200104aJWRUjO+YR0TYFqI02k3Q=='> loadDynamicResource (character, character)</a>
+          <a href='#020010WBwEMHr0e01XBcfAu+sPrg=='> loadDynamicResource (character)</a>
     </font>
   </td>
   <td class="cell">
      
-/* getResourcePath */ <br> <i>  </i>
+/* processAnnotations */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -618,6 +510,24 @@
   <td class="cell">
      
 /* checkForResources */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#02001017ZdBdsZRgtOn93LbrejzA=='> processAnnotations (character, character, character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* getList */ <br> <i>  </i>
   </td>
 </tr>
 <tr class="table_content overview_row">
@@ -648,7 +558,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a>
+          <a href='#020010clv6xOUVs98cSKn588gMeg=='> registerMethods (character)</a>
     </font>
   </td>
   <td class="cell">
@@ -666,7 +576,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010Y370Gzn/D9YqhRXGIQvuwg=='> registerMethods (character, character, character)</a>
+          <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a>
     </font>
   </td>
   <td class="cell">
@@ -738,7 +648,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010TXT8I0ZzS5oiEhj5J9Bo+A=='> setResourceMethod (character, character, character, character, JsonArray)</a>
+          <a href='#020010u+y+PkzrdXDDmBr9Jvj9SA=='> setResourceMethod (character, character, character, JsonArray)</a>
     </font>
   </td>
   <td class="cell">
@@ -756,7 +666,7 @@
   </td>
   <td class="signature_col cell">
     <font>
-          <a href='#020010Y7j7UprK1uHv29kDzSJXzA=='> setResourceProcedure (character, character, character, character)</a>
+          <a href='#0200108QXXgJE+lEPELdN5CqEZbQ=='> setResourceProcedure (character, character, character)</a>
     </font>
   </td>
   <td class="cell">
@@ -873,6 +783,23 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#0200103UXu8Yy0Ih8q7H4W2l+ccA=='> Annotations</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
     <font>+</font>
     <font></font>
     <font></font>
@@ -958,6 +885,23 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         INT64 <a href='#0200100Q0oozKOv83nFAxN+g3iAg=='> ParamUUID</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
     <font>+</font>
     <font></font>
     <font></font>
@@ -999,6 +943,23 @@
   <td class="signature_col cell">
     <font>
          CHARACTER <a href='#020010HwYpOKxw8FcGRzfTByMdBQ=='> ServicePrefix</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010FdAHAxZRxOXZceCgQBAC1Q=='> TemporaryDir</a>
     </font>
   </td>
   <td class="cell">
@@ -1232,11 +1193,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010E2ebSKiXbOCzN9OW/sc+bg==" href="#Top">Top</a>
-                <a name="  <a href='#020010E2ebSKiXbOCzN9OW/sc+bg=='> clearResourceMethods (character, character)</a>"></a>
+                <a name="020010fkJryaxhBNL27QvFvwv4xg==" href="#Top">Top</a>
+                <a name="  <a href='#020010fkJryaxhBNL27QvFvwv4xg=='> clearResourceMethods (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010E2ebSKiXbOCzN9OW/sc+bg=='> clearResourceMethods (character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010fkJryaxhBNL27QvFvwv4xg=='> clearResourceMethods (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1269,23 +1230,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -1347,7 +1292,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
+        <i>pcServiceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -1718,89 +1663,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010YQxCXA+ap37MdGrHvHbM6A==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010YQxCXA+ap37MdGrHvHbM6A=='> getAction (character)</a>"></a>
+                <a name="020010mjiGKwx03Qv3ZGUaG0AtAQ==" href="#Top">Top</a>
+                <a name=" LOGICAL <a href='#020010mjiGKwx03Qv3ZGUaG0AtAQ=='> getBeforeImageFlag (character, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010YQxCXA+ap37MdGrHvHbM6A=='> getAction (character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getJsonType </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcHttpMethod</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      CHARACTER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010Jk1ZwFn8h+yMD8WVPAOmFg==" href="#Top">Top</a>
-                <a name=" LOGICAL <a href='#020010Jk1ZwFn8h+yMD8WVPAOmFg=='> getBeforeImageFlag (character, character, character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010Jk1ZwFn8h+yMD8WVPAOmFg=='> getBeforeImageFlag (character, character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED LOGICAL <a href='#020010mjiGKwx03Qv3ZGUaG0AtAQ=='> getBeforeImageFlag (character, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1833,23 +1700,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -2000,105 +1851,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010fDdnwD/CTwqDmx7/jrLnZA==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010fDdnwD/CTwqDmx7/jrLnZA=='> getClassPath (character, character)</a>"></a>
+                <a name="020010H2c5CE+VZrt0bmudMksXFw==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010H2c5CE+VZrt0bmudMksXFw=='> getDataDefs (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010fDdnwD/CTwqDmx7/jrLnZA=='> getClassPath (character, character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getMethodSignature </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      CHARACTER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010fKu6/psGxIEOZN9w3fkX0w==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010fKu6/psGxIEOZN9w3fkX0w=='> getDataDefs (character, character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010fKu6/psGxIEOZN9w3fkX0w=='> getDataDefs (character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010H2c5CE+VZrt0bmudMksXFw=='> getDataDefs (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2131,23 +1888,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -2266,11 +2007,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010xi8dh9qrmf7+OCL5DERdfA==" href="#Top">Top</a>
-                <a name="  <a href='#020010xi8dh9qrmf7+OCL5DERdfA=='> getMethod (character, character, character, character, character, handle, character)</a>"></a>
+                <a name="020010Bo4umlZZOmXONf/4ND4Xrw==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010Bo4umlZZOmXONf/4ND4Xrw=='> getList (JsonArray)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010xi8dh9qrmf7+OCL5DERdfA=='> getMethod (character, character, character, character, character, handle, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010Bo4umlZZOmXONf/4ND4Xrw=='> getList (JsonArray)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2291,7 +2032,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getVerb </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getJsonType </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -2303,216 +2044,10 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
+        <i>poJsonArray</i>
     </td>
     <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcMethodName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcHttpMethod</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcValidMethod</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>phProcHandle</i>
-    </td>
-    <td>
-       HANDLE
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcEntityName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010MYsZGn8yexFln+gV/lc3GQ==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010MYsZGn8yexFln+gV/lc3GQ=='> getMethodName (character, character, character, character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010MYsZGn8yexFln+gV/lc3GQ=='> getMethodName (character, character, character, character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getMethod </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcMethodName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcHttpMethod</i>
-    </td>
-    <td>
-       CHARACTER
+       Progress.Json.ObjectModel.JsonArray
     </td>
     <td>
     </td>
@@ -2550,121 +2085,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010YsivpBJI3Dy9HyDNV697hg==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010YsivpBJI3Dy9HyDNV697hg=='> getMethodSignature (character, character, character)</a>"></a>
+                <a name="020010EVdK5+mYps2W57LNALaTVA==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010EVdK5+mYps2W57LNALaTVA=='> getOperations (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonArray <a href='#020010YsivpBJI3Dy9HyDNV697hg=='> getMethodSignature (character, character, character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getMethodName </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcClassPath</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcMethodName</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      Progress.Json.ObjectModel.JsonArray 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010ExLeJ26wTIei/wpo9JuYpA==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010ExLeJ26wTIei/wpo9JuYpA=='> getOperations (character, character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonArray <a href='#020010ExLeJ26wTIei/wpo9JuYpA=='> getOperations (character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonArray <a href='#020010EVdK5+mYps2W57LNALaTVA=='> getOperations (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2697,23 +2122,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -2754,11 +2163,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010Q8vUOLS6MLENgK0TYnco7w==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010Q8vUOLS6MLENgK0TYnco7w=='> getRelations (character, character)</a>"></a>
+                <a name="020010IBGGVFa0CJsLDXoDcvjPUg==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010IBGGVFa0CJsLDXoDcvjPUg=='> getRelations (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonArray <a href='#020010Q8vUOLS6MLENgK0TYnco7w=='> getRelations (character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonArray <a href='#020010IBGGVFa0CJsLDXoDcvjPUg=='> getRelations (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -2791,23 +2200,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -2827,100 +2220,6 @@
     </td>
     <td>
       Progress.Json.ObjectModel.JsonArray 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010Pu8szDVQHT1kKKwTNFkSUg==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010Pu8szDVQHT1kKKwTNFkSUg=='> getResourcePath (character, character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010Pu8szDVQHT1kKKwTNFkSUg=='> getResourcePath (character, character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getClassPath </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResClassPath</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      CHARACTER 
     </td>
     <td>
     </td>
@@ -2979,7 +2278,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
+        <i>pcServiceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -3036,11 +2335,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010LNHak5+BWhqMyCN6FnDmpg==" href="#Top">Top</a>
-                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010LNHak5+BWhqMyCN6FnDmpg=='> getSchema (character, character, logical)</a>"></a>
+                <a name="020010MTOe7HdJnWxhWLj7ckKRaQ==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010MTOe7HdJnWxhWLj7ckKRaQ=='> getSchema (character, logical)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010LNHak5+BWhqMyCN6FnDmpg=='> getSchema (character, character, logical)</a></h3>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010MTOe7HdJnWxhWLj7ckKRaQ=='> getSchema (character, logical)</a></h3>
         <table>
             <tr>
                 <td>
@@ -3073,23 +2372,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -3183,7 +2466,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
+        <i>pcServiceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -3382,84 +2665,6 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010fHSikralkliufdR/Y9slBA==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010fHSikralkliufdR/Y9slBA=='> getVerb (character)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010fHSikralkliufdR/Y9slBA=='> getVerb (character)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i>  </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getAction </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pcAction</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      CHARACTER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
                 <a name="020010nRpO1Xu8Sf9r5UoHC9qxyw==" href="#Top">Top</a>
                 <a name="  <a href='#020010nRpO1Xu8Sf9r5UoHC9qxyw=='> initialize ()</a>"></a>
             </font>
@@ -3506,11 +2711,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="0200104aJWRUjO+YR0TYFqI02k3Q==" href="#Top">Top</a>
-                <a name="  <a href='#0200104aJWRUjO+YR0TYFqI02k3Q=='> loadDynamicResource (character, character)</a>"></a>
+                <a name="020010WBwEMHr0e01XBcfAu+sPrg==" href="#Top">Top</a>
+                <a name="  <a href='#020010WBwEMHr0e01XBcfAu+sPrg=='> loadDynamicResource (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#0200104aJWRUjO+YR0TYFqI02k3Q=='> loadDynamicResource (character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010WBwEMHr0e01XBcfAu+sPrg=='> loadDynamicResource (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -3531,7 +2736,7 @@
         <div>
         <dl>
           <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getResourcePath </td></tr></tbody></table>
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* processAnnotations </td></tr></tbody></table>
             <dl>
               <table class="parameter_table">
                   
@@ -3543,23 +2748,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -3620,6 +2809,100 @@
                   </tr>
                   -->
                   
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="02001017ZdBdsZRgtOn93LbrejzA==" href="#Top">Top</a>
+                <a name="  <a href='#02001017ZdBdsZRgtOn93LbrejzA=='> processAnnotations (character, character, character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#02001017ZdBdsZRgtOn93LbrejzA=='> processAnnotations (character, character, character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* getList </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pcResourceUUID</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcClassPath</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pcSourcePath</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
               </table>
             </dl>
           </dd>
@@ -3692,11 +2975,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010rJ4wzlVdFyAPsKRjiC6UpQ==" href="#Top">Top</a>
-                <a name="  <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a>"></a>
+                <a name="020010clv6xOUVs98cSKn588gMeg==" href="#Top">Top</a>
+                <a name="  <a href='#020010clv6xOUVs98cSKn588gMeg=='> registerMethods (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010clv6xOUVs98cSKn588gMeg=='> registerMethods (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -3729,23 +3012,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -3770,11 +3037,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010Y370Gzn/D9YqhRXGIQvuwg==" href="#Top">Top</a>
-                <a name="  <a href='#020010Y370Gzn/D9YqhRXGIQvuwg=='> registerMethods (character, character, character)</a>"></a>
+                <a name="020010rJ4wzlVdFyAPsKRjiC6UpQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010Y370Gzn/D9YqhRXGIQvuwg=='> registerMethods (character, character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010rJ4wzlVdFyAPsKRjiC6UpQ=='> registerMethods (character, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -3807,23 +3074,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResClassPath</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -3901,7 +3152,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -4114,11 +3365,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010TXT8I0ZzS5oiEhj5J9Bo+A==" href="#Top">Top</a>
-                <a name="  <a href='#020010TXT8I0ZzS5oiEhj5J9Bo+A=='> setResourceMethod (character, character, character, character, JsonArray)</a>"></a>
+                <a name="020010u+y+PkzrdXDDmBr9Jvj9SA==" href="#Top">Top</a>
+                <a name="  <a href='#020010u+y+PkzrdXDDmBr9Jvj9SA=='> setResourceMethod (character, character, character, JsonArray)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010TXT8I0ZzS5oiEhj5J9Bo+A=='> setResourceMethod (character, character, character, character, JsonArray)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010u+y+PkzrdXDDmBr9Jvj9SA=='> setResourceMethod (character, character, character, JsonArray)</a></h3>
         <table>
             <tr>
                 <td>
@@ -4151,23 +3402,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -4240,11 +3475,11 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010Y7j7UprK1uHv29kDzSJXzA==" href="#Top">Top</a>
-                <a name="  <a href='#020010Y7j7UprK1uHv29kDzSJXzA=='> setResourceProcedure (character, character, character, character)</a>"></a>
+                <a name="0200108QXXgJE+lEPELdN5CqEZbQ==" href="#Top">Top</a>
+                <a name="  <a href='#0200108QXXgJE+lEPELdN5CqEZbQ=='> setResourceProcedure (character, character, character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED  <a href='#020010Y7j7UprK1uHv29kDzSJXzA=='> setResourceProcedure (character, character, character, character)</a></h3>
+        <h3 class="Signature_Font">PROTECTED  <a href='#0200108QXXgJE+lEPELdN5CqEZbQ=='> setResourceProcedure (character, character, character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -4277,23 +3512,7 @@
                   
                   <tr>
     <td class="document_detail_parameter">
-        <i>pcServiceURI</i>
-    </td>
-    <td>
-       CHARACTER
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i>pcResourceName</i>
+        <i>pcResourceUUID</i>
     </td>
     <td>
        CHARACTER
@@ -4525,6 +3744,68 @@
     <table border="0" class="table_content property_detail">
         <tbody>
             <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200103UXu8Yy0Ih8q7H4W2l+ccA==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#0200103UXu8Yy0Ih8q7H4W2l+ccA=='> Annotations</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#0200103UXu8Yy0Ih8q7H4W2l+ccA=='> Annotations</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
@@ -4838,6 +4119,68 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="0200100Q0oozKOv83nFAxN+g3iAg==" href="#Top">Top</a>
+                <a name=" INT64 <a href='#0200100Q0oozKOv83nFAxN+g3iAg=='> ParamUUID</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED INT64 <a href='#0200100Q0oozKOv83nFAxN+g3iAg=='> ParamUUID</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      INT64 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="0200109EiWhmHzrFhdrkK1PMJFxA==" href="#Top">Top</a>
                 <a name=" CHARACTER <a href='#0200109EiWhmHzrFhdrkK1PMJFxA=='> ReadFilter</a>"></a>
             </font>
@@ -5024,6 +4367,68 @@
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
+                <a name="020010FdAHAxZRxOXZceCgQBAC1Q==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010FdAHAxZRxOXZceCgQBAC1Q=='> TemporaryDir</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010FdAHAxZRxOXZceCgQBAC1Q=='> TemporaryDir</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
                 <a name="020010GRBBVZwioKC4qhW0Fv1v3Q==" href="#Top">Top</a>
                 <a name=" LOGICAL <a href='#020010GRBBVZwioKC4qhW0Fv1v3Q=='> UseRequestObj</a>"></a>
             </font>
@@ -5088,6 +4493,6 @@
     <br>
     <br>
     
-    <font class="footer_timestamp">11.22.2019 16:30:12</font>
+    <font class="footer_timestamp">04.15.2022 11:51:59</font>
     </BODY>
 </HTML>

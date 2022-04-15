@@ -1,0 +1,1711 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>Progress Spark Toolkit (v6.0.2)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="OpenEdge.Core.Util.package.html">OpenEdge.Core.Util<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Class&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">AnnotationWriter</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.Lang.Object                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:2em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='OpenEdge.Core.Util.AnnotationWriter.html'>OpenEdge.Core.Util.AnnotationWriter</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits">Progress.Lang.Object</span>
+                                </td>
+                            </tr>
+                            
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"> OpenEdge.Core.ISupportInitialize</span> 
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2020-2021 by Progress Software Corporation. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>AnnotationWriter </td></tr><tr><td class='unitcommentparam'>Purpose:</td><td class='unitcommentdesc'>Utility to read an XML XREF file and return the annotations for a given ABL program </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>in JSON </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>2018-11-08 </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>The JSON returned is either ancontains only a null "program" property </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>{ "&lt;xref.unavailable&gt;" : { </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"meta": { </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"version": "1.0.0", </td></tr><tr><td class='unitcommentparam'>"fileName":</td><td class='unitcommentdesc'>"" </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>or has the structure </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>{ </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>// metadata about the program </td></tr><tr><td class='unitcommentparam'>"meta":</td><td class='unitcommentdesc'>{ </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"version": "1.0.0"  // the version of this JSON </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"fileName": ""      // the name of the source file that produced the annotations </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"inherits": []      // an optional array of classes that this class inherits. not in procedure-based output </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"implements": []    // an optional array of interface that this class implements. not in procedure-based output </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>// these are annotations that belong to the class/procedure </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"program": { </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"annotation-name-1": ANNOTATION-DATA </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>// these are annotations that match the input user map </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"user" { </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"group": ANNOTATION-DATA </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>ANNOTATION-DATA </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>// these have no parameters or cannot be overloaded. the name never has a paren </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"destructor" </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"procedure" </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"function" </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"property" </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"event": { </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"name": ANNOTATION-DATA </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>// these are members that can be overloaded. the name always has parens. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"constructor" </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"method": { </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"name(&lt;iomode-1&gt; &lt;param-type-1&gt;, &lt;iomode-n&gt; &lt;param-type-n&gt;)": </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>"name()": </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>ANNOTATION-DATA </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>} </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010/wd48FIu962/TLGwh5VL/A=='> AddAnnotationToGroup (character[2], character, JsonObject, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds an annotation and its data to a parent group
+
+@param character[2] A group and (optional) subgroup to find the parent
+@param character The annotation name
+@param JsonObject Annotation data
+@param JsonObject The parent document to which to add the annotations */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010YpynYt7GJbWO9+xRokcmBw=='> AddAnnotationToGroup (JsonObject, character, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds an annotation and its data to a parent group
+
+@param JsonObject The group to which to add an annotation
+@param character The annotation name
+@param JsonObject Annotation data */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#0200102iIt3TIwPSO4cVvQGZWYWw=='> AddReferences (buffer, IStringStringMap, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds references from a "source" element. A single piece of rcode may have many, depending
+on the number includes
+
+@param buffer           The Source record from which to add references
+@param IStringStringMap Any user-defined annotation mappings
+@param JsonObject       The obejcts to which to add the annotations */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010AE7PGHubfs4rhbKVe6bjsA=='> Destroy ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Destroy/Shutdown/Anti-Initializer */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010yY5F0ytV2OTnBdLRQyeSbg=='> ExtractAnnotations (buffer, IStringStringMap)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Extracts annotations for a single program
+
+@param buffer Source The current program whose annotations to extract
+@param IStringStringMap A map of an annotation to a user-defined group. The group is created under a "user" property.
+Unknown values are allowed.
+@return JsonObject A JSON object containing the annotations. A valid object is always returned.   */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010jsXIXYBu7C2fg+YAfRGGlA=='> FindSourceRecord (character, buffer)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Method to find Source record for a given program. The input buffer is positioned
+to a record, if found.
+
+@param character The program name
+@param buffer Source The buffer in which to find the record */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010amN8TjcuYHnY1vGbOiR7JQ=='> GetAnnotations (character, IStringStringMap)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Returns the annotations in JSON form for a given file.
+
+@param character The name of the ABL file (class/procecure/etc) for which to extract annotations
+@param IStringStringMap A map of an annotation to a user-defined group. The group is created under a "user" property.
+Unknown values are allowed.
+@return JsonObject A JSON object containing the annotations. A valid object is always returned. */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010VufCz6EOi4QF6duk9C7uyw=='> GetAnnotations (IStringStringMap)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Returns the annotations in JSON form for a given file.
+@param IStringStringMap A map of an annotation to a user-defined group. The group is created under a "user" property.
+Unknown values are allowed.
+@return JsonObject A JSON object containing the annotations. A valid object is always returned.   */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#0200102b+j7kAJYDyMBp8LDbuc5w=='> GetRefName (buffer)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Gets the 'ref name' - the class/interface or procedure name
+for a source xref.
+
+The ref name has one of two forms
+1) For CLASS or INTERFACE xrefs, the type name
+2) For all others, the file base name (ie foo.p rather than bar/foo.p)
+
+@param buffer Source The source record
+@return character The type or procedure name. Is UNKNOWN if the source buffer is not available. */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010Vvrm/wci7LOdfvnHa3QVsg=='> Initialize ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Initializer/Startup */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010u+aiHHTdah/BDhCxCanvZA=='> ParseXref (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Reads an XML REF file into the local storage. This method can be called
+mulktiple times to read multiple files.
+
+@param character The name of the XML-XREF file */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#0200101BBzWF27r1HastcgLrW4ZA=='> ParseXref (FileInputStream)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Reads an XML REF file into the local storage. This method can be called
+mulktiple times to read multiple files.
+
+@param FileInputStream The XML-XREF file to read */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010KSeyWzEXvZ97mHQk0WOkWA=='> AnnotationWriter ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Default constructor */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010mYjt0ZU32Bei6C9kOwKMgg=='> AnnotationWriter (character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Constructor.
+
+@param character The name of a XML-XREF file to read */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010cu1zvhgNSvdUoNWqJSqs8A=='> AnnotationWriter (FileInputStream)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Constructor.
+
+@param FileInputStream The XML-XREF file to read */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010/wd48FIu962/TLGwh5VL/A==" href="#Top">Top</a>
+                <a name="  <a href='#020010/wd48FIu962/TLGwh5VL/A=='> AddAnnotationToGroup (character[2], character, JsonObject, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010/wd48FIu962/TLGwh5VL/A=='> AddAnnotationToGroup (character[2], character, JsonObject, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds an annotation and its data to a parent group </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pGroup</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pAnnoName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pAnnoData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010YpynYt7GJbWO9+xRokcmBw==" href="#Top">Top</a>
+                <a name="  <a href='#020010YpynYt7GJbWO9+xRokcmBw=='> AddAnnotationToGroup (JsonObject, character, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#020010YpynYt7GJbWO9+xRokcmBw=='> AddAnnotationToGroup (JsonObject, character, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds an annotation and its data to a parent group </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pGroup</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pAnnoName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pAnnoData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200102iIt3TIwPSO4cVvQGZWYWw==" href="#Top">Top</a>
+                <a name="  <a href='#0200102iIt3TIwPSO4cVvQGZWYWw=='> AddReferences (buffer, IStringStringMap, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED  <a href='#0200102iIt3TIwPSO4cVvQGZWYWw=='> AddReferences (buffer, IStringStringMap, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds references from a "source" element. A single piece of rcode may have many, depending </td></tr><td class='paramname'></td><td class='paramdesc'>on the number includes </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pSource</i>
+    </td>
+    <td>
+       buffer
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pUserMap</i>
+    </td>
+    <td>
+       OpenEdge.Core.Collections.IStringStringMap
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010AE7PGHubfs4rhbKVe6bjsA==" href="#Top">Top</a>
+                <a name="  <a href='#020010AE7PGHubfs4rhbKVe6bjsA=='> Destroy ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010AE7PGHubfs4rhbKVe6bjsA=='> Destroy ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Destroy/Shutdown/Anti-Initializer </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010yY5F0ytV2OTnBdLRQyeSbg==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010yY5F0ytV2OTnBdLRQyeSbg=='> ExtractAnnotations (buffer, IStringStringMap)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED Progress.Json.ObjectModel.JsonObject <a href='#020010yY5F0ytV2OTnBdLRQyeSbg=='> ExtractAnnotations (buffer, IStringStringMap)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Extracts annotations for a single program </td></tr><td class='paramname'></td><td class='paramdesc'>Unknown values are allowed. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pSource</i>
+    </td>
+    <td>
+       buffer
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pUserMap</i>
+    </td>
+    <td>
+       OpenEdge.Core.Collections.IStringStringMap
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object containing the annotations. A valid object is always returned.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010jsXIXYBu7C2fg+YAfRGGlA==" href="#Top">Top</a>
+                <a name="  <a href='#020010jsXIXYBu7C2fg+YAfRGGlA=='> FindSourceRecord (character, buffer)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010jsXIXYBu7C2fg+YAfRGGlA=='> FindSourceRecord (character, buffer)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Method to find Source record for a given program. The input buffer is positioned </td></tr><td class='paramname'></td><td class='paramdesc'>to a record, if found. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pAblProgram</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pSource</i>
+    </td>
+    <td>
+       buffer
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010amN8TjcuYHnY1vGbOiR7JQ==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010amN8TjcuYHnY1vGbOiR7JQ=='> GetAnnotations (character, IStringStringMap)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010amN8TjcuYHnY1vGbOiR7JQ=='> GetAnnotations (character, IStringStringMap)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns the annotations in JSON form for a given file. </td></tr><td class='paramname'></td><td class='paramdesc'>Unknown values are allowed. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pAblProgram</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pUserMap</i>
+    </td>
+    <td>
+       OpenEdge.Core.Collections.IStringStringMap
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object containing the annotations. A valid object is always returned.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010VufCz6EOi4QF6duk9C7uyw==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010VufCz6EOi4QF6duk9C7uyw=='> GetAnnotations (IStringStringMap)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010VufCz6EOi4QF6duk9C7uyw=='> GetAnnotations (IStringStringMap)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Returns the annotations in JSON form for a given file. </td></tr><td class='paramname'></td><td class='paramdesc'>Unknown values are allowed. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pUserMap</i>
+    </td>
+    <td>
+       OpenEdge.Core.Collections.IStringStringMap
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object containing the annotations. A valid object is always returned.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200102b+j7kAJYDyMBp8LDbuc5w==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#0200102b+j7kAJYDyMBp8LDbuc5w=='> GetRefName (buffer)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#0200102b+j7kAJYDyMBp8LDbuc5w=='> GetRefName (buffer)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Gets the 'ref name' - the class/interface or procedure name </td></tr><td class='paramname'></td><td class='paramdesc'>for a source xref. </td></tr><td class='paramname'></td><td class='paramdesc'>The ref name has one of two forms </td></tr><td class='paramname'></td><td class='paramdesc'>1) For CLASS or INTERFACE xrefs, the type name </td></tr><td class='paramname'></td><td class='paramdesc'>2) For all others, the file base name (ie foo.p rather than bar/foo.p) </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pSource</i>
+    </td>
+    <td>
+       buffer
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        character The type or procedure name. Is UNKNOWN if the source buffer is not available.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Vvrm/wci7LOdfvnHa3QVsg==" href="#Top">Top</a>
+                <a name="  <a href='#020010Vvrm/wci7LOdfvnHa3QVsg=='> Initialize ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010Vvrm/wci7LOdfvnHa3QVsg=='> Initialize ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Initializer/Startup </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010u+aiHHTdah/BDhCxCanvZA==" href="#Top">Top</a>
+                <a name="  <a href='#020010u+aiHHTdah/BDhCxCanvZA=='> ParseXref (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010u+aiHHTdah/BDhCxCanvZA=='> ParseXref (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Reads an XML REF file into the local storage. This method can be called </td></tr><td class='paramname'></td><td class='paramdesc'>mulktiple times to read multiple files. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pFilename</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200101BBzWF27r1HastcgLrW4ZA==" href="#Top">Top</a>
+                <a name="  <a href='#0200101BBzWF27r1HastcgLrW4ZA=='> ParseXref (FileInputStream)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#0200101BBzWF27r1HastcgLrW4ZA=='> ParseXref (FileInputStream)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Reads an XML REF file into the local storage. This method can be called </td></tr><td class='paramname'></td><td class='paramdesc'>mulktiple times to read multiple files. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pFile</i>
+    </td>
+    <td>
+       Progress.IO.FileInputStream
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010KSeyWzEXvZ97mHQk0WOkWA==" href="#Top">Top</a>
+                <a name="  <a href='#020010KSeyWzEXvZ97mHQk0WOkWA=='> AnnotationWriter ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010KSeyWzEXvZ97mHQk0WOkWA=='> AnnotationWriter ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default constructor </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010mYjt0ZU32Bei6C9kOwKMgg==" href="#Top">Top</a>
+                <a name="  <a href='#020010mYjt0ZU32Bei6C9kOwKMgg=='> AnnotationWriter (character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010mYjt0ZU32Bei6C9kOwKMgg=='> AnnotationWriter (character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Constructor. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pFilename</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010cu1zvhgNSvdUoNWqJSqs8A==" href="#Top">Top</a>
+                <a name="  <a href='#020010cu1zvhgNSvdUoNWqJSqs8A=='> AnnotationWriter (FileInputStream)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010cu1zvhgNSvdUoNWqJSqs8A=='> AnnotationWriter (FileInputStream)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Constructor. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pFile</i>
+    </td>
+    <td>
+       Progress.IO.FileInputStream
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <font class="footer_timestamp">04.15.2022 11:51:58</font>
+    </BODY>
+</HTML>

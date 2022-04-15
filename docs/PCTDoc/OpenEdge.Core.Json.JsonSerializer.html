@@ -1,0 +1,1457 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>Progress Spark Toolkit (v6.0.2)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="OpenEdge.Core.Json.package.html">OpenEdge.Core.Json<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Class&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">JsonSerializer</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.Lang.Object                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:2em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='OpenEdge.Core.Json.JsonSerializer.html'>OpenEdge.Core.Json.JsonSerializer</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits">Progress.Lang.Object</span>
+                                </td>
+                            </tr>
+                            
+                            <!--
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"></span> 
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2019-2021 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>OpenEdge.Core.Json.JsonSerializer </td></tr><tr><td class='unitcommentparam'>Description:</td><td class='unitcommentdesc'>Serilaizes to and from JSON </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>2019-11-21 </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Object <a href='#020010yiJD/mRKjI3RGwqP3jnFtA=='> Deserialize (JsonArray)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Deserializes an array of object from a JSON array..
+
+Integer values are references to objects in the array - if there are duplicates
+then only one has to be (de)serialised. References must be 'backwards' (ie to an
+already-deserialised object).
+
+@param JsonArray An array represented as JSON
+@return Progress.Lang.Object[] A deserialised object array */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Object <a href='#020010WBFtPraeu213wkPS2MdUwg=='> Deserialize (JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Deserializes this object from JSON.
+
+@param JsonConstruct This object represented as JSON
+@return Progress.Lang.Object A deserialised object */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Core.Json.IJsonSerializer <a href='#020010YaaaEesRqoo6T15V1D7HHw=='> NewSerializableObject (Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Instantiates a new instance of an IJsonSerializable object.
+
+This method attempts to find a service using the CCS Service Manager, using IJsonSerializable as
+the service name, and the type name as an alias.
+
+If none is found or returned, then the method requires that the type implement IJsonSerializable, be NEW'able
+(not abstract and not an interface) and also have a public default constructor.
+
+@param Progress.Lang.Class The type to instantiate
+@return IJsonSerializer An object of that type */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010Pgc75lk+fgoGdbr1+3a+Bw=='> Serialize (Object)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Serialises an object to JSON.
+
+This method first tries to serialize using OpenEdge.Core.Json.IJsonSerializer and
+then Progress.IO.JsonSerializer. If the class implements neither then an invalid object
+is returned.
+
+If the class implements IJsonSerializer then the JSON returned has the format
+{
+"serializer": &lt;STRING&gt;          // OOABL type name of the IJsonSerializer interface
+"object": &lt;STRING&gt;              // OOABL type name of the object being serialised
+"data": &lt;NULL|OBJECT|ARRAY&gt;     // the serialized object data
+}
+
+If the class uses the built-in serilisation, then the JSON format is
+{
+"prods:version": &lt;VERISON&gt;,
+"prods:objId", &lt;internal ID of this object)&gt;
+"&lt;STRING&gt;" : {     // the string is the OOABL type name of the class being serialised
+// serialisation data, per doc
+}
+}
+
+@param Progress.Lang.Object  The object to serialize
+@return JsonObject The JSON data. May be invalid/unknown */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010HsGhdWQi6pkVKahjkvjRBA=='> Serialize (Object[])</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Serialises an array of objects to JSON.
+
+This method first tries to serialize using OpenEdge.Core.Json.IJsonSerializer and
+then Progress.IO.JsonSerializer. If the class implements neither then an invalid object
+is returned.
+
+If there are duplicate objects in the array, then the index of the duplicate object is written
+
+@param Progress.Lang.Object[]  The objects to serialize
+@return JsonArray The JSON data. May be invalid/unknown */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Object <a href='#020010OFQgFpiVw+F0QCw9Haph5g=='> ToAblObject (JsonObject, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Attempts to create an object of a specific type from serialised JSON data.
+
+Delegates to ToAblObject(JsonObject, P.L.Class, P.L.Class) ; see that method for details of behaviour.
+
+@param JsonObject The serialised data
+@param Progress.Lang.Class (mandatory) The type of the object. This is used as the defined and implementation type
+@return Progress.Lang.Object An object instance, based on the defined type. May be null if the criteria for types isn't met */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Object <a href='#0200109aSzN4uRjHzvE7Yp/xDTIA=='> ToAblObject (JsonObject, Class, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Attempts to create an object of a specific type from serialised JSON data.
+
+1) Try to deserialize the JSON using this class' Deserialize() method. If not valid,
+2) Try to get an instance of the defined type (from the Service Manager). If not valid,
+3) Try to get an instance of the implementation type (from the Service Manager).
+4) If valid, and meets the 'instantiable' criteria, deserialise using the JSON data
+5) If not, return null
+
+@param JsonObject (optional) The serialised data
+@param Progress.Lang.Class (mandatory) The "defined type" of the object.
+@param Progress.Lang.Class (mandatory) The "implementation type" of the object. Must be instantiable - not an interface,
+nor abstract, default public constructor - and must implement IJsonSerializer
+@return Progress.Lang.Object An object instance of the "defined type". May be null if the criteria for types isn't met */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010NvlgvyVV2ky88ait2LoK5A=='> JsonSerializer ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Default constructor.
+
+This is private so that this class cannot be instantiated - it's intended to be used with static members only */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010IX9BVN/HTVZ7nd+xeOFMcQ=='> PROP_DATA</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#0200106OPta27nrqCmXA9xa4+I8Q=='> PROP_OBJECT</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#0200101IqgDlXWZQ5RPT9ifTVp7A=='> PROP_PRODS-VERSION</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>#</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         CHARACTER <a href='#020010yGhrHLjBnz+UbFCGyNTQUw=='> PROP_SERIALIZER</a>
+    </font>
+  </td>
+  <td class="cell">
+      <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010yiJD/mRKjI3RGwqP3jnFtA==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Object <a href='#020010yiJD/mRKjI3RGwqP3jnFtA=='> Deserialize (JsonArray)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Object <a href='#020010yiJD/mRKjI3RGwqP3jnFtA=='> Deserialize (JsonArray)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Deserializes an array of object from a JSON array.. </td></tr><td class='paramname'></td><td class='paramdesc'>Integer values are references to objects in the array - if there are duplicates </td></tr><td class='paramname'></td><td class='paramdesc'>then only one has to be (de)serialised. References must be 'backwards' (ie to an </td></tr><td class='paramname'></td><td class='paramdesc'>already-deserialised object). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pJson</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Object 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Object[] A deserialised object array
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010WBFtPraeu213wkPS2MdUwg==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Object <a href='#020010WBFtPraeu213wkPS2MdUwg=='> Deserialize (JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Object <a href='#020010WBFtPraeu213wkPS2MdUwg=='> Deserialize (JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Deserializes this object from JSON. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pJson</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Object 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Object A deserialised object
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010YaaaEesRqoo6T15V1D7HHw==" href="#Top">Top</a>
+                <a name=" <a href='OpenEdge.Core.Json.IJsonSerializer.html'>OpenEdge.Core.Json.IJsonSerializer</a> <a href='#020010YaaaEesRqoo6T15V1D7HHw=='> NewSerializableObject (Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC <a href='OpenEdge.Core.Json.IJsonSerializer.html'>OpenEdge.Core.Json.IJsonSerializer</a> <a href='#020010YaaaEesRqoo6T15V1D7HHw=='> NewSerializableObject (Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Instantiates a new instance of an IJsonSerializable object. </td></tr><td class='paramname'></td><td class='paramdesc'>This method attempts to find a service using the CCS Service Manager, using IJsonSerializable as </td></tr><td class='paramname'></td><td class='paramdesc'>the service name, and the type name as an alias. </td></tr><td class='paramname'></td><td class='paramdesc'>If none is found or returned, then the method requires that the type implement IJsonSerializable, be NEW'able </td></tr><td class='paramname'></td><td class='paramdesc'>(not abstract and not an interface) and also have a public default constructor. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      <a href='OpenEdge.Core.Json.IJsonSerializer.html'>OpenEdge.Core.Json.IJsonSerializer</a> 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IJsonSerializer An object of that type
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Pgc75lk+fgoGdbr1+3a+Bw==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010Pgc75lk+fgoGdbr1+3a+Bw=='> Serialize (Object)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010Pgc75lk+fgoGdbr1+3a+Bw=='> Serialize (Object)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Serialises an object to JSON. </td></tr><td class='paramname'></td><td class='paramdesc'>This method first tries to serialize using OpenEdge.Core.Json.IJsonSerializer and </td></tr><td class='paramname'></td><td class='paramdesc'>then Progress.IO.JsonSerializer. If the class implements neither then an invalid object </td></tr><td class='paramname'></td><td class='paramdesc'>is returned. </td></tr><td class='paramname'></td><td class='paramdesc'>If the class implements IJsonSerializer then the JSON returned has the format </td></tr><td class='paramname'></td><td class='paramdesc'>{ </td></tr><tr><td class='paramname'>"serializer": </td><td class='paramdesc'>&lt;STRING&gt;          // OOABL type name of the IJsonSerializer interface </td></tr><tr><td class='paramname'>"object": </td><td class='paramdesc'>&lt;STRING&gt;              // OOABL type name of the object being serialised </td></tr><tr><td class='paramname'>"data": </td><td class='paramdesc'>&lt;NULL|OBJECT|ARRAY&gt;     // the serialized object data </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr><td class='paramname'></td><td class='paramdesc'>If the class uses the built-in serilisation, then the JSON format is </td></tr><td class='paramname'></td><td class='paramdesc'>{ </td></tr><tr><td class='paramname'>"prods:version": </td><td class='paramdesc'>version": &lt;VERISON&gt;, </td></tr><tr><td class='paramname'>"prods:objId", </td><td class='paramdesc'>objId", &lt;internal ID of this object)&gt; </td></tr><td class='paramname'></td><td class='paramdesc'>"&lt;STRING&gt;" : {     // the string is the OOABL type name of the class being serialised </td></tr><td class='paramname'></td><td class='paramdesc'>// serialisation data, per doc </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pSerialize</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject The JSON data. May be invalid/unknown
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010HsGhdWQi6pkVKahjkvjRBA==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010HsGhdWQi6pkVKahjkvjRBA=='> Serialize (Object[])</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonArray <a href='#020010HsGhdWQi6pkVKahjkvjRBA=='> Serialize (Object[])</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Serialises an array of objects to JSON. </td></tr><td class='paramname'></td><td class='paramdesc'>This method first tries to serialize using OpenEdge.Core.Json.IJsonSerializer and </td></tr><td class='paramname'></td><td class='paramdesc'>then Progress.IO.JsonSerializer. If the class implements neither then an invalid object </td></tr><td class='paramname'></td><td class='paramdesc'>is returned. </td></tr><td class='paramname'></td><td class='paramdesc'>If there are duplicate objects in the array, then the index of the duplicate object is written </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pSerialize</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonArray 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonArray The JSON data. May be invalid/unknown
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010OFQgFpiVw+F0QCw9Haph5g==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Object <a href='#020010OFQgFpiVw+F0QCw9Haph5g=='> ToAblObject (JsonObject, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Object <a href='#020010OFQgFpiVw+F0QCw9Haph5g=='> ToAblObject (JsonObject, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Attempts to create an object of a specific type from serialised JSON data. </td></tr><td class='paramname'></td><td class='paramdesc'>Delegates to ToAblObject(JsonObject, P.L.Class, P.L.Class) ; see that method for details of behaviour. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pJsonData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Object 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Object An object instance, based on the defined type. May be null if the criteria for types isn't met
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200109aSzN4uRjHzvE7Yp/xDTIA==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Object <a href='#0200109aSzN4uRjHzvE7Yp/xDTIA=='> ToAblObject (JsonObject, Class, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Object <a href='#0200109aSzN4uRjHzvE7Yp/xDTIA=='> ToAblObject (JsonObject, Class, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Attempts to create an object of a specific type from serialised JSON data. </td></tr><td class='paramname'></td><td class='paramdesc'>1) Try to deserialize the JSON using this class' Deserialize() method. If not valid, </td></tr><td class='paramname'></td><td class='paramdesc'>2) Try to get an instance of the defined type (from the Service Manager). If not valid, </td></tr><td class='paramname'></td><td class='paramdesc'>3) Try to get an instance of the implementation type (from the Service Manager). </td></tr><td class='paramname'></td><td class='paramdesc'>4) If valid, and meets the 'instantiable' criteria, deserialise using the JSON data </td></tr><td class='paramname'></td><td class='paramdesc'>5) If not, return null </td></tr><td class='paramname'></td><td class='paramdesc'>nor abstract, default public constructor - and must implement IJsonSerializer </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pJsonData</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pImplementation</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Object 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Object An object instance of the "defined type". May be null if the criteria for types isn't met
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010NvlgvyVV2ky88ait2LoK5A==" href="#Top">Top</a>
+                <a name="  <a href='#020010NvlgvyVV2ky88ait2LoK5A=='> JsonSerializer ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010NvlgvyVV2ky88ait2LoK5A=='> JsonSerializer ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default constructor. </td></tr><td class='paramname'></td><td class='paramdesc'>This is private so that this class cannot be instantiated - it's intended to be used with static members only </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010IX9BVN/HTVZ7nd+xeOFMcQ==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010IX9BVN/HTVZ7nd+xeOFMcQ=='> PROP_DATA</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010IX9BVN/HTVZ7nd+xeOFMcQ=='> PROP_DATA</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200106OPta27nrqCmXA9xa4+I8Q==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#0200106OPta27nrqCmXA9xa4+I8Q=='> PROP_OBJECT</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#0200106OPta27nrqCmXA9xa4+I8Q=='> PROP_OBJECT</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200101IqgDlXWZQ5RPT9ifTVp7A==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#0200101IqgDlXWZQ5RPT9ifTVp7A=='> PROP_PRODS-VERSION</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#0200101IqgDlXWZQ5RPT9ifTVp7A=='> PROP_PRODS-VERSION</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010yGhrHLjBnz+UbFCGyNTQUw==" href="#Top">Top</a>
+                <a name=" CHARACTER <a href='#020010yGhrHLjBnz+UbFCGyNTQUw=='> PROP_SERIALIZER</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PROTECTED CHARACTER <a href='#020010yGhrHLjBnz+UbFCGyNTQUw=='> PROP_SERIALIZER</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  <tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      CHARACTER 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <font class="footer_timestamp">04.15.2022 11:51:57</font>
+    </BODY>
+</HTML>

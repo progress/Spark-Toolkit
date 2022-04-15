@@ -1,0 +1,2515 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+    <HEAD>
+        <meta http-equiv="expires" content="86400">
+        <TITLE>Progress Spark Toolkit (v6.0.2)</TITLE>
+        <link rel="stylesheet" type="text/css" href="resources/stylesheet.css" title="Style">
+        <SCRIPT src="resources/jquery.js"></SCRIPT>
+        <SCRIPT src="resources/functions.js"></SCRIPT>
+        <SCRIPT src="resources/frameload.js"></SCRIPT>
+        <!-- Browser Switch -->
+        <!--[if lt IE 8]>
+            <!-- Smaller than IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 23px !important;
+                }
+            </style>
+        <![endif]-->
+        <!--[if IE 8]>
+            <!-- Equal IE 8 -->
+            <style type="text/css">
+                .HeightFixIE { 
+                    height: 20px !important;
+                }
+            </style>
+        <![endif]-->
+    </HEAD>
+<BODY onload="onLoad()">
+    <table class="header_table">
+        <tbody>
+        <tr>
+            <td>
+            	<div class="unit_header">
+            	    <table border="0">
+            	       <tbody>
+                	        <tr>
+                	            <td>
+                	                <span class="span_namespace">Namespace:</span>   
+                	            </td>
+                	            <td>
+                	                <span class="span_packagename"><a href="OpenEdge.Core.Json.package.html">OpenEdge.Core.Json<a></span>
+                	            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_pagetype">Class&nbsp;</span>
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <span class="span_classname">JsonConverter</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_parentclass">Parent classes:</span>   
+                                </td>
+                                <td class="span_parentclass">
+                                    <div class='parentclasses'><div style='padding-left:0em; height:12px' class='parentclassesitem'>                                                            <table style='border-spacing:0px'>                                                                <tr>                                                                    <td>                                                                    Progress.Lang.Object                                                                    </td>                                                                </tr>                                                            </table>                                                       </div><div style='padding-left:2em; height:16px' class='parentclassesitem'>                                                                <table>                                                                    <tr>                                                                        <td>                                                                            <div class='parentclassnode'></div>                                                                        </td>                                                                        <td>                                                                        <a href='OpenEdge.Core.Json.JsonConverter.html'>OpenEdge.Core.Json.JsonConverter</a>                                                                        </td>                                                                    </tr>                                                                </table>                                                           </div></div><br>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <span class="span_inherits">Inherits:</span>
+                                </td>
+                                <td class="unit_inherits">
+                                    <span class="span_inherits">Progress.Lang.Object</span>
+                                </td>
+                            </tr>
+                            
+                            <!--
+                            <tr>
+                                <td>
+                                    <span class="span_implements">Implements:</span> 
+                                </td>
+                                <td class="unit_interface">
+                                    <span class="span_implements"></span> 
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="span_inherits"></span>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                	<br>
+                	<span class="unit_comment">
+                	<table><tbody class='unit_commment_table'><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* ************************************************************************************************************************* </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>Copyright (c) 2019-2021 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved. </td></tr><tr><td class='unitcommentparam'>File:</td><td class='unitcommentdesc'>JsonConverter </td></tr><tr><td class='unitcommentparam'>Description:</td><td class='unitcommentdesc'>Helps to convert to and from JSON, for common/standard (Ccs.Common.Support.I*Holder, </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>OpenEdge.Core.Collections.I*) types </td></tr><tr><td class='unitcommentparam'>Author(s):</td><td class='unitcommentdesc'>pjudge </td></tr><tr><td class='unitcommentparam'>Created:</td><td class='unitcommentdesc'>2019-11-21 </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>/* Default constructor. </td></tr><td class='unitcommentparam'></td><td class='unitcommentdesc'>This is private so that this class cannot be instantiated - it's intended to be used with static members only </td></tr></tbody></table>
+                	</span>
+                	<br>
+                </div>
+            </td>
+            <td>
+                <div class="container_logo_google">
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    
+    <br>
+    <br>
+    <div class="TableHeadingColor">
+        <span id="method_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary method_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010HRroB3aesA/o+7cKKxR7JQ=='> AddToArray (integer, Object, JsonArray)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds an instance value into a JSON array
+
+@param integer The index at which to add the value. the array may be extended to this value
+@param Progress.Lang.Object A value to be written for the property. May be null.
+@param JsonObject A JSON array. Must exist.  */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010tolslh/pGoPTiHyTtOaArg=='> AddToObject (Object, Object, JsonObject)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Adds a value into a JSON object for a specific key
+
+@param Progress.Lang.Object The key value - property name (required)
+@param Progress.Lang.Object A value to be written for the property. May be null.
+@param JsonObject A JSON object  */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010wL6syt8tS8Mo2Z2ZNQEbYQ=='> Merge (JsonObject, JsonObject, logical)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Merges (combines) two JSON objects.
+
+Properties are copied from the SOURCE into the TARGET.
+Properties are copied from the SOURCE into the TARGET. Property types
+must match, otherwise an error is thrown.
+If the property exists in the target, it is overwritten by
+the source property if the pOverwriteExisting flag is TRUE.
+
+@param JsonObject The target JSON object. Must exist.
+@param JsonObject The source JSON object. Can be null
+@param logical TRUE if properties from the SOURCE object should overwrite those in the TARGET */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010gk5+Rlwo0J02eBQAi1T6Ag=='> ToArray (ICollection)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an instance of a collection into a JSONArray
+Invalid inputs, indeterminate arrays, all get a null value
+
+@param ICollection The input collection
+@return JsonArray An array instance      */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010GstsTXhZmRxW4nPird4n6g=='> ToArray (IObjectArrayHolder)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an array of objects into into a JSONArray
+
+Invalid inputs, indeterminate arrays, all get a null value
+
+@param IObjectArrayHolder The input array
+@return JsonArray An array instance      */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010m2cvREF7JqOPXH56CgfAbQ=='> ToArray (IPrimitiveArrayHolder)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an instance of a IPrimitiveArrayHolder into a JSONArray
+Invalid inputs, indeterminate arrays, all get a null value
+
+@param IPrimitiveArrayHolder The input value
+@return JsonArray An array instance      */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonArray <a href='#020010KA3GBzvPew+9YzhfQkGhfg=='> ToArray (Object[])</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an array of objects into into a JSONArray
+Invalid inputs, indeterminate arrays, all get a null value
+
+@param P.L.Object[] The input array
+@return JsonArray An array instance      */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Enum <a href='#020010lcqftK8qfvIFbF6nTPGIHg=='> ToEnum (JsonArray, integer, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* This method converts a JSON array element to an instance of an P.L.Enum.
+
+The element value must be either a string or number.
+If the inputs are invalid, or the index is not in range, or the value is of the wrong JSON type,
+an unknown value is returned.
+
+If the ToObject() call fails, an error is raised.
+
+@param JsonArray The array
+@param integer   The element index
+@param P.L.Class The type of the enum
+@return Progress.Lang.Enum The enum */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Lang.Enum <a href='#020010A3Cgd7d5wHzbG03HvW+fsw=='> ToEnum (JsonObject, character, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* This method converts a JSON property to an instance of an P.L.Enum.
+
+The property value must be either a string or number.
+If the inputs are invalid, or the property does not exist, or is of the wrong JSON type,
+enum, an unknown value is returned.
+
+If the ToObject() call fails, an error is raised
+
+@param JsonObject The object
+@param character The property name
+@param P.L.Class The type of the enum
+@return Progress.Lang.Enum The enum */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010Sg1NVL8wk5ZboNPy10Du2A=='> ToObject (IMap)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an instance of a KeyValuePair into a JSON Object
+Invalid inputs, indeterminate arrays, all get an
+
+@param IMap A map (collection of name/value pairs)
+@return JsonObject A JSON object  */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#0200107/XYnwkYNy5I7r4NtGEltg=='> ToObject (KeyValuePair)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an instance of a KeyValuePair into a JSON Object
+Invalid inputs, indeterminate arrays, all get an
+
+@param KeyValuePair A name/value pair
+@return JsonObject A JSON object  */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010Ov5mUCKA5rKZIzADhl7X/A=='> ToObject (Error)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an instance of a Progress.Lang.Error into a JSON Object
+
+{
+_retVal: the return value, if an AppError
+_soapFault:  If a SoapFaultError, non-empty values are written
+{
+_msg:  soapFault:soap-fault-string
+_code: soapFault:soap-fault-code
+_subCode: soapFault:soap-fault-subcode
+_actor: soapFault:soap-fault-actor
+_role: soapFault:soap-fault-role
+_misunderstoodHeader: soap-fault-misunderstood-header
+_node: soapFault:soap-fault-node
+}
+_errors: [
+{ _errorMsg: the error message
+_errorNum: the error number
+}
+]
+_sev: the severity of the error
+_type: the OOABL type of the error, if session:debug-alert
+_stack: the error call stack, if session:debug-alert
+_innerError: one of the below. if both exist in the error, then stop is used
+{&lt;error-json&gt;} if the object has a readable InnerError property of type P.L.Error, and a valid value, then call ToObject(error)
+{&lt;stop-json&gt;} if the object has a readable InnerStop property of type P.L.Stop, and a valid value, then call ToObject(stop)
+}
+
+@param Progress.Lang.Error An error. Must exist
+@return JsonObject A JSON object representing the Error */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010XsUCmBfZpltf26a/gseKAg=='> ToObject (Object, Object)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an kay and value into a JSON Object
+
+@param Progress.Lang.Object The key value - property name (required)
+@param Progress.Lang.Object A value to be written for the property. May be null.
+@return JsonObject A JSON object */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Progress.Json.ObjectModel.JsonObject <a href='#020010qa28cmBC9fQx1ObUM+zWhQ=='> ToObject (Stop)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts an instance of a Progress.Lang.Stop into a JSON Object
+{
+_errors: [
+{ _errorMsg: the stop type name
+_errorNum: null
+_device:     )
+_tableName:  ) If the stop is a LockConflict
+_user:       )
+}
+]
+_type:   if session:debug-alert
+_stack:  if session:debug-alert
+}
+
+@param Progress.Lang.Stop An stop condition. Must exist
+@return JsonObject A JSON object representing the Error */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Core.IObjectArrayHolder <a href='#020010jNzRdtQbfEFsePJT0kfi5Q=='> ToObjectArray (JsonArray)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts a JSON array to an instance of a IObjectArrayHolder
+
+@param JsonArray A JSON array. May be invalid/null
+@return IObjectArrayHolder The array holder. One is always returned. */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         OpenEdge.Core.IObjectArrayHolder <a href='#020010WNkbg81cZdXCqTKtKv7/mA=='> ToObjectArray (JsonArray, Class)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts a JSON array to an instance of a IObjectArrayHolder
+
+@param JsonArray A JSON array. May be invalid/null
+@param P.L.Class The type of the elements in the array
+@return IObjectArrayHolder The array holder. One is always returned. */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.Common.Support.IPrimitiveArrayHolder <a href='#020010K2k7Uh3ZpiLvjV/4Gmisbg=='> ToPrimitiveArray (JsonArray)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Converts a JSON array to an instance of a PrimitiveArrayHolder
+
+The first non-null element is used to infer the array's ABL type.
+Objects and Arrays are returned as JSON text.
+
+@param JsonArray A JSON array. May be invalid/null
+@return IPrimitiveArrayHolder The array holder. One is always returned. */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.Common.Support.IPrimitiveHolder <a href='#020010Ijt/VZp/Sz6MEL1aQ/BrtA=='> ToScalar (JsonArray, integer)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* This method converts a JSON array element to an instance of an IPrimitiveHolder.
+
+If the inputs are invalid, or the index is not in range, a OE.Core.String object represeting the unknown value is returned.
+
+Input JSON data types:
+NULL -&gt; OE.Core.String(?)
+OBJECT, ARRAY -&gt; OE.Core.String(GetJsonText)
+BOOLEAN -&gt; OE.Core.LogicalValue(&lt;val&gt;)
+NUMBER -&gt; if the value has a '.', OE.Core.Decimal(&lt;val&gt;), else OE.Core.Integer(&lt;val&gt;)
+STRING -&gt;
+If the value looks like YYYY-MM-DD, try to parse and return OE.Core.DateHolder
+If the value looks like YYYY-MM-DDTHH:MM:SS.SSS, try to parse and return OE.Core.DateTimeHolder
+If the value looks like YYYY-MM-DDTHH:MM:SS.SSS+HH:MM, try to parse and return OE.Core.DateTimeTzHolder
+If the value looks like a base64-encoded value (last 2 chars are ==), return as OE.Core.Memptr
+If the 'looks like' or parsing fail, return OE.Core.String(&lt;val&gt;)
+
+If the property value cannot be converted, an object represeting the unknown value is returned (same as NULL).
+
+@param JsonArray The object
+@param integer The element index
+@return IPrimitiveHolder The representative value */ <br> <i>  </i>
+  </td>
+</tr>
+<tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft STATIC">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>+</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+         Ccs.Common.Support.IPrimitiveHolder <a href='#020010zInh4Lzhh3vCwg690ckNdg=='> ToScalar (JsonObject, character)</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* This method converts a JSON property to an instance of an IPRimitiveHolder.
+
+Input JSON data types:
+NULL -&gt; OE.Core.String(?)
+OBJECT, ARRAY -&gt; OE.Core.String(GetJsonText)
+BOOLEAN -&gt; OE.Core.LogicalValue(&lt;val&gt;)
+NUMBER -&gt; if the value has a '.', OE.Core.Decimal(&lt;val&gt;), else OE.Core.Integer(&lt;val&gt;)
+STRING -&gt;
+If the value looks like YYYY-MM-DD, try to parse and return OE.Core.DateHolder
+If the value looks like YYYY-MM-DDTHH:MM:SS.SSS, try to parse and return OE.Core.DateTimeHolder
+If the value looks like YYYY-MM-DDTHH:MM:SS.SSS+HH:MM, try to parse and return OE.Core.DateTimeTzHolder
+If the value looks like a base64-encoded value (last 2 chars are ==), return as OE.Core.Memptr
+If the 'looks like' or parsing fail, return OE.Core.String(&lt;val&gt;)
+
+If the property value cannot be converted, an object represeting the unknown value is returned (same as NULL).
+
+@param JsonObject The object
+@param character The property name
+@return IPrimitiveHolder The representative value */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    
+    <br>
+    <div class="TableHeadingColor">
+        <span id="constructor_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary constructor_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+            <tr class="table_content overview_row">
+  <td align="left" valign="top" class="img_col cell cellleft ">
+  </td>
+  <td align="left" valign="top" class="option_col cell">
+    <font>-</font>
+    <font></font>
+    <font></font>
+  </td>
+  <td class="signature_col cell">
+    <font>
+          <a href='#020010jCV4RR9LcNxHoYzrrmyCuw=='> JsonConverter ()</a>
+    </font>
+  </td>
+  <td class="cell">
+     
+/* Default constructor.
+
+This is private so that this class cannot be instantiated - it's intended to be used with static members only */ <br> <i>  </i>
+  </td>
+</tr>
+    
+        </tbody>
+    </table>
+    
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="event_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary event_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <!--
+    <br>
+    <div class="TableHeadingColor">
+        <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Summary</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_summary property_summary">
+        <tbody>
+            <tr class="TableSubHeadingColor">
+                <th align="left"></th>
+                <th align="left">Options</th>
+                <th align="left">Name</th>
+                <th align="left">Purpose</th>
+            </tr>
+                
+        </tbody>
+    </table>
+    -->
+    <br>
+    <br>
+    
+    <div class="TableHeadingColor cell">
+        <span id="method_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Method Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details method_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010HRroB3aesA/o+7cKKxR7JQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010HRroB3aesA/o+7cKKxR7JQ=='> AddToArray (integer, Object, JsonArray)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010HRroB3aesA/o+7cKKxR7JQ=='> AddToArray (integer, Object, JsonArray)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds an instance value into a JSON array </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pIdx</i>
+    </td>
+    <td>
+       INTEGER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pValue</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pJson</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010tolslh/pGoPTiHyTtOaArg==" href="#Top">Top</a>
+                <a name="  <a href='#020010tolslh/pGoPTiHyTtOaArg=='> AddToObject (Object, Object, JsonObject)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010tolslh/pGoPTiHyTtOaArg=='> AddToObject (Object, Object, JsonObject)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Adds a value into a JSON object for a specific key </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pKey</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pValue</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pJson</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010wL6syt8tS8Mo2Z2ZNQEbYQ==" href="#Top">Top</a>
+                <a name="  <a href='#020010wL6syt8tS8Mo2Z2ZNQEbYQ=='> Merge (JsonObject, JsonObject, logical)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC  <a href='#020010wL6syt8tS8Mo2Z2ZNQEbYQ=='> Merge (JsonObject, JsonObject, logical)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Merges (combines) two JSON objects. </td></tr><td class='paramname'></td><td class='paramdesc'>Properties are copied from the SOURCE into the TARGET. </td></tr><td class='paramname'></td><td class='paramdesc'>Properties are copied from the SOURCE into the TARGET. Property types </td></tr><td class='paramname'></td><td class='paramdesc'>must match, otherwise an error is thrown. </td></tr><td class='paramname'></td><td class='paramdesc'>If the property exists in the target, it is overwritten by </td></tr><td class='paramname'></td><td class='paramdesc'>the source property if the pOverwriteExisting flag is TRUE. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTarget</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pSource</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pOverwriteExisting</i>
+    </td>
+    <td>
+       LOGICAL
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010gk5+Rlwo0J02eBQAi1T6Ag==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010gk5+Rlwo0J02eBQAi1T6Ag=='> ToArray (ICollection)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonArray <a href='#020010gk5+Rlwo0J02eBQAi1T6Ag=='> ToArray (ICollection)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an instance of a collection into a JSONArray </td></tr><td class='paramname'></td><td class='paramdesc'>Invalid inputs, indeterminate arrays, all get a null value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pCollection</i>
+    </td>
+    <td>
+       OpenEdge.Core.Collections.ICollection
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonArray 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonArray An array instance
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010GstsTXhZmRxW4nPird4n6g==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010GstsTXhZmRxW4nPird4n6g=='> ToArray (IObjectArrayHolder)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonArray <a href='#020010GstsTXhZmRxW4nPird4n6g=='> ToArray (IObjectArrayHolder)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an array of objects into into a JSONArray </td></tr><td class='paramname'></td><td class='paramdesc'>Invalid inputs, indeterminate arrays, all get a null value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       OpenEdge.Core.IObjectArrayHolder
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonArray 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonArray An array instance
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010m2cvREF7JqOPXH56CgfAbQ==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010m2cvREF7JqOPXH56CgfAbQ=='> ToArray (IPrimitiveArrayHolder)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonArray <a href='#020010m2cvREF7JqOPXH56CgfAbQ=='> ToArray (IPrimitiveArrayHolder)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an instance of a IPrimitiveArrayHolder into a JSONArray </td></tr><td class='paramname'></td><td class='paramdesc'>Invalid inputs, indeterminate arrays, all get a null value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Ccs.Common.Support.IPrimitiveArrayHolder
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonArray 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonArray An array instance
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010KA3GBzvPew+9YzhfQkGhfg==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonArray <a href='#020010KA3GBzvPew+9YzhfQkGhfg=='> ToArray (Object[])</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonArray <a href='#020010KA3GBzvPew+9YzhfQkGhfg=='> ToArray (Object[])</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an array of objects into into a JSONArray </td></tr><td class='paramname'></td><td class='paramdesc'>Invalid inputs, indeterminate arrays, all get a null value </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonArray 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonArray An array instance
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010lcqftK8qfvIFbF6nTPGIHg==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Enum <a href='#020010lcqftK8qfvIFbF6nTPGIHg=='> ToEnum (JsonArray, integer, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Enum <a href='#020010lcqftK8qfvIFbF6nTPGIHg=='> ToEnum (JsonArray, integer, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* This method converts a JSON array element to an instance of an P.L.Enum. </td></tr><td class='paramname'></td><td class='paramdesc'>The element value must be either a string or number. </td></tr><td class='paramname'></td><td class='paramdesc'>If the inputs are invalid, or the index is not in range, or the value is of the wrong JSON type, </td></tr><td class='paramname'></td><td class='paramdesc'>an unknown value is returned. </td></tr><td class='paramname'></td><td class='paramdesc'>If the ToObject() call fails, an error is raised. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pIdx</i>
+    </td>
+    <td>
+       INTEGER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pEnumType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Enum 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Enum The enum
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010A3Cgd7d5wHzbG03HvW+fsw==" href="#Top">Top</a>
+                <a name=" Progress.Lang.Enum <a href='#020010A3Cgd7d5wHzbG03HvW+fsw=='> ToEnum (JsonObject, character, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Lang.Enum <a href='#020010A3Cgd7d5wHzbG03HvW+fsw=='> ToEnum (JsonObject, character, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* This method converts a JSON property to an instance of an P.L.Enum. </td></tr><td class='paramname'></td><td class='paramdesc'>The property value must be either a string or number. </td></tr><td class='paramname'></td><td class='paramdesc'>If the inputs are invalid, or the property does not exist, or is of the wrong JSON type, </td></tr><td class='paramname'></td><td class='paramdesc'>enum, an unknown value is returned. </td></tr><td class='paramname'></td><td class='paramdesc'>If the ToObject() call fails, an error is raised </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pObject</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pEnumType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Lang.Enum 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        Progress.Lang.Enum The enum
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Sg1NVL8wk5ZboNPy10Du2A==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010Sg1NVL8wk5ZboNPy10Du2A=='> ToObject (IMap)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010Sg1NVL8wk5ZboNPy10Du2A=='> ToObject (IMap)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an instance of a KeyValuePair into a JSON Object </td></tr><td class='paramname'></td><td class='paramdesc'>Invalid inputs, indeterminate arrays, all get an </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pMap</i>
+    </td>
+    <td>
+       OpenEdge.Core.Collections.IMap
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="0200107/XYnwkYNy5I7r4NtGEltg==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#0200107/XYnwkYNy5I7r4NtGEltg=='> ToObject (KeyValuePair)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#0200107/XYnwkYNy5I7r4NtGEltg=='> ToObject (KeyValuePair)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an instance of a KeyValuePair into a JSON Object </td></tr><td class='paramname'></td><td class='paramdesc'>Invalid inputs, indeterminate arrays, all get an </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pTuple</i>
+    </td>
+    <td>
+       OpenEdge.Core.KeyValuePair
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Ov5mUCKA5rKZIzADhl7X/A==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010Ov5mUCKA5rKZIzADhl7X/A=='> ToObject (Error)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010Ov5mUCKA5rKZIzADhl7X/A=='> ToObject (Error)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an instance of a Progress.Lang.Error into a JSON Object </td></tr><td class='paramname'></td><td class='paramdesc'>{ </td></tr><tr><td class='paramname'>_retVal: </td><td class='paramdesc'>the return value, if an AppError </td></tr><tr><td class='paramname'>_soapFault: </td><td class='paramdesc'>If a SoapFaultError, non-empty values are written </td></tr><td class='paramname'></td><td class='paramdesc'>{ </td></tr><tr><td class='paramname'>_msg: </td><td class='paramdesc'>soapFault:soap-fault-string </td></tr><tr><td class='paramname'>_code: </td><td class='paramdesc'>soapFault:soap-fault-code </td></tr><tr><td class='paramname'>_subCode: </td><td class='paramdesc'>soapFault:soap-fault-subcode </td></tr><tr><td class='paramname'>_actor: </td><td class='paramdesc'>soapFault:soap-fault-actor </td></tr><tr><td class='paramname'>_role: </td><td class='paramdesc'>soapFault:soap-fault-role </td></tr><tr><td class='paramname'>_misunderstoodHeader: </td><td class='paramdesc'>soap-fault-misunderstood-header </td></tr><tr><td class='paramname'>_node: </td><td class='paramdesc'>soapFault:soap-fault-node </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr><tr><td class='paramname'>_errors: </td><td class='paramdesc'>[ </td></tr><td class='paramname'></td><td class='paramdesc'>{ _errorMsg: the error message </td></tr><tr><td class='paramname'>_errorNum: </td><td class='paramdesc'>the error number </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr><td class='paramname'></td><td class='paramdesc'>] </td></tr><tr><td class='paramname'>_sev: </td><td class='paramdesc'>the severity of the error </td></tr><tr><td class='paramname'>_type: </td><td class='paramdesc'>the OOABL type of the error, if session:debug-alert </td></tr><tr><td class='paramname'>_stack: </td><td class='paramdesc'>the error call stack, if session:debug-alert </td></tr><tr><td class='paramname'>_innerError: </td><td class='paramdesc'>one of the below. if both exist in the error, then stop is used </td></tr><td class='paramname'></td><td class='paramdesc'>{&lt;error-json&gt;} if the object has a readable InnerError property of type P.L.Error, and a valid value, then call ToObject(error) </td></tr><td class='paramname'></td><td class='paramdesc'>{&lt;stop-json&gt;} if the object has a readable InnerStop property of type P.L.Stop, and a valid value, then call ToObject(stop) </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pError</i>
+    </td>
+    <td>
+       Progress.Lang.Error
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object representing the Error
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010XsUCmBfZpltf26a/gseKAg==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010XsUCmBfZpltf26a/gseKAg=='> ToObject (Object, Object)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010XsUCmBfZpltf26a/gseKAg=='> ToObject (Object, Object)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an kay and value into a JSON Object </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pKey</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pValue</i>
+    </td>
+    <td>
+       Progress.Lang.Object
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010qa28cmBC9fQx1ObUM+zWhQ==" href="#Top">Top</a>
+                <a name=" Progress.Json.ObjectModel.JsonObject <a href='#020010qa28cmBC9fQx1ObUM+zWhQ=='> ToObject (Stop)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Progress.Json.ObjectModel.JsonObject <a href='#020010qa28cmBC9fQx1ObUM+zWhQ=='> ToObject (Stop)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts an instance of a Progress.Lang.Stop into a JSON Object </td></tr><td class='paramname'></td><td class='paramdesc'>{ </td></tr><tr><td class='paramname'>_errors: </td><td class='paramdesc'>[ </td></tr><td class='paramname'></td><td class='paramdesc'>{ _errorMsg: the stop type name </td></tr><tr><td class='paramname'>_errorNum: </td><td class='paramdesc'>null </td></tr><tr><td class='paramname'>_device: </td><td class='paramdesc'>) </td></tr><tr><td class='paramname'>_tableName: </td><td class='paramdesc'>) If the stop is a LockConflict </td></tr><tr><td class='paramname'>_user: </td><td class='paramdesc'>) </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr><td class='paramname'></td><td class='paramdesc'>] </td></tr><tr><td class='paramname'>_type: </td><td class='paramdesc'>if session:debug-alert </td></tr><tr><td class='paramname'>_stack: </td><td class='paramdesc'>if session:debug-alert </td></tr><td class='paramname'></td><td class='paramdesc'>} </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pStop</i>
+    </td>
+    <td>
+       Progress.Lang.Stop
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Progress.Json.ObjectModel.JsonObject 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        JsonObject A JSON object representing the Error
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010jNzRdtQbfEFsePJT0kfi5Q==" href="#Top">Top</a>
+                <a name=" OpenEdge.Core.IObjectArrayHolder <a href='#020010jNzRdtQbfEFsePJT0kfi5Q=='> ToObjectArray (JsonArray)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC OpenEdge.Core.IObjectArrayHolder <a href='#020010jNzRdtQbfEFsePJT0kfi5Q=='> ToObjectArray (JsonArray)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts a JSON array to an instance of a IObjectArrayHolder </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      OpenEdge.Core.IObjectArrayHolder 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IObjectArrayHolder The array holder. One is always returned.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010WNkbg81cZdXCqTKtKv7/mA==" href="#Top">Top</a>
+                <a name=" OpenEdge.Core.IObjectArrayHolder <a href='#020010WNkbg81cZdXCqTKtKv7/mA=='> ToObjectArray (JsonArray, Class)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC OpenEdge.Core.IObjectArrayHolder <a href='#020010WNkbg81cZdXCqTKtKv7/mA=='> ToObjectArray (JsonArray, Class)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts a JSON array to an instance of a IObjectArrayHolder </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pElementType</i>
+    </td>
+    <td>
+       Progress.Lang.Class
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      OpenEdge.Core.IObjectArrayHolder 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IObjectArrayHolder The array holder. One is always returned.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010K2k7Uh3ZpiLvjV/4Gmisbg==" href="#Top">Top</a>
+                <a name=" Ccs.Common.Support.IPrimitiveArrayHolder <a href='#020010K2k7Uh3ZpiLvjV/4Gmisbg=='> ToPrimitiveArray (JsonArray)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Ccs.Common.Support.IPrimitiveArrayHolder <a href='#020010K2k7Uh3ZpiLvjV/4Gmisbg=='> ToPrimitiveArray (JsonArray)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Converts a JSON array to an instance of a PrimitiveArrayHolder </td></tr><td class='paramname'></td><td class='paramdesc'>The first non-null element is used to infer the array's ABL type. </td></tr><td class='paramname'></td><td class='paramdesc'>Objects and Arrays are returned as JSON text. </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Ccs.Common.Support.IPrimitiveArrayHolder 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IPrimitiveArrayHolder The array holder. One is always returned.
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010Ijt/VZp/Sz6MEL1aQ/BrtA==" href="#Top">Top</a>
+                <a name=" Ccs.Common.Support.IPrimitiveHolder <a href='#020010Ijt/VZp/Sz6MEL1aQ/BrtA=='> ToScalar (JsonArray, integer)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Ccs.Common.Support.IPrimitiveHolder <a href='#020010Ijt/VZp/Sz6MEL1aQ/BrtA=='> ToScalar (JsonArray, integer)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* This method converts a JSON array element to an instance of an IPrimitiveHolder. </td></tr><td class='paramname'></td><td class='paramdesc'>If the inputs are invalid, or the index is not in range, a OE.Core.String object represeting the unknown value is returned. </td></tr><td class='paramname'></td><td class='paramdesc'>Input JSON data types: </td></tr><td class='paramname'></td><td class='paramdesc'>NULL -&gt; OE.Core.String(?) </td></tr><td class='paramname'></td><td class='paramdesc'>OBJECT, ARRAY -&gt; OE.Core.String(GetJsonText) </td></tr><td class='paramname'></td><td class='paramdesc'>BOOLEAN -&gt; OE.Core.LogicalValue(&lt;val&gt;) </td></tr><td class='paramname'></td><td class='paramdesc'>NUMBER -&gt; if the value has a '.', OE.Core.Decimal(&lt;val&gt;), else OE.Core.Integer(&lt;val&gt;) </td></tr><td class='paramname'></td><td class='paramdesc'>STRING -&gt; </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like YYYY-MM-DD, try to parse and return OE.Core.DateHolder </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like YYYY-MM-DDTHH:MM:SS.SSS, try to parse and return OE.Core.DateTimeHolder </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like YYYY-MM-DDTHH:MM:SS.SSS+HH:MM, try to parse and return OE.Core.DateTimeTzHolder </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like a base64-encoded value (last 2 chars are ==), return as OE.Core.Memptr </td></tr><td class='paramname'></td><td class='paramdesc'>If the 'looks like' or parsing fail, return OE.Core.String(&lt;val&gt;) </td></tr><td class='paramname'></td><td class='paramdesc'>If the property value cannot be converted, an object represeting the unknown value is returned (same as NULL). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pArray</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonArray
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pIdx</i>
+    </td>
+    <td>
+       INTEGER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Ccs.Common.Support.IPrimitiveHolder 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IPrimitiveHolder The representative value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr><tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010zInh4Lzhh3vCwg690ckNdg==" href="#Top">Top</a>
+                <a name=" Ccs.Common.Support.IPrimitiveHolder <a href='#020010zInh4Lzhh3vCwg690ckNdg=='> ToScalar (JsonObject, character)</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PUBLIC Ccs.Common.Support.IPrimitiveHolder <a href='#020010zInh4Lzhh3vCwg690ckNdg=='> ToScalar (JsonObject, character)</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_STATIC" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* This method converts a JSON property to an instance of an IPRimitiveHolder. </td></tr><td class='paramname'></td><td class='paramdesc'>Input JSON data types: </td></tr><td class='paramname'></td><td class='paramdesc'>NULL -&gt; OE.Core.String(?) </td></tr><td class='paramname'></td><td class='paramdesc'>OBJECT, ARRAY -&gt; OE.Core.String(GetJsonText) </td></tr><td class='paramname'></td><td class='paramdesc'>BOOLEAN -&gt; OE.Core.LogicalValue(&lt;val&gt;) </td></tr><td class='paramname'></td><td class='paramdesc'>NUMBER -&gt; if the value has a '.', OE.Core.Decimal(&lt;val&gt;), else OE.Core.Integer(&lt;val&gt;) </td></tr><td class='paramname'></td><td class='paramdesc'>STRING -&gt; </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like YYYY-MM-DD, try to parse and return OE.Core.DateHolder </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like YYYY-MM-DDTHH:MM:SS.SSS, try to parse and return OE.Core.DateTimeHolder </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like YYYY-MM-DDTHH:MM:SS.SSS+HH:MM, try to parse and return OE.Core.DateTimeTzHolder </td></tr><td class='paramname'></td><td class='paramdesc'>If the value looks like a base64-encoded value (last 2 chars are ==), return as OE.Core.Memptr </td></tr><td class='paramname'></td><td class='paramdesc'>If the 'looks like' or parsing fail, return OE.Core.String(&lt;val&gt;) </td></tr><td class='paramname'></td><td class='paramdesc'>If the property value cannot be converted, an object represeting the unknown value is returned (same as NULL). </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  
+                  <tr>
+    <td class="document_detail_parameter">
+        <i>pObject</i>
+    </td>
+    <td>
+       Progress.Json.ObjectModel.JsonObject
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i>pName</i>
+    </td>
+    <td>
+       CHARACTER
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        
+    </td>
+</tr><tr>
+    <td class="document_detail_parameter">
+        <i><b>Returns</b></i>
+    </td>
+    <td>
+      Ccs.Common.Support.IPrimitiveHolder 
+    </td>
+    <td>
+    </td>
+</tr>
+<tr>
+    <td class="document_detail_parameter">
+    </td>
+    <td>
+        IPrimitiveHolder The representative value
+    </td>
+</tr>
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    
+    <div class="TableHeadingColor cell">
+        <span id="constructor_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Constructor Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details constructor_detail">
+        <tbody>
+            <tr class="table_content table_detail_row">
+    <th colspan="2" align="left" valign="top" class="cell">
+        <div class="table_detail_comment_div">
+            <font class="Code_Text">
+                <a name="020010jCV4RR9LcNxHoYzrrmyCuw==" href="#Top">Top</a>
+                <a name="  <a href='#020010jCV4RR9LcNxHoYzrrmyCuw=='> JsonConverter ()</a>"></a>
+            </font>
+        </div>
+        <h3 class="Signature_Font">PRIVATE  <a href='#020010jCV4RR9LcNxHoYzrrmyCuw=='> JsonConverter ()</a></h3>
+        <table>
+            <tr>
+                <td>
+                    <div class="img_" Title="Static">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Abstract">
+                    </div>
+                </td>
+                <td>
+                    <div class="img_" Title="Final">
+                    </div> 
+                </td>
+            </tr>
+        </table>
+        <i>  </i>
+        <div>
+        <dl>
+          <dd class="detail_comment">
+            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Default constructor. </td></tr><td class='paramname'></td><td class='paramdesc'>This is private so that this class cannot be instantiated - it's intended to be used with static members only </td></tr></tbody></table>
+            <dl>
+              <table class="parameter_table">
+                  <!--
+                  <tr>
+                    <td colspan="2">
+                      <b>Parameters:</b>           
+                    </td>
+                  </tr>
+                  -->
+                  
+              </table>
+            </dl>
+          </dd>
+        </dl>
+      </div>
+    </th>
+</tr>
+        </tbody>
+    </table>
+    <br>
+    <br>
+    
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="event_detail" class="expand_arrow expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Event Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content table_content_details event_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <!--
+    <div class="TableHeadingColor cell">
+        <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
+        </span>
+        <span>
+            <font size="+2">
+                <b>Property Detail</b>
+            </font>
+        </span>
+    </div>
+    <table border="0" class="table_content property_detail">
+        <tbody>
+            
+        </tbody>
+    </table>
+    <br>
+    <br>
+    -->
+    <font class="footer_timestamp">04.15.2022 11:51:56</font>
+    </BODY>
+</HTML>

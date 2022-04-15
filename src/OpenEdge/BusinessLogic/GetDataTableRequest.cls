@@ -1,19 +1,20 @@
 /* *************************************************************************************************************************
-Copyright (c) 2018-2020 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
+Copyright (c) 2018-2021 by Progress Software Corporation and/or one of its subsidiaries or affiliates. All rights reserved.
 ************************************************************************************************************************** */
 /*------------------------------------------------------------------------
     File        : GetDataTableRequest
-    Purpose     : 
-    Syntax      : 
-    Description : 
+    Purpose     :
+    Syntax      :
+    Description :
     Author(s)   : pjudge
     Created     : 2018-06-15
-    Notes       : 
+    Notes       :
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
 using Ccs.BusinessLogic.IGetDataTableRequest.
 using Ccs.BusinessLogic.IQueryDefinition.
+using Ccs.BusinessLogic.IQueryEntry.
 using Ccs.BusinessLogic.IQuerySortEntry.
 using OpenEdge.BusinessLogic.IO.JsonPropertyNameEnum.
 using OpenEdge.BusinessLogic.QueryDefinition.
@@ -24,33 +25,32 @@ using OpenEdge.Core.Json.IJsonSerializer.
 using OpenEdge.Core.Json.JsonConverter.
 using OpenEdge.Core.Json.JsonPropertyHelper.
 using OpenEdge.Core.Json.JsonSerializer.
+using OpenEdge.Core.String.
+using OpenEdge.Core.StringConstant.
 using Progress.Json.ObjectModel.JsonConstruct.
 using Progress.Json.ObjectModel.JsonDataType.
 using Progress.Json.ObjectModel.JsonObject.
-using OpenEdge.Core.String.
-using OpenEdge.Core.StringConstant.
-using Ccs.BusinessLogic.IQueryEntry.
 
 class OpenEdge.BusinessLogic.GetDataTableRequest implements IGetDataTableRequest, IJsonSerializer:
     /* Returns the number of records requested by the caller of the Business Entity getData method */
     define public property NumRecords as int64 no-undo get. set.
     
     /* Returns the paging context */
-    define public property PagingContext as character no-undo get. set. 
+    define public property PagingContext as character no-undo get. set.
     
     /* Returns the abstract query defintion for this request */
-    define public property QueryDefinition as IQueryDefinition no-undo get. set. 
+    define public property QueryDefinition as IQueryDefinition no-undo get. set.
     
     /* Returns the Query String for this table */
-    define public property QueryString as character no-undo get. set. 
+    define public property QueryString as character no-undo get. set.
     
     /* Returns the number of records to skip */
-    define public property Skip as int64 no-undo get. set. 
+    define public property Skip as int64 no-undo get. set.
     
     /* Returns the name of the ProDataset Table */
-    define public property TableName as character no-undo 
+    define public property TableName as character no-undo
         get.
-        private set. 
+        private set.
     
     /* Default constructor */
     constructor public GetDataTableRequest ():
@@ -100,7 +100,7 @@ class OpenEdge.BusinessLogic.GetDataTableRequest implements IGetDataTableRequest
     /* Turns JSON into an object.
        
        - This method expects a JSON object
-       - If the "query" property is a string, this method tries to convert it to a IQueryDefinition object 
+       - If the "query" property is a string, this method tries to convert it to a IQueryDefinition object
        
        @param JsonConstruct The input JSON */
     method public void FromJson(input pJson as JsonConstruct):
@@ -108,11 +108,7 @@ class OpenEdge.BusinessLogic.GetDataTableRequest implements IGetDataTableRequest
         define variable fp as FilterParser no-undo.
         define variable qd as QueryDefinition no-undo.
         define variable qryWhere as character no-undo.
-        define variable qrySort as character no-undo.
         define variable qryString as String no-undo.
-        define variable pos as integer extent 2 no-undo.
-        define variable qse as IQuerySortEntry extent no-undo.
-        define variable qe as IQueryEntry no-undo.
         
         if not valid-object(pJson)
         or not type-of(pJson, JsonObject)
@@ -149,7 +145,7 @@ class OpenEdge.BusinessLogic.GetDataTableRequest implements IGetDataTableRequest
             assign this-object:QueryDefinition = cast(JsonSerializer:ToAblObject(data:GetJsonObject(string(JsonPropertyNameEnum:query)),
                                                                                  get-class(IQueryDefinition),
                                                                                  get-class(QueryDefinition)),
-                                                      IQueryDefinition). 
+                                                      IQueryDefinition).
     end method.
     
 end class.

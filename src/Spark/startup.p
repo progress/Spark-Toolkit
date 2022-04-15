@@ -17,10 +17,6 @@ block-level on error undo, throw.
 /* Standard input parameter as set via sessionStartupProcParam */
 define input parameter startup-data as character no-undo.
 
-/* Denote the current version of the Progress Modernization Framework. */
-{Spark/version.i} /* Allow framework version to be updated by build process. */
-define variable CurrentVersion as character no-undo initial "{&SPARK_VERSION}".
-
 /* Set up a custom log file if not in an MSAS environment (eg. ABLUnit). */
 if session:client-type eq "4GLCLIENT" then do:
     log-manager:logfile-name = session:temp-directory + "server.log".
@@ -29,7 +25,7 @@ end. /* session:client-type */
 {Spark/Core/Lib/LogMessage.i &IsClass=false &IsPublic=false}
 
 /* ***************************  Main Block  *************************** */
-logMessage(substitute("Starting Spark, version &1", CurrentVersion), "SPARK-STRT", 0).
+logMessage(substitute("Starting Spark, version &1", Spark.Core.Util.OSTools:CurrentVersion), "SPARK-STRT", 0).
 logMessage(substitute("Session Startup Param [&1], num-dbs: &2", startup-data, num-dbs), "SPARK-STRT", 3).
 logMessage(substitute("Internal Codepage: &1", session:cpinternal), "SPARK-STRT", 2).
 logMessage(substitute("Stream Codepage: &1", session:cpstream), "SPARK-STRT", 2).
