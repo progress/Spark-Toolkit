@@ -140,7 +140,7 @@
         </sequential>
     </macrodef>
 
-    <macrodef name="compile_openedge">
+    <macrodef name="compile_with_openedge">
         <sequential>
             <!-- Code compiles without need for a database. -->
             <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
@@ -153,6 +153,42 @@
                     <include name="OpenEdge/**/*.cls"/>
                 </fileset>
             </PCTCompile>
+
+			<!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
+			<PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+				<propath>
+					<pathelement path="${src.dir}/Spark"/>
+					<pathelement path="${build.tmp}"/>
+					<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+					<pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+					<pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+				</propath>
+				<fileset dir="${src.dir}">
+					<include name="Spark/Core/**/*.cls"/>
+					<include name="Spark/Core/**/*.p"/>
+					<include name="Spark/*.p"/>
+				</fileset>
+			</PCTCompile>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="compile_spark_only">
+        <sequential>
+			<!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
+			<PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+				<propath>
+					<pathelement path="${src.dir}/Spark"/>
+					<pathelement path="${build.tmp}"/>
+					<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+					<pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+					<pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+				</propath>
+				<fileset dir="${src.dir}">
+					<include name="Spark/Core/**/*.cls"/>
+					<include name="Spark/Core/**/*.p"/>
+					<include name="Spark/*.p"/>
+				</fileset>
+			</PCTCompile>
         </sequential>
     </macrodef>
 
@@ -172,38 +208,25 @@
             <equals arg1="${oeMajor}" arg2="11"/>
             <then>
                 <!-- OpenEdge 11.7.x -->
-                <compile_openedge/>
+                <compile_with_openedge/>
             </then>
             <else>
                 <!-- OpenEdge 12.x -->
                 <if>
                     <equals arg1="${oeMinor}" arg2="5"/>
                     <then>
-                        <!-- OpenEdge 12.5 - Not Required -->
+                        <!-- OpenEdge 12.5 - Uses bundled OpenEdge.* classes -->
+						<compile_spark_only/>
                     </then>
                     <else>
-                        <!-- OpenEdge >12.0 or <12.5 -->
-                        <compile_openedge/>
+                        <!-- OpenEdge >12.0 or <12.5 requires special/local OpenEdge.* classes -->
+                        <compile_with_openedge/>
                     </else>
                 </if>
             </else>
         </if>
 
-        <!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
-        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-            <propath>
-                <pathelement path="${src.dir}/Spark"/>
-                <pathelement path="${build.tmp}"/>
-                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-                <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
-            </propath>
-            <fileset dir="${src.dir}">
-                <include name="Spark/Core/**/*.cls"/>
-                <include name="Spark/Core/**/*.p"/>
-                <include name="Spark/*.p"/>
-            </fileset>
-        </PCTCompile>
+		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
     </target>
 
     <target name="compile_spark_diag">

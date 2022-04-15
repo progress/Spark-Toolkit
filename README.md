@@ -8,7 +8,7 @@ The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/
 
 ## Requirements
 
-Due to the inclusion of the CCS libraries and new Business Logic features within the OpenEdge product, version **11.7.8** or **12.2.4** is required as a minimum, along with toolkit version **6.0.2** or later being highly recommended. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
+For reference, the CCS libraries and newer Business Logic features are included with OpenEdge versions **11.7.8+** and **12.2.4+** though we recommend use of the latest LTS release or latest supported OpenEdge 12 release. Use of toolkit version **6.0.2** or later is highly recommended if you are on an earlier version. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
 
 * /dist/oe11 - 11.7.13+ preferred
 * /dist/oe12 - 12.2.8+ preferred
