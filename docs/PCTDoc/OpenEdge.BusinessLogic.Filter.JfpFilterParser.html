@@ -138,74 +138,7 @@
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font>A</font>
     <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         IGetDataRequest <a href='#020010cSqzgEEtkCxi42ckpcnEUQ=='> Parse (Object)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Reads and processes (parses) a complete data filter.
-
-@param P.L.Object The filter data
-@param IGetDataRequest A new filter object */ <br> <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#Parse (Object)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:Parse (Object)</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font>A</font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         IQuerySortEntry <a href='#020010c+yTXVLGqI5hO1IKgNEJXA=='> ParseSortBy (Object)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects.
-
-@param P.L.Object The SORT-BY data
-@return IQuerySortEntry[] An array of sort phrases. An indeterminate array is returned if the input phrase is empty */ <br> <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#ParseSortBy (Object)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:ParseSortBy (Object)</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         IQuerySortEntry <a href='#020010CgMz7axKNPJkSOlMQEH8Vg=='> ParseSortString (longchar)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Parses an ABL BY expression into an array of IQuerySortEntry.
-
-If the string is malformed (ie can't be used as an ABL sort), then an indeterminate array
-is returned. mallformed might be something like "by eq 21" or "by".
-
-@param longchar The standard ABL BY expression. This can be a complete WHERE ... BY string or just the BY portion
-@return IQuerySortEntry[] An array of sort entries. Will be indeterminate if the input value is empty or null,
-or if the string isn't of the format "BY &lt;field&gt; [BY &lt;field-2&gt;]"       */ <br> <i> Inherited from <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html'>OpenEdge.BusinessLogic.Filter.AblFilterParser</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
     <font></font>
     <font></font>
   </td>
@@ -222,53 +155,7 @@ This method knows which properties in the input JSON are for the where clause, f
 
 @param character The table name to which this filter applies
 @param JsonObject The input filter
-@return IGetDataTableRequest A single table Get Request */ <br> <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#ParseTableRequest (character, JsonObject)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:ParseTableRequest (character, JsonObject)</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font>A</font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         IQueryEntry <a href='#020010dmulpeuChLhoPrhh6x1ZZQ=='> ParseWhere (Object)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Parses where/filter phrase and returns an IQueryEntry object for a single table
-
-@param P.L.Object The filter/where clause data
-@return IQueryEntry The query entry.We return one of an IQueryPredicate (single clause)
-or an IQueryGroup (many clauses) */ <br> <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#ParseWhere (Object)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:ParseWhere (Object)</a> </i>
-  </td>
-</tr>
-<tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>#</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         IQueryEntry <a href='#020010fjaJJLQgMbApclFsFULnbQ=='> ParseWhereString (longchar)</a>
-    </font>
-  </td>
-  <td class="cell">
-     
-/* Parses a where string into a query entry - either a group or a predicate.
-
-If the parsing runs into problems (eg a malformed string) a null IQueryEntry is returned.
-Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
-
-@param longchar The WHERE string to parse into parts
-@return IQueryEntry A query group, query predicate or unknown (if the string cannot be parsed) */ <br> <i> Inherited from <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html'>OpenEdge.BusinessLogic.Filter.AblFilterParser</a> </i>
+@return IGetDataTableRequest A single table Get Request */ <br> <i>  </i>
   </td>
 </tr>
     
@@ -298,7 +185,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
+    <font></font>
     <font></font>
     <font></font>
   </td>
@@ -316,7 +203,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
+    <font></font>
     <font></font>
     <font></font>
   </td>
@@ -336,7 +223,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
   <td align="left" valign="top" class="img_col cell cellleft ">
   </td>
   <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
+    <font></font>
     <font></font>
     <font></font>
   </td>
@@ -379,7 +266,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
         </tbody>
     </table>
     -->
-    
+    <!--
     <br>
     <div class="TableHeadingColor">
         <span id="property_summary" class="expand_arrow expandButtonShow HeightFixIE">
@@ -398,27 +285,10 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
                 <th align="left">Name</th>
                 <th align="left">Purpose</th>
             </tr>
-            <tr class="table_content overview_row">
-  <td align="left" valign="top" class="img_col cell cellleft ">
-  </td>
-  <td align="left" valign="top" class="option_col cell">
-    <font>+</font>
-    <font></font>
-    <font></font>
-  </td>
-  <td class="signature_col cell">
-    <font>
-         CHARACTER <a href='#020010dqG98jJM7lm7hiQDskDmGg=='> FilterTable</a>
-    </font>
-  </td>
-  <td class="cell">
-      <br> <i> Inherited from <a href='OpenEdge.BusinessLogic.Filter.FilterParser.html'>OpenEdge.BusinessLogic.Filter.FilterParser</a> </i>
-  </td>
-</tr>
-    
+                
         </tbody>
     </table>
-    
+    -->
     <br>
     <br>
     
@@ -437,245 +307,11 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
     <th colspan="2" align="left" valign="top" class="cell">
         <div class="table_detail_comment_div">
             <font class="Code_Text">
-                <a name="020010cSqzgEEtkCxi42ckpcnEUQ==" href="#Top">Top</a>
-                <a name=" IGetDataRequest <a href='#020010cSqzgEEtkCxi42ckpcnEUQ=='> Parse (Object)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC IGetDataRequest <a href='#020010cSqzgEEtkCxi42ckpcnEUQ=='> Parse (Object)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_ABSTRACT" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#Parse (Object)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:Parse (Object)</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Reads and processes (parses) a complete data filter. </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pData</i>
-    </td>
-    <td>
-       Progress.Lang.Object
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      IGetDataRequest 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010c+yTXVLGqI5hO1IKgNEJXA==" href="#Top">Top</a>
-                <a name=" IQuerySortEntry <a href='#020010c+yTXVLGqI5hO1IKgNEJXA=='> ParseSortBy (Object)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC IQuerySortEntry <a href='#020010c+yTXVLGqI5hO1IKgNEJXA=='> ParseSortBy (Object)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_ABSTRACT" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#ParseSortBy (Object)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:ParseSortBy (Object)</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects. </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pSortBy</i>
-    </td>
-    <td>
-       Progress.Lang.Object
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      IQuerySortEntry 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        IQuerySortEntry[] An array of sort phrases. An indeterminate array is returned if the input phrase is empty
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010CgMz7axKNPJkSOlMQEH8Vg==" href="#Top">Top</a>
-                <a name=" IQuerySortEntry <a href='#020010CgMz7axKNPJkSOlMQEH8Vg=='> ParseSortString (longchar)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED IQuerySortEntry <a href='#020010CgMz7axKNPJkSOlMQEH8Vg=='> ParseSortString (longchar)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html'>OpenEdge.BusinessLogic.Filter.AblFilterParser</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses an ABL BY expression into an array of IQuerySortEntry. </td></tr><td class='paramname'></td><td class='paramdesc'>If the string is malformed (ie can't be used as an ABL sort), then an indeterminate array </td></tr><td class='paramname'></td><td class='paramdesc'>is returned. mallformed might be something like "by eq 21" or "by". </td></tr><td class='paramname'></td><td class='paramdesc'>or if the string isn't of the format "BY &lt;field&gt; [BY &lt;field-2&gt;]" </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pSortBy</i>
-    </td>
-    <td>
-       LONGCHAR
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      IQuerySortEntry 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        IQuerySortEntry[] An array of sort entries. Will be indeterminate if the input value is empty or null,
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
                 <a name="020010G7XUEwI44NmJqKG6wznIKw==" href="#Top">Top</a>
                 <a name=" Ccs.BusinessLogic.IGetDataTableRequest <a href='#020010G7XUEwI44NmJqKG6wznIKw=='> ParseTableRequest (character, JsonObject)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PROTECTED Ccs.BusinessLogic.IGetDataTableRequest <a href='#020010G7XUEwI44NmJqKG6wznIKw=='> ParseTableRequest (character, JsonObject)</a></h3>
+        <h3 class="Signature_Font"> Ccs.BusinessLogic.IGetDataTableRequest <a href='#020010G7XUEwI44NmJqKG6wznIKw=='> ParseTableRequest (character, JsonObject)</a></h3>
         <table>
             <tr>
                 <td>
@@ -692,7 +328,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
                 </td>
             </tr>
         </table>
-        <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#ParseTableRequest (character, JsonObject)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:ParseTableRequest (character, JsonObject)</a> </i>
+        <i>  </i>
         <div>
         <dl>
           <dd class="detail_comment">
@@ -761,162 +397,6 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
         </dl>
       </div>
     </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010dmulpeuChLhoPrhh6x1ZZQ==" href="#Top">Top</a>
-                <a name=" IQueryEntry <a href='#020010dmulpeuChLhoPrhh6x1ZZQ=='> ParseWhere (Object)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC IQueryEntry <a href='#020010dmulpeuChLhoPrhh6x1ZZQ=='> ParseWhere (Object)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_ABSTRACT" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Overrides <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html#ParseWhere (Object)'>OpenEdge.BusinessLogic.Filter.AblFilterParser:ParseWhere (Object)</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses where/filter phrase and returns an IQueryEntry object for a single table </td></tr><td class='paramname'></td><td class='paramdesc'>or an IQueryGroup (many clauses) </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pWhere</i>
-    </td>
-    <td>
-       Progress.Lang.Object
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      IQueryEntry 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        IQueryEntry The query entry.We return one of an IQueryPredicate (single clause)
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr><tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010fjaJJLQgMbApclFsFULnbQ==" href="#Top">Top</a>
-                <a name=" IQueryEntry <a href='#020010fjaJJLQgMbApclFsFULnbQ=='> ParseWhereString (longchar)</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PROTECTED IQueryEntry <a href='#020010fjaJJLQgMbApclFsFULnbQ=='> ParseWhereString (longchar)</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.BusinessLogic.Filter.AblFilterParser.html'>OpenEdge.BusinessLogic.Filter.AblFilterParser</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'><td class='paramname'></td><td class='paramdesc'>/* Parses a where string into a query entry - either a group or a predicate. </td></tr><td class='paramname'></td><td class='paramdesc'>If the parsing runs into problems (eg a malformed string) a null IQueryEntry is returned. </td></tr><td class='paramname'></td><td class='paramdesc'>Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported. </td></tr></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  
-                  <tr>
-    <td class="document_detail_parameter">
-        <i>pWhere</i>
-    </td>
-    <td>
-       LONGCHAR
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr><tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      IQueryEntry 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        IQueryEntry A query group, query predicate or unknown (if the string cannot be parsed)
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
 </tr>
         </tbody>
     </table>
@@ -943,7 +423,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
                 <a name="  <a href='#020010wpkHISnRjFz33Rn/1dno5Q=='> JfpFilterParser ()</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC  <a href='#020010wpkHISnRjFz33Rn/1dno5Q=='> JfpFilterParser ()</a></h3>
+        <h3 class="Signature_Font">  <a href='#020010wpkHISnRjFz33Rn/1dno5Q=='> JfpFilterParser ()</a></h3>
         <table>
             <tr>
                 <td>
@@ -989,7 +469,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
                 <a name="  <a href='#0200102LXrizpehu/HxFJBZJXcMQ=='> JfpFilterParser (character)</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC  <a href='#0200102LXrizpehu/HxFJBZJXcMQ=='> JfpFilterParser (character)</a></h3>
+        <h3 class="Signature_Font">  <a href='#0200102LXrizpehu/HxFJBZJXcMQ=='> JfpFilterParser (character)</a></h3>
         <table>
             <tr>
                 <td>
@@ -1051,7 +531,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
                 <a name="  <a href='#020010qOXtKiMKu8cyL65flX84TQ=='> JfpFilterParser (character[])</a>"></a>
             </font>
         </div>
-        <h3 class="Signature_Font">PUBLIC  <a href='#020010qOXtKiMKu8cyL65flX84TQ=='> JfpFilterParser (character[])</a></h3>
+        <h3 class="Signature_Font">  <a href='#020010qOXtKiMKu8cyL65flX84TQ=='> JfpFilterParser (character[])</a></h3>
         <table>
             <tr>
                 <td>
@@ -1129,7 +609,7 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
     <br>
     <br>
     -->
-    
+    <!--
     <div class="TableHeadingColor cell">
         <span id="property_detail" class="expand_arrow table_content_details expandButtonShow HeightFixIE">
         </span>
@@ -1141,74 +621,12 @@ Splitting of a string into groups using "(&lt;grp-1&gt;)" is not supported.
     </div>
     <table border="0" class="table_content property_detail">
         <tbody>
-            <tr class="table_content table_detail_row">
-    <th colspan="2" align="left" valign="top" class="cell">
-        <div class="table_detail_comment_div">
-            <font class="Code_Text">
-                <a name="020010dqG98jJM7lm7hiQDskDmGg==" href="#Top">Top</a>
-                <a name=" CHARACTER <a href='#020010dqG98jJM7lm7hiQDskDmGg=='> FilterTable</a>"></a>
-            </font>
-        </div>
-        <h3 class="Signature_Font">PUBLIC CHARACTER <a href='#020010dqG98jJM7lm7hiQDskDmGg=='> FilterTable</a></h3>
-        <table>
-            <tr>
-                <td>
-                    <div class="img_" Title="Static">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Abstract">
-                    </div>
-                </td>
-                <td>
-                    <div class="img_" Title="Final">
-                    </div> 
-                </td>
-            </tr>
-        </table>
-        <i> Inherited from <a href='OpenEdge.BusinessLogic.Filter.FilterParser.html'>OpenEdge.BusinessLogic.Filter.FilterParser</a> </i>
-        <div>
-        <dl>
-          <dd class="detail_comment">
-            <table><tbody class='commment_formater_table'></tbody></table>
-            <dl>
-              <table class="parameter_table">
-                  <!--
-                  <tr>
-                    <td colspan="2">
-                      <b>Parameters:</b>           
-                    </td>
-                  </tr>
-                  -->
-                  <tr>
-    <td class="document_detail_parameter">
-        <i><b>Returns</b></i>
-    </td>
-    <td>
-      CHARACTER 
-    </td>
-    <td>
-    </td>
-</tr>
-<tr>
-    <td class="document_detail_parameter">
-    </td>
-    <td>
-        
-    </td>
-</tr>
-              </table>
-            </dl>
-          </dd>
-        </dl>
-      </div>
-    </th>
-</tr>
+            
         </tbody>
     </table>
     <br>
     <br>
-    
-    <font class="footer_timestamp">04.15.2022 11:51:47</font>
+    -->
+    <font class="footer_timestamp">04.18.2022 11:20:22</font>
     </BODY>
 </HTML>
