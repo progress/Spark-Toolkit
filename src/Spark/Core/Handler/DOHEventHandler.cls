@@ -20,7 +20,6 @@ using OpenEdge.Net.HTTP.StatusCodeEnum from propath.
 using OpenEdge.Net.HTTP.StatusCodeHelper from propath.
 using OpenEdge.Web.DataObject.* from propath.
 using OpenEdge.Web.DataObject.Writer.* from propath.
-using OpenEdge.Web.SendExceptionError from propath.
 using Spark.Core.Manager.ICatalogManager from propath.
 using Spark.Core.Manager.ILoggingManager from propath.
 using Spark.Core.Manager.ServiceLifeCycleEnum from propath.
