@@ -215,9 +215,9 @@
             <else>
                 <!-- OpenEdge 12.x -->
                 <if>
-                    <equals arg1="${oeMinor}" arg2="5"/>
+                    <equals arg1="${oeMinor}" arg2="8"/>
                     <then>
-                        <!-- OpenEdge 12.5 - Uses bundled OpenEdge.* classes -->
+                        <!-- OpenEdge 12.8 - Uses bundled OpenEdge.* classes -->
 						<compile_spark_only/>
                     </then>
                     <else>
