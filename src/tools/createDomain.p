@@ -99,7 +99,6 @@ do iDB = 1 to num-dbs:
         assign oEntry = new Progress.Json.ObjectModel.JsonObject().
         oEntry:Add("domain", domainName).
         oEntry:Add("accessCode", security-policy:encode-domain-access-code(domainAccessCode)).
-        &endif
         oEntry:Add("description", oDomain:Description).
         oDomains:Add(oEntry).
 
