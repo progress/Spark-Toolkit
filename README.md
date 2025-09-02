@@ -4,16 +4,17 @@
 
 The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/CCS) reference implementation from Progress meant to aid in creating an ABL application which provides RESTful API's for microservices. This repository primarily contains ABL artifacts and was built specifically for the **Progress Application Server for OpenEdge** to provide the back-end (server-side) support for exposing ABL logic via HTTP/HTTP.
 
-**Latest Release:** v6.0.2 (April 2022) for OE 11.7.13+ and OE 12.2.8+
+**Latest Release:** v7.0.0 (Sept. 2025) for OE 12.2.8+
 
 ## Requirements
 
-For reference, the CCS libraries and newer Business Logic features are included with OpenEdge versions **11.7.8+** and **12.2.4+** though we recommend use of the latest LTS release or latest supported OpenEdge 12 release. Use of toolkit version **6.0.2** or later is highly recommended if you are on an earlier version. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
+For reference, the CCS libraries and newer Business Logic features are included with OpenEdge versions **11.7.8+** and **12.2.4+** though we recommend use of the latest LTS release or latest supported OpenEdge 12 release. Use of toolkit version **6.0.3** or later is highly recommended if you are on an earlier version. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
 
-* /dist/oe11 - 11.7.13+ preferred
-* /dist/oe12 - 12.2.8+ preferred
+* /dist/oe12 - 12.2.8+ through 12.8.x preferred
 
 **Previous Release Requirements:**
+
+OE 11.7.x for v6.0.x (deprecated)
 
 OE 11.7.5+ or OE 12.1+ for v5.0.x (deprecated)
 

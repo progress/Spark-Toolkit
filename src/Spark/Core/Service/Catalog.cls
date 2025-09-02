@@ -17,7 +17,7 @@ using Spark.Core.Manager.ICatalogManager from propath.
 
 block-level on error undo, throw.
 
-class Spark.Core.Service.Catalog inherits Spark.Diagnostic.Util.OSPath implements Spark.Core.Service.ICatalog use-widget-pool:
+class Spark.Core.Service.Catalog inherits Spark.Core.Util.OSPath implements Spark.Core.Service.ICatalog use-widget-pool:
 
     /* Tracks the last time the CB props file was loaded from the file system. */
     define protected variable dCBPropsLastLoaded as datetime no-undo initial ?.

@@ -14,17 +14,10 @@ using OpenEdge.Core.Assert.
 using OpenEdge.Core.Json.IJsonSerializer.
 using OpenEdge.Core.Json.JsonPropertyHelper.
 using Progress.IO.JsonSerializer.
-&IF PROVERSION BEGINS "12" &THEN
 using Progress.IO.MemoryInputStream.
 using Progress.IO.MemoryOutputStream.
 &GLOBAL-DEFINE MemInputStream MemoryInputStream
 &GLOBAL-DEFINE MemOutputStream MemoryOutputStream
-&ELSE
-using OpenEdge.Core.MemptrInputStream.
-using OpenEdge.Core.MemptrOutputStream.
-&GLOBAL-DEFINE MemInputStream MemptrInputStream
-&GLOBAL-DEFINE MemOutputStream MemptrOutputStream
-&ENDIF
 using Progress.Json.ObjectModel.JsonArray.
 using Progress.Json.ObjectModel.JsonConstruct.
 using Progress.Json.ObjectModel.JsonDataType.
