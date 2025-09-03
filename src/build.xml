@@ -54,10 +54,11 @@
 
     <macrodef name="init_env">
         <sequential>
+            <!-- Access environmental variables via "env.*". -->
             <property environment="env"/>
 
             <!-- Set a property if environment is Windows. -->
-            <condition property="isWin32">
+            <condition property="isWin">
                 <os family="windows"/>
             </condition>
 
@@ -84,6 +85,16 @@
                 </not>
             </condition>
 
+            <!-- Set the script suffix for the OS. -->
+            <condition property="scriptSuffix" value=".sh" else=".bat">
+                <os family="unix"/>
+            </condition>
+
+            <!-- Set path delimiter for the OS. -->
+            <condition property="delim" value="/" else="\">
+                <os family="unix"/>
+            </condition>
+
             <!-- Set properties for special directories. -->
             <property name="src.dir" value="${basedir}"/>
             <property name="build.tmp" value="${src.dir}/build"/>
@@ -95,8 +106,9 @@
 
     <macrodef name="init_oe">
         <sequential>
-            <init_env/>
+            <init_env/> <!-- Initialize environmental and general properties. -->
 
+            <!-- Fail immediately if not a 64-bit OS. -->
             <fail message="Environment is not 64-bit">
                 <condition>
                     <not>
@@ -115,6 +127,12 @@
                 </condition>
             </fail>
             <property name="dlcHome" value="${env.DLC}"/>
+            <echo message="DLC Home: ${dlcHome}"/>
+
+            <!-- Assume the DLC WRK directory unless overridden. -->
+            <condition property="wrk" value="/usr/wrk" else="C:\OpenEdge\WRK">
+                <os family="unix"/>
+            </condition>
 
             <!-- Load the current PCT library from DLC. -->
             <taskdef resource="PCT.properties" classpath="${dlcHome}/pct/PCT.jar"/>
@@ -122,6 +140,7 @@
             <!-- Access the OE version info, and read into a property. -->
             <ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
             <property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
+            <echo message="OpenEdge Version: ${oe.version}"/>
 
             <!-- Define the property to set if the file exists -->
             <property name="antContrib06" value="true"/>
