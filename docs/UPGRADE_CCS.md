@@ -30,16 +30,16 @@ The following steps are required when moving from from version 2.x to 3.x of the
 -     ConfigManager:Instance:TranslationManager -> cast(Ccs.Common.Application:StartupManager:getManager(get-class(ITranslationManager)), ITranslationManager)
 
 - Use the full class path for all "inherits" and "implements" keywords in class definitions.
-	- inherits Manager -> inherits Spark.Core.Manager.Manager
-	- inherits Service -> inherits Spark.Core.Manager.Service
+    - inherits Manager -> inherits Spark.Core.Manager.Manager
+    - inherits Service -> inherits Spark.Core.Manager.Service
 
 - For all classes that inherit Manager and implement an initializeManager() method, replace with initialize()
 - For all classes that inherit Service and implement an initializeService() method, replace with initialize()
 - Remove any remaining references to Spark.Core.Manager.ConfigManager and replace with the appropriate item above.
  
 - Within classes that inherit from DynamicEntity or DynamicResource, you can replace the following:
-	- ConfigManager:Instance:SessionManager:CurrentUserContext -> oClientContext
-	- initializeService -> initialize
+    - ConfigManager:Instance:SessionManager:CurrentUserContext -> oClientContext
+    - initializeService -> initialize
 
 ## Configuration Changes: ##
 
@@ -52,7 +52,7 @@ The following steps are required when moving from from version 2.x to 3.x of the
     "Implementation": "Spark.Core.Manager.ServiceManager"
     },
 
-	{
+    {
     "Manager": "Spark.Core.Manager.ISessionManager",
     "Implementation": "Spark.Core.Manager.SessionManager"
     }

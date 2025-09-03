@@ -16,7 +16,7 @@ For reference, the CCS libraries and newer Business Logic features are included 
 
 **Previous Release Requirements:**
 
-OE 11.7.x for v6.0.x (retired, deprecated)
+OE 11.7.x for v6.0.x (retired product, deprecated support)
 
 OE 11.7.5+ or OE 12.1+ for v5.0.x (deprecated)
 
