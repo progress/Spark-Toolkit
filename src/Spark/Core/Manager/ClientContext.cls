@@ -304,7 +304,7 @@ class Spark.Core.Manager.ClientContext implements Spark.Core.Manager.IClientCont
                 do:
                     find first ttUserSessionProp
                         where rowid(ttUserSessionProp) eq buffer biUserSessionProp:after-rowid.
-                    if message-digest("SHA-1", ttUserSessionProp.PropValue, ?) ne message-digest("SHA-1", biUserSessionProp.PropValue, ?) then
+                    if message-digest("SHA-1", ttUserSessionProp.PropValue) ne message-digest("SHA-1", biUserSessionProp.PropValue) then
                         lChanges = true.
                     if ttUserSessionProp.PropClob ne biUserSessionProp.PropClob then
                         lChanges = true.

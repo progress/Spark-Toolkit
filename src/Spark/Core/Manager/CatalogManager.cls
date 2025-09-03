@@ -2791,7 +2791,7 @@ class Spark.Core.Manager.CatalogManager inherits Spark.Core.Manager.Manager impl
         define buffer bService for ServiceInfo.
 
         /* Use a simple hash to identify this combination of URI and Resource Name. */
-        assign cHash = string(hex-encode(message-digest("SHA-1", substitute("&1&2", pcServiceURI, pcResourceName), ?))).
+        assign cHash = string(hex-encode(message-digest("SHA-1", substitute("&1&2", pcServiceURI, pcResourceName)))).
 
         if not oCatRegistry:Has(cHash) then do:
             /**
