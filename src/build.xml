@@ -246,48 +246,33 @@
             <equals arg1="${oeMajor}" arg2="11"/>
             <then>
                 <!-- OpenEdge 11.7.x -->
-                <compile_with_openedge/>
+                <fail message="Compilation is not supported for this version of OpenEdge"/>
             </then>
-            <else>
+        </if>
+        <if>
+            <equals arg1="${oeMajor}" arg2="12"/>
+            <then>
                 <!-- OpenEdge 12.x -->
                 <if>
                     <equals arg1="${oeMinor}" arg2="8"/>
                     <then>
-                        <!-- OpenEdge 12.8 - Uses bundled OpenEdge.* classes -->
+                        <!-- OpenEdge 12.8 - Expected to use product-installed OpenEdge.* classes -->
                         <compile_spark_only/>
                     </then>
                     <else>
-                        <!-- OpenEdge >12.0 or <12.5 requires special/local OpenEdge.* classes -->
+                        <!-- OpenEdge versions >12.0 and <12.5 requires special/local OpenEdge.* classes -->
                         <compile_with_openedge/>
                     </else>
                 </if>
-            </else>
+            </then>
         </if>
-    </target>
-
-    <target name="compile_spark_diag">
-        <init_oe/>
-
-        <delete dir="${preprocess}/Spark/Diagnostic" quiet="true"/>
-
-        <report_oe_vars/>
-
-        <compile_with_openedge/>
-
-        <!-- Code compiles without need for a database, but uses some extra libs. -->
-        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-            <propath>
-                <pathelement path="${src.dir}/Spark"/>
-                <pathelement path="${build.tmp}"/>
-                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-            </propath>
-            <fileset dir="${src.dir}">
-                <include name="Spark/Diagnostic/Util/*.cls"/>
-                <include name="Spark/Diagnostic/Interface/*.p"/>
-                <include name="Spark/Diagnostic/*.p"/>
-            </fileset>
-        </PCTCompile>
+        <if>
+            <equals arg1="${oeMajor}" arg2="13"/>
+            <then>
+                <!-- OpenEdge 13.0.x -->
+                <compile_spark_only/>
+            </then>
+        </if>
     </target>
 
     <target name="clean">
@@ -352,7 +337,6 @@
 
         <!-- Compile all code. -->
         <antcall target="compile_spark_core"/>
-        <antcall target="compile_spark_diag"/>
 
         <!-- Prepare directories for output. -->
         <property name="ablduck.output" value="${doc.out}/ABLDuck"/>
@@ -388,7 +372,6 @@
 
         <!-- Compile all code. -->
         <antcall target="compile_spark_core"/>
-        <antcall target="compile_spark_diag"/>
 
         <!-- Prepare directories for output. -->
         <property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
