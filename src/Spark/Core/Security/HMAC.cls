@@ -8,7 +8,7 @@
         http://en.wikipedia.org/wiki/HMAC
         http://www.ietf.org/rfc/rfc2104.txt
     HMAC is a hash based MAC algorithm defined in RFC 2104. It can utilize
-    any hash function (MD5, SHA1, etc). HMAC also requires a user-supplied
+    any hash function (SHA1, SHA256, etc). HMAC also requires a user-supplied
     secret key, which is a string of bytes of any length (up to 64 bytes).
     This version will support SHA1 or SHA256 (default: SHA1).
   ----------------------------------------------------------------------*/
