@@ -8,13 +8,15 @@ The **Progress Spark Toolkit** is a [CCS-compliant](https://github.com/progress/
 
 ## Requirements
 
-For reference, the CCS libraries and newer Business Logic features are included with OpenEdge versions **11.7.8+** and **12.2.4+** though we recommend use of the latest LTS release or latest supported OpenEdge 12 release. Use of toolkit version **6.0.3** or later is highly recommended if you are on an earlier version. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
+For reference, the CCS libraries and newer Business Logic features are included with OpenEdge version **12.2.4+** and we recommend use of the latest OpenEdge 12 LTS release. Current builds of the PL files in the following distribution directories are compiled using the following OpenEdge versions for proper compatibility:
 
-* /dist/oe12 - 12.2.8+ through 12.8.x preferred
+* /dist/oe122 - 12.2 LTS through 12.7
+* /dist/oe128 - 12.8 LTS (Preferred)
+* /dist/oe130 - 13.0.x (TBD)
 
 **Previous Release Requirements:**
 
-OE 11.7.x for v6.0.x (deprecated)
+OE 11.7.x for v6.0.x (retired, deprecated)
 
 OE 11.7.5+ or OE 12.1+ for v5.0.x (deprecated)
 
@@ -24,8 +26,8 @@ OE 11.7.3+ for v4.3.0 (deprecated, upgrade required)
 
 ### Supporting Tools
 
-- Apache Ant 1.9.x+ (included with OE 11.7+/12.0+ at DLC/ant) executed as `DLC/bin/proant`
-- Progress Compile Tools, aka. "PCT" (included as of OE 11.7.3/12.0+ at DLC/pct/PCT.jar)
+- Apache Ant 1.9.x+ (included with OE 12.0+ at DLC/ant) executed as `DLC/bin/proant`
+- Progress Compile Tools, aka. "PCT" (included since OE 12.0+ at DLC/pct/PCT.jar)
 
 
 ## Project Usage
@@ -39,7 +41,7 @@ As previously mentioned, the Progress Spark Toolkit library is intended for use 
 5. Copy the .json and .cp files from the `/cfg/` folder to a new `CATALINA_BASE/conf/spark/` directory.
 6. If intending to utilize OERealm security, copy the `/cfg/Realm/SparkRealm.json` file to `CATALINA_BASE/conf/spark/` and `/cfg/Realm/SparkRealm.cp` to `CATALINA_BASE/common/lib/`.
 
-**CCS Note:** As of release **4.6.0** the inclusion of the CCS source code and Ccs.pl has been discontinued and all related source is removed from this repository. As of **OpenEdge 11.7.5 / 12.1** all CCS class interfaces are already included within the product and are utilized to build the Spark.pl library. Therefore, it is no longer necessary to include this PL file within your PROPATH or included as part of your code promotion processes.
+**CCS Note:** As of **OpenEdge 12.1** all CCS class interfaces are already included within the product and are utilized to build the `Spark.pl` library. Therefore, it is no longer necessary to include a separate `ccs.pl` file within your PROPATH or included as part of your code promotion processes.
 
 
 ## Contributions / Changes
