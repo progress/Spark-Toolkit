@@ -14,17 +14,8 @@ using OpenEdge.Core.Assert.
 using OpenEdge.Core.Json.IJsonSerializer.
 using OpenEdge.Core.Json.JsonPropertyHelper.
 using Progress.IO.JsonSerializer.
-&IF PROVERSION BEGINS "12" &THEN
 using Progress.IO.MemoryInputStream.
 using Progress.IO.MemoryOutputStream.
-&GLOBAL-DEFINE MemInputStream MemoryInputStream
-&GLOBAL-DEFINE MemOutputStream MemoryOutputStream
-&ELSE
-using OpenEdge.Core.MemptrInputStream.
-using OpenEdge.Core.MemptrOutputStream.
-&GLOBAL-DEFINE MemInputStream MemptrInputStream
-&GLOBAL-DEFINE MemOutputStream MemptrOutputStream
-&ENDIF
 using Progress.Json.ObjectModel.JsonArray.
 using Progress.Json.ObjectModel.JsonConstruct.
 using Progress.Json.ObjectModel.JsonDataType.
@@ -122,7 +113,7 @@ class OpenEdge.Core.Json.JsonSerializer:
         define variable serialisedObj as JsonConstruct no-undo.
         define variable js as JsonSerializer no-undo.
         define variable omp as ObjectModelParser no-undo.
-        define variable mos as {&MemOutputStream} no-undo.
+        define variable mos as MemoryOutputStream no-undo.
 
         if not valid-object(pSerialize) then
             return jsonData.
@@ -149,7 +140,7 @@ class OpenEdge.Core.Json.JsonSerializer:
         if pSerialize:GetClass():IsSerializable() then
         do:
             assign js  = new JsonSerializer(false)
-                   mos = new {&MemOutputStream}()
+                   mos = new MemoryOutputStream()
                    omp = new ObjectModelParser()
                    .
             js:Serialize(pSerialize, mos).
@@ -206,7 +197,7 @@ class OpenEdge.Core.Json.JsonSerializer:
         define variable mJson as memptr no-undo.
         define variable objType as Progress.Lang.Class no-undo.
         define variable objData as JsonConstruct no-undo.
-        define variable mis as {&MemInputStream} no-undo.
+        define variable mis as MemoryInputStream no-undo.
 
         if not valid-object(pJson) then
             return obj.
@@ -237,7 +228,7 @@ class OpenEdge.Core.Json.JsonSerializer:
             pJson:Write(mJson).
 
             assign js  = new JsonSerializer(false)
-                   mis = new {&MemInputStream}(mJson)
+                   mis = new MemoryInputStream(mJson)
                    obj = js:Deserialize(mis)
                    .
             finally:

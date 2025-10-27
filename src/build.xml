@@ -1,7 +1,7 @@
 <project name="FrameworkTools" basedir="." default="usage">
 
     <!-- Provide tasks to build the Spark (Core) and Diagnotic procedure library files. -->
-	<!-- Note: For ABLDuck and PCTDoc it may be necessary to copy ast.jar and
+    <!-- Note: For ABLDuck and PCTDoc it may be necessary to copy ast.jar and
                ast-dependencies.jar from DLC/java/ant-libs/ to DLC/ant/libs -->
 
     <target name="usage">
@@ -9,7 +9,6 @@
         <echo message="${line.separator}Builds:"/>
         <echo message="ant build_spark_pl - Create PL archive for Spark classes"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
-        <echo message="ant build_diag_pl - Create PL archive for diagnostic tools"/>
         <echo message="${line.separator}Documentation:"/>
         <echo message="ant build_ablduck - Generate ABLDuck output for Spark"/>
         <echo message="    -Dversion=[VERSION_NUMBER] = Release version in the form of #.#.#"/>
@@ -55,10 +54,11 @@
 
     <macrodef name="init_env">
         <sequential>
+            <!-- Access environmental variables via "env.*". -->
             <property environment="env"/>
 
             <!-- Set a property if environment is Windows. -->
-            <condition property="isWin32">
+            <condition property="isWin">
                 <os family="windows"/>
             </condition>
 
@@ -85,6 +85,16 @@
                 </not>
             </condition>
 
+            <!-- Set the script suffix for the OS. -->
+            <condition property="scriptSuffix" value=".sh" else=".bat">
+                <os family="unix"/>
+            </condition>
+
+            <!-- Set path delimiter for the OS. -->
+            <condition property="delim" value="/" else="\">
+                <os family="unix"/>
+            </condition>
+
             <!-- Set properties for special directories. -->
             <property name="src.dir" value="${basedir}"/>
             <property name="build.tmp" value="${src.dir}/build"/>
@@ -96,8 +106,9 @@
 
     <macrodef name="init_oe">
         <sequential>
-            <init_env/>
+            <init_env/> <!-- Initialize environmental and general properties. -->
 
+            <!-- Fail immediately if not a 64-bit OS. -->
             <fail message="Environment is not 64-bit">
                 <condition>
                     <not>
@@ -116,6 +127,12 @@
                 </condition>
             </fail>
             <property name="dlcHome" value="${env.DLC}"/>
+            <echo message="DLC Home: ${dlcHome}"/>
+
+            <!-- Assume the DLC WRK directory unless overridden. -->
+            <condition property="wrk" value="/usr/wrk" else="C:\OpenEdge\WRK">
+                <os family="unix"/>
+            </condition>
 
             <!-- Load the current PCT library from DLC. -->
             <taskdef resource="PCT.properties" classpath="${dlcHome}/pct/PCT.jar"/>
@@ -123,13 +140,32 @@
             <!-- Access the OE version info, and read into a property. -->
             <ProgressVersion dlcHome="${dlcHome}" majorVersion="oeMajor" minorVersion="oeMinor" revision="oeRev" fullVersion="full"/>
             <property name="oe.version" value="${oeMajor}.${oeMinor}.${oeRev}"/>
+            <echo message="OpenEdge Version: ${oe.version}"/>
 
-            <!-- Add the ANT-Contrib library to this environment (present in 11.7.4+ and 12.0+). -->
-            <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${dlcHome}/ant/lib/ant-contrib-0.6.jar"/>
+            <!-- Define the property to set if the file exists -->
+            <property name="antContrib06" value="true"/>
+
+            <!-- Add the appropriate ANT-Contrib library to this environment (v0.6 present in 11.7.4+ and 12.0+ and updated to v1.0b3 in 12.8+). -->
+            <loadtask resource="net/sf/antcontrib/antcontrib.properties" classfile="${dlcHome}/ant/lib/ant-contrib-0.6.jar"/>
+            <loadtask resource="net/sf/antcontrib/antcontrib.properties" classfile="${dlcHome}/ant/lib/ant-contrib-1.0b3.jar"/>
 
             <!-- Set properties for special directories. -->
             <property name="build.out" value="${src.dir}/../dist/oe${oeMajor}${oeMinor}"/>
             <mkdir dir="${build.out}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="loadtask">
+        <!-- Usage <loadtask resource="_resource_string_" classfile="_path_to_file_"/> -->
+        <attribute name="resource"/>
+        <attribute name="classfile"/>
+
+        <sequential>
+            <condition property="file.exists">
+                <available file="@{classfile}" type="file"/>
+            </condition>
+
+            <taskdef resource="@{resource}" classpath="@{classfile}"/>
         </sequential>
     </macrodef>
 
@@ -156,41 +192,41 @@
                 </fileset>
             </PCTCompile>
 
-			<!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
-			<PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-				<propath>
-					<pathelement path="${src.dir}/Spark"/>
-					<pathelement path="${build.tmp}"/>
-					<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-					<pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-					<pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
-				</propath>
-				<fileset dir="${src.dir}">
-					<include name="Spark/Core/**/*.cls"/>
-					<include name="Spark/Core/**/*.p"/>
-					<include name="Spark/*.p"/>
-				</fileset>
-			</PCTCompile>
+            <!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
+            <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+                <propath>
+                    <pathelement path="${src.dir}/Spark"/>
+                    <pathelement path="${build.tmp}"/>
+                    <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                    <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                    <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+                </propath>
+                <fileset dir="${src.dir}">
+                    <include name="Spark/Core/**/*.cls"/>
+                    <include name="Spark/Core/**/*.p"/>
+                    <include name="Spark/*.p"/>
+                </fileset>
+            </PCTCompile>
         </sequential>
     </macrodef>
 
     <macrodef name="compile_spark_only">
         <sequential>
-			<!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
-			<PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-				<propath>
-					<pathelement path="${src.dir}/Spark"/>
-					<pathelement path="${build.tmp}"/>
-					<pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-					<pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-					<pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
-				</propath>
-				<fileset dir="${src.dir}">
-					<include name="Spark/Core/**/*.cls"/>
-					<include name="Spark/Core/**/*.p"/>
-					<include name="Spark/*.p"/>
-				</fileset>
-			</PCTCompile>
+            <!-- Code compiles without need for a database, but uses Ccs (included with corelib from OE 11.7.4+) and any extra libs. -->
+            <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
+                <propath>
+                    <pathelement path="${src.dir}/Spark"/>
+                    <pathelement path="${build.tmp}"/>
+                    <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
+                    <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
+                    <pathelement path="${dlcHome}/tty/OpenEdge.BusinessLogic.pl"/>
+                </propath>
+                <fileset dir="${src.dir}">
+                    <include name="Spark/Core/**/*.cls"/>
+                    <include name="Spark/Core/**/*.p"/>
+                    <include name="Spark/*.p"/>
+                </fileset>
+            </PCTCompile>
         </sequential>
     </macrodef>
 
@@ -210,48 +246,33 @@
             <equals arg1="${oeMajor}" arg2="11"/>
             <then>
                 <!-- OpenEdge 11.7.x -->
-                <compile_with_openedge/>
+                <fail message="Compilation is not supported for this version of OpenEdge"/>
             </then>
-            <else>
+        </if>
+        <if>
+            <equals arg1="${oeMajor}" arg2="12"/>
+            <then>
                 <!-- OpenEdge 12.x -->
                 <if>
-                    <equals arg1="${oeMinor}" arg2="5"/>
+                    <equals arg1="${oeMinor}" arg2="8"/>
                     <then>
-                        <!-- OpenEdge 12.5 - Uses bundled OpenEdge.* classes -->
-						<compile_spark_only/>
+                        <!-- OpenEdge 12.8 - Expected to use product-installed OpenEdge.* classes -->
+                        <compile_spark_only/>
                     </then>
                     <else>
-                        <!-- OpenEdge >12.0 or <12.5 requires special/local OpenEdge.* classes -->
+                        <!-- OpenEdge versions >12.0 and <12.5 requires special/local OpenEdge.* classes -->
                         <compile_with_openedge/>
                     </else>
                 </if>
-            </else>
+            </then>
         </if>
-    </target>
-
-    <target name="compile_spark_diag">
-        <init_oe/>
-
-        <delete dir="${preprocess}/Spark/Diagnostic" quiet="true"/>
-
-        <report_oe_vars/>
-
-        <compile_with_openedge/>
-
-        <!-- Code compiles without need for a database, but uses some extra libs. -->
-        <PCTCompile destDir="${build.tmp}" preprocessDir="${preprocess}" dlcHome="${dlcHome}">
-            <propath>
-                <pathelement path="${src.dir}/Spark"/>
-                <pathelement path="${build.tmp}"/>
-                <pathelement path="${dlcHome}/tty/netlib/OpenEdge.Net.pl"/>
-                <pathelement path="${dlcHome}/tty/OpenEdge.Core.pl"/>
-            </propath>
-            <fileset dir="${src.dir}">
-                <include name="Spark/Diagnostic/Util/*.cls"/>
-                <include name="Spark/Diagnostic/Interface/*.p"/>
-                <include name="Spark/Diagnostic/*.p"/>
-            </fileset>
-        </PCTCompile>
+        <if>
+            <equals arg1="${oeMajor}" arg2="13"/>
+            <then>
+                <!-- OpenEdge 13.0.x -->
+                <compile_spark_only/>
+            </then>
+        </if>
     </target>
 
     <target name="clean">
@@ -316,7 +337,6 @@
 
         <!-- Compile all code. -->
         <antcall target="compile_spark_core"/>
-        <antcall target="compile_spark_diag"/>
 
         <!-- Prepare directories for output. -->
         <property name="ablduck.output" value="${doc.out}/ABLDuck"/>
@@ -337,7 +357,7 @@
             </propath>
         </ABLDuck>
 
-		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
+        <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION 0.0.0-NA (NA)"/>
     </target>
 
     <target name="build_pctdoc" depends="clean">
@@ -352,7 +372,6 @@
 
         <!-- Compile all code. -->
         <antcall target="compile_spark_core"/>
-        <antcall target="compile_spark_diag"/>
 
         <!-- Prepare directories for output. -->
         <property name="pctdocs.output" value="${doc.out}/PCTDoc"/>
@@ -397,7 +416,7 @@
             </propath>
         </HTMLDocumentation>
 
-		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
+        <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION 0.0.0-NA (NA)"/>
     </target>
 
     <target name="build_spark_pl" depends="clean">
@@ -419,25 +438,7 @@
             </fileset>
         </PCTLibrary>
 
-		<delete file="${src.dir}/Spark/version.i" quiet="true"/>
-    </target>
-
-    <target name="build_diag_pl" depends="clean">
-        <init_oe/>
-
-        <!-- First, compile the necessary code. -->
-        <antcall target="compile_spark_diag"/>
-
-        <!-- Next, remove old/temporary files. -->
-        <delete file="${build.out}/Diagnostic.pl" quiet="true"/>
-        <delete dir="${build.tmp}/.pct" quiet="true"/>
-
-        <!-- Finally, build PL file with R-code. -->
-        <PCTLibrary destfile="${build.out}/Diagnostic.pl" dlcHome="${dlcHome}">
-            <fileset dir="${build.tmp}">
-                <include name="Spark/Diagnostic/**/*.r"/>
-            </fileset>
-        </PCTLibrary>
+        <echo file="${src.dir}/Spark/version.i" append="false" message="&amp;GLOBAL-DEFINE SPARK_VERSION 0.0.0-NA (NA)"/>
     </target>
 
 </project>

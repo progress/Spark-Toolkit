@@ -43,31 +43,31 @@ using Progress.Json.ObjectModel.JsonObject.
 using Progress.Lang.AppError.
 
 class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
-        
+
     /* Default constructor */
     constructor public AblFilterParser():
         super().
     end constructor.
-    
+
     /* Constructor.
-       
+
        @param longchar (mandatory) A table name for which to construct the filter */
     constructor public AblFilterParser(input pTable as character):
         super(pTable).
     end constructor.
-    
+
     /* Constructor.
-       
+
        @param longchar[] (mandatory) An array of table name for which to construct the filter */
     constructor public AblFilterParser(input pTable as character extent):
         super(pTable).
     end constructor.
-    
+
     /* Parses an ABL BY expression into an array of IQuerySortEntry.
-       
+
        If the string is malformed (ie can't be used as an ABL sort), then an indeterminate array
        is returned. mallformed might be something like "by eq 21" or "by".
-       
+
        @param longchar The standard ABL BY expression. This can be a complete WHERE ... BY string or just the BY portion
        @return IQuerySortEntry[] An array of sort entries. Will be indeterminate if the input value is empty or null,
                                  or if the string isn't of the format "BY <field> [BY <field-2>]"       */
@@ -82,10 +82,10 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable fieldName as character no-undo.
         define variable sortDirection as character no-undo.
         define variable word as character no-undo.
-        
+
         if String:IsNullOrEmpty(pSortBy) then
             return querySortEntry.
-        
+
         // pad the sort phrase with a space to make our calculations easier
         assign pSortBy  = StringConstant:SPACE + pSortBy
                startPos = index(pSortBy, ' by ':u)
@@ -111,18 +111,18 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                    startPos = 0
                    .
         end.    //EXPR-LOOP
-        
+
         assign pSortBy = trim(replace(pSortBy, '  ':u, StringConstant:SPACE))
                cnt     = num-entries(pSortBy, StringConstant:SPACE)
                .
         WORD-LOOP:
         do loop = 1 to cnt:
             assign word = entry(loop, pSortBy, StringConstant:SPACE).
-            
+
             // if there are double spaces, skip
             if word eq '':u then
                 next WORD-LOOP.
-            
+
             // we want to start at BY and go from there
             // if this is not a BY then we've got a malformed string,
             // and we don't return anything
@@ -131,7 +131,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 assign extent(querySortEntry) = ?.
                 return querySortEntry.
             end.
-            
+
             // BY <field> or BY <field> <order>
             assign fieldName = entry(loop + 1, pSortBy, StringConstant:SPACE).
             //is there an order?
@@ -139,7 +139,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 assign sortDirection = entry(loop + 2, pSortBy, StringConstant:SPACE).
             else
                 assign sortDirection = '':u.
-            
+
             // another by or end-of-string
             if sortDirection begins 'desc':u then
                 assign sortOrder = SortOrderEnum:Descending
@@ -159,15 +159,15 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                    querySortEntry[elems]  = new QuerySortEntry(fieldName, sortOrder)
                    .
         end.    //WORD-LOOP
-        
+
         return querySortEntry.
     end method.
-    
+
     /* Parses a where string into a query entry - either a group or a predicate.
-       
+
        If the parsing runs into problems (eg a malformed string) a null IQueryEntry is returned.
        Splitting of a string into groups using "(<grp-1>)" is not supported.
-       
+
        @param longchar The WHERE string to parse into parts
        @return IQueryEntry A query group, query predicate or unknown (if the string cannot be parsed) */
     method protected IQueryEntry ParseWhereString(input pWhere as longchar):
@@ -194,17 +194,17 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable joinWith as JoinEnum no-undo.
         define variable entries as IQueryEntry extent no-undo.
         define variable joinEnumNames as character no-undo.
-        
+
         // WHERE table.field<operator><value> {and|or|,}
         assign pWhere = trim(pWhere).
         // don't use TRIM since it doesn't always do what you think with multi-character "trim-chars" expressions.
         if pWhere begins 'where':u then
             assign pWhere = trim(substring(pWhere, 6)).
-        
+
         assign len = length(pWhere).
         if String:IsNullOrEmpty(pWhere) then
             return qryPredicate.
-        
+
         CHR-LOOP:
         do loop = 1 to len
         on error undo, throw:
@@ -263,7 +263,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             end.    // loop= len
             else
                 assign nextChr = substring(pWhere, loop + 1, 1).
-            
+
             // we're at the end of a 'word'; strValue (usually) contains the word
             if chrValue eq StringConstant:SPACE
             or loop eq len
@@ -307,7 +307,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 then
                 do:
                     assign joinWith = GetJoin(strValue, joinWith).
-                    
+
                     if not valid-object(qryGroup) then
                         assign qryGroup    = new QueryGroup()
                                topGroup    = qryGroup
@@ -320,9 +320,9 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                     //nothing more to do here
                     next CHR-LOOP.
                 end.    // AND|OR|NOT
-                
+
                 //else
-                
+
                 // deal with words
                 if not haveName then
                 do:
@@ -410,10 +410,10 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                         do:
                             if joinEnumNames eq '':u then
                                 assign joinEnumNames = get-class(JoinEnum):GetEnumNames().
-                            
+
                             if lookup(strValue, joinEnumNames) eq 0 then
                                 return ?.
-                            
+
                             if not valid-object(qryGroup) then
                                 assign qryGroup    = new QueryGroup()
                                        topGroup    = qryGroup
@@ -422,17 +422,17 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                             else
                                 // the previous group is now the parent
                                 assign parentGroup = qryGroup.
-                            
+
                             // use any existing join
                             AddToGroup(qryGroup, qryPredicate, joinWith).
-                            
+
                             // the JOIN applies to the following group, not the current predicate
                             assign joinWith     = GetJoin(strValue, joinWith)
                                    qryPredicate = ?
                                    strValue     = '':u
                                    .
                         end.
-                        
+
                         // first ( or there's no other group yet
                         if not valid-object(topGroup) then
                             assign topGroup    = new QueryGroup()
@@ -441,19 +441,20 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                         else
                             // the previous group is now the parent
                             assign parentGroup = qryGroup.
-                        
+
                         // Create a group if this is a non-quoted (
-                        assign qryGroup = new QueryGroup().
-                               strValue = '':u
-                               .
+                        assign
+                            qryGroup = new QueryGroup()
+                            strValue = '':u
+                            .
                         // add it to its parent
                         AddToGroup(parentGroup, qryGroup, joinWith).
-                        
+
                         // clear the join, since this group may have its own, or not
                         assign joinWith = ?.
                         next CHR-LOOP.
                     end.
-                    
+
                     assign strValue = strValue + chrValue.
                 end.    // (
                 else
@@ -534,7 +535,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                         end.
                         else
                             assign operator = QueryOperatorHelper:ToEnum(chrValue).
-                        
+
                         // if this is table.field= 20 (space after oprator) then skip the space,
                         // since we're dealing with it here
                         if nextChr eq StringConstant:SPACE then
@@ -546,7 +547,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 else
                     assign strValue = strValue + chrValue.
             end.
-            
+
             if  haveName
             and haveOperator
             and haveValue
@@ -567,16 +568,16 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 if valid-object(joinWith) then
                     assign qryPredicate:Join = joinWith.
             end.
-            
+
             finally:
                 assign prevChr = chrValue.
             end finally.
         end.    //CHR-LOOP
-        
+
         // we return one of an IQueryPredicate (single clause) or an IQueryGroup (many clauses)
         if valid-object(topGroup) then
             assign qryGroup = topGroup.
-        
+
         if valid-object(qryGroup) then
         do:
             // We added a group (due to a ( probably) , but it's empty. So there's nothing to resolve here.
@@ -591,7 +592,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                     if extent(entries) eq ? then
                         return ?.
                 end.
-                
+
                 // if we have a join but no predicate, then something went wrong parsing the
                 // last predicate; return null in this case.
                 // "WHERE bal = 1 AND TRUE" is an example of this.
@@ -599,15 +600,15 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                 and not valid-object(qryPredicate)
                 then
                     return ?.
-                
+
                 // in case there's a stray predicate
                 AddToGroup(qryGroup, qryPredicate, joinWith).
-                
+
                 // if the string is just "(x=y)" then we only have/need the one group
                 if extent(qryGroup:Entries) eq 1 then
                     return qryGroup:Entries[1].
             end.
-            
+
             return qryGroup.
         end.
         else
@@ -621,27 +622,27 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             return qryPredicate.
         else
             return ?.
-        
+
         // if there's an error parsing the string, assume it's rubbish and return null.
         {&_proparse_ prolint-nowarn(varusage)}
         catch uncaught as Progress.Lang.Error:
             return ?.
         end catch.
     end method.
-    
+
     /* Indicates whether a string can be used with a MATCHES operator:
        it needs to have an unescaped * or . in the string.
-       
+
        @param character The expression to evaluate
        @return logical TRUE if the expression contains at least one * or .; FALSE otherwise */
     method private logical IsMatchesExpression(input pExpr as character):
-        define variable pos as integer.
-        
+        define variable pos as integer no-undo.
+
         if pExpr eq ?
         or pExpr eq '':u
         then
             return false.
-        
+
         // look for unescaped * first
         assign pos = index(pExpr, '*':u).
         do while pos gt 0:
@@ -652,7 +653,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             else
                 return true.
         end.
-        
+
         // then for unescaped .
         assign pos = index(pExpr, '.':u).
         do while pos gt 0:
@@ -663,12 +664,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             else
                 return true.
         end.
-        
+
         return false.
     end method.
-    
+
     /* Reads the whole tree of groups in a group to find a particular group's parent group.
-       
+
        @param QueryGroup The parent group
        @param QueryGroup The group whose parent to find
        @return QueryGroup The parent group, or NULL if none found. */
@@ -677,12 +678,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable loop as integer no-undo.
         define variable cnt as integer no-undo.
         define variable qg as QueryGroup no-undo.
-        
+
         if not valid-object(pParent) then
             return ?.
         if pParent:Equals(pGroup) then
             return pParent.
-        
+
         assign cnt = extent(pParent:Entries).
         ENTRY-LOOP:
         do loop = 1 to cnt:
@@ -696,12 +697,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                     return qg.
             end.
         end.
-        
+
         return ?.
     end method.
-    
+
     /* Adds a query entry to an existing group.
-    
+
        @param QueryGroup A group to which to add an entry to.
        @param IQueryEntry A new query entry. May be a QueryPredicate or a QueryGroup
        @param JoinEnum How the new entry joins (AND/OR/etc) to any previous entries in the group
@@ -710,17 +711,17 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                                       input pEntry as IQueryEntry,
                                       input pJoin as JoinEnum          ):
         define variable idx as integer no-undo.
-        
+
         if not valid-object(pParentGroup)
         or not valid-object(pEntry)
         then
             return false.
-        
+
         assign idx = extent(pParentGroup:Entries) + 1.
         // ? + anything = ?
         if idx eq ? then
             assign idx = 1.
-        
+
         assign extent(pParentGroup:Entries) = idx
                pParentGroup:Entries[idx]    = pEntry
                .
@@ -732,12 +733,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             if type-of(pEntry, QueryPredicate) then
                 assign cast(pEntry, QueryPredicate):Join = pJoin.
         end.
-        
+
         return true.
     end method.
-    
+
     /* Parses an SORT-BY phrase and returns an array of IQuerySortEntry objects.
-       
+
        @param character The SORT-BY phrase
        @return IQuerySortEntry[] An array of sort phrases. An indeterminate array is returned if the input phrase is empty */
     method override public IQuerySortEntry extent ParseSortBy(input pSortBy as Progress.Lang.Object):
@@ -746,17 +747,17 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable sortByArray as character extent no-undo.
         define variable cnt as integer no-undo.
         define variable loop as integer no-undo.
-        
+
         case true:
             when not valid-object(pSortBy) then
                 return qrySort.
-            
+
             when type-of(pSortBy, ILongcharHolder)  or
             when type-of(pSortBy, ICharacterHolder) then
                 assign sortByString = dynamic-property(pSortBy, 'Value':u)
                        qrySort      = ParseSortString(sortByString)
                        .
-            
+
             when type-of(pSortBy, ICharacterArrayHolder) or
             when type-of(pSortBy, ILongcharArrayHolder) then
             do:
@@ -765,22 +766,22 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                    and cnt ge 1
                 then
                     assign cnt = extent(sortByArray).
-                
+
                 do loop = 1 to cnt:
                     assign sortByString = sortByString + StringConstant:SPACE + sortByArray[loop].
                 end.
                 assign qrySort = ParseSortString(sortByString).
             end.
-            
+
             otherwise
                 return qrySort.
         end case.
-        
+
         return qrySort.
     end method.
-    
+
     /* Parses where/filter phrase and returns an IQueryEntry object for a single table
-       
+
        @param P.L.Object The filter/where clause phrase
        @return IQueryEntry The query entry.We return one of an IQueryPredicate (single clause)
                            or an IQueryGroup (many clauses) */
@@ -791,17 +792,17 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable cnt as integer no-undo.
         define variable loop as integer no-undo.
         define variable stringData as longchar extent no-undo.
-        
+
         case true:
             when not valid-object(pWhere) then
                 return qryEntry.
-            
+
             when type-of(pWhere, ILongcharHolder)  or
             when type-of(pWhere, ICharacterHolder) then
                 assign whereString  = dynamic-property(pWhere, 'Value':u)
                        qryEntry     = ParseWhereString(whereString)
                        .
-            
+
             when type-of(pWhere, ICharacterArrayHolder) or
             when type-of(pWhere, ILongcharArrayHolder) then
             do:
@@ -827,16 +828,16 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                     assign qryEntry = qryGrp.
                 end.
             end.
-            
+
             otherwise
                 return qryEntry.
         end case.
-        
+
         return qryEntry.
     end method.
-    
+
     /* Reads and processes (parses) the filter.
-       
+
        @param P.L.Object The filter data
        @param IGetDataRequest A new filter object */
     method override public IGetDataRequest Parse(input pData as Progress.Lang.Object):
@@ -848,13 +849,13 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable stringData as longchar extent no-undo.
         define variable tableName as character no-undo.
         define variable nameCnt as integer no-undo.
-        
+
         assign dataRequest = new GetDataRequest().
-        
+
         case true:
             when not valid-object(pData) then
                 return dataRequest.
-            
+
             when type-of(pData, ICharacterHolder) or
             when type-of(pData, ILongcharHolder) then
             do:
@@ -874,7 +875,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                            tableRequest:QueryString     = string(stringData[1])
                            .
             end.
-            
+
             when type-of(pData, ICharacterArrayHolder) or
             when type-of(pData, ILongcharArrayHolder)  then
             do:
@@ -886,7 +887,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                    and cnt ge 1
                 then
                     assign extent(dataRequest:TableRequests) = cnt.
-                
+
                 do loop = 1 to cnt:
                     // if there's a FilterTable for the query, use that.
                     // if not, use blank to indicate "we don't know"
@@ -894,7 +895,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                         assign tableName = FilterTable[loop].
                     else
                         assign tableName = '':u.
-                    
+
                     assign tableRequest                      = new GetDataTableRequest(tableName)
                            dataRequest:TableRequests[loop]   = tableRequest
                            qryDef                            = new QueryDefinition()
@@ -909,13 +910,13 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                                .
                 end.
             end.
-            
+
             when type-of(pData, JsonObject) then
                 assign extent(dataRequest:TableRequests) = 1
                        dataRequest:TableRequests[1]      = ParseTableRequest(FilterTable[1],
                                                                              cast(pData, JsonObject))
                        .
-            
+
             when type-of(pData, JsonArray) then
             do:
                 assign cnt     = cast(pData, JsonArray):Length
@@ -925,7 +926,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                    and cnt ge 1
                 then
                     assign extent(dataRequest:TableRequests) = cnt.
-                
+
                 do loop = 1 to cnt:
                     // if there's a FilterTable for the query, use that.
                     // if not, use blank to indicate "we don't know"
@@ -933,25 +934,25 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                         assign tableName = FilterTable[loop].
                     else
                         assign tableName = '':u.
-                    
+
                     assign dataRequest:TableRequests[loop] = ParseTableRequest(tableName,
                                                                                cast(pData, JsonArray):GetJsonObject(loop)).
                 end.
             end.
-            
+
             otherwise
                 return error new AppError(
                         substitute('Unsupported object type: &1', pData:GetClass():TypeName)
                         , 0).
         end case.
-        
+
         return cast(dataRequest, IGetDataRequest).
     end method.
-        
+
     /* Reads a single table's request
-       
+
        This method knows which properties in the input JSON are for the where clause, for the sort-by etc
-       
+
        @param character The table name to which this filter applies
        @param JsonObject The input filter
        @return IGetDataTableRequest A single table Get Request */
@@ -964,14 +965,14 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         define variable cnt as integer no-undo.
         define variable hasQry as logical extent 2 initial false no-undo.
         define variable qryStr as character no-undo.
-        
+
         Assert:NotNull(pTable, 'Table name').
-        
+
         assign tableRequest = new GetDataTableRequest(pTable).
-        
+
         if not valid-object(pData) then
             return tableRequest.
-        
+
         assign qryDef                       = new QueryDefinition()
                tableRequest:QueryDefinition = qryDef
                names = pData:GetNames()
@@ -982,7 +983,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
         while (not hasQry[1] or not hasQry[2]):
             if not pData:GetType(names[loop]) eq JsonDataType:STRING then
                 next NAMES-LOOP.
-            
+
             // loop-de-loop cos JSON is case sensitive and ABL is not
             case names[loop]:
                 when 'where':u then
@@ -1004,7 +1005,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                                .
             end case.
         end.    // NAMES-LOOP
-        
+
         // if the query string failed to parse into an IQueryEntry, add the
         // sort phrases to the string
         if hasQry[1]
@@ -1024,12 +1025,12 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                     assign tableRequest:QueryString = tableRequest:QueryString + ' descending ':u.
             end.
         end.
-        
+
         return cast(tableRequest, IGetDataTableRequest).
     end method.
-    
+
     /* Returns a field value from the current parsed string
-       
+
        @param character The parsed character
        @param logical TRUE if the value is a quoted null
        @param QueryOperatorEnum An optional operator
@@ -1038,7 +1039,7 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
                                         input pQuotedNull as logical,
                                         input pOperator as QueryOperatorEnum):
         define variable fldVal as String no-undo.
-        
+
         if pVal eq '?':u
         and not pQuotedNull
         then
@@ -1053,25 +1054,25 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             then
                 // add * instead of . since that's a broader match
                 assign pVal = '*':u + pVal.
-            
+
             assign fldVal = new String(pVal).
         end.
-        
+
         return fldVal.
     end method.
-    
+
     /* Determines the join value.
-       
+
        If there is an existing join value passed in,
        and it's value is either "And" or "Or", and the current string
        value is "not", then return a new "AndNot" or "OrNot".
-       
+
        If there is an existing join value passed in, and it is not "And" or
        "Or", then that value is returned.
-       
+
        If no join value is passed in, then use the string value to determine the
        enum.
-       
+
        @param character A word representing a join
        @param JoinEnum The current join, if any
        @return JoinEnum The new join. */
@@ -1083,9 +1084,9 @@ class OpenEdge.BusinessLogic.Filter.AblFilterParser inherits FilterParser:
             when JoinEnum:Or  then return JoinEnum:OrNot.
             otherwise              return pJoin.
         end case.
-        
+
         // should never get here, but have a value anyway
         return JoinEnum:None.
     end method.
-    
+
 end class.

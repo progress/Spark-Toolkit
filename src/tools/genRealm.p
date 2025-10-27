@@ -27,12 +27,7 @@ define variable oRealm as Progress.Json.ObjectModel.JsonObject no-undo.
 assign oRealm = new Progress.Json.ObjectModel.JsonObject().
 oRealm:Add("debug", false).
 oRealm:Add("domain", "OESPA").
-&if proversion(1) begins "12" &then
 oRealm:Add("password", security-policy:encode-domain-access-code("{&PassCodeValue}")).
-&else
-oRealm:Add("password", "oech1::" + audit-policy:encrypt-audit-mac-key("{&PassCodeValue}")).
-&endif
-
 oRealm:Add("role", "SPAClient").
 oRealm:WriteFile(substitute("&1{&BaseName}.json", session:temp-directory), true).
 
